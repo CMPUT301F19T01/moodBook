@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -71,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                     showLoginFailed(loginResult.getError());
                 }
                 if (loginResult.getSuccess() != null) {
+                    //loginResult.getSuccess().getDisplayName())
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     updateUiWithUser(loginResult.getSuccess());
                     setResult(Activity.RESULT_OK);
