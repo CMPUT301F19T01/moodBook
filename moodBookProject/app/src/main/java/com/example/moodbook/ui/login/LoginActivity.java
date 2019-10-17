@@ -24,7 +24,9 @@ import com.google.firebase.auth.FirebaseUser;
  * Citation: https://firebase.google.com/docs/auth/android/manage-users?authuser=0
  * https://stackoverflow.com/questions/43599638/firebase-signinwithemailandpassword-and-createuserwithemailandpassword-not-worki -Sagar Raut   used for mAuthListener
  */
-//TODO: change buttons .isEnabled when appropriate
+//TODO:
+//  change buttons .isEnabled when appropriate
+//  input verification in verify() method
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -38,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Stuck logging in? use the following line once to log out the cached session:
         //mAuth.getInstance().signOut();
         setContentView(R.layout.activity_login);
 
@@ -77,7 +80,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
 
-        //startActivity(new Intent(LoginActivityOld.this, MainActivity.class));
     }
 
     @Override
