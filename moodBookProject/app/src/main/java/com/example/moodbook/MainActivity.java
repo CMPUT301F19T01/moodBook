@@ -2,6 +2,7 @@ package com.example.moodbook;
 
 import android.os.Bundle;
 
+import com.example.moodbook.ui.login.LoginActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
