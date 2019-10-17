@@ -188,10 +188,8 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "creating user in db:"+ uid);
 
         // Initialize moodcount
-        HashMap<String, String> data = new HashMap<>();
-        data.put("test", "test");
-        //collectionReference.add(uid);
-        //collectionReference.add(uid);
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("moodCount", 0);
         collectionReference
                 .document(uid)
                 .set(data)
@@ -209,9 +207,13 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
         // Initialize containers
-        collectionReference.document(uid).collection("MOODS");
-        collectionReference.document(uid).collection("FRIENDS");
-        collectionReference.document(uid).collection("REQUESTS");
+
+        HashMap<String, String> nullData = new HashMap<>();
+        data.put("null", "null");
+
+        collectionReference.document(uid).collection("MOODS").document("null").set(nullData);
+        collectionReference.document(uid).collection("FRIENDS").document("null").set(nullData);
+        collectionReference.document(uid).collection("REQUESTS").document("null").set(nullData);
 
     }
 }
