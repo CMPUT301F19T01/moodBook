@@ -14,10 +14,16 @@ import android.widget.Toast;
 import com.example.moodbook.MainActivity;
 import com.example.moodbook.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 /**
  * This activity handles login and registration
@@ -27,10 +33,14 @@ import com.google.firebase.auth.FirebaseUser;
 //TODO:
 //  change buttons .isEnabled when appropriate
 //  input verification in verify() method
+//  create containers in db
+//  in mainactivity, check if the user has a username and prompt to add one
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseFirestore db;
+    private  CollectionReference collectionReference;
     private Button loginButton;
     private Button registerButton;
     private EditText email;
@@ -41,7 +51,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Stuck logging in? use the following line once to log out the cached session:
-        //mAuth.getInstance().signOut();
+        mAuth.getInstance().signOut();
+        db = FirebaseFirestore.getInstance();
+        collectionReference = db.collection("USERS");
+
         setContentView(R.layout.activity_login);
 
         loginButton = findViewById(R.id.login);
@@ -155,6 +168,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            createUser(user);
                             updateUI(user);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -163,5 +177,41 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    /**
+     * This method creates containers for a new user in the database
+     */
+    private void createUser(FirebaseUser user){
+
+        String uid = user.getUid();
+        Log.d(TAG, "creating user in db:"+ uid);
+
+        // Initialize moodcount
+        HashMap<String, String> data = new HashMap<>();
+        data.put("test", "test");
+        //collectionReference.add(uid);
+        //collectionReference.add(uid);
+        collectionReference
+                .document(uid)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "uid stored in db");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "failed:" + e.toString());
+                    }
+                });
+
+        // Initialize containers
+        collectionReference.document(uid).collection("MOODS");
+        collectionReference.document(uid).collection("FRIENDS");
+        collectionReference.document(uid).collection("REQUESTS");
+
     }
 }
