@@ -26,7 +26,7 @@ public class CustomList extends ArrayAdapter {
         View view = convertView;
 
         if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.item, parent, false);
+            //view = LayoutInflater.from(context).inflate(R.layout.mood_item, parent, false);
         }
 
         Mood mood = moods.get(position);

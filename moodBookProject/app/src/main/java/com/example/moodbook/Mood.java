@@ -14,17 +14,19 @@ public class Mood {
     private String situation;
     private Location location;
 
+
     public Mood(Date date, Date time, String emotional_state,
-                String reason_text = null, Image reason_photo = null,
-                String situation = null, Location location = null) {
+                String reason_text, Image reason_photo,
+                String situation, Location location) {
         setAll(date, time, emotional_state, reason_text, reason_photo, situation, location);
     }
 
     public void setAll(Date date, Date time, String emotional_state,
-                  String reason_text = null, Image reason_photo = null,
-                  String situation = null, Location location = null) {
+                  String reason_text, Image reason_photo,
+                  String situation, Location location) {
         setDate(date);
         setTime(time);
+        setEmotional_state(emotional_state);
         setReason_text(reason_text);
         setReason_photo(reason_photo);
         setSituation(situation);
