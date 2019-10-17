@@ -13,5 +13,7 @@ https://github.com/CMPUT301F19T01/moodBook/wiki
 
 [Glossary](https://github.com/CMPUT301F19T01/moodBook/wiki/Glossary)
 
+[Information References](https://github.com/CMPUT301F19T01/moodBook/wiki/Information-References)
+
 # License
 This project is licensed under the terms of the MIT [license](LICENSE).
