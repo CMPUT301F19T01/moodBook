@@ -45,7 +45,6 @@ public class CreateMoodActivity extends AppCompatActivity {
         });
     }
 
-
     public void setImage(View view){
         Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (imageIntent.resolveActivity(getPackageManager()) != null) {

@@ -3,8 +3,9 @@
     package="com.example.moodbook">
 
     <uses-feature
-        android:name="android.hardware.Camera"
-        android:required="true"/>
+        android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<!--        android:name="android.hardware.Camera"-->
+<!--        android:required="true"-->
 
     <application
         android:allowBackup="true"
