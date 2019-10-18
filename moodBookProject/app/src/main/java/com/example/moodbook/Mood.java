@@ -13,13 +13,41 @@ public class Mood {
     private Image reason_photo;     // string of image name?
     private String situation;
     private Location location;
-
-
     public Mood(Date date, Date time, String emotional_state,
                 String reason_text, Image reason_photo,
                 String situation, Location location) {
         setAll(date, time, emotional_state, reason_text, reason_photo, situation, location);
     }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public Date getTime() {
+        return time;
+    }
+
+    public String getEmotional_state() {
+        return emotional_state;
+    }
+
+    public String getReason_text() {
+        return reason_text;
+    }
+
+    public Image getReason_photo() {
+        return reason_photo;
+    }
+
+    public String getSituation() {
+        return situation;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+
 
     public void setAll(Date date, Date time, String emotional_state,
                   String reason_text, Image reason_photo,
