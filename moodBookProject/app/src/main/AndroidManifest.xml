@@ -20,9 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.example.moodbook.CreateMoodActivity"
-            android:label="MoodBook" ></activity>
+<!--        <activity-->
+<!--            android:name="com.example.moodbook.CreateMoodActivity"-->
+<!--            android:label="MoodBook" ></activity>-->
     </application>
 
 </manifest>
