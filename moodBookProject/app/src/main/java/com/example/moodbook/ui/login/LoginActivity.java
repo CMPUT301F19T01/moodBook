@@ -33,7 +33,6 @@ import java.util.HashMap;
 //TODO:
 //  change buttons .isEnabled when appropriate
 //  input verification in verify() method
-//  create containers in db
 //  in mainactivity, check if the user has a username and prompt to add one
 public class LoginActivity extends AppCompatActivity {
 
@@ -80,7 +79,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO: add verify() for inputs
-                register(email.getText().toString(), password.getText().toString());
+                new UsernameFragment().show(getSupportFragmentManager(), "register");
+                //register(email.getText().toString(), password.getText().toString());
             }
         });
 
@@ -131,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         } else {
             // update text views, show error messages
-            Log.d(TAG, "User not logged in:");
+            Log.d(TAG, "User not logged in");
         }
     }
 
