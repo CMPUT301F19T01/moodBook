@@ -45,9 +45,9 @@
             android:id="@+id/pick_mood_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/pick_mood_state"
-            android:layout_alignParentEnd="true"></Button>
+            android:text="@string/pick_mood_state"></Button>
     </RelativeLayout>
 
     <RelativeLayout
@@ -76,9 +76,9 @@
             android:id="@+id/pick_mood_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/pick_mood_date"
-            android:layout_alignParentEnd="true"></Button>
+            android:text="@string/pick_mood_date"></Button>
     </RelativeLayout>
 
     <RelativeLayout
@@ -107,10 +107,11 @@
             android:id="@+id/pick_mood_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/pick_mood_time"
-            android:layout_alignParentEnd="true"></Button>
+            android:text="@string/pick_mood_time"></Button>
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
@@ -137,9 +138,9 @@
             android:id="@+id/pick_mood_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/pick_mood_location"
-            android:layout_alignParentEnd="true"></Button>
+            android:text="@string/pick_mood_location"></Button>
     </RelativeLayout>
 
     <RelativeLayout
@@ -168,10 +169,11 @@
             android:id="@+id/pick_mood_situation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/pick_mood_situation"
-            android:layout_alignParentEnd="true"></Button>
+            android:text="@string/pick_mood_situation"></Button>
     </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
@@ -198,43 +200,66 @@
             android:id="@+id/pick_mood_reason"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/pick_mood_reason"
-            android:layout_alignParentEnd="true"></Button>
+            android:text="@string/pick_mood_reason"></Button>
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/mood_photo"
+
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/mood_photo"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentStart="true"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginStart="79dp"-->
+<!--            android:layout_marginLeft="79dp"-->
+<!--            android:layout_marginTop="1dp"-->
+<!--            android:layout_marginEnd="10dp"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:layout_toStartOf="@+id/pick_mood_photo"-->
+<!--            android:layout_toLeftOf="@+id/pick_mood_photo"-->
+<!--            android:text="@string/mood_photo_would_showup_here"-->
+<!--            android:textSize="12sp"-->
+<!--            android:textStyle="bold" />-->
+
+        <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="79dp"
-            android:layout_marginLeft="79dp"
-            android:layout_marginTop="1dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toStartOf="@+id/pick_mood_photo"
-            android:layout_toLeftOf="@+id/pick_mood_photo"
-            android:text="@string/mood_photo_would_showup_here"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:layout_marginStart="21dp"
+            android:layout_marginLeft="21dp"
+            android:layout_marginTop="30dp"
+            tools:srcCompat="@tools:sample/avatars[3]" />
 
         <Button
             android:id="@+id/pick_mood_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:text="@string/pick_mood_photo"
-            android:layout_alignParentEnd="true"></Button>
+            android:layout_marginStart="7dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="97dp"
+            android:layout_marginEnd="105dp"
+            android:layout_marginRight="105dp"
+            android:layout_marginBottom="6dp"
+            android:layout_toEndOf="@+id/imageView2"
+            android:layout_toRightOf="@+id/imageView2"
+            android:text="@string/pick_mood_photo"></Button>
+
     </RelativeLayout>
-
-
-
 
 
 </LinearLayout>
