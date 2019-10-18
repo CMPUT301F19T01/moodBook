@@ -2,5 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="#9C68B1">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/viewID"-->
+<!--            android:layout_width="421dp"-->
+<!--            android:layout_height="58dp"-->
+<!--            android:text="Select Mood"-->
+<!--            android:textSize="30sp"-->
+<!--            android:textAlignment="center"/>-->
+<!--    </LinearLayout>-->
+    <SearchView
+        android:id="@+id/search_my_mood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></SearchView>
+
+    <ListView
+        android:id="@+id/moodListView"
+        android:layout_width="wrap_content"
+        android:layout_height="513dp"></ListView>
+
+    <Button
+        android:id="@+id/select"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select" />
+
+    <Button
+        android:id="@+id/cancel"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:text="@string/cancel" />
+
 
 </LinearLayout>
