@@ -42,8 +42,8 @@ public class LoginActivity extends AppCompatActivity {
     private  CollectionReference collectionReference;
     private Button loginButton;
     private Button registerButton;
-    private EditText email;
-    private EditText password;
+    protected EditText email;
+    protected EditText password;
     private static final String TAG = "EmailPassword";
 
     @Override
@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO: add verify() for inputs
-                new UsernameFragment().show(getSupportFragmentManager(), "register");
+                new UsernameFragment().show(getSupportFragmentManager(), "registering");
                 //register(email.getText().toString(), password.getText().toString());
             }
         });
@@ -160,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This method creates a new user in Firebase
      */
-    private void register(String email, String password){
+    public void register(String email, String password){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
