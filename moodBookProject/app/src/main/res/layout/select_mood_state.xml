@@ -23,7 +23,7 @@
     <ListView
         android:id="@+id/moodListView"
         android:layout_width="wrap_content"
-        android:layout_height="513dp"></ListView>
+        android:layout_height="264dp"></ListView>
 
     <Button
         android:id="@+id/select"

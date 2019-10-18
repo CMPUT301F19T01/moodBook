@@ -24,8 +24,8 @@ public class SelectMoodStateFragment extends DialogFragment {
 
     ArrayAdapter<String> statesadapter;
     ArrayAdapter<Integer> emojiadapter;
-    String[] MoodStates = {"Anxious", "Excited", "Happy", "Sad","Scared","Tired"};
-    int[] MoodEmoji = {R.drawable.anxious,R.drawable.excited,R.drawable.happy,R.drawable.sad, R.drawable.scared, R.drawable.tired };
+    String[] MoodStates = {"Happy", "Sad", "Afraid", "Angry"};
+    int[] MoodEmoji = {R.drawable.happy,R.drawable.sad, R.drawable.afraid, R.drawable.angry };
 
 //    @Override
 //    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
