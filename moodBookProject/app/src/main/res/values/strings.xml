@@ -30,4 +30,9 @@
     <string name="mood_situation_would_show_up_here">Mood Situation would show up here</string>
     <string name="select">Select</string>
     <string name="cancel">Cancel</string>
+    <string name="afraid">Afraid</string>
+    <string name="angry">Angry</string>
+    <string name="happy">Happy</string>
+    <string name="sad">Sad</string>
+    <string name="todo">TODO</string>
 </resources>
