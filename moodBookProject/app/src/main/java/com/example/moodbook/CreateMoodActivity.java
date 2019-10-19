@@ -2,10 +2,12 @@ package com.example.moodbook;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -31,6 +34,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     Button add_time;
     private int year, month, day, hour, minute;
     private static final int REQUEST_IMAGE = 101;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +87,10 @@ public class CreateMoodActivity extends AppCompatActivity {
                 showTime(view);
             }
         });
+
+        //for situational
+        Spinner situation = (Spinner) findViewById(R.id.pick_mood_situation);
+        String text = situation.getSelectedItem().toString();
     }
 
     // for showing calendar so user could select a date
@@ -138,4 +146,7 @@ public class CreateMoodActivity extends AppCompatActivity {
             view_photo.setImageBitmap(imageBitmap);
         }
     }
+
+
+
 }
