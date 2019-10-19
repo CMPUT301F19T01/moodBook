@@ -36,7 +36,7 @@ import java.util.HashMap;
 //TODO:
 //  change buttons .isEnabled when appropriate
 //  input verification in verify() method
-//  in mainactivity, check if the user has a username and prompt to add one
+
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -72,20 +72,36 @@ public class LoginActivity extends AppCompatActivity {
         // LOGIN button
         loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                //TODO: add verify() for inputs
-                login(email.getText().toString(), password.getText().toString());
+                if (verifyEmail(email.getText().toString())){
+                    if (verifyPass(password.getText().toString())){
+                        login(email.getText().toString(), password.getText().toString());
+                    } else {
+                        password.setError("Password must be >= 6 chars");
+                    }
+                } else {
+                    email.setError("Incorrect email format");
+                }
             }
         });
 
         // REGISTER button
         registerButton = findViewById(R.id.register);
         registerButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
-                //TODO: add verify() for inputs
-                new UsernameFragment().show(getSupportFragmentManager(), "registering");
+                if (verifyEmail(email.getText().toString())){
+                    if (verifyPass(password.getText().toString())){
+                        new UsernameFragment().show(getSupportFragmentManager(), "registering");
+                    } else {
+                        password.setError("Password must be >= 6 chars");
+                    }
+                } else {
+                    email.setError("Incorrect email format");
+                }
                 //register(email.getText().toString(), password.getText().toString());
             }
         });
@@ -118,12 +134,23 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This method verifys that the email and password are filled out. Email is of type email, password is > 6 chars
      * @param email
+     * @return
+     *      True if email is an email address
+     *      False if email is not an email address
+     */
+    private Boolean verifyEmail(String email){
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    /**
+     * This method verifys that the password is filled out.
      * @param password
      * @return
+     *      True if password >= 6 chars
+     *      False if password is not >= 6 chars
      */
-    private Boolean verify(String email, String password){
-
-        return true;
+    private Boolean verifyPass(String password){
+        return password.length() >= 6;
     }
 
     /**
@@ -226,6 +253,11 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This method gets all the currently used usernames
+     * @return
+     *      an ArrayList of usernames
+     */
     private ArrayList<String> getUsernameList(){
         FirebaseFirestore db = db = FirebaseFirestore.getInstance();
         final ArrayList<String> usernameList = new ArrayList<>();
