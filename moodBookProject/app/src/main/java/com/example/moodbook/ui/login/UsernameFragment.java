@@ -54,9 +54,9 @@ public class UsernameFragment extends DialogFragment {
                             // register the user with firebase
                             ((LoginActivity) getActivity()).register(
                                     ((LoginActivity) getActivity()).email.getText().toString(),
-                                    ((LoginActivity) getActivity()).password.getText().toString());
+                                    ((LoginActivity) getActivity()).password.getText().toString(), usernameEditText.getText().toString());
 
-                            updateUsername(usernameEditText.getText().toString());
+                            //updateUsername(usernameEditText.getText().toString());
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -72,14 +72,14 @@ public class UsernameFragment extends DialogFragment {
         }
     }
 
-    /**
+    /*/**
      * This updates the firebase user profile with a username
      * @param username
-     */
+
     private void updateUsername(String username){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        //if (user != null){
+        if (user != null){
             UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                     .setDisplayName(username)
                     .build();
@@ -93,9 +93,9 @@ public class UsernameFragment extends DialogFragment {
                         }
                     });
 
-        //}
+        }
 
-        //Log.d("EMAIL", "USERNAME:" + user.getDisplayName());
-    }
+        Log.d("EMAIL", "USERNAME:" + user.getDisplayName());
+    }*/
 
 }

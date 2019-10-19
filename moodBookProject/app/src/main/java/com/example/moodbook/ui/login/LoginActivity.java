@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
      * This method decides how to update the ui based on the user's login status
      * @param currentUser
      */
-    private void updateUI(FirebaseUser currentUser){
+    protected void updateUI(FirebaseUser currentUser){
         if (currentUser != null){
             Log.d(TAG, "User logged in:starting mainactivity");
             startActivity(new Intent(this, MainActivity.class));
@@ -160,7 +160,8 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This method creates a new user in Firebase
      */
-    public void register(String email, String password){
+    public void register(String email, String password, String userParam){
+        final String username = userParam;
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -168,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            createUser(user);
+                            createUser(user, username);
                             updateUI(user);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -182,13 +183,14 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This method creates containers for a new user in the database
      */
-    private void createUser(FirebaseUser user){
+    private void createUser(FirebaseUser user, String username){
 
         String uid = user.getUid();
         Log.d(TAG, "creating user in db:"+ uid);
 
         // Initialize moodcount
         HashMap<String, Object> data = new HashMap<>();
+        data.put("username", username);
         data.put("moodCount", 0);
         collectionReference
                 .document(uid)
