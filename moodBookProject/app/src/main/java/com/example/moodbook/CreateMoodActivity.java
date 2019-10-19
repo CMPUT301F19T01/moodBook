@@ -12,11 +12,15 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -29,6 +33,13 @@ public class CreateMoodActivity extends AppCompatActivity {
     TextView mood_state;
     Button add_date;
     Button add_time;
+    String SelectedMoodState;
+    Spinner sp1;
+    RelativeLayout pickState;
+    MoodStateAdapter adapter;
+    String [] states ={"Afraid","Angry","Happy","Sad"};
+    int[] images = {R.drawable.afraid, R.drawable.angry,R.drawable.happy,R.drawable.sad};
+    int[] colors = {R.color.afraidBrown,R.color.angryRed,R.color.happyYellow,R.color.sadBlue};
     private int year, month, day, hour, minute;
     private static final int REQUEST_IMAGE = 101;
 
@@ -47,7 +58,23 @@ public class CreateMoodActivity extends AppCompatActivity {
 
             }
         });
+        sp1 = (Spinner)findViewById(R.id.mood_spinner);
+        adapter = new MoodStateAdapter(this,states,images );
+        sp1.setAdapter(adapter);
+        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(),states[i],Toast.LENGTH_LONG).show();
+                SelectedMoodState = states[i];
+                sp1.setBackgroundColor(getResources().getColor(colors[i]));
+//               pickState.setBackgroundColor(getResources().getColor(colors[i]));
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         //Mood State Displayer
         int e = getIntent().getIntExtra("emoji",0);
