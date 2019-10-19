@@ -4,19 +4,28 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TimePicker;
+
+import java.util.Calendar;
 
 public class CreateMoodActivity extends AppCompatActivity {
 
     Button pick_mood;
     Button add_photo;
     ImageView view_photo;
+    Button add_date;
+    Button add_time;
+    private int year, month, day, hour, minute;
     private static final int REQUEST_IMAGE = 101;
 
     @Override
@@ -34,7 +43,6 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
-
         add_photo = findViewById(R.id.pick_mood_photo);
         view_photo = findViewById(R.id.fill_mood_photo);
         add_photo.setOnClickListener(new View.OnClickListener() {
@@ -43,8 +51,62 @@ public class CreateMoodActivity extends AppCompatActivity {
                 setImage(view);
             }
         });
+
+        add_date = findViewById(R.id.pick_mood_date);
+        add_time = findViewById(R.id.pick_mood_time);
+        //handles selecting a calendar
+        add_date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCalendar(view);
+            }
+        });
+        //handles selecting a time
+        add_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTime(view);
+            }
+        });
     }
 
+    // for showing calendar so user could select a date
+    public void showCalendar(View view){
+        final Button dateFilled = (Button) view;
+        Calendar calendar = Calendar.getInstance();
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        year = calendar.get(Calendar.YEAR);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+            //sets formatted date on the button
+            @Override
+            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
+                String formattedDate = String.format("%d-%02d-%02d", y, m+1, d);
+                dateFilled.setText(formattedDate);
+            }
+        }, year, month, day);
+        datePickerDialog.show();
+    }
+    //for showing time so user could select a time
+    public void showTime(View view){
+        final Button timeFilled = (Button) view;
+        Calendar calendar = Calendar.getInstance();
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        minute = calendar.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+
+            //sets formatted time on the button
+            @Override
+            public void onTimeSet(TimePicker timePicker, int h, int m) {
+                String formattedTime = String.format("%02d:%02d", h, m);
+                timeFilled.setText(formattedTime);
+            }
+        }, hour, minute, false);
+        timePickerDialog.show();
+    }
+
+    //for setting a photo for the mood
     public void setImage(View view){
         Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (imageIntent.resolveActivity(getPackageManager()) != null) {
@@ -52,6 +114,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         }
     }
 
+    //gets the photo that was taken and let the image be shown in the page
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode==REQUEST_IMAGE && resultCode==RESULT_OK){
