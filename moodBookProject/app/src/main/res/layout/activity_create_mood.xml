@@ -182,32 +182,4 @@
     </LinearLayout>
 
 
-
-
-<!--    <RelativeLayout-->
-<!--        android:layout_width="fill_parent"-->
-<!--        android:layout_height="wrap_content">-->
-
-<!--&lt;!&ndash;        <Button&ndash;&gt;-->
-<!--&lt;!&ndash;            android:id="@+id/pick_mood_photo"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_alignParentEnd="true"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_alignParentRight="true"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:onClick="takePicture"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_weight="1"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:text="@string/pick_mood_photo"></Button>&ndash;&gt;-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/fill_mood_photo"-->
-<!--            android:layout_width="fill_parent"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_weight="1"-->
-<!--            android:layout_margin="8dp"-->
-<!--            tools:srcCompat="@tools:sample/avatars[3]" />-->
-
-
-<!--    </RelativeLayout>-->
-
-
 </LinearLayout>
