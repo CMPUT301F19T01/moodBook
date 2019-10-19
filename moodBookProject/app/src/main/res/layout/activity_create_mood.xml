@@ -117,14 +117,16 @@
         android:layout_marginRight="10dp"
         android:text="Mood Situation: " />
 
-    <Button
+    <Spinner
         android:id="@+id/pick_mood_situation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:hint="Pick Mood Situation" />
+        android:entries="@array/situation_options"
+        android:prompt="@string/situation_prompt"
+        android:layout_margin="8dp"/>
 
     <TextView
         android:id="@+id/mood_reason"
