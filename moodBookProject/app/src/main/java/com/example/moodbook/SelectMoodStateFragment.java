@@ -2,6 +2,7 @@ package com.example.moodbook;
 
 import android.app.Dialog;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,12 +85,28 @@ public class SelectMoodStateFragment extends DialogFragment {
                     Toast.makeText(getContext(), "You have not selected anything", Toast.LENGTH_LONG).show();
                 }else if(selectedItem =="happy"){
                     Toast.makeText(getContext(), "Mood : Happy", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), CreateMoodActivity.class);
+                    intent.putExtra("emoji", R.drawable.happy);
+                    intent.putExtra("state",selectedItem);
+                    startActivity(intent);
                 }else if(selectedItem =="sad"){
                     Toast.makeText(getContext(), "Mood : Sad", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), CreateMoodActivity.class);
+                    intent.putExtra("emoji", R.drawable.sad);
+                    intent.putExtra("state",selectedItem);
+                    startActivity(intent);
                 }else if(selectedItem =="angry"){
                     Toast.makeText(getContext(), "Mood : Angry", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), CreateMoodActivity.class);
+                    intent.putExtra("emoji", R.drawable.angry);
+                    intent.putExtra("state",selectedItem);
+                    startActivity(intent);
                 }else if(selectedItem =="afraid"){
                     Toast.makeText(getContext(), "Mood : Afraid", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getContext(), CreateMoodActivity.class);
+                    intent.putExtra("emoji",R.drawable.afraid );
+                    intent.putExtra("state",selectedItem);
+                    startActivity(intent);
                 }else{
                     Toast.makeText(getContext(), "An Error Occurred", Toast.LENGTH_LONG).show();
                 }

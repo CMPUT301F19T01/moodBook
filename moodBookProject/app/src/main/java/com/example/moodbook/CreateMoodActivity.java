@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.util.Calendar;
@@ -24,6 +25,8 @@ public class CreateMoodActivity extends AppCompatActivity {
     Button pick_mood;
     Button add_photo;
     ImageView view_photo;
+    ImageView emoji;
+    TextView mood_state;
     Button add_date;
     Button add_time;
     private int year, month, day, hour, minute;
@@ -44,6 +47,15 @@ public class CreateMoodActivity extends AppCompatActivity {
 
             }
         });
+
+
+        //Mood State Displayer
+        int e = getIntent().getIntExtra("emoji",0);
+        String state = getIntent().getStringExtra("state");
+        mood_state = findViewById(R.id.mood_state);
+        mood_state.setText(state);
+        emoji = findViewById(R.id.emoji);
+        emoji.setImageResource(e);
 
         add_photo = findViewById(R.id.pick_mood_photo);
         view_photo = findViewById(R.id.fill_mood_photo);
