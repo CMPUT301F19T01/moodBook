@@ -35,7 +35,7 @@ import java.util.HashMap;
  * https://stackoverflow.com/questions/16812039/how-to-check-valid-email-format-entered-in-edittext  - iversoncru   used for verifying email format
  */
 //TODO:
-//  change buttons .isEnabled when appropriate
+//  handle empty fields
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -194,7 +194,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This method creates a new user in Firebase
      */
-    public void register(String email, String password, String userParam){
+    public Boolean register(String email, String password, String userParam){
         final String username = userParam;
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -207,11 +207,16 @@ public class LoginActivity extends AppCompatActivity {
                             updateUI(user);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Login failed: email in use", Toast.LENGTH_LONG).show();
                             updateUI(null);
                         }
                     }
                 });
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null){
+            return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
     }
 
     /**

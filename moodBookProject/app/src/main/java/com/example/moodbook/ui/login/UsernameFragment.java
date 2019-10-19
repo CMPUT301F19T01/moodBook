@@ -58,9 +58,13 @@ public class UsernameFragment extends DialogFragment {
                         usernameEditText.setError("Username in use");
                     } else {
                         // register the user with firebase
-                        ((LoginActivity) getActivity()).register(
+                        Boolean registerResult = ((LoginActivity) getActivity()).register(
                                 ((LoginActivity) getActivity()).email.getText().toString(),
                                 ((LoginActivity) getActivity()).password.getText().toString(), username);
+
+                        if (!registerResult){
+                            dismiss();
+                        }
                     }
                 }
             });
