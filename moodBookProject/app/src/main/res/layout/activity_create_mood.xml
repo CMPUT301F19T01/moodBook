@@ -19,24 +19,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-<<<<<<< HEAD
-=======
 
-
->>>>>>> b376957e575229c72b2561a8aa04abb6e1de18a1
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-<<<<<<< HEAD
-=======
-
-
->>>>>>> b376957e575229c72b2561a8aa04abb6e1de18a1
-
-        <TextView
+         <TextView
             android:id="@+id/mood_date"
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
@@ -60,54 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:text="Mood State: " />
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="42dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/pick_mood_state"
-            android:layout_width="209dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:text="@string/pick_mood_state"></Button>
-
-        <RelativeLayout
-            android:layout_width="198dp"
-            android:layout_height="wrap_content">
-
-            //default image here
-
-            <ImageView
-                android:id="@+id/emoji"
-                android:layout_width="57dp"
-                android:layout_height="26dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_weight="1"
-                android:src="@drawable/happy" />
-
-            <TextView
-                android:id="@+id/mood_state"
-                android:layout_width="101dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="23dp"
-                android:layout_marginLeft="23dp"
-                android:layout_marginTop="11dp"
-                android:layout_toEndOf="@+id/emoji"
-                android:layout_toRightOf="@+id/emoji"></TextView>
-
-        </RelativeLayout>
-
-    </LinearLayout>
+        android:text="Time: " />
 
 
         <Button
@@ -125,7 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Time: " />
+            android:text="Mood State: " />
 
 
         <LinearLayout
@@ -133,7 +76,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-<<<<<<< HEAD
             <Button
                 android:id="@+id/pick_mood_state"
                 android:layout_width="fill_parent"
@@ -142,8 +84,9 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="10dp"
-                android:text="@string/pick_mood_state">
-            </Button>
+                android:text="@string/pick_mood_state"
+                android:hint="Add Emoticon"/>
+
 
 
             <ImageView
@@ -165,10 +108,6 @@
             android:layout_marginLeft="10dp"
             android:text="Mood Location: " />
 
-=======
-        </LinearLayout>
-        
->>>>>>> b376957e575229c72b2561a8aa04abb6e1de18a1
         <Button
             android:id="@+id/pick_mood_location"
             android:layout_width="match_parent"
