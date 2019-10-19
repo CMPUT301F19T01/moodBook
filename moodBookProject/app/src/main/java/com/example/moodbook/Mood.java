@@ -3,89 +3,159 @@ package com.example.moodbook;
 import android.location.Location;
 import android.media.Image;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Mood {
     private Date date;
     private Date time;
-    private String emotional_state;
-    private String reason_text;
-    private Image reason_photo;     // string of image name?
-    private String situation;
-    private Location location;
-    public Mood(Date date, Date time, String emotional_state,
+    private String emotion;
+    private String reason_text;     // optional
+    private Image reason_photo;     // optional
+    private String situation;       // optional
+    private Location location;      // optional
+
+    private SimpleDateFormat dateFt;    // date format
+    private SimpleDateFormat timeFt;    // time format
+    private HashMap<String, Integer> emotionImageMap;   // map emotion text to emotion image id
+
+    public Mood(Date date, Date time, String emotion,
                 String reason_text, Image reason_photo,
                 String situation, Location location) {
-        setAll(date, time, emotional_state, reason_text, reason_photo, situation, location);
+        // Initialize
+        dateFt = new SimpleDateFormat ("yyyy-MM-dd");
+        timeFt = new SimpleDateFormat ("HH:mm");
+        emotionImageMap = new HashMap<>();
+        emotionImageMap.put("happy", R.drawable.happy);
+        emotionImageMap.put("sad", R.drawable.sad);
+        emotionImageMap.put("angry", R.drawable.angry);
+        emotionImageMap.put("afraid", R.drawable.afraid);
+
+        setAll(date, time, emotion, reason_text, reason_photo, situation, location);
     }
 
-    public Date getDate() {
-        return date;
+    public Mood(Date date, Date time, String emotion) {
+        this(date, time, emotion, null, null, null, null);
     }
 
-    public Date getTime() {
-        return time;
-    }
-
-    public String getEmotional_state() {
-        return emotional_state;
-    }
-
-    public String getReason_text() {
-        return reason_text;
-    }
-
-    public Image getReason_photo() {
-        return reason_photo;
-    }
-
-    public String getSituation() {
-        return situation;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-
-
-    public void setAll(Date date, Date time, String emotional_state,
-                  String reason_text, Image reason_photo,
-                  String situation, Location location) {
+    public void setAll(Date date, Date time, String emotion,
+                       String reason_text, Image reason_photo,
+                       String situation, Location location) {
         setDate(date);
         setTime(time);
-        setEmotional_state(emotional_state);
-        setReason_text(reason_text);
-        setReason_photo(reason_photo);
+        setEmotion(emotion);
+        setReasonText(reason_text);
+        setReasonPhoto(reason_photo);
         setSituation(situation);
         setLocation(location);
     }
 
+    // Date
     public void setDate(Date date) {
+        // Initialize to current date
+        if(date == null) {
+            date = new Date();
+        }
         this.date = date;
     }
 
+    public String getDateText() {
+        return dateFt.format(this.date);
+    }
+
+    // Time
     public void setTime(Date time) {
+        // Initialize to current time
+        if(time == null) {
+            time = new Date();
+        }
         this.time = time;
     }
 
-    public void setEmotional_state(String emotional_state) {
-        this.emotional_state = emotional_state;
+    public String getTimeText() {
+        return timeFt.format(this.time);
     }
 
-    public void setReason_text(String reason_text) {
+    // Emotion
+    public void setEmotion(String emotion) {
+        // Error: empty
+        if(emotion == null) {
+            // TODO
+            return;
+        }
+        emotion = emotion.toLowerCase();
+        // Valid argument
+        if(emotionImageMap.containsKey(emotion)){
+            this.emotion = emotion;
+        }
+        // Error: invalid argument
+        else{
+            // TODO
+        }
+    }
+
+    public String getEmotionText() {
+        return this.emotion;
+    }
+
+    public Integer getEmotionImageResource() {
+        Integer imageId = null;
+        if(this.emotion != null){
+            imageId = emotionImageMap.get(this.emotion);
+        }
+        return imageId;
+    }
+
+    // Reason
+    public void setReasonText(String reason_text) {
+        // Check if text is longer than 20 characters or 3 words
+        if(reason_text != null){
+            // Error: > 20 characters
+            if(reason_text.length() > 20){
+                // TODO
+                return;
+            }
+            else{
+                String[] reason_text_words = reason_text.trim().split(" ");
+                // Error: > 3 words
+                if(reason_text_words.length > 3){
+                    // TODO
+                    return;
+                }
+            }
+        }
+        // Valid
         this.reason_text = reason_text;
     }
 
-    public void setReason_photo(Image reason_photo) {
+    public String getReasonText() {
+        return this.reason_text;
+    }
+
+    public void setReasonPhoto(Image reason_photo) {
         this.reason_photo = reason_photo;
     }
 
+    public Image getReasonPhoto() {
+        return this.reason_photo;
+    }
+
+    // Situation
     public void setSituation(String situation) {
         this.situation = situation;
     }
 
+    public String getSituation() {
+        return this.situation;
+    }
+
+    // Location
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    public Location getLocation() {
+        return this.location;
     }
 }
