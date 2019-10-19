@@ -132,8 +132,6 @@
             android:ems="10"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:entries="@array/situation_options"
-            android:prompt="@string/situation_prompt"
             android:layout_margin="8dp"/>
 
         <TextView

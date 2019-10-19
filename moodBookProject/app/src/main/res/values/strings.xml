@@ -37,12 +37,4 @@
     <string name="todo">TODO</string>
 
 
-    <string name="situation_prompt">Choose a situation</string>
-
-    <string-array name="situation_options">
-        <item>Alone</item>
-        <item>With one person</item>
-        <item>With two or more</item>
-        <item>With a crowd</item>
-    </string-array>
 </resources>

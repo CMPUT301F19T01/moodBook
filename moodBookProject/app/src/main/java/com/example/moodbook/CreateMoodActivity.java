@@ -2,18 +2,19 @@ package com.example.moodbook;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,8 +22,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreateMoodActivity extends AppCompatActivity {
 
@@ -53,6 +58,65 @@ public class CreateMoodActivity extends AppCompatActivity {
         add_reason = findViewById(R.id.pick_mood_reason);
         final Button add_button = findViewById(R.id.add_mood_button);
         final Button cancel_button = findViewById(R.id.cancel_mood_button);
+
+
+        //initialize string array for situation
+        String[] option_sit = new String[]{
+                "Add situation...",
+                "Alone",
+                "With one person",
+                "With two and more",
+                "With a crowd"
+        };
+
+        final List<String> listSituation = new ArrayList<>(Arrays.asList(option_sit));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                this,R.layout.spinner_situation,listSituation){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView text = (TextView) view;
+                if(position == 0){
+                    text.setTextColor(Color.GRAY);
+                }
+                else {
+                    text.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_situation);
+        situation.setAdapter(spinnerArrayAdapter);
+        situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItemText = (String) parent.getItemAtPosition(position);
+                // first item disabled
+                if(position > 0){
+                    Toast.makeText
+                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
 
         pick_mood.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +163,9 @@ public class CreateMoodActivity extends AppCompatActivity {
                 time_mood = add_time.getText().toString();
                 reason_mood = add_reason.getText().toString();
                 situation_mood = situation.getSelectedItem().toString();
-
+                Toast.makeText
+                        (getApplicationContext(), "Selected : " + situation_mood, Toast.LENGTH_SHORT)
+                        .show();
             }
         });
 
