@@ -21,6 +21,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * This creates a fragment that allows the user to set a username
@@ -34,14 +43,16 @@ public class UsernameFragment extends DialogFragment {
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_username, null);
         usernameEditText = view.findViewById(R.id.usernameEditText);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
+        final ArrayList<String> usernameList = ((LoginActivity) getActivity()).usernameList;
+
         // Determine if registering or updating
         Fragment fragment = getFragmentManager().findFragmentByTag("registering");
-        if ("registering" == fragment.getTag()){
+        if ("registering" == fragment.getTag()) {
             return builder
                     .setView(view)
                     .setTitle("Set username")
@@ -51,12 +62,19 @@ public class UsernameFragment extends DialogFragment {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             //TODO verify username unique
 
-                            // register the user with firebase
-                            ((LoginActivity) getActivity()).register(
-                                    ((LoginActivity) getActivity()).email.getText().toString(),
-                                    ((LoginActivity) getActivity()).password.getText().toString(), usernameEditText.getText().toString());
+                            String username = usernameEditText.getText().toString();
+                            Log.d("EmailUsernameTesting", Arrays.toString(usernameList.toArray()));
 
-                            //updateUsername(usernameEditText.getText().toString());
+                            if (usernameList.contains(username)) {
+                                Log.w("Email", "username exists:" + username);
+                            } else {
+                                // register the user with firebase
+                                ((LoginActivity) getActivity()).register(
+                                        ((LoginActivity) getActivity()).email.getText().toString(),
+                                        ((LoginActivity) getActivity()).password.getText().toString(), username);
+
+                                //updateUsername(usernameEditText.getText().toString());
+                            }
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -71,6 +89,10 @@ public class UsernameFragment extends DialogFragment {
                     .create();
         }
     }
+
+}
+
+
 
     /*/**
      * This updates the firebase user profile with a username
@@ -98,4 +120,3 @@ public class UsernameFragment extends DialogFragment {
         Log.d("EMAIL", "USERNAME:" + user.getDisplayName());
     }*/
 
-}

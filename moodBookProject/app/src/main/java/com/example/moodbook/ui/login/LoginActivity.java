@@ -22,7 +22,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -40,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseFirestore db;
     private  CollectionReference collectionReference;
+    protected ArrayList<String> usernameList;
     private Button loginButton;
     private Button registerButton;
     protected EditText email;
@@ -53,6 +57,8 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.getInstance().signOut();
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("USERS");
+
+        usernameList = getUsernameList();
 
         setContentView(R.layout.activity_login);
 
@@ -210,12 +216,34 @@ public class LoginActivity extends AppCompatActivity {
 
         // Initialize containers
 
-        HashMap<String, String> nullData = new HashMap<>();
-        data.put("null", "null");
+        HashMap<String, Object> nullData = new HashMap<>();
+        data.put("null", null);
 
+        db.collection("usernamelist").document(username).set(nullData); // add username to usernamelist
         collectionReference.document(uid).collection("MOODS").document("null").set(nullData);
         collectionReference.document(uid).collection("FRIENDS").document("null").set(nullData);
         collectionReference.document(uid).collection("REQUESTS").document("null").set(nullData);
 
+    }
+
+    private ArrayList<String> getUsernameList(){
+        FirebaseFirestore db = db = FirebaseFirestore.getInstance();
+        final ArrayList<String> usernameList = new ArrayList<>();
+        db.collection("usernamelist")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                usernameList.add(document.getId());
+                            }
+                        } else {
+                            Log.w("Email", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+        return usernameList;
     }
 }
