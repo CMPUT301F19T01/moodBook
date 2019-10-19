@@ -133,7 +133,7 @@
         android:hint="HH:MM" />
 
     <TextView
-        android:id="@+id/mood_state"
+        android:id="@+id/mood_state_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -141,29 +141,49 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="42dp"
         android:orientation="horizontal">
 
         <Button
-                android:id="@+id/pick_mood_state"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="10dp"
-                android:text="@string/pick_mood_state">
-         </Button>
-
-        <ImageView
-            android:id="@+id/emoji"
-            android:layout_width="fill_parent"
-            android:layout_height="30dp"
+            android:id="@+id/pick_mood_state"
+            android:layout_width="209dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:layout_margin="8dp"
-            android:src="@drawable/happy"/> //default image here
+            android:text="@string/pick_mood_state"></Button>
+
+        <RelativeLayout
+            android:layout_width="198dp"
+            android:layout_height="wrap_content">
+
+            //default image here
+
+            <ImageView
+                android:id="@+id/emoji"
+                android:layout_width="57dp"
+                android:layout_height="26dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:src="@drawable/happy" />
+
+            <TextView
+                android:id="@+id/mood_state"
+                android:layout_width="101dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="23dp"
+                android:layout_marginLeft="23dp"
+                android:layout_marginTop="11dp"
+                android:layout_toEndOf="@+id/emoji"
+                android:layout_toRightOf="@+id/emoji"></TextView>
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 
