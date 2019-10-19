@@ -60,7 +60,7 @@ public class HomeFragment extends Fragment {
         moodListView = root.findViewById(R.id.mood_history_listView);
         moodAdapter = new CustomAdapter(getContext(), new ArrayList<Mood>());
         // test adding
-        Mood testItem = new Mood(null, null, "happy");
+        Mood testItem = new Mood(null, null, "sad");
         moodAdapter.add(testItem);
         moodListView.setAdapter(moodAdapter);
 

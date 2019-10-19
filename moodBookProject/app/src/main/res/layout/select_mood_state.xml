@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 <!--    <LinearLayout-->
@@ -15,15 +16,164 @@
 <!--            android:textSize="30sp"-->
 <!--            android:textAlignment="center"/>-->
 <!--    </LinearLayout>-->
-    <SearchView
-        android:id="@+id/search_my_mood"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></SearchView>
+<!--    <SearchView-->
+<!--        android:id="@+id/search_my_mood"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"></SearchView>-->
 
-    <ListView
-        android:id="@+id/moodListView"
-        android:layout_width="wrap_content"
-        android:layout_height="264dp"></ListView>
+<!--    <ListView-->
+<!--        android:id="@+id/moodListView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="264dp"></ListView>-->
+<!--    -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:orientation="vertical"
+        android:background="#E1C494">
+
+        <ImageView
+            android:id="@+id/afraid_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="28dp"
+            android:src="@drawable/afraid" />
+
+        <TextView
+            android:id="@+id/afraid_text"
+            android:layout_width="254dp"
+            android:layout_height="49dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_toEndOf="@+id/afraid_image"
+            android:layout_toRightOf="@+id/afraid_image"
+            android:text="Afraid"
+            android:textSize="24dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:orientation="vertical"
+        android:background="#F68A90">
+
+        <ImageView
+            android:id="@+id/angry_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="28dp"
+            android:src="@drawable/angry" />
+
+        <TextView
+            android:id="@+id/angry_text"
+            android:layout_width="254dp"
+            android:layout_height="49dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_toEndOf="@+id/angry_image"
+            android:layout_toRightOf="@+id/angry_image"
+            android:text="Angry"
+            android:textSize="24dp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:orientation="vertical"
+        android:background="#EBDD06">
+
+        <ImageView
+            android:id="@+id/happy_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="28dp"
+            android:src="@drawable/happy" />
+
+        <TextView
+            android:id="@+id/happy_text"
+            android:layout_width="254dp"
+            android:layout_height="49dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_toEndOf="@+id/happy_image"
+            android:layout_toRightOf="@+id/happy_image"
+            android:text="Happy"
+            android:textSize="24dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:orientation="vertical"
+        android:background="#ACE1F3">
+
+        <ImageView
+            android:id="@+id/sad_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="28dp"
+            android:src="@drawable/sad" />
+
+        <TextView
+            android:id="@+id/sad_text"
+            android:layout_width="254dp"
+            android:layout_height="49dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="34dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:layout_toEndOf="@+id/sad_image"
+            android:layout_toRightOf="@+id/sad_image"
+            android:text="Sad"
+            android:textSize="24dp" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/select"
