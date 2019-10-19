@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,15 +26,14 @@ import java.util.Calendar;
 
 public class CreateMoodActivity extends AppCompatActivity {
 
-    Button pick_mood;
-    Button add_photo;
-    ImageView view_photo;
-    ImageView emoji;
-    TextView mood_state;
-    Button add_date;
-    Button add_time;
+    private Button pick_mood, add_photo, add_date, add_time;
+    private ImageView view_photo, emoji;
+    private TextView mood_state;
+    private EditText add_reason;
     private int year, month, day, hour, minute;
+    private Spinner situation;
     private static final int REQUEST_IMAGE = 101;
+    private String date_mood, time_mood, reason_mood, situation_mood;
 
 
     @Override
@@ -44,6 +44,16 @@ public class CreateMoodActivity extends AppCompatActivity {
         final FragmentManager fm = getSupportFragmentManager();
         final SelectMoodStateFragment s = new SelectMoodStateFragment();
         pick_mood = findViewById(R.id.pick_mood_state);
+        emoji = findViewById(R.id.show_mood_state);
+        add_photo = findViewById(R.id.pick_mood_photo);
+        view_photo = findViewById(R.id.fill_mood_photo);
+        add_date = findViewById(R.id.pick_mood_date);
+        add_time = findViewById(R.id.pick_mood_time);
+        situation = (Spinner) findViewById(R.id.pick_mood_situation);
+        add_reason = findViewById(R.id.pick_mood_reason);
+        final Button add_button = findViewById(R.id.add_mood_button);
+        final Button cancel_button = findViewById(R.id.cancel_mood_button);
+
         pick_mood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,18 +62,13 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
-
         //Mood State Displayer
         int e = getIntent().getIntExtra("emoji",0);
         String state = getIntent().getStringExtra("state");
-        mood_state = findViewById(R.id.pick_mood_state);
-        mood_state.setText(state);
-        emoji = findViewById(R.id.fill_mood_photo);
+        pick_mood.setText(state);
         emoji.setImageResource(e);
 
         //sets mood photo
-        add_photo = findViewById(R.id.pick_mood_photo);
-        view_photo = findViewById(R.id.fill_mood_photo);
         add_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,8 +77,6 @@ public class CreateMoodActivity extends AppCompatActivity {
         });
 
         // sets date, time
-        add_date = findViewById(R.id.pick_mood_date);
-        add_time = findViewById(R.id.pick_mood_time);
         //handles selecting a calendar
         add_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,9 +91,27 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
-        //for situational
-        Spinner situation = (Spinner) findViewById(R.id.pick_mood_situation);
-        String text = situation.getSelectedItem().toString();
+        // When this button is clicked, we want to return a result
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                date_mood = add_date.getText().toString();
+                time_mood = add_time.getText().toString();
+                reason_mood = add_reason.getText().toString();
+                situation_mood = situation.getSelectedItem().toString();
+
+            }
+        });
+
+        //when cancel button is pressed, return to main activity; do nothing
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setResult(AppCompatActivity.RESULT_CANCELED);
+                finish();
+            }
+        });
+
     }
 
     // for showing calendar so user could select a date
@@ -144,6 +165,9 @@ public class CreateMoodActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             view_photo.setImageBitmap(imageBitmap);
+        }
+        else {
+
         }
     }
 
