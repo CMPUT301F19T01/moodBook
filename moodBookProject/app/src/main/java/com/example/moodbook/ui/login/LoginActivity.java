@@ -32,10 +32,10 @@ import java.util.HashMap;
  * This activity handles login and registration
  * Citation: https://firebase.google.com/docs/auth/android/manage-users?authuser=0
  * https://stackoverflow.com/questions/43599638/firebase-signinwithemailandpassword-and-createuserwithemailandpassword-not-worki -Sagar Raut   used for mAuthListener
+ * https://stackoverflow.com/questions/16812039/how-to-check-valid-email-format-entered-in-edittext  - iversoncru   used for verifying email format
  */
 //TODO:
 //  change buttons .isEnabled when appropriate
-//  input verification in verify() method
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -139,6 +139,7 @@ public class LoginActivity extends AppCompatActivity {
      *      False if email is not an email address
      */
     private Boolean verifyEmail(String email){
+        //TODO: verify email unique
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 

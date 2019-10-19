@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ import java.util.Arrays;
 
 public class UsernameFragment extends DialogFragment {
     private EditText usernameEditText;
+    private Button usernameButton;
 
     @NonNull
     @Override
@@ -36,44 +38,42 @@ public class UsernameFragment extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_username, null);
         usernameEditText = view.findViewById(R.id.usernameEditText);
 
+        usernameButton = view.findViewById(R.id.usernameButton);
+
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         // Determine if registering or updating
         Fragment fragment = getFragmentManager().findFragmentByTag("registering");
         if ("registering" == fragment.getTag()) {
-            final ArrayList<String> usernameList = ((LoginActivity) getActivity()).usernameList;
-            return builder
-                    .setView(view)
-                    .setTitle("Set username")
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            final ArrayList<String> usernameList = ((LoginActivity) getActivity()).usernameList; // get the usernamelist from LoginActivity
 
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
+            usernameButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String username = usernameEditText.getText().toString();
+                    Log.d("EmailUsernameTesting", Arrays.toString(usernameList.toArray()));
 
-                            String username = usernameEditText.getText().toString();
-                            Log.d("EmailUsernameTesting", Arrays.toString(usernameList.toArray()));
-
-                            if (usernameList.contains(username)) {
-                                Log.w("Email", "username exists:" + username);
-                            } else {
-                                // register the user with firebase
-                                ((LoginActivity) getActivity()).register(
-                                        ((LoginActivity) getActivity()).email.getText().toString(),
-                                        ((LoginActivity) getActivity()).password.getText().toString(), username);
-                            }
-                        }
-                    })
-                    .setNegativeButton("Cancel", null)
-                    .create();
+                    if (usernameList.contains(username)) {
+                        Log.w("Email", "username exists:" + username);
+                        usernameEditText.setError("Username in use");
+                    } else {
+                        // register the user with firebase
+                        ((LoginActivity) getActivity()).register(
+                                ((LoginActivity) getActivity()).email.getText().toString(),
+                                ((LoginActivity) getActivity()).password.getText().toString(), username);
+                    }
+                }
+            });
 
         // Not registering an account
         } else { //TODO updating username. only implement if client requests this feature
-            return builder
-                    .setView(view)
-                    .setTitle("Set username")
-                    .setPositiveButton("Ok", null)
-                    .setNegativeButton("Cancel", null)
-                    .create();
+            Log.d("Email", "not registering");
         }
+        return builder
+                .setView(view)
+                .setTitle("Set username")
+                .setNegativeButton("Cancel", null)
+                .create();
     }
+
 }
