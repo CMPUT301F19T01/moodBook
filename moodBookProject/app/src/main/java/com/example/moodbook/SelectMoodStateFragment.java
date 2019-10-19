@@ -29,6 +29,8 @@ public class SelectMoodStateFragment extends DialogFragment {
     RelativeLayout angry;
     String selectedItem = "";
     SearchView sv;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View rootView = inflater.inflate(R.layout.select_mood_state,null);
@@ -81,6 +83,7 @@ public class SelectMoodStateFragment extends DialogFragment {
         select_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if(selectedItem == ""){
                     Toast.makeText(getContext(), "You have not selected anything", Toast.LENGTH_LONG).show();
                 }else if(selectedItem =="happy"){
@@ -117,7 +120,6 @@ public class SelectMoodStateFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 dismiss();
-
             }
         });
 

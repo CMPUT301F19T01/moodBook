@@ -3,28 +3,39 @@ package com.example.moodbook;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+
+import android.widget.ArrayAdapter;
+
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
+
 import android.widget.RelativeLayout;
+
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreateMoodActivity extends AppCompatActivity {
+
 
     Button pick_mood;
     Button add_photo;
@@ -40,8 +51,17 @@ public class CreateMoodActivity extends AppCompatActivity {
     String [] states ={"Afraid","Angry","Happy","Sad"};
     int[] images = {R.drawable.afraid, R.drawable.angry,R.drawable.happy,R.drawable.sad};
     int[] colors = {R.color.afraidBrown,R.color.angryRed,R.color.happyYellow,R.color.sadBlue};
+
+//    private Button pick_mood, add_photo, add_date, add_time;
+//    private ImageView view_photo, emoji;
+//    private TextView mood_state;
+    private EditText add_reason;
+
     private int year, month, day, hour, minute;
+    private Spinner situation;
     private static final int REQUEST_IMAGE = 101;
+    private String date_mood, time_mood, reason_mood, situation_mood;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +71,75 @@ public class CreateMoodActivity extends AppCompatActivity {
         final FragmentManager fm = getSupportFragmentManager();
         final SelectMoodStateFragment s = new SelectMoodStateFragment();
         pick_mood = findViewById(R.id.pick_mood_state);
+        emoji = findViewById(R.id.emoji);
+        add_photo = findViewById(R.id.pick_mood_photo);
+        view_photo = findViewById(R.id.fill_mood_photo);
+        add_date = findViewById(R.id.pick_mood_date);
+        add_time = findViewById(R.id.pick_mood_time);
+        situation = (Spinner) findViewById(R.id.pick_mood_situation);
+        add_reason = findViewById(R.id.pick_mood_reason);
+        final Button add_button = findViewById(R.id.add_mood_button);
+        final Button cancel_button = findViewById(R.id.cancel_mood_button);
+
+
+        //initialize string array for situation
+        String[] option_sit = new String[]{
+                "Add situation...",
+                "Alone",
+                "With one person",
+                "With two and more",
+                "With a crowd"
+        };
+
+        final List<String> listSituation = new ArrayList<>(Arrays.asList(option_sit));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                this,R.layout.spinner_situation,listSituation){
+            @Override
+            public boolean isEnabled(int position){
+                if(position == 0) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView text = (TextView) view;
+                if(position == 0){
+                    text.setTextColor(Color.GRAY);
+                }
+                else {
+                    text.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_situation);
+        situation.setAdapter(spinnerArrayAdapter);
+        situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItemText = (String) parent.getItemAtPosition(position);
+                // first item disabled
+                if(position > 0){
+                    Toast.makeText
+                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
+
+
         pick_mood.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,19 +162,17 @@ public class CreateMoodActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
+
             }
         });
 
         //Mood State Displayer
         int e = getIntent().getIntExtra("emoji",0);
         String state = getIntent().getStringExtra("state");
-        mood_state = findViewById(R.id.mood_state);
-        mood_state.setText(state);
-        emoji = findViewById(R.id.emoji);
+        pick_mood.setText(state);
         emoji.setImageResource(e);
 
-        add_photo = findViewById(R.id.pick_mood_photo);
-        view_photo = findViewById(R.id.fill_mood_photo);
+        //sets mood photo
         add_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,8 +180,7 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
-        add_date = findViewById(R.id.pick_mood_date);
-        add_time = findViewById(R.id.pick_mood_time);
+        // sets date, time
         //handles selecting a calendar
         add_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,13 +188,36 @@ public class CreateMoodActivity extends AppCompatActivity {
                 showCalendar(view);
             }
         });
-        //handles selecting a time
         add_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showTime(view);
             }
         });
+
+        // When this button is clicked, we want to return a result
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                date_mood = add_date.getText().toString();
+                time_mood = add_time.getText().toString();
+                reason_mood = add_reason.getText().toString();
+                situation_mood = situation.getSelectedItem().toString();
+                Toast.makeText
+                        (getApplicationContext(), "Selected : " + situation_mood, Toast.LENGTH_SHORT)
+                        .show();
+            }
+        });
+
+        //when cancel button is pressed, return to main activity; do nothing
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setResult(AppCompatActivity.RESULT_CANCELED);
+                finish();
+            }
+        });
+
     }
 
     // for showing calendar so user could select a date
@@ -163,5 +272,11 @@ public class CreateMoodActivity extends AppCompatActivity {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             view_photo.setImageBitmap(imageBitmap);
         }
+        else {
+
+        }
     }
+
+
+
 }
