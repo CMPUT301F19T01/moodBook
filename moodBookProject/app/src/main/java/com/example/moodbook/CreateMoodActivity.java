@@ -70,8 +70,6 @@ public class CreateMoodActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_mood);
         final FragmentManager fm = getSupportFragmentManager();
         final SelectMoodStateFragment s = new SelectMoodStateFragment();
-        pick_mood = findViewById(R.id.pick_mood_state);
-        emoji = findViewById(R.id.emoji);
         add_photo = findViewById(R.id.pick_mood_photo);
         view_photo = findViewById(R.id.fill_mood_photo);
         add_date = findViewById(R.id.pick_mood_date);
@@ -138,15 +136,6 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
-
-
-        pick_mood.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                s.show(fm,"Hello");
-
-            }
-        });
         sp1 = (Spinner)findViewById(R.id.mood_spinner);
         adapter = new MoodStateAdapter(this,states,images );
         sp1.setAdapter(adapter);
@@ -166,11 +155,6 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
-        //Mood State Displayer
-        int e = getIntent().getIntExtra("emoji",0);
-        String state = getIntent().getStringExtra("state");
-        pick_mood.setText(state);
-        emoji.setImageResource(e);
 
         //sets mood photo
         add_photo.setOnClickListener(new View.OnClickListener() {
