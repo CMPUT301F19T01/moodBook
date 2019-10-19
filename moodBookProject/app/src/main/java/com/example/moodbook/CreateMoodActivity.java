@@ -48,14 +48,14 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
-
-        //Mood State Displayer
-        int e = getIntent().getIntExtra("emoji",0);
-        String state = getIntent().getStringExtra("state");
-        mood_state = findViewById(R.id.mood_state);
-        mood_state.setText(state);
-        emoji = findViewById(R.id.emoji);
-        emoji.setImageResource(e);
+//
+//        //Mood State Displayer
+//        int e = getIntent().getIntExtra("emoji",0);
+//        String state = getIntent().getStringExtra("state");
+//        mood_state = findViewById(R.id.mood_state);
+//        mood_state.setText(state);
+//       // emoji = findViewById(R.id.emoji);
+//        emoji.setImageResource(e);
 
         add_photo = findViewById(R.id.pick_mood_photo);
         view_photo = findViewById(R.id.fill_mood_photo);

@@ -19,92 +19,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-<<<<<<< HEAD
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-=======
-<!--<<<<<<< HEAD-->
-<!--&lt;!&ndash;    <RelativeLayout&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_width="fill_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;        android:layout_height="wrap_content">&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <ImageView&ndash;&gt;-->
-<!--&lt;!&ndash;            android:id="@+id/emoji"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="63dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="35dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_alignParentStart="true"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_alignParentLeft="true"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_alignParentTop="true"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginStart="6dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginLeft="6dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginTop="7dp"></ImageView>&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;            android:id="@+id/mood_state"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_alignParentTop="true"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginStart="13dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginLeft="13dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginTop="1dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginEnd="10dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_marginRight="10dp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_toStartOf="@+id/pick_mood_state"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_toLeftOf="@+id/pick_mood_state"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_toEndOf="@+id/emoji"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_toRightOf="@+id/emoji"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:text="@string/mood_state_would_showup_here"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:textSize="12sp"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:textStyle="bold" />&ndash;&gt;-->
-
-<!--&lt;!&ndash;        <Button&ndash;&gt;-->
-<!--&lt;!&ndash;            android:id="@+id/pick_mood_state"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_alignParentEnd="true"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:layout_alignParentRight="true"&ndash;&gt;-->
-<!--&lt;!&ndash;            android:text="@string/pick_mood_state"></Button>&ndash;&gt;-->
-<!--&lt;!&ndash;    </RelativeLayout>&ndash;&gt;-->
-
-<!--    <RelativeLayout-->
-<!--        android:layout_width="fill_parent"-->
-<!--        android:layout_height="wrap_content">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/mood_date"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentStart="true"-->
-<!--            android:layout_alignParentLeft="true"-->
-<!--            android:layout_alignParentTop="true"-->
-<!--            android:layout_marginStart="79dp"-->
-<!--            android:layout_marginLeft="79dp"-->
-<!--            android:layout_marginTop="1dp"-->
-<!--            android:layout_marginEnd="10dp"-->
-<!--            android:layout_marginRight="10dp"-->
-<!--            android:layout_toStartOf="@+id/pick_mood_date"-->
-<!--            android:layout_toLeftOf="@+id/pick_mood_date"-->
-<!--            android:text="@string/mood_date_would_showup_here"-->
-<!--            android:textSize="12sp"-->
-<!--            android:textStyle="bold" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/pick_mood_date"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:text="@string/pick_mood_date"></Button>-->
-<!--    </RelativeLayout>-->
-<!--=======-->
-<!--&gt;>>>>>> 460b6f933246e4c869e28845339f12eb3dcf33e8-->
->>>>>>> 1b630aec3acc66a5427ce7e6ed42c8d767977c31
-
 
         <TextView
             android:id="@+id/mood_date"
@@ -164,7 +84,7 @@
                 android:text="@string/pick_mood_state">
             </Button>
 
-<<<<<<< HEAD
+
             <ImageView
                 android:id="@+id/show_mood_state"
                 android:layout_width="fill_parent"
@@ -181,14 +101,7 @@
             android:id="@+id/mood_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-=======
-        <ImageView
-            android:id="@+id/emoji"
-            android:layout_width="fill_parent"
-            android:layout_height="30dp"
->>>>>>> 1b630aec3acc66a5427ce7e6ed42c8d767977c31
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:text="Mood Location: " />
 
         <Button
@@ -291,9 +204,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"/>
 
-
     </LinearLayout>
-
 
 
 </ScrollView>
