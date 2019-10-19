@@ -7,4 +7,5 @@
     <color name="happyYellow">#EBDD06</color>
     <color name="angryRed">#F68A90</color>
     <color name="afraidBrown">#E1C494</color>
+    <drawable name="highlighter">#08F90E</drawable>
 </resources>
