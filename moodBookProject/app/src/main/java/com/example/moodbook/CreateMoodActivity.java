@@ -2,14 +2,25 @@ package com.example.moodbook;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
+
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -44,6 +55,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     TextView mood_state;
     Button add_date;
     Button add_time;
+    Button add_location;
     String SelectedMoodState;
     Spinner sp1;
     RelativeLayout pickState;
@@ -61,6 +73,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     private Spinner situation;
     private static final int REQUEST_IMAGE = 101;
     private String date_mood, time_mood, reason_mood, situation_mood;
+    private double lat_mood, lon_mood;
 
 
     @Override
@@ -76,6 +89,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         add_time = findViewById(R.id.pick_mood_time);
         situation = (Spinner) findViewById(R.id.pick_mood_situation);
         add_reason = findViewById(R.id.pick_mood_reason);
+        add_location = findViewById(R.id.pick_mood_location);
         final Button add_button = findViewById(R.id.add_mood_button);
         final Button cancel_button = findViewById(R.id.cancel_mood_button);
 
@@ -202,6 +216,53 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
+        // gets users location
+        // create location manager and listener
+        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        final LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                lat_mood = location.getLatitude();
+                lon_mood = location.getLongitude();
+                Toast.makeText(getApplicationContext(), lat_mood + "   " + lon_mood, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {} // not implemented
+
+            @Override
+            public void onProviderEnabled(String s) {} // not implemented
+
+            @Override
+            public void onProviderDisabled(String s) {} // not implemented
+        };
+
+        // set criteria for accuracy of location provider
+        final Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
+
+        // set to null because we are required to supply looper but not going to use it
+        final Looper looper = null;
+
+        // set the button onClickListener to request location
+        add_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // ask user for permission to get location
+                if (ActivityCompat.checkSelfPermission(CreateMoodActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreateMoodActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(CreateMoodActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                    return;
+
+
+                }else{ // permission granted
+                    locationManager.requestSingleUpdate(criteria, locationListener, looper);
+
+                }
+            }
+        });
+
+
     }
 
     // for showing calendar so user could select a date
@@ -259,6 +320,10 @@ public class CreateMoodActivity extends AppCompatActivity {
         else {
 
         }
+    }
+
+    public void showCoords(View view){
+
     }
 
 
