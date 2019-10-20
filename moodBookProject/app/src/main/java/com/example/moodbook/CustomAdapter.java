@@ -1,3 +1,4 @@
+/* Depreciated */
 package com.example.moodbook;
 
 import android.content.Context;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class CustomAdapter extends ArrayAdapter {
     private ArrayList<Mood> moods;
     private Context context;

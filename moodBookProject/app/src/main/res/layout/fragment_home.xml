@@ -2,7 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinatorLayout"
+    android:id="@+id/mood_history_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,12 +15,13 @@
         <SearchView
             android:id="@+id/mood_history_search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></SearchView>
+            android:layout_height="wrap_content" />
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/mood_history_listView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 

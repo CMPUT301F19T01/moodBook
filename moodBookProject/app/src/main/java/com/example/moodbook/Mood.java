@@ -10,15 +10,15 @@ import java.util.HashMap;
 public class Mood {
     private Date date;
     private Date time;
-    private String emotion;
+    private String emotion_text;
     private String reason_text;     // optional
     private Image reason_photo;     // optional
     private String situation;       // optional
     private Location location;      // optional
 
-    private SimpleDateFormat dateFt;    // date format
-    private SimpleDateFormat timeFt;    // time format
-    private HashMap<String, Integer> emotionImageMap;   // map emotion text to emotion image id
+    private final SimpleDateFormat dateFt;    // date format
+    private final SimpleDateFormat timeFt;    // time format
+    private final HashMap<String, Emotion> emotionMap;
 
     public Mood(Date date, Date time, String emotion,
                 String reason_text, Image reason_photo,
@@ -26,11 +26,11 @@ public class Mood {
         // Initialize
         dateFt = new SimpleDateFormat ("yyyy-MM-dd");
         timeFt = new SimpleDateFormat ("HH:mm");
-        emotionImageMap = new HashMap<>();
-        emotionImageMap.put("happy", R.drawable.happy);
-        emotionImageMap.put("sad", R.drawable.sad);
-        emotionImageMap.put("angry", R.drawable.angry);
-        emotionImageMap.put("afraid", R.drawable.afraid);
+        emotionMap = new HashMap<>();
+        emotionMap.put("happy",new Emotion("happy"));
+        emotionMap.put("sad",new Emotion("sad"));
+        emotionMap.put("angry",new Emotion("angry"));
+        emotionMap.put("afraid",new Emotion("afraid"));
 
         setAll(date, time, emotion, reason_text, reason_photo, situation, location);
     }
@@ -78,16 +78,16 @@ public class Mood {
     }
 
     // Emotion
-    public void setEmotion(String emotion) {
+    public void setEmotion(String emotion_text) {
         // Error: empty
-        if(emotion == null) {
+        if(emotion_text == null) {
             // TODO
             return;
         }
-        emotion = emotion.toLowerCase();
+        emotion_text = emotion_text.toLowerCase();
         // Valid argument
-        if(emotionImageMap.containsKey(emotion)){
-            this.emotion = emotion;
+        if(emotionMap.containsKey(emotion_text)){
+            this.emotion_text = emotion_text;
         }
         // Error: invalid argument
         else{
@@ -96,15 +96,23 @@ public class Mood {
     }
 
     public String getEmotionText() {
-        return this.emotion;
+        return emotionMap.get(this.emotion_text).getName();
     }
 
     public Integer getEmotionImageResource() {
         Integer imageId = null;
-        if(this.emotion != null){
-            imageId = emotionImageMap.get(this.emotion);
+        if(this.emotion_text != null){
+            imageId = emotionMap.get(this.emotion_text).getImageId();
         }
         return imageId;
+    }
+
+    public Integer getEmotionColorResource() {
+        Integer colorId = null;
+        if(this.emotion_text != null){
+            colorId = emotionMap.get(this.emotion_text).getColorId();
+        }
+        return colorId;
     }
 
     // Reason
@@ -157,5 +165,64 @@ public class Mood {
 
     public Location getLocation() {
         return this.location;
+    }
+
+
+    protected class Emotion{
+        String name;
+        Integer image_id;
+        Integer color_id;
+
+        public Emotion(String name) {
+            this.name = name;
+            setImageId();
+            setColorId();
+        }
+
+        private void setImageId() {
+            switch(this.name){
+                case "happy":
+                    this.image_id = R.drawable.happy;
+                    break;
+                case "sad":
+                    this.image_id = R.drawable.sad;
+                    break;
+                case "angry":
+                    this.image_id = R.drawable.angry;
+                    break;
+                case "afraid":
+                    this.image_id = R.drawable.afraid;
+                    break;
+            }
+        }
+
+        private void setColorId() {
+            switch(this.name){
+                case "happy":
+                    this.color_id = R.color.happyYellow;
+                    break;
+                case "sad":
+                    this.color_id = R.color.sadBlue;
+                    break;
+                case "angry":
+                    this.color_id = R.color.angryRed;
+                    break;
+                case "afraid":
+                    this.color_id = R.color.afraidBrown;
+                    break;
+            }
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public Integer getImageId() {
+            return this.image_id;
+        }
+
+        public Integer getColorId() {
+            return this.color_id;
+        }
     }
 }
