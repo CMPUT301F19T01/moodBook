@@ -35,7 +35,10 @@ import java.util.HashMap;
  * https://stackoverflow.com/questions/16812039/how-to-check-valid-email-format-entered-in-edittext  - iversoncru   used for verifying email format
  */
 //TODO:
-//  handle empty fields
+//  move methods to a new LoginHandler class to make code cleaner?
+//  POSSIBLE BUG: two users attempt registering at the (sameish) time.. depends on when activity was created
+//  currently, the list of all usernames is cached on creation of activity. this is used as a workaround. the firebase call to retrieve the documents in the usernamelist collection is done synchronously so it won't return in time if I update it as its needed
+    // fix by having the activity halt until a response from firebase is recieved maybe?
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -43,28 +46,30 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseFirestore db;
     private  CollectionReference collectionReference;
+
     protected ArrayList<String> usernameList;
+
     private Button loginButton;
     private Button registerButton;
     protected EditText email;
     protected EditText password;
+
     private static final String TAG = "EmailPassword";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
         //Stuck logging in? use the following line once to log out the cached session:
-        mAuth.getInstance().signOut();
+        //mAuth.getInstance().signOut();
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("USERS");
+        mAuth = FirebaseAuth.getInstance();
 
-        usernameList = getUsernameList();
+        usernameList = getUsernameList(); //
 
-        setContentView(R.layout.activity_login);
 
         loginButton = findViewById(R.id.login);
-
-        mAuth = FirebaseAuth.getInstance();
 
         email = findViewById(R.id.username);
         password = findViewById(R.id.password);
