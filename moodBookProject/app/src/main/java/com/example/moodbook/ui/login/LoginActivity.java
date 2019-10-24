@@ -44,8 +44,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseFirestore db;
-    private  CollectionReference collectionReference;
+
+    protected DBAuth dbAuth;
 
     protected ArrayList<String> usernameList;
 
@@ -61,12 +61,12 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //Stuck logging in? use the following line once to log out the cached session:
-        //mAuth.getInstance().signOut();
-        db = FirebaseFirestore.getInstance();
-        collectionReference = db.collection("USERS");
-        mAuth = FirebaseAuth.getInstance();
+        mAuth.getInstance().signOut();
 
-        usernameList = getUsernameList(); //
+        mAuth = FirebaseAuth.getInstance();
+        dbAuth = new DBAuth(mAuth, getApplicationContext());
+
+        usernameList = dbAuth.getUsernameList(); //
 
 
         loginButton = findViewById(R.id.login);
@@ -80,9 +80,15 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                if (verifyEmail(email.getText().toString())){
-                    if (verifyPass(password.getText().toString())){
-                        login(email.getText().toString(), password.getText().toString());
+                if (dbAuth.verifyEmail(email.getText().toString())){
+                    if (dbAuth.verifyPass(password.getText().toString())){
+                        FirebaseUser loginResult = dbAuth.login(email.getText().toString(), password.getText().toString());
+                        if (loginResult != null){
+                            updateUI(loginResult);
+                        }
+                        updateUI(null);
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
                     } else {
                         password.setError("Password must be >= 6 chars");
                     }
@@ -98,8 +104,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                if (verifyEmail(email.getText().toString())){
-                    if (verifyPass(password.getText().toString())){
+                if (dbAuth.verifyEmail(email.getText().toString())){
+                    if (dbAuth.verifyPass(password.getText().toString())){
                         new UsernameFragment().show(getSupportFragmentManager(), "registering");
                     } else {
                         password.setError("Password must be >= 6 chars");
@@ -135,34 +141,6 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-    /**
-     * This method verifys that the email and password are filled out. Email is of type email, password is > 6 chars
-     * @param email
-     * @return
-     *      True if email is an email address
-     *      False if email is not an email address
-     */
-    private Boolean verifyEmail(String email){
-        //TODO: verify email unique
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
-
-    /**
-     * This method verifys that the password is filled out.
-     * @param password
-     * @return
-     *      True if password >= 6 chars
-     *      False if password is not >= 6 chars
-     */
-    private Boolean verifyPass(String password){
-        return password.length() >= 6;
-    }
-
-    /**
-     * This method decides how to update the ui based on the user's login status
-     * @param currentUser
-     */
     protected void updateUI(FirebaseUser currentUser){
         if (currentUser != null){
             Log.d(TAG, "User logged in:starting mainactivity");
@@ -172,121 +150,5 @@ public class LoginActivity extends AppCompatActivity {
             // update text views, show error messages
             Log.d(TAG, "User not logged in");
         }
-    }
-
-    /**
-     * This method attempts to log a user in
-     */
-    private void login(String email, String password){
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    }
-                });
-    }
-
-    /**
-     * This method creates a new user in Firebase
-     */
-    public Boolean register(String email, String password, String userParam){
-        final String username = userParam;
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            createUser(user, username);
-                            updateUI(user);
-                        } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Login failed: email in use", Toast.LENGTH_LONG).show();
-                            updateUI(null);
-                        }
-                    }
-                });
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null){
-            return Boolean.TRUE;
-        }
-        return Boolean.FALSE;
-    }
-
-    /**
-     * This method creates containers for a new user in the database
-     */
-    private void createUser(FirebaseUser user, String username){
-
-        String uid = user.getUid();
-        Log.d(TAG, "creating user in db:"+ uid);
-
-        // Initialize moodcount
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("username", username);
-        data.put("moodCount", 0);
-        collectionReference
-                .document(uid)
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "uid stored in db");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "failed:" + e.toString());
-                    }
-                });
-
-        // Initialize containers
-
-        HashMap<String, Object> nullData = new HashMap<>();
-        data.put("null", null);
-
-        db.collection("usernamelist").document(username).set(nullData); // add username to usernamelist
-        collectionReference.document(uid).collection("MOODS").document("null").set(nullData);
-        collectionReference.document(uid).collection("FRIENDS").document("null").set(nullData);
-        collectionReference.document(uid).collection("REQUESTS").document("null").set(nullData);
-
-    }
-
-    /**
-     * This method gets all the currently used usernames
-     * @return
-     *      an ArrayList of usernames
-     */
-    private ArrayList<String> getUsernameList(){
-        FirebaseFirestore db = db = FirebaseFirestore.getInstance();
-        final ArrayList<String> usernameList = new ArrayList<>();
-        db.collection("usernamelist")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                usernameList.add(document.getId());
-                            }
-                        } else {
-                            Log.w("Email", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-        return usernameList;
     }
 }
