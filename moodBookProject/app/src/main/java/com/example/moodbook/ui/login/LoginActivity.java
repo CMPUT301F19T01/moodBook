@@ -13,20 +13,11 @@ import android.widget.Toast;
 
 import com.example.moodbook.MainActivity;
 import com.example.moodbook.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * This activity handles login and registration
@@ -35,7 +26,7 @@ import java.util.HashMap;
  * https://stackoverflow.com/questions/16812039/how-to-check-valid-email-format-entered-in-edittext  - iversoncru   used for verifying email format
  */
 //TODO:
-//  move methods to a new LoginHandler class to make code cleaner?
+//  BUG: toast message is shown as failing login/registration when actually succeeding
 //  POSSIBLE BUG: two users attempt registering at the (sameish) time.. depends on when activity was created
 //  currently, the list of all usernames is cached on creation of activity. this is used as a workaround. the firebase call to retrieve the documents in the usernamelist collection is done synchronously so it won't return in time if I update it as its needed
     // fix by having the activity halt until a response from firebase is recieved maybe?
@@ -61,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //Stuck logging in? use the following line once to log out the cached session:
-        mAuth.getInstance().signOut();
+        //mAuth.getInstance().signOut();
 
         mAuth = FirebaseAuth.getInstance();
         dbAuth = new DBAuth(mAuth, getApplicationContext());

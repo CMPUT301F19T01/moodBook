@@ -1,13 +1,11 @@
 package com.example.moodbook.ui.login;
 
 import android.content.Context;
-import android.content.Intent;
+
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.moodbook.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,10 +20,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.Executor;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
+/**
+ * This class handles interaction with the DB to login and register
+ */
+// Citation
+// https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira    used to find out what argument to use in .addOnCompleteListener
 public class DBAuth {
 
     private FirebaseAuth mAuth;
