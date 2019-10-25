@@ -10,6 +10,35 @@
       "client_info": {
         "mobilesdk_app_id": "1:906490709018:android:4f05149ec586f475b03da3",
         "android_client_info": {
+          "package_name": "com.example.moodBook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906490709018-jtitf8s7nepeg095erplh45tm46gouij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXgzlXXREx21_UnjpG4nfGdSe9-TKIHBw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906490709018-jtitf8s7nepeg095erplh45tm46gouij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906490709018:android:8f78f3336107ec47b03da3",
+        "android_client_info": {
           "package_name": "com.example.moodbook"
         }
       },
