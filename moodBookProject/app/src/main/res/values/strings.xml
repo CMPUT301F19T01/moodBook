@@ -35,6 +35,7 @@
     <string name="happy">Happy</string>
     <string name="sad">Sad</string>
     <string name="todo">TODO</string>
+    <string name="title_activity_mood_maps">Map</string>
 
 
 </resources>
