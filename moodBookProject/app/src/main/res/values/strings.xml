@@ -6,19 +6,12 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-
-
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> 09163f82fe6ab4bf32c45d2c924e93fca74d35ab
     <string name="mood_state_would_showup_here">Mood State would showup here</string>
     <string name="pick_mood_time">Pick Mood Time</string>
     <string name="mood_location_would_showup_here">Mood Location would showup here</string>
@@ -40,14 +33,6 @@
     <string name="happy">Happy</string>
     <string name="sad">Sad</string>
     <string name="todo">TODO</string>
-<<<<<<< HEAD
     <string name="title_activity_mood_maps">Map</string>
-
-
-=======
     <string name="title_activity_mood_map">Map</string>
-
-
->>>>>>> Stashed changes
->>>>>>> 09163f82fe6ab4bf32c45d2c924e93fca74d35ab
 </resources>
