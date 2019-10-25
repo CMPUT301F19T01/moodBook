@@ -2,13 +2,13 @@ package com.example.moodbook.ui.login;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 
 import com.example.moodbook.R;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,13 +59,17 @@ public class UsernameFragment extends DialogFragment {
                         usernameEditText.setError("Username in use");
                     } else {
                         // register the user with firebase
-                        Boolean registerResult = ((LoginActivity) getActivity()).register(
+                        FirebaseUser registerResult = ((LoginActivity) getActivity()).dbAuth.register(
                                 ((LoginActivity) getActivity()).email.getText().toString(),
                                 ((LoginActivity) getActivity()).password.getText().toString(), username);
 
-                        if (!registerResult){
+                        if (registerResult == null){
+                            ((LoginActivity) getActivity()).updateUI(null);
+                            Toast.makeText(getActivity(), "Login failed: email in use", Toast.LENGTH_LONG).show();
                             dismiss();
                         }
+                        ((LoginActivity) getActivity()).updateUI(registerResult);
+
                     }
                 }
             });
