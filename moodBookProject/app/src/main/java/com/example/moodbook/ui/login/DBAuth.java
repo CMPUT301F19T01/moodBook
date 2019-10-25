@@ -25,9 +25,10 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * This class handles interaction with the DB to login and register
+ * Citation
+ * https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira    used to find out what argument to use in .addOnCompleteListener
  */
-// Citation
-// https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira    used to find out what argument to use in .addOnCompleteListener
+
 public class DBAuth {
 
     private FirebaseAuth mAuth;
