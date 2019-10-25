@@ -14,6 +14,7 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+<<<<<<< HEAD
     <string name="mood_state_would_showup_here">Mood State would showup here</string>
     <string name="pick_mood_time">Pick Mood Time</string>
     <string name="mood_location_would_showup_here">Mood Location would showup here</string>
@@ -37,4 +38,15 @@
     <string name="todo">TODO</string>
 
 
+=======
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_register">Register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+>>>>>>> f48751a8c3684214a0e3262378f6de2bc7fd1882
 </resources>
