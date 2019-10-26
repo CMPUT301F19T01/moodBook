@@ -3,6 +3,7 @@ package com.example.moodbook;
 import android.location.Location;
 import android.media.Image;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ public class Mood {
     private final SimpleDateFormat timeFt;    // time format
     private final HashMap<String, Emotion> emotionMap;
 
-    public Mood(Date date, Date time, String emotion,
+    public Mood(String date_text, String time_text, String emotion,
                 String reason_text, Image reason_photo,
                 String situation, Location location) {
         // Initialize
@@ -32,18 +33,18 @@ public class Mood {
         emotionMap.put("angry",new Emotion("angry"));
         emotionMap.put("afraid",new Emotion("afraid"));
 
-        setAll(date, time, emotion, reason_text, reason_photo, situation, location);
+        setAll(date_text, time_text, emotion, reason_text, reason_photo, situation, location);
     }
 
-    public Mood(Date date, Date time, String emotion) {
-        this(date, time, emotion, null, null, null, null);
+    public Mood(String date_text, String time_text, String emotion) {
+        this(date_text, date_text, emotion, null, null, null, null);
     }
 
-    public void setAll(Date date, Date time, String emotion,
+    public void setAll(String date_text, String time_text, String emotion,
                        String reason_text, Image reason_photo,
                        String situation, Location location) {
-        setDate(date);
-        setTime(time);
+        setDate(date_text);
+        setTime(time_text);
         setEmotion(emotion);
         setReasonText(reason_text);
         setReasonPhoto(reason_photo);
@@ -52,12 +53,21 @@ public class Mood {
     }
 
     // Date
-    public void setDate(Date date) {
+    public void setDate(String date_text) {
         // Initialize to current date
-        if(date == null) {
-            date = new Date();
+        if(date_text == null) {
+            this.date = new Date();
         }
-        this.date = date;
+        else{
+            try {
+                this.date = dateFt.parse(date_text);
+            }
+            // Error: invalid argument
+            catch (ParseException e) {
+                // TODO
+                e.printStackTrace();
+            }
+        }
     }
 
     public String getDateText() {
@@ -65,12 +75,21 @@ public class Mood {
     }
 
     // Time
-    public void setTime(Date time) {
+    public void setTime(String time_text) {
         // Initialize to current time
-        if(time == null) {
-            time = new Date();
+        if(time_text == null) {
+            this.time = new Date();
         }
-        this.time = time;
+        else{
+            try {
+                this.time = timeFt.parse(time_text);
+            }
+            // Error: invalid argument
+            catch (ParseException e) {
+                // TODO
+                e.printStackTrace();
+            }
+        }
     }
 
     public String getTimeText() {
