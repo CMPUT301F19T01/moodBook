@@ -3,16 +3,12 @@ package com.example.moodbook.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.moodbook.MainActivity;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,6 +20,7 @@ import java.util.ArrayList;
  * Citation: https://firebase.google.com/docs/auth/android/manage-users?authuser=0
  * https://stackoverflow.com/questions/43599638/firebase-signinwithemailandpassword-and-createuserwithemailandpassword-not-worki -Sagar Raut   used for mAuthListener
  * https://stackoverflow.com/questions/16812039/how-to-check-valid-email-format-entered-in-edittext  - iversoncru   used for verifying email format
+ * https://stackoverflow.com/questions/34110565/how-to-add-back-button-on-actionbar-in-android-studio  - adnbsr    used for back button
  */
 //TODO:
 //  BUG: toast message is shown as failing login/registration when actually succeeding
@@ -37,9 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     protected DBAuth dbAuth;
 
-    protected ArrayList<String> usernameList;
 
-    private Button loginButton;
     private Button registerButton;
     protected EditText email;
     private EditText username;
@@ -51,15 +46,11 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        //Stuck logging in? use the following line once to log out the cached session:
-        //mAuth.getInstance().signOut();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
         dbAuth = new DBAuth(mAuth, getApplicationContext());
         dbAuth.updateUsernameList(); // fetch the usernamelist now so it is ready by the time the user clicks register
-
-
-        loginButton = findViewById(R.id.login);
 
         email = findViewById(R.id.email);
         username = findViewById(R.id.username);
@@ -96,7 +87,6 @@ public class RegisterActivity extends AppCompatActivity {
                 } else {
                     email.setError("Incorrect email format");
                 }
-                //register(email.getText().toString(), password.getText().toString());
             }
         });
 

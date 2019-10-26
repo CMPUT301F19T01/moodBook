@@ -178,6 +178,13 @@ public class DBAuth {
         return usernameList;
     }
 
+    /**
+     * This method verifys a given username for uniqueness and length
+     * @param username
+     * @return
+     *      true: username is unique and > length 0
+     *      false: username is not unique and/or is not > length 0
+     */
     public Boolean verifyUsername(String username){
         return (!usernameList.contains(username) && username.length() > 0);
 

@@ -18,7 +18,6 @@ import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 
 /**
  * This activity handles login and registration
