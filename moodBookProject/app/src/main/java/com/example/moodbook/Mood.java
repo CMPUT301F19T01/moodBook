@@ -19,7 +19,6 @@ public class Mood {
 
     private final SimpleDateFormat dateFt;    // date format
     private final SimpleDateFormat timeFt;    // time format
-    private final HashMap<String, Emotion> emotionMap;
 
     public Mood(String date_text, String time_text, String emotion,
                 String reason_text, Image reason_photo,
@@ -27,12 +26,6 @@ public class Mood {
         // Initialize
         dateFt = new SimpleDateFormat ("yyyy-MM-dd");
         timeFt = new SimpleDateFormat ("HH:mm");
-        emotionMap = new HashMap<>();
-        emotionMap.put("happy",new Emotion("happy"));
-        emotionMap.put("sad",new Emotion("sad"));
-        emotionMap.put("angry",new Emotion("angry"));
-        emotionMap.put("afraid",new Emotion("afraid"));
-
         setAll(date_text, time_text, emotion, reason_text, reason_photo, situation, location);
     }
 
@@ -105,7 +98,7 @@ public class Mood {
         }
         emotion_text = emotion_text.toLowerCase();
         // Valid argument
-        if(emotionMap.containsKey(emotion_text)){
+        if(Emotion.hasName(emotion_text)){
             this.emotion_text = emotion_text;
         }
         // Error: invalid argument
@@ -115,23 +108,25 @@ public class Mood {
     }
 
     public String getEmotionText() {
-        return emotionMap.get(this.emotion_text).getName();
+        return this.emotion_text;
     }
 
     public Integer getEmotionImageResource() {
-        Integer imageId = null;
+        /*Integer imageId = null;
         if(this.emotion_text != null){
             imageId = emotionMap.get(this.emotion_text).getImageId();
         }
-        return imageId;
+        return imageId;*/
+        return Emotion.getImageResourceId(this.emotion_text);
     }
 
     public Integer getEmotionColorResource() {
-        Integer colorId = null;
+        /*Integer colorId = null;
         if(this.emotion_text != null){
             colorId = emotionMap.get(this.emotion_text).getColorId();
         }
-        return colorId;
+        return colorId;*/
+        return Emotion.getColorResourceId(this.emotion_text);
     }
 
     // Reason
@@ -187,61 +182,44 @@ public class Mood {
     }
 
 
-    protected class Emotion{
-        String name;
-        Integer image_id;
-        Integer color_id;
+    public static class Emotion {
 
-        public Emotion(String name) {
-            this.name = name;
-            setImageId();
-            setColorId();
-        }
+        private static String[] names;
+        private static Integer[] image_resource_id;
+        private static Integer[] color_resource_id;
+        private static HashMap<String, Integer> name_index;
 
-        private void setImageId() {
-            switch(this.name){
-                case "happy":
-                    this.image_id = R.drawable.happy;
-                    break;
-                case "sad":
-                    this.image_id = R.drawable.sad;
-                    break;
-                case "angry":
-                    this.image_id = R.drawable.angry;
-                    break;
-                case "afraid":
-                    this.image_id = R.drawable.afraid;
-                    break;
+        static {
+            names = new String[]{ "happy", "sad", "angry", "afraid" };
+            image_resource_id = new Integer[]{
+                    R.drawable.happy, R.drawable.sad, R.drawable.angry, R.drawable.afraid };
+            color_resource_id = new Integer[]{
+                    R.color.happyYellow, R.color.sadBlue, R.color.angryRed, R.color.afraidBrown };
+            // map emotion name to index
+            name_index = new HashMap<>();
+            for(int i = 0; i < names.length; i++) {
+                name_index.put(names[i],i);
             }
         }
 
-        private void setColorId() {
-            switch(this.name){
-                case "happy":
-                    this.color_id = R.color.happyYellow;
-                    break;
-                case "sad":
-                    this.color_id = R.color.sadBlue;
-                    break;
-                case "angry":
-                    this.color_id = R.color.angryRed;
-                    break;
-                case "afraid":
-                    this.color_id = R.color.afraidBrown;
-                    break;
+        public static Boolean hasName(String name) {
+            return name_index.containsKey(name);
+        }
+
+        public static Integer getImageResourceId(String name) {
+            Integer resourceId = null;
+            if(name_index.containsKey(name)){
+                resourceId = image_resource_id[name_index.get(name)];
             }
+            return resourceId;
         }
 
-        public String getName() {
-            return this.name;
-        }
-
-        public Integer getImageId() {
-            return this.image_id;
-        }
-
-        public Integer getColorId() {
-            return this.color_id;
+        public static Integer getColorResourceId(String name) {
+            Integer resourceId = null;
+            if(name_index.containsKey(name)){
+                resourceId = color_resource_id[name_index.get(name)];
+            }
+            return resourceId;
         }
     }
 }
