@@ -37,7 +37,7 @@ public class Mood {
     }
 
     public Mood(String date_text, String time_text, String emotion) {
-        this(date_text, date_text, emotion, null, null, null, null);
+        this(date_text, time_text, emotion, null, null, null, null);
     }
 
     public void setAll(String date_text, String time_text, String emotion,

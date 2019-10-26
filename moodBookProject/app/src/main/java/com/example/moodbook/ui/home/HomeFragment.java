@@ -9,17 +9,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -28,8 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moodbook.CreateMoodActivity;
-import com.example.moodbook.CustomAdapter;
-import com.example.moodbook.MainActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.R;
@@ -53,32 +45,6 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        /*final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
-
-        /*// Set up ListView
-        moodListView = root.findViewById(R.id.mood_history_listView);
-        moodAdapter = new CustomAdapter(getContext(), new ArrayList<Mood>());
-        // test adding
-        Mood testItem = new Mood(null, null, "sad");
-        moodAdapter.add(testItem);
-        moodListView.setAdapter(moodAdapter);
-
-        // Edit a mood: when a mood item is clicked, start edit activity
-        moodListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // get the selected mood
-                Mood selectedMood = (Mood)adapterView.getItemAtPosition(i);
-                System.out.println("Selected: "+selectedMood.getEmotionText());
-                // TODO: start edit activity to edit the selected mood
-            }
-        });*/
 
         // Add a mood: when floating add button is clicked, start add activity
         add_mood_button = root.findViewById(R.id.mood_history_add_button);
@@ -157,9 +123,9 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
     private void testAdd() {
         // test adding
+        moodAdapter.addItem(new Mood("2019-09-30", null, "sad"));
+        moodAdapter.addItem(new Mood("2019-09-01", "07:00", "afraid"));
+        moodAdapter.addItem(new Mood("2019-09-01", "20:00", "angry"));
         moodAdapter.addItem(new Mood(null, null, "happy"));
-        moodAdapter.addItem(new Mood(null, null, "sad"));
-        moodAdapter.addItem(new Mood(null, null, "angry"));
-        moodAdapter.addItem(new Mood(null, null, "afraid"));
     }
 }
