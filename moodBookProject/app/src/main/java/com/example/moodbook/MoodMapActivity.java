@@ -1,7 +1,10 @@
 package com.example.moodbook;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -9,12 +12,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
-public class MoodMapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -60,8 +65,15 @@ public class MoodMapActivity extends FragmentActivity implements OnMapReadyCallb
         locationArrayList.add(loc2);
         locationArrayList.add(loc3);
 
+        int height = 100;
+        int width = 100;
+
         for(int i = 0; i < locationArrayList.size(); i++){
-            mMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)));
+            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.afraid);
+            Bitmap b = bitmapdraw.getBitmap();
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
+            mMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).icon(bitmapDescriptor));
         }
 
 

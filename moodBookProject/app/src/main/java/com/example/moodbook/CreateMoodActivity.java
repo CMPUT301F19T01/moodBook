@@ -242,9 +242,6 @@ public class CreateMoodActivity extends AppCompatActivity {
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
         criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
 
-        // set to null because we are required to supply looper but not going to use it
-        final Looper looper = null;
-
         // set the button onClickListener to request location
         add_location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,7 +253,7 @@ public class CreateMoodActivity extends AppCompatActivity {
 
 
                 }else{ // permission granted
-                    locationManager.requestSingleUpdate(criteria, locationListener, looper);
+                    locationManager.requestSingleUpdate(criteria, locationListener, null);
 
                 }
             }
