@@ -11,8 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Mood implements Comparable<Mood> {
-    private Date date_time;
-    private String emotion_text;
+    private Date date_time;         // mandatory
+    private String emotion_text;    // mandatory
     private String reason_text;     // optional
     private Image reason_photo;     // optional
     private String situation;       // optional
@@ -176,15 +176,15 @@ public class Mood implements Comparable<Mood> {
     public static class Emotion {
 
         private static String[] names;
-        private static Integer[] image_resource_id;
-        private static Integer[] color_resource_id;
+        private static int[] image_resource_id;
+        private static int[] color_resource_id;
         private static HashMap<String, Integer> name_index;
 
         static {
             names = new String[]{ "happy", "sad", "angry", "afraid" };
-            image_resource_id = new Integer[]{
+            image_resource_id = new int[]{
                     R.drawable.happy, R.drawable.sad, R.drawable.angry, R.drawable.afraid };
-            color_resource_id = new Integer[]{
+            color_resource_id = new int[]{
                     R.color.happyYellow, R.color.sadBlue, R.color.angryRed, R.color.afraidBrown };
             // map emotion name to index
             name_index = new HashMap<>();
@@ -211,6 +211,18 @@ public class Mood implements Comparable<Mood> {
                 resourceId = color_resource_id[name_index.get(name)];
             }
             return resourceId;
+        }
+
+        public static String[] getNames() {
+            return names.clone();
+        }
+
+        public static int[] getImageResources() {
+            return image_resource_id.clone();
+        }
+
+        public static int[] getColorResources() {
+            return color_resource_id.clone();
         }
     }
 }

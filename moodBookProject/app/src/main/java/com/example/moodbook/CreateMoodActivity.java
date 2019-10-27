@@ -60,9 +60,9 @@ public class CreateMoodActivity extends AppCompatActivity {
     Spinner sp1;
     RelativeLayout pickState;
     MoodStateAdapter adapter;
-    String [] states ={"Afraid","Angry","Happy","Sad"};
-    int[] images = {R.drawable.afraid, R.drawable.angry,R.drawable.happy,R.drawable.sad};
-    int[] colors = {R.color.afraidBrown,R.color.angryRed,R.color.happyYellow,R.color.sadBlue};
+    String [] states = Mood.Emotion.getNames();
+    int[] images = Mood.Emotion.getImageResources();
+    int[] colors = Mood.Emotion.getColorResources();
 
 //    private Button pick_mood, add_photo, add_date, add_time;
 //    private ImageView view_photo, emoji;
