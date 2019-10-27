@@ -16,9 +16,9 @@ public class Mood {
     private String situation;       // optional
     private Location location;      // optional
 
-    private final SimpleDateFormat dateFt;    // date format
-    private final SimpleDateFormat timeFt;    // time format
-    private final HashMap<String, Emotion> emotionMap;
+    private  SimpleDateFormat dateFt;    // date format
+    private  SimpleDateFormat timeFt;    // time format
+    private HashMap<String, Emotion> emotionMap;
 
     public Mood(Date date, Date time, String emotion,
                 String reason_text, Image reason_photo,
@@ -37,6 +37,12 @@ public class Mood {
 
     public Mood(Date date, Date time, String emotion) {
         this(date, time, emotion, null, null, null, null);
+    }
+
+    // constructor to test moodMaps
+    public Mood(String emotion, Location location){
+        this.location = location;
+        this.emotion_text = emotion;
     }
 
     public void setAll(Date date, Date time, String emotion,

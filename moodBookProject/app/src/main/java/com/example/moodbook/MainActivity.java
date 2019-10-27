@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
         /* Mood History */
         // Add mood: when floating add button is clicked, start add activity to add a new mood item
         /*FloatingActionButton add_mood_button = findViewById(R.id.mood_history_add_button);
@@ -87,6 +86,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+        /////////// MAP TEST CODE ///////////
+        Intent intent = new Intent(this, MoodMapActivity.class);
+        startActivity(intent);
 
     }
 

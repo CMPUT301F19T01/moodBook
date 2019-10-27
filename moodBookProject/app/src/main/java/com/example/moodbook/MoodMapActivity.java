@@ -2,6 +2,7 @@ package com.example.moodbook;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -10,6 +11,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class MoodMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -35,6 +38,8 @@ public class MoodMapActivity extends FragmentActivity implements OnMapReadyCallb
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -43,5 +48,23 @@ public class MoodMapActivity extends FragmentActivity implements OnMapReadyCallb
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        // test data
+        ArrayList<LatLng> locationArrayList = new ArrayList<>();
+
+        LatLng loc1 = new LatLng(60.03547, -123.75790);
+        LatLng loc2 = new LatLng(24.26711, 125.54427);
+        LatLng loc3 = new LatLng(3.28003, 107.63163);
+
+        locationArrayList.add(loc1);
+        locationArrayList.add(loc2);
+        locationArrayList.add(loc3);
+
+        for(int i = 0; i < locationArrayList.size(); i++){
+            mMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)));
+        }
+
+
+
     }
 }
