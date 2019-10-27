@@ -123,9 +123,9 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
     private void testAdd() {
         // test adding
-        moodAdapter.addItem(new Mood("2019-09-30", null, "sad"));
-        moodAdapter.addItem(new Mood("2019-09-01", "07:00", "afraid"));
-        moodAdapter.addItem(new Mood("2019-09-01", "20:00", "angry"));
-        moodAdapter.addItem(new Mood(null, null, "happy"));
+        moodAdapter.addItem(new Mood("2019-09-30 18:00", "sad"));
+        moodAdapter.addItem(new Mood("2019-09-01 07:00", "afraid"));
+        moodAdapter.addItem(new Mood("2019-09-01 20:00", "angry"));
+        moodAdapter.addItem(new Mood(null, "happy"));
     }
 }

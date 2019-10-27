@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyViewHolder> {
     private ArrayList<Mood> moods;
@@ -94,12 +95,15 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         return moods.get(position);
     }
 
+    // Add a mood item, and sort mood list by dateTime starting from most recent
     public void addItem(Mood item) {
         moods.add(item);
+        Collections.sort(moods, Collections.reverseOrder());
         // notify item added
         notifyDataSetChanged();
     }
 
+    // Remove a mood item at specified position
     public void removeItem(int position) {
         moods.remove(position);
         // notify the item removed by position
@@ -108,6 +112,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         notifyItemRemoved(position);
     }
 
+    // Restore a mood item at its original position
     public void restoreItem(Mood item, int position) {
         moods.add(position, item);
         // notify item added by position

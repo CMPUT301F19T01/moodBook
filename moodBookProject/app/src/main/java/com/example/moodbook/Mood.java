@@ -3,41 +3,43 @@ package com.example.moodbook;
 import android.location.Location;
 import android.media.Image;
 
+import androidx.annotation.NonNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Mood {
-    private Date date;
-    private Date time;
+public class Mood implements Comparable<Mood> {
+    private Date date_time;
     private String emotion_text;
     private String reason_text;     // optional
     private Image reason_photo;     // optional
     private String situation;       // optional
     private Location location;      // optional
 
-    private final SimpleDateFormat dateFt;    // date format
-    private final SimpleDateFormat timeFt;    // time format
+    private final SimpleDateFormat dateFt;      // date format
+    private final SimpleDateFormat timeFt;      // time format
+    private final SimpleDateFormat dateTimeFt;  // date_time format
 
-    public Mood(String date_text, String time_text, String emotion,
+    public Mood(String date_time_text, String emotion,
                 String reason_text, Image reason_photo,
                 String situation, Location location) {
         // Initialize
         dateFt = new SimpleDateFormat ("yyyy-MM-dd");
         timeFt = new SimpleDateFormat ("HH:mm");
-        setAll(date_text, time_text, emotion, reason_text, reason_photo, situation, location);
+        dateTimeFt = new SimpleDateFormat ("yyyy-MM-dd HH:mm");
+        setAll(date_time_text, emotion, reason_text, reason_photo, situation, location);
     }
 
-    public Mood(String date_text, String time_text, String emotion) {
-        this(date_text, time_text, emotion, null, null, null, null);
+    public Mood(String date_time_text, String emotion) {
+        this(date_time_text, emotion, null, null, null, null);
     }
 
-    public void setAll(String date_text, String time_text, String emotion,
+    public void setAll(String date_time_text, String emotion,
                        String reason_text, Image reason_photo,
                        String situation, Location location) {
-        setDate(date_text);
-        setTime(time_text);
+        setDateTime(date_time_text);
         setEmotion(emotion);
         setReasonText(reason_text);
         setReasonPhoto(reason_photo);
@@ -46,14 +48,14 @@ public class Mood {
     }
 
     // Date
-    public void setDate(String date_text) {
+    public void setDateTime(String date_time_text) {
         // Initialize to current date
-        if(date_text == null) {
-            this.date = new Date();
+        if(date_time_text == null) {
+            this.date_time = new Date();
         }
         else{
             try {
-                this.date = dateFt.parse(date_text);
+                this.date_time = dateTimeFt.parse(date_time_text);
             }
             // Error: invalid argument
             catch (ParseException e) {
@@ -64,29 +66,15 @@ public class Mood {
     }
 
     public String getDateText() {
-        return dateFt.format(this.date);
-    }
-
-    // Time
-    public void setTime(String time_text) {
-        // Initialize to current time
-        if(time_text == null) {
-            this.time = new Date();
-        }
-        else{
-            try {
-                this.time = timeFt.parse(time_text);
-            }
-            // Error: invalid argument
-            catch (ParseException e) {
-                // TODO
-                e.printStackTrace();
-            }
-        }
+        return dateFt.format(this.date_time);
     }
 
     public String getTimeText() {
-        return timeFt.format(this.time);
+        return timeFt.format(this.date_time);
+    }
+
+    public Date getDateTime() {
+        return this.date_time;
     }
 
     // Emotion
@@ -112,20 +100,10 @@ public class Mood {
     }
 
     public Integer getEmotionImageResource() {
-        /*Integer imageId = null;
-        if(this.emotion_text != null){
-            imageId = emotionMap.get(this.emotion_text).getImageId();
-        }
-        return imageId;*/
         return Emotion.getImageResourceId(this.emotion_text);
     }
 
     public Integer getEmotionColorResource() {
-        /*Integer colorId = null;
-        if(this.emotion_text != null){
-            colorId = emotionMap.get(this.emotion_text).getColorId();
-        }
-        return colorId;*/
         return Emotion.getColorResourceId(this.emotion_text);
     }
 
@@ -179,6 +157,19 @@ public class Mood {
 
     public Location getLocation() {
         return this.location;
+    }
+
+    @Override
+    public int compareTo(@NonNull Mood other) {
+        if(this == other) return 0;
+        Date dateTime = this.getDateTime();
+        Date otherDateTime = other.getDateTime();
+        // smaller if dateTime for this object has parsing error
+        if(dateTime == null) return -1000;
+        // larger if dateTime for other object has parsing error
+        if(otherDateTime == null) return 1000;
+
+        return dateTime.compareTo(otherDateTime);
     }
 
 
