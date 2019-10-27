@@ -81,10 +81,9 @@ public class CreateMoodActivity extends AppCompatActivity {
     // reason photo
     Button add_photo_button;
     ImageView image_view_photo;
-
+    public static final int REQUEST_IMAGE = 101;
 
     private int year, month, day, hour, minute;
-    private static final int REQUEST_IMAGE = 101;
     private String date_mood, time_mood, reason_mood, situation_mood;
     private double lat_mood, lon_mood;
 
@@ -167,7 +166,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         add_photo_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setImage(view);
+                MoodEditor.setImage(view,CreateMoodActivity.this);
             }
         });
 
@@ -271,6 +270,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         }, year, month, day);
         datePickerDialog.show();
     }
+
     // for showing time so user could select a time
     public void showTime(View view){
         final Button timeFilled = (Button) view;
@@ -289,25 +289,10 @@ public class CreateMoodActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    // for setting a photo for the mood
-    public void setImage(View view){
-        Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (imageIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(imageIntent, REQUEST_IMAGE);
-        }
-    }
-
     // gets the photo that was taken and let the image be shown in the page
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode==REQUEST_IMAGE && resultCode==RESULT_OK){
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            image_view_photo.setImageBitmap(imageBitmap);
-        }
-        else {
-
-        }
+        MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo);
     }
 
     public void showCoords(View view){
