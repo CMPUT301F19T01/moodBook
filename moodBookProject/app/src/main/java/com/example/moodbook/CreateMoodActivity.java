@@ -83,7 +83,6 @@ public class CreateMoodActivity extends AppCompatActivity {
     ImageView image_view_photo;
     public static final int REQUEST_IMAGE = 101;
 
-    private int year, month, day, hour, minute;
     private String date_mood, time_mood, reason_mood, situation_mood;
     private double lat_mood, lon_mood;
 
@@ -166,7 +165,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         add_photo_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.setImage(view,CreateMoodActivity.this);
+                MoodEditor.setImage(CreateMoodActivity.this);
             }
         });
 
@@ -175,13 +174,13 @@ public class CreateMoodActivity extends AppCompatActivity {
         add_date_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showCalendar(view);
+                MoodEditor.showCalendar((Button)view,CreateMoodActivity.this);
             }
         });
         add_time_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTime(view);
+                MoodEditor.showTime((Button)view,CreateMoodActivity.this);
             }
         });
 
@@ -250,43 +249,6 @@ public class CreateMoodActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    // for showing calendar so user could select a date
-    public void showCalendar(View view){
-        final Button dateFilled = (Button) view;
-        Calendar calendar = Calendar.getInstance();
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        year = calendar.get(Calendar.YEAR);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-            //sets formatted date on the button
-            @Override
-            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-                String formattedDate = String.format("%d-%02d-%02d", y, m+1, d);
-                dateFilled.setText(formattedDate);
-            }
-        }, year, month, day);
-        datePickerDialog.show();
-    }
-
-    // for showing time so user could select a time
-    public void showTime(View view){
-        final Button timeFilled = (Button) view;
-        Calendar calendar = Calendar.getInstance();
-        hour = calendar.get(Calendar.HOUR_OF_DAY);
-        minute = calendar.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-
-            //sets formatted time on the button
-            @Override
-            public void onTimeSet(TimePicker timePicker, int h, int m) {
-                String formattedTime = String.format("%02d:%02d", h, m);
-                timeFilled.setText(formattedTime);
-            }
-        }, hour, minute, false);
-        timePickerDialog.show();
     }
 
     // gets the photo that was taken and let the image be shown in the page
