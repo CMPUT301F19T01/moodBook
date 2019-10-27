@@ -49,56 +49,41 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Mood Time: " />
+            android:text="Time: " />
 
 
-    <Button
-        android:id="@+id/pick_mood_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:hint="HH:MM" />
+        <Button
+            android:id="@+id/pick_mood_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:hint="HH:MM" />
 
-    <TextView
-        android:id="@+id/mood_state_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="Mood State: " />
+        <TextView
+            android:id="@+id/mood_state_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="Emotional State: " />
 
-        <LinearLayout
-
-            android:layout_width="fill_parent"
-            android:layout_height="72dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/pick_mood_state1"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:text="@string/pick_mood_state"/>
-
-            <Spinner
-                android:layout_weight="4"
-                android:id="@+id/mood_spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="10dp"/>
-
-        </LinearLayout>
+        <Spinner
+            android:id="@+id/mood_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="4" />
 
         <TextView
             android:id="@+id/mood_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Mood Location: " />
+            android:text="Location: " />
 
         <Button
             android:id="@+id/pick_mood_location"
@@ -107,7 +92,7 @@
             android:ems="10"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:hint="Pick Mood Location" />
+            android:hint="@string/pick_mood_location" />
 
         <TextView
             android:id="@+id/mood_situation"
@@ -115,23 +100,24 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Mood Situation: " />
+            android:text="Situation: " />
 
         <Spinner
             android:id="@+id/pick_mood_situation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_margin="8dp"/>
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:ems="10" />
 
         <TextView
             android:id="@+id/mood_reason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Mood Reason: " />
+            android:text="Reason Text: " />
 
         <EditText
             android:id="@+id/pick_mood_reason"
@@ -149,7 +135,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:text="Mood Photo: " />
+            android:text="Reason Photo: " />
 
         <LinearLayout
             android:layout_width="fill_parent"
