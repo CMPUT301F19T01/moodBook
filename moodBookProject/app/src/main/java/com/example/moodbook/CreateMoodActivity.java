@@ -309,11 +309,8 @@ public class CreateMoodActivity extends AppCompatActivity {
         }
     }
 
-<<<<<<< HEAD
     //gets the photo that was taken and let the image be shown in the page
-=======
-    //gets the photo that was taken and let the image be shown in the page`
->>>>>>> 09163f82fe6ab4bf32c45d2c924e93fca74d35ab
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode==REQUEST_IMAGE && resultCode==RESULT_OK){
@@ -326,13 +323,5 @@ public class CreateMoodActivity extends AppCompatActivity {
         }
     }
 
-<<<<<<< HEAD
-    public void showCoords(View view){
 
-    }
-
-
-
-=======
->>>>>>> 09163f82fe6ab4bf32c45d2c924e93fca74d35ab
 }
