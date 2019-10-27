@@ -47,30 +47,43 @@ import java.util.List;
 
 public class CreateMoodActivity extends AppCompatActivity {
 
+    // date
+    Button add_date_button;
 
-    Button pick_mood;
-    Button add_photo;
-    ImageView view_photo;
-    ImageView emoji;
-    TextView mood_state;
-    Button add_date;
-    Button add_time;
-    Button add_location;
-    String SelectedMoodState;
-    Spinner sp1;
-    RelativeLayout pickState;
-    MoodStateAdapter adapter;
-    String [] states = Mood.Emotion.getNames();
-    int[] images = Mood.Emotion.getImageResources();
-    int[] colors = Mood.Emotion.getColorResources();
+    // time
+    Button add_time_button;
 
-//    private Button pick_mood, add_photo, add_date, add_time;
-//    private ImageView view_photo, emoji;
-//    private TextView mood_state;
-    private EditText add_reason;
+    // emotion
+    String selectedMoodState;
+    Spinner spinner_emotion;
+    MoodStateAdapter emotionAdapter;
+    final String [] emotionStateList = Mood.Emotion.getNames();
+    final int[] emotionImages = Mood.Emotion.getImageResources();
+    final int[] emotionColors = Mood.Emotion.getColorResources();
+
+    // location
+    Button add_location_button;
+
+    // situation
+    Spinner spinner_situation;
+    // initialize string array for situation
+    final List<String> situationList = Arrays.asList(
+            "Add situation...",
+            "Alone",
+            "With one person",
+            "With two and more",
+            "With a crowd"
+    );
+
+    // reason text
+    EditText edit_text_reason;
+
+    // reason photo
+    Button add_photo_button;
+    ImageView image_view_photo;
+
 
     private int year, month, day, hour, minute;
-    private Spinner situation;
     private static final int REQUEST_IMAGE = 101;
     private String date_mood, time_mood, reason_mood, situation_mood;
     private double lat_mood, lon_mood;
@@ -81,112 +94,92 @@ public class CreateMoodActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_mood);
+
         final FragmentManager fm = getSupportFragmentManager();
         final SelectMoodStateFragment s = new SelectMoodStateFragment();
-        add_photo = findViewById(R.id.pick_mood_photo);
-        view_photo = findViewById(R.id.fill_mood_photo);
-        add_date = findViewById(R.id.pick_mood_date);
-        add_time = findViewById(R.id.pick_mood_time);
-        situation = (Spinner) findViewById(R.id.pick_mood_situation);
-        add_reason = findViewById(R.id.pick_mood_reason);
-        add_location = findViewById(R.id.pick_mood_location);
+
+        add_photo_button = findViewById(R.id.pick_mood_photo);
+        image_view_photo = findViewById(R.id.fill_mood_photo);
+        add_date_button = findViewById(R.id.pick_mood_date);
+        add_time_button = findViewById(R.id.pick_mood_time);
+        spinner_situation = findViewById(R.id.pick_mood_situation);
+        edit_text_reason = findViewById(R.id.pick_mood_reason);
+        add_location_button = findViewById(R.id.pick_mood_location);
+
         final Button add_button = findViewById(R.id.add_mood_button);
         final Button cancel_button = findViewById(R.id.cancel_mood_button);
 
-
-        //initialize string array for situation
-        String[] option_sit = new String[]{
-                "Add situation...",
-                "Alone",
-                "With one person",
-                "With two and more",
-                "With a crowd"
-        };
-
-        final List<String> listSituation = new ArrayList<>(Arrays.asList(option_sit));
-
-        // Initializing an ArrayAdapter
+        // Initializing an ArrayAdapter for situation spinner
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
-                this,R.layout.spinner_situation,listSituation){
+                this, R.layout.spinner_situation, situationList){
             @Override
             public boolean isEnabled(int position){
-                if(position == 0) {
-                    return false;
-                }
-                else {
-                    return true;
-                }
+                return (position != 0);
             }
             @Override
             public View getDropDownView(int position, View convertView,
                                         ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView text = (TextView) view;
-                if(position == 0){
-                    text.setTextColor(Color.GRAY);
-                }
-                else {
-                    text.setTextColor(Color.BLACK);
-                }
+                text.setTextColor((position == 0) ? Color.GRAY : Color.BLACK);
                 return view;
             }
         };
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_situation);
-        situation.setAdapter(spinnerArrayAdapter);
-        situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinner_situation.setAdapter(spinnerArrayAdapter);
+        spinner_situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // first item disabled
                 if(position > 0){
-                    Toast.makeText
-                            (getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
+                    Toast.makeText(getApplicationContext(),
+                            "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
                             .show();
                 }
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        sp1 = (Spinner)findViewById(R.id.mood_spinner);
-        adapter = new MoodStateAdapter(this,states,images );
-        sp1.setAdapter(adapter);
-        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(),states[i],Toast.LENGTH_LONG).show();
-                SelectedMoodState = states[i];
-                sp1.setBackgroundColor(getResources().getColor(colors[i]));
-//               pickState.setBackgroundColor(getResources().getColor(colors[i]));
-            }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
+                // Do nothing
+            }
+        });
 
-
+        // Initializing a MoodStateAdapter for emotional state spinner
+        spinner_emotion = findViewById(R.id.mood_spinner);
+        emotionAdapter = new MoodStateAdapter(this, emotionStateList, emotionImages );
+        spinner_emotion.setAdapter(emotionAdapter);
+        spinner_emotion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getApplicationContext(), emotionStateList[i], Toast.LENGTH_LONG)
+                        .show();
+                selectedMoodState = emotionStateList[i];
+                spinner_emotion.setBackgroundColor(getResources().getColor(emotionColors[i]));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                // Do nothing
             }
         });
 
 
-        //sets mood photo
-        add_photo.setOnClickListener(new View.OnClickListener() {
+        // Sets mood photo
+        add_photo_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setImage(view);
             }
         });
 
-        // sets date, time
-        //handles selecting a calendar
-        add_date.setOnClickListener(new View.OnClickListener() {
+        // Sets date, time
+        // handles selecting a calendar
+        add_date_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showCalendar(view);
             }
         });
-        add_time.setOnClickListener(new View.OnClickListener() {
+        add_time_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showTime(view);
@@ -197,17 +190,17 @@ public class CreateMoodActivity extends AppCompatActivity {
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                date_mood = add_date.getText().toString();
-                time_mood = add_time.getText().toString();
-                reason_mood = add_reason.getText().toString();
-                situation_mood = situation.getSelectedItem().toString();
+                date_mood = add_date_button.getText().toString();
+                time_mood = add_time_button.getText().toString();
+                reason_mood = edit_text_reason.getText().toString();
+                situation_mood = spinner_situation.getSelectedItem().toString();
                 Toast.makeText
                         (getApplicationContext(), "Selected : " + situation_mood, Toast.LENGTH_SHORT)
                         .show();
             }
         });
 
-        //when cancel button is pressed, return to main activity; do nothing
+        // When cancel button is pressed, return to main activity; do nothing
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -216,7 +209,7 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
-        // gets users location
+        // Gets users location
         // create location manager and listener
         final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         final LocationListener locationListener = new LocationListener() {
@@ -246,23 +239,18 @@ public class CreateMoodActivity extends AppCompatActivity {
         final Looper looper = null;
 
         // set the button onClickListener to request location
-        add_location.setOnClickListener(new View.OnClickListener() {
+        add_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // ask user for permission to get location
                 if (ActivityCompat.checkSelfPermission(CreateMoodActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreateMoodActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(CreateMoodActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                     return;
-
-
-                }else{ // permission granted
+                } else { // permission granted
                     locationManager.requestSingleUpdate(criteria, locationListener, looper);
-
                 }
             }
         });
-
-
     }
 
     // for showing calendar so user could select a date
@@ -283,7 +271,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         }, year, month, day);
         datePickerDialog.show();
     }
-    //for showing time so user could select a time
+    // for showing time so user could select a time
     public void showTime(View view){
         final Button timeFilled = (Button) view;
         Calendar calendar = Calendar.getInstance();
@@ -301,7 +289,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         timePickerDialog.show();
     }
 
-    //for setting a photo for the mood
+    // for setting a photo for the mood
     public void setImage(View view){
         Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (imageIntent.resolveActivity(getPackageManager()) != null) {
@@ -309,13 +297,13 @@ public class CreateMoodActivity extends AppCompatActivity {
         }
     }
 
-    //gets the photo that was taken and let the image be shown in the page
+    // gets the photo that was taken and let the image be shown in the page
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode==REQUEST_IMAGE && resultCode==RESULT_OK){
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            view_photo.setImageBitmap(imageBitmap);
+            image_view_photo.setImageBitmap(imageBitmap);
         }
         else {
 
@@ -325,7 +313,4 @@ public class CreateMoodActivity extends AppCompatActivity {
     public void showCoords(View view){
 
     }
-
-
-
 }
