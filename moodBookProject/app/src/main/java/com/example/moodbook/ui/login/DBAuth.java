@@ -35,14 +35,12 @@ public class DBAuth {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private CollectionReference collectionReference;
-    private Context context;
     private ArrayList<String> usernameList;
 
-    public DBAuth(FirebaseAuth mAuth, Context context){
+    public DBAuth(FirebaseAuth mAuth){
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
         this.collectionReference = db.collection("USERS");
-        this.context = context;
         this.usernameList = this.updateUsernameList();
     }
 

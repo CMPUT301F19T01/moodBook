@@ -49,7 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
-        dbAuth = new DBAuth(mAuth, getApplicationContext());
+        dbAuth = new DBAuth(mAuth);
         dbAuth.updateUsernameList(); // fetch the usernamelist now so it is ready by the time the user clicks register
 
         email = findViewById(R.id.email);
