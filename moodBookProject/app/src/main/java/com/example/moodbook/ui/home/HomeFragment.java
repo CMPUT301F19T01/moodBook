@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moodbook.CreateMoodActivity;
+import com.example.moodbook.EditMoodActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.R;
@@ -64,7 +65,8 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
             @Override
             public void onItemClick(Mood item) {
                 Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
-                // TODO: start edit activity to edit the selected mood
+                Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
+                startActivity(editIntent);
             }
         });
         testAdd();
