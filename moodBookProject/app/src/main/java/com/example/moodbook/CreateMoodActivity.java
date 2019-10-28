@@ -92,6 +92,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_mood);
+        mAuth = FirebaseAuth.getInstance();
         moodDB = new DBMoodSetter(mAuth, getApplicationContext());
 
 
