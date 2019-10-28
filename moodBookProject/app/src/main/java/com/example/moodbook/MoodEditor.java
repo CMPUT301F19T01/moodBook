@@ -188,18 +188,6 @@ public class MoodEditor {
         pictureDialog.show();
     }
 
-    // Image editor
-    // for setting a photo for the mood
-//    public static void setImage(AppCompatActivity myActivity) {
-////        Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-////        if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
-////            myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
-////        }
-//        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//        photoPickerIntent.setType("image/*");
-//        photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/*"});
-//        myActivity.startActivityForResult(photoPickerIntent, GET_IMAGE);
-//    }
 
     // gets the photo that was taken and let the image be shown in the page
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
