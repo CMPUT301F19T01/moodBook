@@ -115,7 +115,7 @@ public class DBAuth {
     /**
      * This method creates containers for a new user in the database
      */
-    public void createUser(FirebaseUser user, String username){
+    private void createUser(FirebaseUser user, String username){
 
         String uid = user.getUid();
         Log.d(TAG, "creating user in db:"+ uid);
