@@ -132,6 +132,11 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
+    /**
+     * This method starts the mainactivity when the user is logged in
+     * @param currentUser
+     */
     protected void updateUI(FirebaseUser currentUser){
         if (currentUser != null){
             Log.d(TAG, "User logged in:starting mainactivity");
