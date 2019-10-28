@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -31,6 +32,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -157,18 +159,47 @@ public class MoodEditor {
     }
 
 
+    public static void setImage(final AppCompatActivity myActivity){
+        AlertDialog.Builder pictureDialog = new AlertDialog.Builder(myActivity);
+        pictureDialog.setTitle("Select Action");
+        String[] pictureDialogItems = {
+                "Capture photo from camera",
+                "Select photo from gallery"};
+        pictureDialog.setItems(pictureDialogItems,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
+                                    myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
+                                }
+                                break;
+                            case 1:
+                                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                                photoPickerIntent.setType("image/*");
+                                photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*"});
+                                myActivity.startActivityForResult(photoPickerIntent, GET_IMAGE);
+                                break;
+                        }
+                    }
+                });
+        pictureDialog.show();
+    }
+
     // Image editor
     // for setting a photo for the mood
-    public static void setImage(AppCompatActivity myActivity) {
-//        Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
-//            myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
-//        }
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/*"});
-        myActivity.startActivityForResult(photoPickerIntent, GET_IMAGE);
-    }
+//    public static void setImage(AppCompatActivity myActivity) {
+////        Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////        if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
+////            myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
+////        }
+//        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+//        photoPickerIntent.setType("image/*");
+//        photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[] {"image/*"});
+//        myActivity.startActivityForResult(photoPickerIntent, GET_IMAGE);
+//    }
 
     // gets the photo that was taken and let the image be shown in the page
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
@@ -179,17 +210,18 @@ public class MoodEditor {
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             image_view_photo.setImageBitmap(imageBitmap);
         }
-        else if (requestCode == GET_IMAGE){
+        else if (requestCode == GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK){
             Uri uri = null;
             if (data != null) {
                 uri = data.getData();
                 Log.i(TAG, "Uri: " + uri.toString());
                 image_view_photo.setImageURI(uri);
             }
-
+        }
+        else {
+            // does nothing if fails to deliver data
         }
     }
-
 
     // Location editor
     public static LocationManager getLocationManager(AppCompatActivity myActivity) {

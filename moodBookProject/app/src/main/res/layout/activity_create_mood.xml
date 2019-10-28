@@ -156,9 +156,10 @@
                 android:id="@+id/fill_mood_photo"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:maxHeight="100dp"
+                android:adjustViewBounds="true"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
-                tools:srcCompat="@tools:sample/avatars[3]"
                 android:layout_marginRight="10dp"/>
 
         </LinearLayout>
@@ -182,7 +183,8 @@
             android:textStyle="bold"
             android:textSize="15dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"/>
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"/>
 
     </LinearLayout>
 
