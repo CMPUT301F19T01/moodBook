@@ -94,20 +94,20 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/mood_location"
+            android:id="@+id/mood_latLng"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="Mood Location: " />
+            android:text="Mood latLng: " />
 
         <Button
-            android:id="@+id/pick_mood_location"
+            android:id="@+id/pick_mood_latLng"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:hint="Pick Mood Location" />
+            android:hint="Pick Mood latLng" />
 
         <TextView
             android:id="@+id/mood_situation"

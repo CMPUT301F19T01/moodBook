@@ -1,7 +1,8 @@
 package com.example.moodbook;
 
-import android.location.Location;
 import android.media.Image;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +15,7 @@ public class Mood {
     private String reason_text;     // optional
     private Image reason_photo;     // optional
     private String situation;       // optional
-    private Location location;      // optional
+    private LatLng latLng;      // optional
 
     private  SimpleDateFormat dateFt;    // date format
     private  SimpleDateFormat timeFt;    // time format
@@ -22,7 +23,7 @@ public class Mood {
 
     public Mood(Date date, Date time, String emotion,
                 String reason_text, Image reason_photo,
-                String situation, Location location) {
+                String situation, LatLng latLng) {
         // Initialize
         dateFt = new SimpleDateFormat ("yyyy-MM-dd");
         timeFt = new SimpleDateFormat ("HH:mm");
@@ -32,7 +33,7 @@ public class Mood {
         emotionMap.put("angry",new Emotion("angry"));
         emotionMap.put("afraid",new Emotion("afraid"));
 
-        setAll(date, time, emotion, reason_text, reason_photo, situation, location);
+        setAll(date, time, emotion, reason_text, reason_photo, situation, latLng);
     }
 
     public Mood(Date date, Date time, String emotion) {
@@ -40,21 +41,21 @@ public class Mood {
     }
 
     // constructor to test moodMaps
-    public Mood(String emotion, Location location){
-        this.location = location;
+    public Mood(String emotion, LatLng latLng){
+        this.latLng = latLng;
         this.emotion_text = emotion;
     }
 
     public void setAll(Date date, Date time, String emotion,
                        String reason_text, Image reason_photo,
-                       String situation, Location location) {
+                       String situation, LatLng latLng) {
         setDate(date);
         setTime(time);
         setEmotion(emotion);
         setReasonText(reason_text);
         setReasonPhoto(reason_photo);
         setSituation(situation);
-        setLocation(location);
+        setlatLng(latLng);
     }
 
     // Date
@@ -164,13 +165,13 @@ public class Mood {
         return this.situation;
     }
 
-    // Location
-    public void setLocation(Location location) {
-        this.location = location;
+    // latLng
+    public void setlatLng(LatLng latLng) {
+        this.latLng = latLng;
     }
 
-    public Location getLocation() {
-        return this.location;
+    public LatLng getlatLng() {
+        return this.latLng;
     }
 
 

@@ -18,9 +18,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -40,6 +38,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -55,7 +55,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     TextView mood_state;
     Button add_date;
     Button add_time;
-    Button add_location;
+    Button add_latLng;
     String SelectedMoodState;
     Spinner sp1;
     RelativeLayout pickState;
@@ -73,7 +73,7 @@ public class CreateMoodActivity extends AppCompatActivity {
     private Spinner situation;
     private static final int REQUEST_IMAGE = 101;
     private String date_mood, time_mood, reason_mood, situation_mood;
-    private double lat_mood, lon_mood;
+    private LatLng moodLatLng;
 
 
     @Override
@@ -89,7 +89,7 @@ public class CreateMoodActivity extends AppCompatActivity {
         add_time = findViewById(R.id.pick_mood_time);
         situation = (Spinner) findViewById(R.id.pick_mood_situation);
         add_reason = findViewById(R.id.pick_mood_reason);
-        add_location = findViewById(R.id.pick_mood_location);
+        add_latLng = findViewById(R.id.pick_mood_latLng);
         final Button add_button = findViewById(R.id.add_mood_button);
         final Button cancel_button = findViewById(R.id.cancel_mood_button);
 
@@ -216,37 +216,36 @@ public class CreateMoodActivity extends AppCompatActivity {
             }
         });
 
-        // gets users location
-        // create location manager and listener
+        // gets users latLng
+        // create latLng manager and listener
         final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         final LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                lat_mood = location.getLatitude();
-                lon_mood = location.getLongitude();
-                Toast.makeText(getApplicationContext(), lat_mood + "   " + lon_mood, Toast.LENGTH_SHORT).show();
+                moodLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                Toast.makeText(getApplicationContext(), location.getLatitude() + " " + location.getLongitude(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {} // not implemented
+            public void onStatusChanged(String s, int i, Bundle bundle) {}
 
             @Override
-            public void onProviderEnabled(String s) {} // not implemented
+            public void onProviderEnabled(String s) {}
 
             @Override
-            public void onProviderDisabled(String s) {} // not implemented
+            public void onProviderDisabled(String s) {}
         };
 
-        // set criteria for accuracy of location provider
+        // set criteria for accuracy of latLng provider
         final Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
         criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
 
-        // set the button onClickListener to request location
-        add_location.setOnClickListener(new View.OnClickListener() {
+        // set the button onClickListener to request latLng
+        add_latLng.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // ask user for permission to get location
+                // ask user for permission to get latLng
                 if (ActivityCompat.checkSelfPermission(CreateMoodActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(CreateMoodActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(CreateMoodActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                     return;

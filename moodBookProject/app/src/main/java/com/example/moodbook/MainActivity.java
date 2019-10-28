@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         /////////// MAP TEST CODE ///////////
         Intent intent = new Intent(this, MoodMapActivity.class);
-        startActivity(intent);
+        //startActivity(intent);
 
     }
 

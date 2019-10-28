@@ -16,13 +16,13 @@
     <string name="menu_send">Send</string>
     <string name="mood_state_would_showup_here">Mood State would showup here</string>
     <string name="pick_mood_time">Pick Mood Time</string>
-    <string name="mood_location_would_showup_here">Mood Location would showup here</string>
+    <string name="mood_latLng_would_showup_here">Mood latLng would showup here</string>
     <string name="mood_reason_would_showup_here">Mood Reason would showup here</string>
     <string name="mood_photo_would_showup_here">Mood Photo would showup here</string>
     <string name="pick_mood_state">Pick Mood State</string>
     <string name="pick_mood_situation">Pick Mood Situation</string>
     <string name="pick_mood_reason">Pick Mood Reason</string>
-    <string name="pick_mood_location">Pick Mood Location</string>
+    <string name="pick_mood_latLng">Pick Mood latLng</string>
     <string name="pick_mood_photo">Pick Mood Photo</string>
     <string name="pick_mood_date">Pick Mood Date</string>
     <string name="mood_time_would_showup_here">Mood Time would showup here</string>

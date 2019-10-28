@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,30 +49,28 @@ public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCall
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
 
         // test data
-        ArrayList<LatLng> locationArrayList = new ArrayList<>();
+        ArrayList<LatLng> latLngArrayList = new ArrayList<>();
 
         LatLng loc1 = new LatLng(60.03547, -123.75790);
         LatLng loc2 = new LatLng(24.26711, 125.54427);
         LatLng loc3 = new LatLng(3.28003, 107.63163);
 
-        locationArrayList.add(loc1);
-        locationArrayList.add(loc2);
-        locationArrayList.add(loc3);
+        latLngArrayList.add(loc1);
+        latLngArrayList.add(loc2);
+        latLngArrayList.add(loc3);
 
         int height = 100;
         int width = 100;
 
-        for(int i = 0; i < locationArrayList.size(); i++){
+        for(int i = 0; i < latLngArrayList.size(); i++){
             BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.afraid);
             Bitmap b = bitmapdraw.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
-            mMap.addMarker(new MarkerOptions().position(locationArrayList.get(i)).icon(bitmapDescriptor));
+            mMap.addMarker(new MarkerOptions().position(latLngArrayList.get(i)).icon(bitmapDescriptor));
         }
 
 
