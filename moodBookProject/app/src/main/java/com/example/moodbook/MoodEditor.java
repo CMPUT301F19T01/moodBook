@@ -36,7 +36,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class MoodEditor {
 
@@ -55,39 +57,23 @@ public class MoodEditor {
     // Date editor
     // for showing calendar so user could select a date
     public static void showCalendar(final Button view, AppCompatActivity myActivity){
-        Calendar calendar = Calendar.getInstance();
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int year = calendar.get(Calendar.YEAR);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(myActivity,
-                new DatePickerDialog.OnDateSetListener() {
-            //sets formatted date on the button
-            @Override
-            public void onDateSet(DatePicker datePicker, int y, int m, int d) {
-                String formattedDate = String.format("%d-%02d-%02d", y, m+1, d);
-                view.setText(formattedDate);
-            }
-        }, year, month, day);
-        datePickerDialog.show();
+
+        Calendar c = Calendar.getInstance();
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = df.format(c.getTime());
+        view.setText(formattedDate);
+
     }
 
 
     // Time editor
     // for showing time so user could select a time
     public static void showTime(final Button view, AppCompatActivity myActivity){
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(myActivity,
-                new TimePickerDialog.OnTimeSetListener() {
-            //sets formatted time on the button
-            @Override
-            public void onTimeSet(TimePicker timePicker, int h, int m) {
-                String formattedTime = String.format("%02d:%02d", h, m);
-                view.setText(formattedTime);
-            }
-        }, hour, minute,false);
-        timePickerDialog.show();
+        Date d=new Date();
+        SimpleDateFormat sdf=new SimpleDateFormat("hh:mm");
+        String currentDateTimeString = sdf.format(d);
+        view.setText(currentDateTimeString);
     }
 
 
