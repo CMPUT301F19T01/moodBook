@@ -156,7 +156,7 @@ public class DBAuth {
      *      an ArrayList of usernames
      * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
      */
-    protected ArrayList<String> updateUsernameList(){
+    public ArrayList<String> updateUsernameList(){
         final ArrayList<String> usernameList = new ArrayList<>();
         db.collection("usernamelist")
                 .get()
