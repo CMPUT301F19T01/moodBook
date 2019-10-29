@@ -3,12 +3,12 @@
     package="com.example.moodbook">
 
     <!--
-         The ACCESS_COARSE/FINE_latLng permissions are not required to use
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
-         latLng permissions for the 'MylatLng' functionality.
+         location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-feature android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -19,7 +19,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -34,13 +33,15 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name=".FriendMoodMapActivity"
+            android:label="@string/title_activity_friend_mood_map"></activity>
+        <activity
             android:name=".MoodMapActivity"
-            android:label="@string/title_activity_mood_map"></activity>
+            android:label="@string/title_activity_mood_map" />
         <activity android:name=".CreateMoodActivity" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,8 +51,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
