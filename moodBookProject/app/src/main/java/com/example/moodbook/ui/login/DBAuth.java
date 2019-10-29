@@ -25,22 +25,23 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * This class handles interaction with the DB to login and register
+ * Citation
+ * https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira    used to find out what argument to use in .addOnCompleteListener
+ * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
  */
-// Citation
-// https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira    used to find out what argument to use in .addOnCompleteListener
+
 public class DBAuth {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private CollectionReference collectionReference;
-    private Context context;
+    private ArrayList<String> usernameList;
 
-    public DBAuth(FirebaseAuth mAuth, Context context){
+    public DBAuth(FirebaseAuth mAuth){
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
         this.collectionReference = db.collection("USERS");
-        this.context = context;
-
+        this.usernameList = this.updateUsernameList();
     }
 
     /**
@@ -112,7 +113,7 @@ public class DBAuth {
     /**
      * This method creates containers for a new user in the database
      */
-    public void createUser(FirebaseUser user, String username){
+    private void createUser(FirebaseUser user, String username){
 
         String uid = user.getUid();
         Log.d(TAG, "creating user in db:"+ uid);
@@ -153,9 +154,9 @@ public class DBAuth {
      * This method gets all the currently used usernames
      * @return
      *      an ArrayList of usernames
+     * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
      */
-    public ArrayList<String> getUsernameList(){
-        FirebaseFirestore db = db = FirebaseFirestore.getInstance();
+    protected ArrayList<String> updateUsernameList(){
         final ArrayList<String> usernameList = new ArrayList<>();
         db.collection("usernamelist")
                 .get()
@@ -173,5 +174,17 @@ public class DBAuth {
                 });
 
         return usernameList;
+    }
+
+    /**
+     * This method verifys a given username for uniqueness and length
+     * @param username
+     * @return
+     *      true: username is unique and > length 0
+     *      false: username is not unique and/or is not > length 0
+     */
+    public Boolean verifyUsername(String username){
+        return (!usernameList.contains(username) && username.length() > 0);
+
     }
 }
