@@ -110,5 +110,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/moodBookLogo" />
+        app:srcCompat="@drawable/moodbook_logo" />
 </androidx.constraintlayout.widget.ConstraintLayout>
