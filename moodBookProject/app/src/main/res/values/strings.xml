@@ -7,12 +7,34 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="mood_state_would_showup_here">Mood State would showup here</string>
+    <string name="pick_mood_time">Pick Mood Time</string>
+    <string name="mood_location_would_showup_here">Mood Location would showup here</string>
+    <string name="mood_reason_would_showup_here">Mood Reason would showup here</string>
+    <string name="mood_photo_would_showup_here">Mood Photo would showup here</string>
+    <string name="pick_mood_emotional_state">Pick Mood State</string>
+    <string name="pick_mood_situation">Pick Mood Situation</string>
+    <string name="pick_mood_reason">Pick Mood Reason</string>
+    <string name="pick_mood_location">Pick Mood Location</string>
+    <string name="pick_mood_photo">Pick Mood Photo</string>
+    <string name="pick_mood_date">Pick Mood Date</string>
+    <string name="mood_time_would_showup_here">Mood Time would showup here</string>
+    <string name="mood_date_would_showup_here">Mood Date would showup here</string>
+    <string name="mood_situation_would_show_up_here">Mood Situation would show up here</string>
+    <string name="select">Select</string>
+    <string name="cancel">Cancel</string>
+    <string name="afraid">Afraid</string>
+    <string name="angry">Angry</string>
+    <string name="happy">Happy</string>
+    <string name="sad">Sad</string>
+    <string name="todo">TODO</string>
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
