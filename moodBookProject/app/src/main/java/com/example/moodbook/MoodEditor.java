@@ -51,7 +51,7 @@ public class MoodEditor {
     private static final int GET_IMAGE = 102;
     private static final String TAG = "MyActivity";
 
-    
+
     // Date editor
     // for showing calendar so user could select a date
     public static void showCalendar(final Button view, AppCompatActivity myActivity){
