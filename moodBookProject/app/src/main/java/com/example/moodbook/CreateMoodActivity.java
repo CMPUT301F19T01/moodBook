@@ -20,11 +20,30 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.moodbook.ui.login.DBAuth;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 
 
 public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.MoodActivity{
+
+    //database
+//    FirebaseAuth mAuth;
+//    FirebaseFirestore appDatabase = FirebaseFirestore.getInstance();
+//    FirebaseUser loggedUser = mAuth.getCurrentUser();
+//    String uid = loggedUser.getUid();
+//    CollectionReference collectionRefrence = appDatabase.collection("USERS").document(uid).collection("MOODS");
+
+    // moodSetter
+    protected DBMoodSetter moodDB;
+    private FirebaseAuth mAuth;
 
     // date
     Button add_date_button;
@@ -64,7 +83,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     Button add_photo_button;
     ImageView image_view_photo;
 
-    private String mood_date, mood_time, mood_reason, mood_situation;
+    private String mood_date, mood_time, mood_reason, mood_situation, mood_emotion;
     private double mood_lat, mood_lon;
 
 
@@ -73,6 +92,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_mood);
+        mAuth = FirebaseAuth.getInstance();
+        moodDB = new DBMoodSetter(mAuth, getApplicationContext());
+
 
         final FragmentManager fm = getSupportFragmentManager();
         final SelectMoodStateFragment s = new SelectMoodStateFragment();
@@ -148,14 +170,17 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
             public void onClick(View view) {
                 mood_date = add_date_button.getText().toString();
                 mood_time = add_time_button.getText().toString();
+                mood_emotion = spinner_emotion.getSelectedItem().toString();
                 mood_reason = edit_text_reason.getText().toString();
                 mood_situation = spinner_situation.getSelectedItem().toString();
+                Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
+                        mood_reason,null,mood_situation,null);
+                moodDB.addMood(newMood);
                 Toast.makeText
-                        (getApplicationContext(), "Selected : " + mood_situation, Toast.LENGTH_SHORT)
+                        (getApplicationContext(), "Added: " + mood_date+mood_time+mood_emotion, Toast.LENGTH_SHORT)
                         .show();
             }
         });
-
 
         // When cancel button is pressed, return to main activity; do nothing
         cancel_button.setOnClickListener(new View.OnClickListener() {
