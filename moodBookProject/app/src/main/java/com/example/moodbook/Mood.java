@@ -40,10 +40,9 @@ public class Mood {
         this(date, time, emotion, null, null, null, null);
     }
 
-    // constructor to test moodMaps
+    ////////////////////////// constructor to test moodMaps ///////////////////////////////////
     public Mood(String emotion, LatLng latLng){
-        this.latLng = latLng;
-        this.emotion_text = emotion;
+        this(null, null, emotion, null, null, null, latLng);
     }
 
     public void setAll(Date date, Date time, String emotion,

@@ -1,11 +1,13 @@
 package com.example.moodbook;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -15,12 +17,19 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCallback, DBUpdate {
 
-    private GoogleMap mMap;
+    ///// Member Variables /////
+    private GoogleMap moodMap;
+    private ArrayList<Mood> moodDataList;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,34 +55,66 @@ public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        // initialize map
+        moodMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-
+        // connect to db
+        db = FirebaseFirestore.getInstance();
 
         // test data
-        ArrayList<LatLng> latLngArrayList = new ArrayList<>();
+        ArrayList<Mood> moodTESTDATA= new ArrayList<>();
 
         LatLng loc1 = new LatLng(60.03547, -123.75790);
         LatLng loc2 = new LatLng(24.26711, 125.54427);
         LatLng loc3 = new LatLng(3.28003, 107.63163);
+        LatLng loc4 = new LatLng(53.28003, -134.63163);
 
-        latLngArrayList.add(loc1);
-        latLngArrayList.add(loc2);
-        latLngArrayList.add(loc3);
+        Mood moodAfraid = new Mood("Afraid", loc1);
+        Mood moodAngry = new Mood("Angry", loc2);
+        Mood moodHappy = new Mood("Happy", loc3);
+        Mood moodSad = new Mood("Sad", loc4);
 
-        int height = 100;
+        moodTESTDATA.add(moodAfraid);
+        moodTESTDATA.add(moodAngry);
+        moodTESTDATA.add(moodHappy);
+        moodTESTDATA.add(moodSad);
+
+        drawMoodMarkers(moodTESTDATA);
+
+    }
+
+    // update users mood list
+    @Override
+    public void updateList(FirebaseFirestore db) {
+        db.collection("USERS")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                    }
+                });
+
+    }
+
+    public void drawMoodMarkers(ArrayList<Mood> moodData){
+        // iterate through moods
+        int emotionRes;
+        LatLng emotionLatLng;
         int width = 100;
+        int height = 100;
+        for(int i = 0; i < moodData.size(); i++){
+            // get latlng and image resource from Mood
+            emotionRes = moodData.get(i).getEmotionImageResource();
+            emotionLatLng = moodData.get(i).getlatLng();
 
-        for(int i = 0; i < latLngArrayList.size(); i++){
-            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(R.drawable.afraid);
+            // convert and draw to map
+            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(emotionRes);
             Bitmap b = bitmapdraw.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
-            mMap.addMarker(new MarkerOptions().position(latLngArrayList.get(i)).icon(bitmapDescriptor));
+            moodMap.addMarker(new MarkerOptions().position(emotionLatLng).icon(bitmapDescriptor));
         }
-
-
-
     }
+
 }
