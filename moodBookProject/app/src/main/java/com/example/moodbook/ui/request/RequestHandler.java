@@ -1,5 +1,7 @@
 package com.example.moodbook.ui.request;
 
+import android.util.Log;
+
 import com.example.moodbook.ui.login.DBAuth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -31,6 +33,7 @@ public class RequestHandler {
      */
     public Boolean verifyRequest(String username){
         dbAuth.updateUsernameList();
+        Log.d("REQUEST", usernameList.get(0));
         return usernameList.contains(username);
     }
 }
