@@ -83,7 +83,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     Button add_photo_button;
     ImageView image_view_photo;
 
-    private String mood_date, mood_time, mood_reason, mood_situation, mood_state;
+    private String mood_date, mood_time, mood_reason, mood_situation, mood_emotion;
     private double mood_lat, mood_lon;
 
 
@@ -170,12 +170,14 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
             public void onClick(View view) {
                 mood_date = add_date_button.getText().toString();
                 mood_time = add_time_button.getText().toString();
+                mood_emotion = spinner_emotion.getSelectedItem().toString();
                 mood_reason = edit_text_reason.getText().toString();
                 mood_situation = spinner_situation.getSelectedItem().toString();
-                //mood_state = spinner_emotion.getSelectedItem().toString();
-                moodDB.addMood("Sad");
+                Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
+                        mood_reason,null,mood_situation,null);
+                moodDB.addMood(newMood);
                 Toast.makeText
-                        (getApplicationContext(), "Selected  Sad added: " + mood_situation + mood_state, Toast.LENGTH_SHORT)
+                        (getApplicationContext(), "Added: " + mood_date+mood_time+mood_emotion, Toast.LENGTH_SHORT)
                         .show();
             }
         });

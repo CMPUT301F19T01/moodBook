@@ -33,10 +33,24 @@ public class DBMoodSetter {
         this.context = context;
     }
 
-    public void addMood(String moodstate){
+    public void addMood(Mood mood){
+        HashMap<String, Object> data = getMoodData(mood);
+        String docId = getMoodDocId(mood);
+        userReference.document(uid).collection("MOODS").document(docId).set(data);
+    }
+
+    private String getMoodDocId(Mood mood) {
+        return mood.getDateText()+"_"+mood.getTimeText()+"_"+mood.getEmotionText();
+    }
+
+    private HashMap<String, Object> getMoodData(Mood mood) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put("moodstate", moodstate);
-        userReference.document(uid).collection("MOODS").document("1").set(data);
+        data.put("date",mood.getDateText());
+        data.put("time",mood.getTimeText());
+        data.put("emotion",mood.getEmotionText());
+        data.put("situation",mood.getSituation());
+        data.put("reason_text",mood.getReasonText());
+        return data;
     }
 
 
