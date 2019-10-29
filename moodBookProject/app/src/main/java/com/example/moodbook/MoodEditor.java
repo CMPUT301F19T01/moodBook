@@ -43,7 +43,7 @@ public class MoodEditor {
 
     private static final int REQUEST_IMAGE = 101;
 
-    
+
     // Date editor
     // for showing calendar so user could select a date
     public static void showCalendar(final Button view, AppCompatActivity myActivity){
