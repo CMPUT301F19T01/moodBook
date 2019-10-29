@@ -9,6 +9,34 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/nav_myMood"
+            android:icon="@drawable/ic_format_list_bulleted_black_24dp"
+            android:title="My Mood" />
+        <item
+            android:id="@+id/nav_FriendMood"
+            android:icon="@drawable/ic_group_black_24dp"
+            android:title="Friend Mood" />
+        <item
+            android:id="@+id/nav_addFriendsMood"
+            android:icon="@drawable/ic_person_add_black_24dp"
+            android:title="Add Friends" />
+        <item
+            android:id="@+id/nav_myRequests"
+            android:icon="@drawable/ic_group_add_black_24dp"
+            android:title="My Requests" />
+        <item
+            android:id="@+id/nav_myMoodMap"
+            android:icon="@drawable/ic_location_on_black_24dp"
+            android:title="My Mood Map" />
+        <item
+            android:id="@+id/nav_myFriendMoodMap"
+            android:icon="@drawable/ic_person_pin_circle_black_24dp"
+            android:title="Friend Mood map" />
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="@string/menu_home" />
+        <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/menu_gallery" />

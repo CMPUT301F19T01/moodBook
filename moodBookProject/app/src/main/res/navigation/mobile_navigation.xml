@@ -12,6 +12,38 @@
         tools:layout="@layout/fragment_home"></fragment>
 
     <fragment
+        android:id="@+id/nav_myMood"
+        android:name="com.example.moodbook.ui.myMood.myMoodFragment"
+        android:label="My Mood"
+        tools:layout="@layout/fragment_mymood" />
+
+    <fragment
+        android:id="@+id/nav_FriendMood"
+        android:name="com.example.moodbook.ui.friendMood.friendMoodFragment"
+        android:label="Friend Mood"
+        tools:layout="@layout/fragment_friendmood" />
+    <fragment
+        android:id="@+id/nav_addFriendsMood"
+        android:name="com.example.moodbook.ui.addFriends.addFriendFragment"
+        android:label="Add Friends"
+        tools:layout="@layout/fragment_addfriends" />
+    <fragment
+        android:id="@+id/nav_myRequests"
+        android:name="com.example.moodbook.ui.myRequests.myRequestsFragment"
+        android:label="My Requests"
+        tools:layout="@layout/fragment_myrequests" />
+    <fragment
+        android:id="@+id/nav_myMoodMap"
+        android:name="com.example.moodbook.ui.myMoodMap.myMoodMapFragment"
+        android:label="My Mood Map"
+        tools:layout="@layout/fragment_mymoodmap" />
+    <fragment
+        android:id="@+id/nav_myFriendMoodMap"
+        android:name="com.example.moodbook.ui.myFriendMoodMap.myFriendMoodMapFragment"
+        android:label="Friend Mood Map"
+        tools:layout="@layout/fragment_friendmoodmap" />
+
+    <fragment
         android:id="@+id/nav_gallery"
         android:name="com.example.moodbook.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
