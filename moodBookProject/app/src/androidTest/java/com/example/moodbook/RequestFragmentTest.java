@@ -13,6 +13,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 
 public class RequestFragmentTest {
     private Solo solo;
@@ -32,8 +36,9 @@ public class RequestFragmentTest {
      */
     @Test
     public void sendRequest(){
-        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "elisa");
+        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "JIM");
         solo.clickOnButton("Send Request");
         solo.sleep(5000); // wait for activity to change
+        assertTrue(solo.waitForText("Sent request"));
     }
 }

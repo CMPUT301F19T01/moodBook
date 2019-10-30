@@ -36,11 +36,10 @@ public class RequestHandler {
      * @param username
      * @return
      *      true: username exists
-     *      false: username does not exist
+     *      false: username does not exist/username is the same as the user's username
      */
     public Boolean verifyRequest(String username){
         dbAuth.updateUsernameList();
-        Log.d("REQUEST", usernameList.get(0));
         return usernameList.contains(username);
     }
 
