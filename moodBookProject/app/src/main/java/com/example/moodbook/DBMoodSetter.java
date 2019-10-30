@@ -33,11 +33,18 @@ public class DBMoodSetter {
         this.context = context;
     }
 
-    public void addMood(Mood mood){
+    public void addMood(Mood mood) {
         HashMap<String, Object> data = getMoodData(mood);
         String docId = getMoodDocId(mood);
         userReference.document(uid).collection("MOODS").document(docId).set(data);
     }
+
+    public void removeMood(Mood mood) {
+        String docId = getMoodDocId(mood);
+        // remove selected city
+        userReference.document(uid).collection("MOODS").document(docId).delete();
+    }
+
 
     private String getMoodDocId(Mood mood) {
         return mood.getDateText()+"_"+mood.getTimeText()+"_"+mood.getEmotionText();
@@ -52,7 +59,5 @@ public class DBMoodSetter {
         data.put("reason_text",mood.getReasonText());
         return data;
     }
-
-
 
 }
