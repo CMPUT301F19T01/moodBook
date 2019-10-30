@@ -50,9 +50,9 @@ public class RequestFragment extends Fragment {
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (requestHandler.verifyRequest(requestText.getText().toString())){ // check if username exists in db
-
-                    Log.d("REQUEST", "exists");
+                String addUser = requestText.getText().toString();
+                if (requestHandler.verifyRequest(addUser)){ // check if username exists in db
+                    requestHandler.sendRequest(addUser, mAuth.getCurrentUser().getUid());
                     Toast.makeText(root.getContext(), "Sent request",
                             Toast.LENGTH_LONG).show();
                 } else {

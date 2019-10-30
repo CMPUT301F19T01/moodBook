@@ -3,6 +3,7 @@ package com.example.moodbook.ui.login;
 import android.content.Context;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -188,5 +190,23 @@ public class DBAuth {
     public Boolean verifyUsername(String username){
         return (!usernameList.contains(username) && username.length() > 0);
 
+    }
+
+    /**
+     * Stores the username in the user's FireBase auth profile
+     * @param user
+     * @param username
+     */
+    public void updateUsername(FirebaseUser user, String username){
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(username).build();
+        user.updateProfile(profileUpdates) .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d("PROFILE", "User profile updated.");
+                }
+            }
+        });
     }
 }

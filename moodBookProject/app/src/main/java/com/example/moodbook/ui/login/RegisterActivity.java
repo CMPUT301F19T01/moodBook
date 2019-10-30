@@ -3,6 +3,7 @@ package com.example.moodbook.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,10 +75,12 @@ public class RegisterActivity extends AppCompatActivity {
                             FirebaseUser user = dbAuth.register(emailS, passwordS, usernameS);
                             if (user == null){
                                 email.setError("Email in use"); // Firebase call fails when email is in use
+                            } else {
+                                dbAuth.updateUsername(user, usernameS);
+                                Intent intent = new Intent();
+                                setResult(Activity.RESULT_OK, intent);
+                                finish();
                             }
-                            Intent intent = new Intent();
-                            setResult(Activity.RESULT_OK, intent);
-                            finish();
                         } else {
                             username.setError("Username in use");
                         }

@@ -36,4 +36,13 @@ public class RequestHandler {
         Log.d("REQUEST", usernameList.get(0));
         return usernameList.contains(username);
     }
+
+    /**
+     * This method adds a request to the given user's db document
+     * @param addUser -- the username to add
+     * @param uid  -- the current user's uid
+     */
+    public void sendRequest(String addUser, String uid){
+
+    }
 }
