@@ -47,8 +47,9 @@ public class MoodEditor {
 
 
     // for accessing SelectedMoodState outside of activity
-    public interface MoodActivity {
+    public interface MoodInterface {
         void setSelectedMoodState(String moodState);
+        void setLocation(Location location);
     }
 
 
@@ -106,7 +107,7 @@ public class MoodEditor {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(myActivity.getApplicationContext(), emotionStateList[i], Toast.LENGTH_LONG)
                         .show();
-                ((MoodActivity)myActivity).setSelectedMoodState(emotionStateList[i]);
+                ((MoodInterface)myActivity).setSelectedMoodState(emotionStateList[i]);
                 if(i != 0) {
                     spinner_emotion.setBackgroundColor(myActivity.getResources().getColor(emotionColors[i]));
                 }
@@ -225,8 +226,12 @@ public class MoodEditor {
         return new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                ((MoodInterface)myActivity).setLocation(location);
+
+                //redundant
                 double mood_lat = location.getLatitude();
                 double mood_lon = location.getLongitude();
+
                 Toast.makeText(myActivity.getApplicationContext(),
                         mood_lat + "   " + mood_lon, Toast.LENGTH_SHORT)
                         .show();

@@ -1,6 +1,7 @@
 package com.example.moodbook;
 
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -51,14 +52,15 @@ public class DBMoodSetter {
     }
 
     private HashMap<String, Object> getMoodData(Mood mood) {
+        Location location = mood.getLocation();
         HashMap<String, Object> data = new HashMap<>();
         data.put("date",mood.getDateText());
         data.put("time",mood.getTimeText());
         data.put("emotion",mood.getEmotionText());
         data.put("situation",mood.getSituation());
         data.put("reason_text",mood.getReasonText());
-//        data.put("location_lat", mood.getLocationLatitude());
-//        data.put("location_lon", mood.getLocationLongtitude());
+        data.put("location_lat", location==null ? null : location.getLatitude());
+        data.put("location_lon", location==null ? null : location.getLongitude());
         return data;
     }
 }

@@ -17,6 +17,7 @@ public class Mood implements Comparable<Mood> {
     private Image reason_photo;     // optional
     private String situation;       // optional
     private Location location;      // optional
+    private Double latitude;
 
     private final SimpleDateFormat dateFt;      // date format
     private final SimpleDateFormat timeFt;      // time format
@@ -154,6 +155,10 @@ public class Mood implements Comparable<Mood> {
         this.location = location;
     }
 
+    public Location getLocation() {
+        return this.location;
+    }
+
 
     @Override
     public int compareTo(@NonNull Mood other) {
@@ -167,6 +172,11 @@ public class Mood implements Comparable<Mood> {
 
         return dateTime.compareTo(otherDateTime);
     }
+
+//    public Double getLocationLongtitude() {
+//        double longitude = this.location.getLongitude();
+//        return longitude;
+//    }
 
 
     public static class Emotion {

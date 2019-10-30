@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -32,7 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 
 
-public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.MoodActivity{
+public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.MoodInterface{
 
     //database
 //    FirebaseAuth mAuth;
@@ -76,7 +77,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
 
     private String mood_date, mood_time, mood_reason, mood_situation, mood_emotion;
     private double mood_lat, mood_lon;
-
+    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +130,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
             @Override
             public void onClick(View view) {
                 MoodEditor.showCalendar((Button)view,CreateMoodActivity.this);
+
             }
         });
         add_time_button.setOnClickListener(new View.OnClickListener() {
@@ -149,8 +151,10 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         add_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 MoodEditor.getLocationResult(CreateMoodActivity.this,
                         locationManager, locationListener);
+
             }
         });
 
@@ -165,7 +169,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                 mood_reason = edit_text_reason.getText().toString();
                 mood_situation = spinner_situation.getSelectedItem().toString();
                 Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
-                        mood_reason,null,mood_situation,null);
+                        mood_reason,null,mood_situation,location);
                 moodDB.addMood(newMood);
                 Toast.makeText
                         (getApplicationContext(), "Added: " + mood_date+mood_time+mood_emotion, Toast.LENGTH_SHORT)
@@ -191,12 +195,15 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     }
 
     public void showCoords(View view){
-
     }
-
 
     @Override
     public void setSelectedMoodState(String moodState) {
         this.selectedMoodState = moodState;
+    }
+
+    @Override
+    public void setLocation(Location location) {
+        this.location = location;
     }
 }
