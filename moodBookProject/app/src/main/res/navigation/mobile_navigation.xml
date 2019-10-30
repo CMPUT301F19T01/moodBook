@@ -15,7 +15,11 @@
         android:id="@+id/nav_myMood"
         android:name="com.example.moodbook.ui.myMood.myMoodFragment"
         android:label="My Mood"
-        tools:layout="@layout/fragment_mymood" />
+        tools:layout="@layout/fragment_mymood" >
+        <action
+            android:id="@+id/action_nav_myMood_to_nav_home2"
+            app:destination="@id/nav_home" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_FriendMood"
@@ -42,24 +46,11 @@
         android:name="com.example.moodbook.ui.myFriendMoodMap.myFriendMoodMapFragment"
         android:label="Friend Mood Map"
         tools:layout="@layout/fragment_friendmoodmap" />
-
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.moodbook.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.moodbook.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-
-    <fragment
-        android:id="@+id/nav_tools"
-        android:name="com.example.moodbook.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:id="@+id/nav_logout"
+        android:name="com.example.moodbook.ui.logout.logoutFragment"
+        android:label="Log Out"
+        tools:layout="@layout/fragment_logout" />
 
     <fragment
         android:id="@+id/nav_share"
