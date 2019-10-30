@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
+ * @deprecated
  * This creates a fragment that allows the user to set a username
  * Citation: https://stackoverflow.com/questions/16918854/find-fragment-by-tag-name-in-container  Ken Wolf - used to determine where the fragment was created
  * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
@@ -45,7 +46,7 @@ public class UsernameFragment extends DialogFragment {
 
         // Determine if registering or updating
         Fragment fragment = getFragmentManager().findFragmentByTag("registering");
-        if ("registering" == fragment.getTag()) {
+        /*if ("registering" == fragment.getTag()) {
             final ArrayList<String> usernameList = ((LoginActivity) getActivity()).usernameList; // get the usernamelist from LoginActivity
 
             usernameButton.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +78,7 @@ public class UsernameFragment extends DialogFragment {
         // Not registering an account
         } else { //TODO updating username. only implement if client requests this feature
             Log.d("Email", "not registering");
-        }
+        }*/
         return builder
                 .setView(view)
                 .setTitle("Set username")

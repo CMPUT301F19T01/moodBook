@@ -9,4 +9,5 @@
     <color name="angryRed">#F68A90</color>
     <color name="afraidBrown">#E1C494</color>
     <drawable name="highlighter">#08F90E</drawable>
+    <color name="transparent">#00FFFFFF</color>
 </resources>

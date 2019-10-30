@@ -3,6 +3,7 @@ package com.example.moodbook.ui.login;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,13 +18,13 @@ import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 
 /**
  * This activity handles login and registration
  * Citation: https://firebase.google.com/docs/auth/android/manage-users?authuser=0
  * https://stackoverflow.com/questions/43599638/firebase-signinwithemailandpassword-and-createuserwithemailandpassword-not-worki -Sagar Raut   used for mAuthListener
  * https://stackoverflow.com/questions/16812039/how-to-check-valid-email-format-entered-in-edittext  - iversoncru   used for verifying email format
+ * https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant    used for activity results
  */
 //TODO:
 //  BUG: toast message is shown as failing login/registration when actually succeeding
@@ -38,8 +39,6 @@ public class LoginActivity extends AppCompatActivity {
 
     protected DBAuth dbAuth;
 
-    protected ArrayList<String> usernameList;
-
     private Button loginButton;
     private Button registerButton;
     protected EditText email;
@@ -52,17 +51,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //Stuck logging in? use the following line once to log out the cached session:
-        //mAuth.getInstance().signOut();
+        mAuth.getInstance().signOut();
 
         mAuth = FirebaseAuth.getInstance();
-        dbAuth = new DBAuth(mAuth, getApplicationContext());
-
-        usernameList = dbAuth.getUsernameList(); //
+        dbAuth = new DBAuth(mAuth);
 
 
         loginButton = findViewById(R.id.login);
 
-        email = findViewById(R.id.username);
+        email = findViewById(R.id.email);
         password = findViewById(R.id.password);
 
         // LOGIN button
@@ -74,13 +71,15 @@ public class LoginActivity extends AppCompatActivity {
                 if (dbAuth.verifyEmail(email.getText().toString())){
                     if (dbAuth.verifyPass(password.getText().toString())){
                         FirebaseUser loginResult = dbAuth.login(email.getText().toString(), password.getText().toString());
-                        if (loginResult != null){
+                        if (loginResult != null) {
                             updateUI(loginResult);
+
                         }
                         updateUI(null);
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                    } else {
+                                    Toast.LENGTH_SHORT).show();
+                    }
+                    else {
                         password.setError("Password must be >= 6 chars");
                     }
                 } else {
@@ -95,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                if (dbAuth.verifyEmail(email.getText().toString())){
+                /*if (dbAuth.verifyEmail(email.getText().toString())){
                     if (dbAuth.verifyPass(password.getText().toString())){
                         new UsernameFragment().show(getSupportFragmentManager(), "registering");
                     } else {
@@ -104,7 +103,10 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     email.setError("Incorrect email format");
                 }
-                //register(email.getText().toString(), password.getText().toString());
+                *///register(email.getText().toString(), password.getText().toString());
+
+                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -132,6 +134,11 @@ public class LoginActivity extends AppCompatActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
+    /**
+     * This method starts the mainactivity when the user is logged in
+     * @param currentUser
+     */
     protected void updateUI(FirebaseUser currentUser){
         if (currentUser != null){
             Log.d(TAG, "User logged in:starting mainactivity");
@@ -140,6 +147,18 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             // update text views, show error messages
             Log.d(TAG, "User not logged in");
+        }
+    }
+
+    // https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant    used for activity results
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if(resultCode == Activity.RESULT_OK){
+                FirebaseUser user = mAuth.getCurrentUser();
+                updateUI(user);
+            }
         }
     }
 }
