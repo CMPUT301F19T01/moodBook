@@ -71,13 +71,15 @@ public class LoginActivity extends AppCompatActivity {
                 if (dbAuth.verifyEmail(email.getText().toString())){
                     if (dbAuth.verifyPass(password.getText().toString())){
                         FirebaseUser loginResult = dbAuth.login(email.getText().toString(), password.getText().toString());
-                        if (loginResult != null){
+                        if (loginResult != null) {
                             updateUI(loginResult);
+
                         }
                         updateUI(null);
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-                    } else {
+                                    Toast.LENGTH_SHORT).show();
+                    }
+                    else {
                         password.setError("Password must be >= 6 chars");
                     }
                 } else {
