@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class RequestFragment extends Fragment {
 
@@ -27,6 +28,7 @@ public class RequestFragment extends Fragment {
     private EditText requestText;
     private Button requestButton;
     private RequestHandler requestHandler;
+    private FirebaseUser user;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -41,18 +43,20 @@ public class RequestFragment extends Fragment {
             }
         });*/
 
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
         requestText = root.findViewById(R.id.usernameEditText);
         requestButton = root.findViewById(R.id.requestButton);
 
-        mAuth = FirebaseAuth.getInstance();
         requestHandler = new RequestHandler(mAuth);
 
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String addUser = requestText.getText().toString();
+
                 if (requestHandler.verifyRequest(addUser)){ // check if username exists in db
-                    requestHandler.sendRequest(addUser, mAuth.getCurrentUser().getUid());
+                    requestHandler.sendRequest(addUser, user.getUid(), user.getDisplayName());
                     Toast.makeText(root.getContext(), "Sent request",
                             Toast.LENGTH_LONG).show();
                 } else {
