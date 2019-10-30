@@ -73,6 +73,7 @@ public class DBAuth {
      * This method attempts to log a user in
      */
     // https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira    used to find out what argument to use in .addOnCompleteListener
+    @Deprecated
     public FirebaseUser login(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
