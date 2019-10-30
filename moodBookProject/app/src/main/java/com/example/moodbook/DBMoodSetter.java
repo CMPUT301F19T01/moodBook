@@ -8,11 +8,13 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Document;
@@ -23,15 +25,31 @@ public class DBMoodSetter {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private CollectionReference userReference;
+    private CollectionReference intReference;
     private Context context;
     private String uid;
+    private FieldValue var;
 
     public DBMoodSetter(FirebaseAuth mAuth, Context context){
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
+        this.intReference = db.collection("int");
         this.context = context;
+    }
+
+    //writes to database the last int that it used
+    public void setInt() {
+        DocumentReference intRef = intReference.document("count");
+        // Atomically increment the population of the city by 50.
+        intRef.update("count", FieldValue.increment(1));
+    }
+
+
+    //gets from database what int it last used, so it could start counting from there
+    public void getInt() {
+
     }
 
     public void addMood(Mood mood) {
@@ -45,7 +63,6 @@ public class DBMoodSetter {
         // remove selected city
         userReference.document(uid).collection("MOODS").document(docId).delete();
     }
-
 
     private String getMoodDocId(Mood mood) {
         return mood.getDateText()+"_"+mood.getTimeText()+"_"+mood.getEmotionText();
@@ -61,6 +78,12 @@ public class DBMoodSetter {
         data.put("reason_text",mood.getReasonText());
         data.put("location_lat", location==null ? null : location.getLatitude());
         data.put("location_lon", location==null ? null : location.getLongitude());
+        return data;
+    }
+
+    private HashMap<String, Object> getMoodInt(int i) {
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("counter", i);
         return data;
     }
 }

@@ -78,6 +78,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     private String mood_date, mood_time, mood_reason, mood_situation, mood_emotion;
     private double mood_lat, mood_lon;
     private Location location;
+    private int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,6 +172,8 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                 Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
                         mood_reason,null,mood_situation,location);
                 moodDB.addMood(newMood);
+                counter += 1;
+                moodDB.setInt();
                 Toast.makeText
                         (getApplicationContext(), "Added: " + mood_date+mood_time+mood_emotion, Toast.LENGTH_SHORT)
                         .show();
