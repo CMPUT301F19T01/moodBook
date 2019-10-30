@@ -107,6 +107,7 @@ public class Mood implements Comparable<Mood> {
         return Emotion.getColorResourceId(this.emotion_text);
     }
 
+
     // Reason
     public void setReasonText(String reason_text) {
         // Check if text is longer than 20 characters or 3 words
@@ -155,8 +156,14 @@ public class Mood implements Comparable<Mood> {
         this.location = location;
     }
 
-    public Location getLocation() {
-        return this.location;
+
+    public double getLocationLat() {
+
+        return this.location.getLatitude();
+    }
+
+    public double getLocationLon() {
+        return this.location.getLongitude();
     }
 
     @Override
@@ -224,5 +231,6 @@ public class Mood implements Comparable<Mood> {
         public static int[] getColorResources() {
             return color_resource_id.clone();
         }
+
     }
 }

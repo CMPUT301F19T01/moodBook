@@ -50,9 +50,8 @@ public class DBMoodSetter {
         data.put("emotion",mood.getEmotionText());
         data.put("situation",mood.getSituation());
         data.put("reason_text",mood.getReasonText());
+        data.put("location_lat", mood.getLocationLat());
+        data.put("location_lon", mood.getLocationLon());
         return data;
     }
-
-
-
 }
