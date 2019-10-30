@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
 
-                R.id.nav_home, R.id.nav_myMood,R.id.nav_FriendMood,
+                R.id.nav_myMood,R.id.nav_FriendMood,
                 R.id.nav_addFriendsMood, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout, R.id.nav_send)
                 .setDrawerLayout(drawer)
                 .build();
