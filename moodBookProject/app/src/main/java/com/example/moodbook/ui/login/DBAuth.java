@@ -93,6 +93,7 @@ public class DBAuth {
     /**
      * This method creates a new user in Firebase
      */
+    @Deprecated
     public FirebaseUser register(String email, String password, String userParam){
         final String username = userParam;
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -102,7 +103,7 @@ public class DBAuth {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            createUser(user, username);
+                            //createUser(user, username);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                         }
@@ -115,14 +116,14 @@ public class DBAuth {
     /**
      * This method creates containers for a new user in the database
      */
-    private void createUser(FirebaseUser user, String username){
+    public void createUser(FirebaseUser user, String email, String username){
 
         String uid = user.getUid();
         Log.d(TAG, "creating user in db:"+ uid);
 
         // Initialize moodcount
         HashMap<String, Object> data = new HashMap<>();
-        data.put("username", username);
+        data.put("username", email);
         data.put("moodCount", 0);
         collectionReference
                 .document(uid)
