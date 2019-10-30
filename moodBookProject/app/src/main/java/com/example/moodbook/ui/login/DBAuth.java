@@ -141,12 +141,14 @@ public class DBAuth {
         // Initialize containers
 
         HashMap<String, Object> nullData = new HashMap<>();
-        data.put("null", null);
+        nullData.put("null", null);
 
-        db.collection("usernamelist").document(username).set(nullData); // add username to usernamelist
         collectionReference.document(uid).collection("MOODS").document("null").set(nullData);
         collectionReference.document(uid).collection("FRIENDS").document("null").set(nullData);
         collectionReference.document(uid).collection("REQUESTS").document("null").set(nullData);
+
+        nullData.put("uid", user.getUid());
+        db.collection("usernamelist").document(username).set(nullData); // add username to usernamelist
 
     }
 
