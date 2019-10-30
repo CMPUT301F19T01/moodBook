@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moodbook.CreateMoodActivity;
+import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.MainActivity;
 import com.example.moodbook.EditMoodActivity;
 import com.example.moodbook.Mood;
@@ -38,6 +39,7 @@ import com.example.moodbook.R;
 import com.example.moodbook.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -49,13 +51,21 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
     private RecyclerView moodListView;
     private MoodListAdapter moodAdapter;
     private CoordinatorLayout moodHistoryLayout;
-    private ArrayList<Mood> filterOptions;
+
+    // connect to DB
+    private DBMoodSetter moodDB;
+    private FirebaseAuth mAuth;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // initialize DB connector
+        mAuth = FirebaseAuth.getInstance();
+        moodDB = new DBMoodSetter(mAuth, getContext());
 
         // Add a mood: when floating add button is clicked, start add activity
         add_mood_button = root.findViewById(R.id.mood_history_add_button);

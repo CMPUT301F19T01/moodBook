@@ -69,7 +69,7 @@ public class EditMoodActivity extends AppCompatActivity {
     // situation
     private Spinner edit_spinner_situation;
     // initialize string array for situation
-    private final String[] situationList = MoodEditor.EMOTION_STATE_LIST;
+    private final String[] situationList = MoodEditor.SITUATION_LIST;
 
     // reason text
     private EditText edit_text_reason;
