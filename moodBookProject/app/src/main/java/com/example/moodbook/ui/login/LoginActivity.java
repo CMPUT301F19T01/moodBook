@@ -93,6 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         /*if (loginResult != null){
                             updateUI(loginResult);
+
                         }
                         updateUI(null);
                         Toast.makeText(LoginActivity.this, "Authentication failed.",

@@ -19,7 +19,7 @@
     <string name="mood_location_would_showup_here">Mood Location would showup here</string>
     <string name="mood_reason_would_showup_here">Mood Reason would showup here</string>
     <string name="mood_photo_would_showup_here">Mood Photo would showup here</string>
-    <string name="pick_mood_state">Pick Mood State</string>
+    <string name="pick_mood_emotional_state">Pick Mood State</string>
     <string name="pick_mood_situation">Pick Mood Situation</string>
     <string name="pick_mood_reason">Pick Mood Reason</string>
     <string name="pick_mood_location">Pick Mood Location</string>

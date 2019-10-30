@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CreateMoodActivity"></activity>
+        <activity android:name=".EditMoodActivity"></activity>
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/app_name">
