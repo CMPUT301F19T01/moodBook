@@ -156,6 +156,7 @@ public class Mood implements Comparable<Mood> {
         this.location = location;
     }
 
+<<<<<<< HEAD
 
     public double getLocationLat() {
 
@@ -164,6 +165,22 @@ public class Mood implements Comparable<Mood> {
 
     public double getLocationLon() {
         return this.location.getLongitude();
+=======
+    public Double getLocationLatitude() {
+        Double latitude = null;
+        if(this.location != null) {
+            latitude = this.location.getLatitude();
+        }
+        return latitude;
+    }
+
+    public Double getLocationLongtitude() {
+        Double longitude = null;
+        if(this.location != null) {
+            longitude = this.location.getLongitude();
+        }
+        return longitude;
+>>>>>>> f5b0717f35f4e82d57824eaf8832c04b92590fc3
     }
 
     @Override

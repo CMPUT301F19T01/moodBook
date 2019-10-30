@@ -50,18 +50,18 @@ import javax.microedition.khronos.egl.EGLDisplay;
 public class EditMoodActivity extends AppCompatActivity {
 
     // date
-    Button edit_date_button;
+    private Button edit_date_button;
 
     // time
-    Button edit_time_button;
+    private Button edit_time_button;
 
     // emotion
     private String selectedMoodState;
     private Spinner spinner_emotion;
     private MoodStateAdapter emotionAdapter;
-    final String [] emotionStateList = Mood.Emotion.getNames();
-    final int[] emotionImages = Mood.Emotion.getImageResources();
-    final int[] emotionColors = Mood.Emotion.getColorResources();
+    private final String [] emotionStateList = MoodEditor.EMOTION_STATE_LIST;
+    private final int[] emotionImages = MoodEditor.EMOTION_IMAGE_LIST;
+    private final int[] emotionColors = MoodEditor.EMOTION_COLOR_LIST;
 
     // location
     private Button edit_location_button;
@@ -69,20 +69,14 @@ public class EditMoodActivity extends AppCompatActivity {
     // situation
     private Spinner edit_spinner_situation;
     // initialize string array for situation
-    final List<String> situationList = Arrays.asList(
-            "Add situation...",
-            "Alone",
-            "With one person",
-            "With two and more",
-            "With a crowd"
-    );
+    private final String[] situationList = MoodEditor.EMOTION_STATE_LIST;
 
     // reason text
     private EditText edit_text_reason;
 
     // reason photo
     private Button edit_photo_button;
-    ImageView image_view_photo;
+    private ImageView image_view_photo;
     public static final int REQUEST_IMAGE = 101;
 
     private String date_mood, time_mood, reason_mood, situation_mood;

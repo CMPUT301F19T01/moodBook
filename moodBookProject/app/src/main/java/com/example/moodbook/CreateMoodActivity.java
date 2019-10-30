@@ -46,42 +46,33 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     private FirebaseAuth mAuth;
 
     // date
-    Button add_date_button;
+    private Button add_date_button;
 
     // time
-    Button add_time_button;
+    private Button add_time_button;
 
     // emotion
-    String selectedMoodState;
-    Spinner spinner_emotion;
-    MoodStateAdapter emotionAdapter;
-    final String [] emotionStateList = ObjectArrays.concat(
-            new String[]{"Pick mood state ..."}, Mood.Emotion.getNames(), String.class);
-    final int[] emotionImages = Ints.concat(
-            new int[]{R.color.transparent}, Mood.Emotion.getImageResources());
-    final int[] emotionColors = Ints.concat(
-            new int[]{R.color.transparent}, Mood.Emotion.getColorResources());
+    private String selectedMoodState;
+    private Spinner spinner_emotion;
+    private MoodStateAdapter emotionAdapter;
+    private final String [] emotionStateList = MoodEditor.EMOTION_STATE_LIST;
+    private final int[] emotionImages = MoodEditor.EMOTION_IMAGE_LIST;
+    private final int[] emotionColors = MoodEditor.EMOTION_COLOR_LIST;
 
     // location
-    Button add_location_button;
+    private Button add_location_button;
 
     // situation
-    Spinner spinner_situation;
+    private Spinner spinner_situation;
     // initialize string array for situation
-    final String[] situationList = new String[]{
-            "Add situation ...",
-            "Alone",
-            "With one person",
-            "With two and more",
-            "With a crowd"
-    };
+    private final String[] situationList = MoodEditor.EMOTION_STATE_LIST;
 
     // reason text
-    EditText edit_text_reason;
+    private EditText edit_text_reason;
 
     // reason photo
-    Button add_photo_button;
-    ImageView image_view_photo;
+    private Button add_photo_button;
+    private ImageView image_view_photo;
 
     private String mood_date, mood_time, mood_reason, mood_situation, mood_emotion;
     private double mood_lat, mood_lon;

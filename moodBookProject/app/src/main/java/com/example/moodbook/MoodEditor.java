@@ -36,6 +36,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.common.collect.ObjectArrays;
+import com.google.common.primitives.Ints;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,6 +55,22 @@ public class MoodEditor {
     private static final int REQUEST_IMAGE = 101;
     private static final int GET_IMAGE = 102;
     private static final String TAG = "MyActivity";
+
+    // Emotion state spinner options
+    public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
+            new String[]{"Pick mood state ..."}, Mood.Emotion.getNames(), String.class);
+    public static final int[] EMOTION_IMAGE_LIST = Ints.concat(
+            new int[]{R.color.transparent}, Mood.Emotion.getImageResources());
+    public static final int[] EMOTION_COLOR_LIST = Ints.concat(
+            new int[]{R.color.transparent}, Mood.Emotion.getColorResources());
+    // Situation spinner options
+    public static final String[] SITUATION_LIST = new String[]{
+            "Add situation ...",
+            "Alone",
+            "With one person",
+            "With two and more",
+            "With a crowd"
+    };
 
 
     // Date editor
