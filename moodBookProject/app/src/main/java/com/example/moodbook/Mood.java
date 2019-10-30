@@ -155,8 +155,20 @@ public class Mood implements Comparable<Mood> {
         this.location = location;
     }
 
-    public Location getLocation() {
-        return this.location;
+    public Double getLocationLatitude() {
+        Double latitude = null;
+        if(this.location != null) {
+            latitude = this.location.getLatitude();
+        }
+        return latitude;
+    }
+
+    public Double getLocationLongtitude() {
+        Double longitude = null;
+        if(this.location != null) {
+            longitude = this.location.getLongitude();
+        }
+        return longitude;
     }
 
     @Override
