@@ -78,11 +78,9 @@ public class LoginActivity extends AppCompatActivity {
                             updateUI(loginResult);
 
                         }
-                        else {
-                            updateUI(null);
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                        updateUI(null);
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                        }
                     }
                     else {
                         password.setError("Password must be >= 6 chars");

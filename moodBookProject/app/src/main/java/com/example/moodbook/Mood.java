@@ -26,9 +26,9 @@ public class Mood implements Comparable<Mood> {
                 String reason_text, Image reason_photo,
                 String situation, Location location) {
         // Initialize
-        dateFt = new SimpleDateFormat ("yyyy-MM-dd");
-        timeFt = new SimpleDateFormat ("HH:mm");
-        dateTimeFt = new SimpleDateFormat ("yyyy-MM-dd HH:mm");
+        dateFt = new SimpleDateFormat("yyyy-MM-dd");
+        timeFt = new SimpleDateFormat("HH:mm");
+        dateTimeFt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         setAll(date_time_text, emotion, reason_text, reason_photo, situation, location);
     }
 
@@ -50,10 +50,9 @@ public class Mood implements Comparable<Mood> {
     // Date
     public void setDateTime(String date_time_text) {
         // Initialize to current date
-        if(date_time_text == null) {
+        if (date_time_text == null) {
             this.date_time = new Date();
-        }
-        else{
+        } else {
             try {
                 this.date_time = dateTimeFt.parse(date_time_text);
             }
@@ -80,17 +79,17 @@ public class Mood implements Comparable<Mood> {
     // Emotion
     public void setEmotion(String emotion_text) {
         // Error: empty
-        if(emotion_text == null) {
+        if (emotion_text == null) {
             // TODO
             return;
         }
         emotion_text = emotion_text.toLowerCase();
         // Valid argument
-        if(Emotion.hasName(emotion_text)){
+        if (Emotion.hasName(emotion_text)) {
             this.emotion_text = emotion_text;
         }
         // Error: invalid argument
-        else{
+        else {
             // TODO
         }
     }
@@ -111,16 +110,15 @@ public class Mood implements Comparable<Mood> {
     // Reason
     public void setReasonText(String reason_text) {
         // Check if text is longer than 20 characters or 3 words
-        if(reason_text != null){
+        if (reason_text != null) {
             // Error: > 20 characters
-            if(reason_text.length() > 20){
+            if (reason_text.length() > 20) {
                 // TODO
                 return;
-            }
-            else{
+            } else {
                 String[] reason_text_words = reason_text.trim().split(" ");
                 // Error: > 3 words
-                if(reason_text_words.length > 3){
+                if (reason_text_words.length > 3) {
                     // TODO
                     return;
                 }
@@ -156,42 +154,16 @@ public class Mood implements Comparable<Mood> {
         this.location = location;
     }
 
-<<<<<<< HEAD
-
-    public double getLocationLat() {
-
-        return this.location.getLatitude();
-    }
-
-    public double getLocationLon() {
-        return this.location.getLongitude();
-=======
-    public Double getLocationLatitude() {
-        Double latitude = null;
-        if(this.location != null) {
-            latitude = this.location.getLatitude();
-        }
-        return latitude;
-    }
-
-    public Double getLocationLongtitude() {
-        Double longitude = null;
-        if(this.location != null) {
-            longitude = this.location.getLongitude();
-        }
-        return longitude;
->>>>>>> f5b0717f35f4e82d57824eaf8832c04b92590fc3
-    }
 
     @Override
     public int compareTo(@NonNull Mood other) {
-        if(this == other) return 0;
+        if (this == other) return 0;
         Date dateTime = this.getDateTime();
         Date otherDateTime = other.getDateTime();
         // smaller if dateTime for this object has parsing error
-        if(dateTime == null) return -1000;
+        if (dateTime == null) return -1000;
         // larger if dateTime for other object has parsing error
-        if(otherDateTime == null) return 1000;
+        if (otherDateTime == null) return 1000;
 
         return dateTime.compareTo(otherDateTime);
     }
@@ -205,15 +177,15 @@ public class Mood implements Comparable<Mood> {
         private static HashMap<String, Integer> name_index;
 
         static {
-            names = new String[]{ "happy", "sad", "angry", "afraid" };
+            names = new String[]{"happy", "sad", "angry", "afraid"};
             image_resource_id = new int[]{
-                    R.drawable.happy, R.drawable.sad, R.drawable.angry, R.drawable.afraid };
+                    R.drawable.happy, R.drawable.sad, R.drawable.angry, R.drawable.afraid};
             color_resource_id = new int[]{
-                    R.color.happyYellow, R.color.sadBlue, R.color.angryRed, R.color.afraidBrown };
+                    R.color.happyYellow, R.color.sadBlue, R.color.angryRed, R.color.afraidBrown};
             // map emotion name to index
             name_index = new HashMap<>();
-            for(int i = 0; i < names.length; i++) {
-                name_index.put(names[i],i);
+            for (int i = 0; i < names.length; i++) {
+                name_index.put(names[i], i);
             }
         }
 
@@ -223,7 +195,7 @@ public class Mood implements Comparable<Mood> {
 
         public static Integer getImageResourceId(String name) {
             Integer resourceId = null;
-            if(name_index.containsKey(name)){
+            if (name_index.containsKey(name)) {
                 resourceId = image_resource_id[name_index.get(name)];
             }
             return resourceId;
@@ -231,7 +203,7 @@ public class Mood implements Comparable<Mood> {
 
         public static Integer getColorResourceId(String name) {
             Integer resourceId = null;
-            if(name_index.containsKey(name)){
+            if (name_index.containsKey(name)) {
                 resourceId = color_resource_id[name_index.get(name)];
             }
             return resourceId;
