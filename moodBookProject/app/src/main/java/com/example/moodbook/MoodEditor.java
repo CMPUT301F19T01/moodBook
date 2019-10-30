@@ -76,24 +76,19 @@ public class MoodEditor {
 
     // Date editor
     // for showing calendar so user could select a date
-    public static void showCalendar(final Button view, AppCompatActivity myActivity){
-
+    public static void showCalendar(final Button view){
         Calendar c = Calendar.getInstance();
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = df.format(c.getTime());
-        view.setText(formattedDate);
-
+        String currentDateString = Mood.DATE_FORMATTER.format(c.getTime());
+        view.setText(currentDateString);
     }
 
 
     // Time editor
     // for showing time so user could select a time
-    public static void showTime(final Button view, AppCompatActivity myActivity){
-        Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("hh:mm");
-        String currentDateTimeString = sdf.format(d);
-        view.setText(currentDateTimeString);
+    public static void showTime(final Button view){
+        Date d = new Date();
+        String currentTimeString = Mood.TIME_FORMATTER.format(d);
+        view.setText(currentTimeString);
     }
 
 

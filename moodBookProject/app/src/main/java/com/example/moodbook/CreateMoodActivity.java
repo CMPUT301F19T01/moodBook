@@ -129,14 +129,14 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         add_date_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.showCalendar((Button)view,CreateMoodActivity.this);
+                MoodEditor.showCalendar((Button)view);
 
             }
         });
         add_time_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.showTime((Button)view,CreateMoodActivity.this);
+                MoodEditor.showTime((Button)view);
             }
         });
 
@@ -168,12 +168,18 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                 mood_emotion = spinner_emotion.getSelectedItem().toString();
                 mood_reason = edit_text_reason.getText().toString();
                 mood_situation = spinner_situation.getSelectedItem().toString();
-                Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
-                        mood_reason,null,mood_situation,location);
-                moodDB.addMood(newMood);
-                Toast.makeText
-                        (getApplicationContext(), "Added: " + mood_date+mood_time+mood_emotion, Toast.LENGTH_SHORT)
-                        .show();
+                try {
+                    Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
+                            mood_reason,null,mood_situation,location);
+                    moodDB.addMood(newMood);
+                    Toast.makeText(getApplicationContext(),
+                            "Added: " + mood_date+"_"+mood_time+"_"+mood_emotion,
+                            Toast.LENGTH_SHORT).show();
+                } catch (MoodInvalidInputException e) {
+                    Toast.makeText(getApplicationContext(),
+                            "Adding failed: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
 

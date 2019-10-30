@@ -17,29 +17,17 @@ public class Mood implements Comparable<Mood> {
     private Image reason_photo;     // optional
     private String situation;       // optional
     private Location location;      // optional
-    private Double latitude;
+    private String doc_id;          // for editing & deleting
 
-    private final SimpleDateFormat dateFt;      // date format
-    private final SimpleDateFormat timeFt;      // time format
-    private final SimpleDateFormat dateTimeFt;  // date_time format
+    // date time formatter
+    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("HH:mm");
+    public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public Mood(String date_time_text, String emotion,
                 String reason_text, Image reason_photo,
-                String situation, Location location) {
+                String situation, Location location) throws MoodInvalidInputException {
         // Initialize
-        dateFt = new SimpleDateFormat("yyyy-MM-dd");
-        timeFt = new SimpleDateFormat("HH:mm");
-        dateTimeFt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        setAll(date_time_text, emotion, reason_text, reason_photo, situation, location);
-    }
-
-    public Mood(String date_time_text, String emotion) {
-        this(date_time_text, emotion, null, null, null, null);
-    }
-
-    public void setAll(String date_time_text, String emotion,
-                       String reason_text, Image reason_photo,
-                       String situation, Location location) {
         setDateTime(date_time_text);
         setEmotion(emotion);
         setReasonText(reason_text);
@@ -48,29 +36,33 @@ public class Mood implements Comparable<Mood> {
         setLocation(location);
     }
 
+    // for testing
+    public Mood(String date_time_text, String emotion) throws MoodInvalidInputException {
+        this(date_time_text, emotion, null, null, null, null);
+    }
+
     // Date
-    public void setDateTime(String date_time_text) {
+    public void setDateTime(String date_time_text) throws MoodInvalidInputException {
         // Initialize to current date
         if (date_time_text == null) {
             this.date_time = new Date();
         } else {
             try {
-                this.date_time = dateTimeFt.parse(date_time_text);
+                this.date_time = DATETIME_FORMATTER.parse(date_time_text);
             }
-            // Error: invalid argument
+            // Error: invalid date time format
             catch (ParseException e) {
-                // TODO
-                e.printStackTrace();
+                throw new MoodInvalidInputException("Data and time must be yyyy-hh-dd hh:mm format");
             }
         }
     }
 
     public String getDateText() {
-        return dateFt.format(this.date_time);
+        return DATE_FORMATTER.format(this.date_time);
     }
 
     public String getTimeText() {
-        return timeFt.format(this.date_time);
+        return TIME_FORMATTER.format(this.date_time);
     }
 
     public Date getDateTime() {
@@ -78,20 +70,19 @@ public class Mood implements Comparable<Mood> {
     }
 
     // Emotion
-    public void setEmotion(String emotion_text) {
+    public void setEmotion(String emotion_text) throws MoodInvalidInputException {
         // Error: empty
         if (emotion_text == null) {
-            // TODO
-            return;
+            throw new MoodInvalidInputException("Must select an emotion");
         }
         emotion_text = emotion_text.toLowerCase();
         // Valid argument
         if (Emotion.hasName(emotion_text)) {
             this.emotion_text = emotion_text;
         }
-        // Error: invalid argument
+        // Error: no option is selected
         else {
-            // TODO
+            throw new MoodInvalidInputException("Must select an emotion");
         }
     }
 
@@ -109,19 +100,17 @@ public class Mood implements Comparable<Mood> {
 
 
     // Reason
-    public void setReasonText(String reason_text) {
+    public void setReasonText(String reason_text) throws MoodInvalidInputException {
         // Check if text is longer than 20 characters or 3 words
         if (reason_text != null) {
             // Error: > 20 characters
             if (reason_text.length() > 20) {
-                // TODO
-                return;
+                throw new MoodInvalidInputException("Reason text cannot be longer than 20 characters");
             } else {
                 String[] reason_text_words = reason_text.trim().split(" ");
                 // Error: > 3 words
                 if (reason_text_words.length > 3) {
-                    // TODO
-                    return;
+                    throw new MoodInvalidInputException("Reason text cannot have more than 3 words");
                 }
             }
         }
@@ -160,6 +149,16 @@ public class Mood implements Comparable<Mood> {
     }
 
 
+    // Doc Id
+    public void setDocId(String doc_id) {
+        this.doc_id = doc_id;
+    }
+
+    public String getDoc_id() {
+        return this.doc_id;
+    }
+
+
     @Override
     public int compareTo(@NonNull Mood other) {
         if (this == other) return 0;
@@ -172,11 +171,6 @@ public class Mood implements Comparable<Mood> {
 
         return dateTime.compareTo(otherDateTime);
     }
-
-//    public Double getLocationLongtitude() {
-//        double longitude = this.location.getLongitude();
-//        return longitude;
-//    }
 
 
     public static class Emotion {

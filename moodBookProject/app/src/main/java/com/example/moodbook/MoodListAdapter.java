@@ -151,6 +151,11 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         notifyItemInserted(position);
     }
 
+    public void clear() {
+        moodList.clear();
+        moodListFull.clear();
+    }
+
     @Override
     public Filter getFilter() {
         return moodFilter;

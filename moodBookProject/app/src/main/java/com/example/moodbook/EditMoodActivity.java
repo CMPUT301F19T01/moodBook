@@ -170,13 +170,13 @@ public class EditMoodActivity extends AppCompatActivity {
         edit_date_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.showCalendar((Button)view,EditMoodActivity.this);
+                MoodEditor.showCalendar((Button)view);
             }
         });
         edit_time_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.showTime((Button)view,EditMoodActivity.this);
+                MoodEditor.showTime((Button)view);
             }
         });
 

@@ -7,6 +7,7 @@ package com.example.moodbook.ui.home;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -40,8 +42,13 @@ import com.example.moodbook.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
@@ -55,6 +62,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
     // connect to DB
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
+    private static final String TAG = HomeFragment.class.getSimpleName();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -65,7 +73,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getContext());
+        moodDB = new DBMoodSetter(mAuth, getContext(), getMoodHistoryListener());
 
         // Add a mood: when floating add button is clicked, start add activity
         add_mood_button = root.findViewById(R.id.mood_history_add_button);
@@ -89,7 +97,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 startActivity(editIntent);
             }
         });
-        testAdd();
+        //testAdd();
 
         // adding item touch helper
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
@@ -137,23 +145,6 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         }
     }
 
-    private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
-        moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        moodListView.setLayoutManager(mLayoutManager);
-        moodListView.setItemAnimator(new DefaultItemAnimator());
-        moodListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        moodListView.setAdapter(moodAdapter);
-    }
-
-    private void testAdd() {
-        // test adding
-        moodAdapter.addItem(new Mood("2019-09-30 18:00", "sad"));
-        moodAdapter.addItem(new Mood("2019-09-01 07:00", "afraid"));
-        moodAdapter.addItem(new Mood("2019-09-01 20:00", "angry"));
-        moodAdapter.addItem(new Mood(null, "happy"));
-    }
-
     /**
      * Set up search action
      * to filter emotional state
@@ -181,4 +172,39 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
             }
         });
     }
+
+    private EventListener<QuerySnapshot> getMoodHistoryListener() {
+        return new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // clear the old list
+                moodAdapter.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    // Adding mood from FireStore
+                    Mood mood = moodDB.getMoodFromData(doc.getData());
+                    if(mood != null) {
+                        mood.setDocId(doc.getId());
+                        moodAdapter.addItem(mood);
+                    }
+                }
+            }
+        };
+    }
+
+    private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
+        moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+        moodListView.setLayoutManager(mLayoutManager);
+        moodListView.setItemAnimator(new DefaultItemAnimator());
+        moodListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        moodListView.setAdapter(moodAdapter);
+    }
+
+    /*private void testAdd() {
+        // test adding
+        moodAdapter.addItem(new Mood("2019-09-30 18:00", "sad"));
+        moodAdapter.addItem(new Mood("2019-09-01 07:00", "afraid"));
+        moodAdapter.addItem(new Mood("2019-09-01 20:00", "angry"));
+        moodAdapter.addItem(new Mood(null, "happy"));
+    }*/
 }
