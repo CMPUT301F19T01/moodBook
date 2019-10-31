@@ -3,10 +3,13 @@ package com.example.moodbook;
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +22,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Document;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class DBMoodSetter {
     private FirebaseAuth mAuth;
@@ -29,6 +35,9 @@ public class DBMoodSetter {
     private Context context;
     private String uid;
     private FieldValue var;
+    private DocumentReference intRef;
+    private String TAG;
+    private int moodID;
 
     public DBMoodSetter(FirebaseAuth mAuth, Context context){
         this.mAuth = mAuth;
@@ -41,32 +50,62 @@ public class DBMoodSetter {
 
     //writes to database the last int that it used
     public void setInt() {
-        DocumentReference intRef = intReference.document("count");
-        // Atomically increment the population of the city by 50.
-        intRef.update("count", FieldValue.increment(1));
+        intRef = intReference.document("count");
+        // increment moodCount by 1
+        intRef.update("mood_Count", FieldValue.increment(1));
     }
 
 
     //gets from database what int it last used, so it could start counting from there
-    public void getInt() {
-
+    public int getInt() {
+        intRef = intReference.document("count");
+        intRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot.exists()){
+                            Double md = documentSnapshot.getDouble("mood_Count");
+                            moodID = Integer.valueOf(md.intValue());
+                        }
+                        else{
+                            //document doesnt exist
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
+                    }
+                });
+        return moodID;
     }
+
+    public int getStr() {
+//        String t = Integer.toString(moodID);
+        return moodID;
+    }
+
 
     public void addMood(Mood mood) {
         HashMap<String, Object> data = getMoodData(mood);
-        String docId = getMoodDocId(mood);
-        userReference.document(uid).collection("MOODS").document(docId).set(data);
+        int m = getInt();
+        String docId = Integer.toString(m);
+        userReference.document(uid).collection("MOODS").document("test").set(data);
     }
 
     public void removeMood(Mood mood) {
-        String docId = getMoodDocId(mood);
+       // String docId = getMoodDocId(mood);
         // remove selected city
-        userReference.document(uid).collection("MOODS").document(docId).delete();
+       // userReference.document(uid).collection("MOODS").document(docId).delete();
     }
 
-    private String getMoodDocId(Mood mood) {
-        return mood.getDateText()+"_"+mood.getTimeText()+"_"+mood.getEmotionText();
-    }
+//    private String getMoodDocId(Mood mood) {
+//       // return mood.getDateText()+"_"+mood.getTimeText()+"_"+mood.getEmotionText();
+//
+//    }
+
 
     private HashMap<String, Object> getMoodData(Mood mood) {
         Location location = mood.getLocation();
