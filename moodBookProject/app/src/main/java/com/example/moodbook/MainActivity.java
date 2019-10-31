@@ -6,12 +6,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.moodbook.ui.login.LoginActivity;
+import com.example.moodbook.ui.login.UsernameFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -52,7 +56,66 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+
+        /* Mood History */
+        // Add mood: when floating add button is clicked, start add activity to add a new mood item
+        /*FloatingActionButton add_mood_button = findViewById(R.id.mood_history_add_button);
+        add_mood_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("click");
+                Intent intent = new Intent(MainActivity.this, CreateMoodActivity.class);
+                startActivity(intent);
+            }
+        });
+        // Set up ListView
+        moodListView = findViewById(R.id.mood_history_listView);
+        moodAdapter = new CustomAdapter(this, new ArrayList<Mood>());
+        // test adding
+        Mood testItem = new Mood(null, null, "happy");
+        moodAdapter.add(testItem);
+        moodListView.setAdapter(moodAdapter);
+        // Edit mood: When a mood item is clicked, start edit activity to edit the selected mood
+        moodListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // get the selected mood
+                Mood selectedMood = (Mood)adapterView.getItemAtPosition(i);
+                System.out.println("Selected: "+selectedMood.getEmotionText());
+                // TODO
+            }
+        });*/
+//    displayView(R.id.nav_logout);
+//    }
+//    public void displayView(int viewId) {
+//
+//        Fragment fragment = null;
+//        String title = getString(R.string.app_name);
+//        switch (viewId){
+//            case R.id.nav_logout:
+//                fragment = new UsernameFragment();
+//                break;
+//        }
+//
+//        if (fragment != null) {
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.replace(R.id.nav_host_fragment, fragment);//double check the which id to use
+//            ft.commit();
+//        }
+//
+//        // set the toolbar title
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setTitle(title);
+//        }
+//
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
     }
+//    @Override
+//    public boolean onNavigationItemSelected(MenuItem item) {
+//        displayView(item.getItemId());
+//        return true;
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

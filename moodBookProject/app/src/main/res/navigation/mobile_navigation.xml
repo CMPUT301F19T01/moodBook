@@ -42,7 +42,7 @@
         tools:layout="@layout/fragment_friendmoodmap" />
     <fragment
         android:id="@+id/nav_logout"
-        android:name="com.example.moodbook.ui.logout.logoutFragment"
+        android:name="com.example.moodbook.ui.login.LoginActivity"
         android:label="Log Out"
         tools:layout="@layout/fragment_logout" />
 

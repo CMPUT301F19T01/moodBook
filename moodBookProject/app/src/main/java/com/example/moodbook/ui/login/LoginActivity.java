@@ -7,6 +7,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -139,6 +142,34 @@ public class LoginActivity extends AppCompatActivity {
         };
 
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.activity_main_drawer,menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == R.id.nav_logout){
+//
+//                mAuth.getInstance().signOut();
+//                finish();
+//                startActivity(new Intent(this, LoginActivity.class));
+//
+//        }
+//
+//        return true;
+//    }
+//    public  void logout(){
+//        mAuth.getInstance().signOut();
+//        Toast.makeText(LoginActivity.this, "mAuth instance", Toast.LENGTH_LONG).show();
+//
+//        startActivity(new Intent(this, LoginActivity.class));
+//        Toast.makeText(LoginActivity.this, "after new intent", Toast.LENGTH_LONG).show();
+//    }
+
 
     @Override
     public void onStart(){
