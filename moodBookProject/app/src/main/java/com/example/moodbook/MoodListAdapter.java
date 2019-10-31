@@ -126,7 +126,49 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         notifyItemChanged(position);
     }
 
+    // Remove all mood items
+    public void clear() {
+        moodList.clear();
+        moodListFull.clear();
+    }
+
+    @Override
+    public Filter getFilter() {
+        Filter moodFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                ArrayList<Mood> filteredList = new ArrayList<>();
+                // if there is no constraint, return all mood events
+                if(constraint == null || constraint.length() == 0) {
+                    filteredList.addAll(moodListFull);
+                }
+                // otherwise, find all mood events whose emotional states match constraint
+                else {
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+                    for(Mood item : moodListFull) {
+                        if(item.getEmotionText().toLowerCase().contains(filterPattern)) {
+                            filteredList.add(item);
+                        }
+                    }
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredList;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults results) {
+                moodList.clear();
+                moodList.addAll((ArrayList)results.values);
+                notifyDataSetChanged();
+            }
+        };
+        return moodFilter;
+    }
+
+
     // Remove a mood item at specified position
+    @Deprecated
     public void removeItem(int position) {
         // get index of removed item in full moodList
         int posInListFull = moodListFull.indexOf(moodList.get(position));
@@ -141,6 +183,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     }
 
     // Restore a mood item at its original position
+    @Deprecated
     public void restoreItem(Mood item, int position) {
         // insert removed item back to filtered moodList
         moodList.add(position, item);
@@ -150,39 +193,4 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         // notify item added by position
         notifyItemInserted(position);
     }
-
-    @Override
-    public Filter getFilter() {
-        return moodFilter;
-    }
-
-    private Filter moodFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<Mood> filteredList = new ArrayList<>();
-            // if there is no constraint, return all mood events
-            if(constraint == null || constraint.length() == 0) {
-                filteredList.addAll(moodListFull);
-            }
-            // otherwise, find all mood events whose emotional states match constraint
-            else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
-                for(Mood item : moodListFull) {
-                    if(item.getEmotionText().toLowerCase().contains(filterPattern)) {
-                        filteredList.add(item);
-                    }
-                }
-            }
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence charSequence, FilterResults results) {
-            moodList.clear();
-            moodList.addAll((ArrayList)results.values);
-            notifyDataSetChanged();
-        }
-    };
 }
