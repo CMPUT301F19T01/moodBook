@@ -140,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                 updateUI(user);
             }
         };
+//        onOptionsItemSelected(R.id.nav_logout);
 
     }
 
