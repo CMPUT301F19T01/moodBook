@@ -3,6 +3,7 @@ package com.example.moodbook;
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,11 +20,13 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -37,7 +40,7 @@ public class DBMoodSetter {
     private FieldValue var;
     private DocumentReference intRef;
     private String TAG;
-    private int moodID;
+    private String moodID;
 
     public DBMoodSetter(FirebaseAuth mAuth, Context context){
         this.mAuth = mAuth;
@@ -53,23 +56,24 @@ public class DBMoodSetter {
         intRef = intReference.document("count");
         // increment moodCount by 1
         intRef.update("mood_Count", FieldValue.increment(1));
+
     }
 
-
     //gets from database what int it last used, so it could start counting from there
-    public int getInt() {
-        intRef = intReference.document("count");
+    public String getInt() {
+        DocumentReference intRef = db.collection("int").document("count");
         intRef
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()){
-                            Double md = documentSnapshot.getDouble("mood_Count");
-                            moodID = Integer.valueOf(md.intValue());
+                        if (documentSnapshot!=null){
+                            Double m = documentSnapshot.getDouble("mood_Count");
+                            moodID = String.valueOf(m);
+                            //moodID = Integer.valueOf(md.intValue());
                         }
                         else{
-                            //document doesnt exist
+
                         }
                     }
                 })
@@ -82,17 +86,13 @@ public class DBMoodSetter {
         return moodID;
     }
 
-    public int getStr() {
-//        String t = Integer.toString(moodID);
-        return moodID;
-    }
-
-
     public void addMood(Mood mood) {
         HashMap<String, Object> data = getMoodData(mood);
-        int m = getInt();
-        String docId = Integer.toString(m);
-        userReference.document(uid).collection("MOODS").document("test").set(data);
+        String m = getInt();
+        //     //   String docId = String.valueOf(m);
+        if (moodID!=null){
+            userReference.document(uid).collection("MOODS").document(moodID).set(data);
+        }
     }
 
     public void removeMood(Mood mood) {
@@ -100,11 +100,6 @@ public class DBMoodSetter {
         // remove selected city
        // userReference.document(uid).collection("MOODS").document(docId).delete();
     }
-
-//    private String getMoodDocId(Mood mood) {
-//       // return mood.getDateText()+"_"+mood.getTimeText()+"_"+mood.getEmotionText();
-//
-//    }
 
 
     private HashMap<String, Object> getMoodData(Mood mood) {

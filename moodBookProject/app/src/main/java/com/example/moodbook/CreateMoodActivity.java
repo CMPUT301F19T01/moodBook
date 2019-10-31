@@ -171,8 +171,8 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                         mood_reason,null,mood_situation,location);
                 moodDB.addMood(newMood);
                 moodDB.setInt(); //increment integer counter
-                int test = moodDB.getStr();
-                Toast.makeText(getApplicationContext(),String.valueOf(test),Toast.LENGTH_LONG).show();
+               // double test = moodDB.getStr();
+               // Toast.makeText(getApplicationContext(),String.valueOf(test),Toast.LENGTH_LONG).show();
 //                Toast.makeText
 //                        (getApplicationContext(), "Added: " + mood_date+mood_time+mood_emotion, Toast.LENGTH_SHORT)
 //                        .show();
