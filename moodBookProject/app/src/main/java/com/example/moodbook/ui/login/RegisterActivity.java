@@ -3,17 +3,25 @@ package com.example.moodbook.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moodbook.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * This activity handles registration
@@ -56,28 +64,52 @@ public class RegisterActivity extends AppCompatActivity {
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
 
+        // Register is not not modularized because FireBase calls are asynchronous. Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows that the task is finished
         // REGISTER button
         registerButton = findViewById(R.id.register);
         registerButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                String emailS = email.getText().toString();
-                String passwordS = password.getText().toString();
-                String usernameS = username.getText().toString();
+                final String emailS = email.getText().toString();
+                final String passwordS = password.getText().toString();
+                final String usernameS = username.getText().toString();
 
                 if (dbAuth.verifyEmail(emailS)){
                     if (dbAuth.verifyPass(passwordS)){
                         //new UsernameFragment().show(getSupportFragmentManager(), "registering");
                         if (dbAuth.verifyUsername(usernameS)){
                             // all fields are good
-                            FirebaseUser user = dbAuth.register(emailS, passwordS, usernameS);
-                            if (user == null){
+                            //FirebaseUser user = dbAuth.register(emailS, passwordS, usernameS);
+
+                            mAuth.createUserWithEmailAndPassword(emailS, passwordS)
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "createUserWithEmail:success");
+                                                FirebaseUser user = mAuth.getCurrentUser();
+                                                dbAuth.createUser(user, emailS, usernameS);
+                                                dbAuth.updateUsername(user, usernameS);
+                                                Intent intent = new Intent();
+                                                setResult(Activity.RESULT_OK, intent);
+                                                finish();
+
+                                            } else {
+                                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                                email.setError("Email in use"); // Firebase call fails when email is in use
+                                            }
+                                        }
+                                    });
+
+                           /* if (userL.get(0) == null){
                                 email.setError("Email in use"); // Firebase call fails when email is in use
-                            }
-                            Intent intent = new Intent();
-                            setResult(Activity.RESULT_OK, intent);
-                            finish();
+                            } else {
+                                dbAuth.updateUsername(userL.get(0), usernameS);
+                                Intent intent = new Intent();
+                                setResult(Activity.RESULT_OK, intent);
+                                finish();
+                            }*/
                         } else {
                             username.setError("Username in use");
                         }
