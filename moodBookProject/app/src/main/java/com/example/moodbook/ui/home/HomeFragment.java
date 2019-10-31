@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -151,13 +152,13 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        if(inflater == null) {
+        if (inflater == null) {
             inflater = getActivity().getMenuInflater();
         }
         inflater.inflate(R.menu.mood_history_emotion_filter, menu);
 
-        MenuItem searchItem = menu.findItem(R.id.mood_history_action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
+        final MenuItem searchItem = menu.findItem(R.id.mood_history_action_search);
+        final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -169,6 +170,18 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
             public boolean onQueryTextChange(String s) {
                 moodAdapter.getFilter().filter(s);
                 return false;
+            }
+        });
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                searchView.setQuery("",false);
+                moodAdapter.getFilter().filter("");
+                return true;
             }
         });
     }
