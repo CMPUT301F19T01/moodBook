@@ -43,38 +43,89 @@ public class DBMoodSetter {
         final HashMap<String, Object> data = new HashMap<>();
         final HashMap<String, Object> mood = new HashMap<>();
 
-
-        final String[] moodCount = new String[1];
-        final int[] newCount = new int[1];
         userReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 for (QueryDocumentSnapshot doc: queryDocumentSnapshots){
-//                    Log.d("Mood Count", String.valueOf(doc.getData().get("moodCount")));
-                     moodCount[0] = String.valueOf(doc.getData().get("moodCount"));
-                     Log.d("Mood Count", moodCount[0]);
-//                    newCount[0] = moodCount[0] + 1;
-                    data.put("moodID",String.valueOf(doc.getData().get("moodCount")));
+                    if (doc.contains("moodCount")){
+                        Log.d("Mood Count", String.valueOf(doc.getData().get("moodCount")));
+                        int moodCount = doc.get("moodCount", Integer.class) ;//Long and .getlong
 
-                    data.put("moodstate", moodstate);
-                    data.put("moodreason","Rude");
-                    final String userName = String.valueOf(doc.getData().get("username"));
+                        if(doc.getData().get("moodCount")==null) {
+                            Log.d("Is Null:", "Yes!!!! It is null");
+                            System.out.println(doc.getData());
+
+                        }else{
+                            System.out.println(doc.getData());
+                        }
+
+                        Log.d("Mood Count", String.valueOf(moodCount));
+                        int newCount = moodCount + 1;
+//                    data.put("moodID",String.valueOf(doc.getData().get("moodCount")));
+                        data.put("moodID",String.valueOf(doc.getData().get("moodCount")));
+                        data.put("moodstate", moodstate);
+                        data.put("moodreason","Rude");
+//                    final String userName = String.valueOf(doc.getData().get("username"));
 
 //                    final int count = Integer.valueOget("username")f(String.valueOf(doc.getData().get("moodCount")))+1;
-                    mood.put("moodCount",3);
-                    mood.put("username",userName);
-                    Log.d("id",userReference.document(uid).getId());
-                    userReference.document(uid).set(mood);
+                        mood.put("moodCount",newCount);
+//                    mood.put("username",userName);
+                        userReference.document(uid).update(mood);
+//                    Log.d("id",userReference.document(uid).getId());
+//                    userReference.document(uid).set(mood);
 //                    doc.getData().put("moodCount","2");
-                    userReference.document(uid).collection("MOODS").document("6").set(data);
+                        userReference.document(uid).collection("MOODS").document(String.valueOf(doc.getData().get("moodCount"))).set(data);
 
+                    }else{
+                        Log.d("Mood Not Found","Cannot find Anything");
+                    }
+
+//
                 }
             }
         });
-        if (moodCount[0] != null){
-            Log.d("Mood Count", moodCount[0]);
-            data.put("moodID", moodCount[0]);
-        }
+
+
+
+//        userReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+//                for (QueryDocumentSnapshot doc: queryDocumentSnapshots){
+////                    Log.d("Mood Count", String.valueOf(doc.getData().get("moodCount")));
+//                     int moodCount = doc.get("moodCount", Integer.class) ;//Long and .getlong
+//
+//                    if(doc.getData().get("moodCount")==null) {
+//                        Log.d("Is Null:", "Yes!!!! It is null");
+//                        System.out.println(doc.getData());
+//
+//                    }else{
+//                        System.out.println(doc.getData());
+//                    }
+//
+//                     Log.d("Mood Count", String.valueOf(moodCount));
+//                    int newCount = moodCount + 1;
+////                    data.put("moodID",String.valueOf(doc.getData().get("moodCount")));
+//                    data.put("moodID",String.valueOf(doc.getData().get("moodCount")));
+//                    data.put("moodstate", moodstate);
+//                    data.put("moodreason","Rude");
+////                    final String userName = String.valueOf(doc.getData().get("username"));
+//
+////                    final int count = Integer.valueOget("username")f(String.valueOf(doc.getData().get("moodCount")))+1;
+//                    mood.put("moodCount",newCount);
+////                    mood.put("username",userName);
+//                    userReference.document(uid).update(mood);
+////                    Log.d("id",userReference.document(uid).getId());
+////                    userReference.document(uid).set(mood);
+////                    doc.getData().put("moodCount","2");
+//                    userReference.document(uid).collection("MOODS").document("6").set(data);
+//
+//                }
+//            }
+//        });
+//        if (moodCount[0] != null){
+//            Log.d("Mood Count", moodCount[0]);
+//            data.put("moodID", moodCount[0]);
+//        }
 
 
 
