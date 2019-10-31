@@ -57,8 +57,9 @@ public class DBMoodSetter {
         this.TAG = TAG;
     }
 
-    public void addMood(Mood mood) {
+    public void addMood(final Mood mood) {
         Map<String, Object> data = getDataFromMood(mood);
+        // TODO: use the mood docId generated from db counter
         final String docId = mood.toString();
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         if(TAG != null) {
@@ -66,13 +67,13 @@ public class DBMoodSetter {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            showStatusMessage("Added successfully: " + docId);
+                            showStatusMessage("Added successfully: " + mood.toString());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            showStatusMessage("Adding failed for "+docId+": " + e.toString());
+                            showStatusMessage("Adding failed for "+mood.toString()+": " + e.toString());
                         }
                     });
         }
@@ -81,8 +82,8 @@ public class DBMoodSetter {
         }
     }
 
-    public void removeMood(Mood mood) {
-        final String docId = mood.toString();
+    public void removeMood(final Mood mood) {
+        final String docId = mood.getDocId();
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         // remove selected city
         moodReference.document(docId).delete();
@@ -91,13 +92,13 @@ public class DBMoodSetter {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            showStatusMessage("Deleted successfully: " + docId);
+                            showStatusMessage("Deleted successfully: " + mood.toString());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            showStatusMessage("Deleting failed for "+docId+": " + e.toString());
+                            showStatusMessage("Deleting failed for "+mood.toString()+": " + e.toString());
                         }
                     });
         }
