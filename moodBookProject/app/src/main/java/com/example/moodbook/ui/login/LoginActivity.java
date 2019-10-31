@@ -15,8 +15,13 @@ import android.widget.Toast;
 import com.example.moodbook.MainActivity;
 import com.example.moodbook.R;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -62,6 +67,8 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
 
+
+        // Login is not not modularized because FireBase calls are asynchronous. Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows that the task is finished
         // LOGIN button
         loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -70,16 +77,28 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (dbAuth.verifyEmail(email.getText().toString())){
                     if (dbAuth.verifyPass(password.getText().toString())){
-                        FirebaseUser loginResult = dbAuth.login(email.getText().toString(), password.getText().toString());
-                        if (loginResult != null) {
+                        mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (task.isSuccessful()) {
+                                            FirebaseUser loginResult = mAuth.getCurrentUser();
+                                            updateUI(loginResult);
+                                        } else {
+                                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
+                        /*if (loginResult != null){
                             updateUI(loginResult);
 
                         }
                         updateUI(null);
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                                Toast.LENGTH_SHORT).show();*/
+                    } else {
                         password.setError("Password must be >= 6 chars");
                     }
                 } else {
