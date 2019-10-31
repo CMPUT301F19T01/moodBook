@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,33 +13,90 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Document;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 import java.util.Map;
 
 public class DBMoodSetter {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private CollectionReference userReference;
+    private CollectionReference intReference;
     private Context context;
     private String uid;
-    private String TAG;
 
+    private FieldValue var;
+    private DocumentReference intRef;
+    private String TAG;
+    private String moodID;
+  
     public DBMoodSetter(FirebaseAuth mAuth, Context context){
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
+        this.intReference = db.collection("int");
         this.context = context;
+    }
+
+    //writes to database the last int that it used
+    public void setInt() {
+        intRef = intReference.document("count");
+        // increment moodCount by 1
+        intRef.update("mood_Count", FieldValue.increment(1));
+
+    }
+
+    //gets from database what int it last used, so it could start counting from there
+    public String getInt() {
+        DocumentReference intRef = db.collection("int").document("count");
+        intRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot!=null){
+                            Double m = documentSnapshot.getDouble("mood_Count");
+                            moodID = String.valueOf(m);
+                            //moodID = Integer.valueOf(md.intValue());
+                        }
+                        else{
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
+                    }
+                });
+        return moodID;
+    }
+
+    public void addMood(Mood mood) {
+        HashMap<String, Object> data = getMoodData(mood);
+        String m = getInt();
+        if (moodID!=null){
+            userReference.document(uid).collection("MOODS").document(moodID).set(data);
+        }
     }
 
     public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG){
@@ -57,29 +115,8 @@ public class DBMoodSetter {
         this.TAG = TAG;
     }
 
-    public void addMood(Mood mood) {
-        Map<String, Object> data = getDataFromMood(mood);
-        final String docId = mood.toString();
-        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
-        if(TAG != null) {
-            moodReference.document(docId).set(data)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            showStatusMessage("Added successfully: " + docId);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            showStatusMessage("Adding failed for "+docId+": " + e.toString());
-                        }
-                    });
-        }
-        else {
-            moodReference.document(docId).set(data);
-        }
-    }
+
+    private HashMap<String, Object> getMoodData(Mood mood) {
 
     public void removeMood(Mood mood) {
         final String docId = mood.toString();
