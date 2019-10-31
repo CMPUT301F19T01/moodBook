@@ -18,6 +18,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Document;
@@ -29,9 +30,12 @@ public class DBMoodSetter {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private CollectionReference userReference;
+    private CollectionReference intReference;
+    private DocumentReference intRef;
     private Context context;
     private String uid;
     private String TAG;
+    private String moodID;
 
     public DBMoodSetter(FirebaseAuth mAuth, Context context){
         this.mAuth = mAuth;
@@ -39,6 +43,7 @@ public class DBMoodSetter {
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
         this.context = context;
+        this.intReference = db.collection("int");
     }
 
     public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG){
@@ -57,10 +62,47 @@ public class DBMoodSetter {
         this.TAG = TAG;
     }
 
+    public void setInt() {
+        intRef = intReference.document("count");
+        // increment moodCount by 1
+        intRef.update("mood_Count", FieldValue.increment(1));
+
+    }
+    //gets from database what int it last used, so it could start counting from there
+    public void updateDocID(final Mood mood) {
+        DocumentReference intRef = db.collection("int").document("count");
+        intRef
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot!=null){
+                            Double m = documentSnapshot.getDouble("mood_Count");
+                            moodID = String.valueOf(m);
+                            addMood(mood);
+                            setInt();
+                            //moodID = Integer.valueOf(md.intValue());
+                        }
+                        else{
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, e.toString());
+                    }
+                });
+
+    }
+
+
     public void addMood(final Mood mood) {
         Map<String, Object> data = getDataFromMood(mood);
         // TODO: use the mood docId generated from db counter
-        final String docId = mood.toString();
+       // final String docId = mood.toString();
+        final String docId = moodID;
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         if(TAG != null) {
             moodReference.document(docId).set(data)

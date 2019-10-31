@@ -129,7 +129,7 @@ public class Mood implements Comparable<Mood> {
         this.doc_id = doc_id;
     }
 
-    public String getDoc_id() {
+    public String getDocId() {
         return this.doc_id;
     }
 
