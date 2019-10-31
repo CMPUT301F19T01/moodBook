@@ -4,10 +4,13 @@ import android.content.Context;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +31,7 @@ public class DBMoodSetter {
     private CollectionReference userReference;
     private Context context;
     private String uid;
+    private String TAG;
 
     public DBMoodSetter(FirebaseAuth mAuth, Context context){
         this.mAuth = mAuth;
@@ -37,26 +41,69 @@ public class DBMoodSetter {
         this.context = context;
     }
 
+    public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG){
+        this(mAuth, context);
+        this.TAG = TAG;
+    }
+
     public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener){
         this(mAuth, context);
         userReference.document(uid).collection("MOODS")
                 .addSnapshotListener(moodHistoryListener);
     }
 
+    public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener, String TAG){
+        this(mAuth, context, moodHistoryListener);
+        this.TAG = TAG;
+    }
+
     public void addMood(Mood mood) {
         Map<String, Object> data = getDataFromMood(mood);
-        String docId = getMoodDocId(mood);
-        userReference.document(uid).collection("MOODS").document(docId).set(data);
+        final String docId = mood.toString();
+        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
+        if(TAG != null) {
+            moodReference.document(docId).set(data)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            showStatusMessage("Added successfully: " + docId);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            showStatusMessage("Adding failed for "+docId+": " + e.toString());
+                        }
+                    });
+        }
+        else {
+            moodReference.document(docId).set(data);
+        }
     }
 
     public void removeMood(Mood mood) {
-        String docId = getMoodDocId(mood);
+        final String docId = mood.toString();
+        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         // remove selected city
-        userReference.document(uid).collection("MOODS").document(docId).delete();
-    }
-
-    private String getMoodDocId(Mood mood) {
-        return mood.getDateText()+"_"+mood.getTimeText()+"_"+mood.getEmotionText();
+        moodReference.document(docId).delete();
+        if(TAG != null) {
+            moodReference.document(docId).delete()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            showStatusMessage("Deleted successfully: " + docId);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            showStatusMessage("Deleting failed for "+docId+": " + e.toString());
+                        }
+                    });
+        }
+        else {
+            moodReference.document(docId).delete();
+        }
     }
 
     private Map<String, Object> getDataFromMood(Mood mood) {
@@ -90,5 +137,10 @@ public class DBMoodSetter {
             e.printStackTrace();
         }
         return newMood;
+    }
+
+    private void showStatusMessage(String message) {
+        Log.w(TAG, message);
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 }

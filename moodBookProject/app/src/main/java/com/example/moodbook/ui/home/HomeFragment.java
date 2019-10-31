@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
     private HomeViewModel homeViewModel;
 
-    private FloatingActionButton add_mood_button;
+    // Mood History
     private RecyclerView moodListView;
     private MoodListAdapter moodAdapter;
     private CoordinatorLayout moodHistoryLayout;
@@ -73,10 +73,10 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getContext(), getMoodHistoryListener());
+        moodDB = new DBMoodSetter(mAuth, getContext(), getMoodHistoryListener(), TAG);
 
         // Add a mood: when floating add button is clicked, start add activity
-        add_mood_button = root.findViewById(R.id.mood_history_add_button);
+        FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
         add_mood_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -97,7 +97,6 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 startActivity(editIntent);
             }
         });
-        //testAdd();
 
         // adding item touch helper
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
@@ -122,22 +121,23 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         if (viewHolder instanceof MoodListAdapter.MyViewHolder) {
             // backup of removed item for undo purpose
             final int deletedIndex = viewHolder.getAdapterPosition();
-            final Mood deletedItem = moodAdapter.getItem(deletedIndex);
-
-            // get the removed item emotion to display it in snack bar
-            String itemEmotion = deletedItem.getEmotionText();
+            final Mood deletedMood = moodAdapter.getItem(deletedIndex);
 
             // remove the item from recycler view
-            moodAdapter.removeItem(deletedIndex);
+            //moodAdapter.removeItem(deletedIndex);
+            moodDB.removeMood(deletedMood);
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
-                    .make(moodHistoryLayout, itemEmotion + " removed from Mood History!", Snackbar.LENGTH_LONG);
+                    .make(moodHistoryLayout,
+                            deletedMood.toString() + " removed from Mood History!",
+                            Snackbar.LENGTH_LONG);
             snackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // undo is selected, restore the deleted item
-                    moodAdapter.restoreItem(deletedItem, deletedIndex);
+                    //moodAdapter.restoreItem(deletedItem, deletedIndex);
+                    moodDB.addMood(deletedMood);
                 }
             });
             snackbar.setActionTextColor(Color.YELLOW);
@@ -180,11 +180,14 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 // clear the old list
                 moodAdapter.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // Adding mood from FireStore
-                    Mood mood = moodDB.getMoodFromData(doc.getData());
-                    if(mood != null) {
-                        mood.setDocId(doc.getId());
-                        moodAdapter.addItem(mood);
+                    // ignore null item
+                    if(doc.getId() != "null") {
+                        // Adding mood from FireStore
+                        Mood mood = moodDB.getMoodFromData(doc.getData());
+                        if(mood != null) {
+                            mood.setDocId(doc.getId());
+                            moodAdapter.addItem(mood);
+                        }
                     }
                 }
             }
@@ -199,12 +202,4 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         moodListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         moodListView.setAdapter(moodAdapter);
     }
-
-    /*private void testAdd() {
-        // test adding
-        moodAdapter.addItem(new Mood("2019-09-30 18:00", "sad"));
-        moodAdapter.addItem(new Mood("2019-09-01 07:00", "afraid"));
-        moodAdapter.addItem(new Mood("2019-09-01 20:00", "angry"));
-        moodAdapter.addItem(new Mood(null, "happy"));
-    }*/
 }

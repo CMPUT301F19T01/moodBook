@@ -19,28 +19,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.moodbook.ui.login.DBAuth;
-import com.google.common.collect.ObjectArrays;
-import com.google.common.primitives.Ints;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 
 
 public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.MoodInterface{
-
-    //database
-//    FirebaseAuth mAuth;
-//    FirebaseFirestore appDatabase = FirebaseFirestore.getInstance();
-//    FirebaseUser loggedUser = mAuth.getCurrentUser();
-//    String uid = loggedUser.getUid();
-//    CollectionReference collectionRefrence = appDatabase.collection("USERS").document(uid).collection("MOODS");
 
     // moodSetter
     protected DBMoodSetter moodDB;
@@ -48,36 +33,30 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
 
     // date
     private Button add_date_button;
+    private String mood_date;
 
     // time
     private Button add_time_button;
+    private String mood_time;
 
     // emotion
-    private String selectedMoodState;
-    private Spinner spinner_emotion;
+    private Spinner emotion_spinner;
     private MoodStateAdapter emotionAdapter;
-    private final String [] emotionStateList = MoodEditor.EMOTION_STATE_LIST;
-    private final int[] emotionImages = MoodEditor.EMOTION_IMAGE_LIST;
-    private final int[] emotionColors = MoodEditor.EMOTION_COLOR_LIST;
-
-    // location
-    private Button add_location_button;
-
-    // situation
-    private Spinner spinner_situation;
-    // initialize string array for situation
-    private final String[] situationList = MoodEditor.SITUATION_LIST;
+    private String mood_emotion;
 
     // reason text
-    private EditText edit_text_reason;
+    private EditText reason_editText;
+    private String mood_reason_text;
 
     // reason photo
-    private Button add_photo_button;
-    private ImageView image_view_photo;
+    private ImageView reason_photo_imageView;
 
-    private String mood_date, mood_time, mood_reason, mood_situation, mood_emotion;
-    private double mood_lat, mood_lon;
-    private Location location;
+    // situation
+    private String mood_situation;
+
+    // location
+    private Location mood_location;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,98 +66,36 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         mAuth = FirebaseAuth.getInstance();
         moodDB = new DBMoodSetter(mAuth, getApplicationContext());
 
-
         final FragmentManager fm = getSupportFragmentManager();
         final SelectMoodStateFragment s = new SelectMoodStateFragment();
 
-        add_photo_button = findViewById(R.id.pick_mood_photo);
-        image_view_photo = findViewById(R.id.fill_mood_photo);
-        add_date_button = findViewById(R.id.pick_mood_date);
-        add_time_button = findViewById(R.id.pick_mood_time);
-        spinner_situation = findViewById(R.id.pick_mood_situation);
-        edit_text_reason = findViewById(R.id.pick_mood_reason);
-        add_location_button = findViewById(R.id.pick_mood_location);
+        initializeDate();
+        initializeTime();
+        initializeEmotion();
+        initializeReasonText();
+        initializeReasonPhoto();
+        initializeSituation();
+        initializeLocation();
 
-        final Button add_button = findViewById(R.id.add_mood_button);
-        final Button cancel_button = findViewById(R.id.cancel_mood_button);
-
-        // Initializing an ArrayAdapter for situation spinner
-        final ArrayAdapter<String> situationAdapter = MoodEditor.getSituationAdapter(
-                this, R.layout.spinner_situation, situationList);
-        MoodEditor.setSituationSpinner(this, spinner_situation, situationAdapter);
-
-
-        // Initializing a MoodStateAdapter for emotional state spinner
-        spinner_emotion = findViewById(R.id.mood_spinner);
-        emotionAdapter = new MoodStateAdapter(this, emotionStateList, emotionImages);
-        MoodEditor.setEmotionSpinner(this, spinner_emotion, emotionAdapter,
-                emotionStateList, emotionColors);
-
-
-        // Sets mood photo
-        add_photo_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MoodEditor.setImage(CreateMoodActivity.this);
-            }
-        });
-
-
-        // Sets date, time
-        // handles selecting a calendar
-        add_date_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MoodEditor.showCalendar((Button)view);
-
-            }
-        });
-        add_time_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MoodEditor.showTime((Button)view);
-            }
-        });
-
-
-        // Gets users location
-        // create location manager and listener
-        final LocationManager locationManager = MoodEditor.getLocationManager(this);
-        final LocationListener locationListener = MoodEditor.getLocationListener(this);
-
-
-        // set the button onClickListener to request location
-        add_location_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                MoodEditor.getLocationResult(CreateMoodActivity.this,
-                        locationManager, locationListener);
-
-            }
-        });
-
+        final Button add_button = findViewById(R.id.create_add_button);
+        final Button cancel_button = findViewById(R.id.create_cancel_button);
 
         // When this button is clicked, we want to return a result
         add_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mood_date = add_date_button.getText().toString();
-                mood_time = add_time_button.getText().toString();
-                mood_emotion = spinner_emotion.getSelectedItem().toString();
-                mood_reason = edit_text_reason.getText().toString();
-                mood_situation = spinner_situation.getSelectedItem().toString();
-                try {
-                    Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
-                            mood_reason,null,mood_situation,location);
-                    moodDB.addMood(newMood);
-                    Toast.makeText(getApplicationContext(),
-                            "Added: " + mood_date+"_"+mood_time+"_"+mood_emotion,
-                            Toast.LENGTH_SHORT).show();
-                } catch (MoodInvalidInputException e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Adding failed: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
+                if(validMoodInputs()){
+                    try {
+                        Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
+                                mood_reason_text,null,mood_situation,mood_location);
+                        moodDB.addMood(newMood);
+                        finish();
+                    } catch (MoodInvalidInputException e) {
+                        // shouldn't happen since inputs are already checked
+                        Toast.makeText(getApplicationContext(),
+                                "Adding failed: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -197,19 +114,148 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     // gets the photo that was taken and let the image be shown in the page
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo);
+        MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView);
     }
 
     public void showCoords(View view){
     }
 
+    // set attributes in Activity
     @Override
-    public void setSelectedMoodState(String moodState) {
-        this.selectedMoodState = moodState;
+    public void setMoodEmotion(String emotion) {
+        this.mood_emotion = emotion;
     }
 
     @Override
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setMoodSituation(String situation) {
+        this.mood_situation = situation;
     }
+
+    @Override
+    public void setMoodLocation(Location location) {
+        this.mood_location = location;
+    }
+
+
+    private void initializeDate() {
+        add_date_button = findViewById(R.id.create_date_button);
+        // show current date
+        add_date_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MoodEditor.showCalendar((Button)view);
+            }
+        });
+    }
+
+    private void initializeTime() {
+        add_time_button = findViewById(R.id.create_time_button);
+        // show current time
+        add_time_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MoodEditor.showTime((Button)view);
+            }
+        });
+    }
+
+    private void initializeEmotion() {
+        mood_emotion = null;
+        emotion_spinner = findViewById(R.id.create_emotion_spinner);
+
+        // Initializing a MoodStateAdapter for emotional state spinner
+        emotionAdapter = new MoodStateAdapter(this,
+                MoodEditor.EMOTION_STATE_LIST, MoodEditor.EMOTION_IMAGE_LIST);
+        MoodEditor.setEmotionSpinner(this, emotion_spinner, emotionAdapter);
+    }
+
+    private void initializeReasonText() {
+        reason_editText = findViewById(R.id.create_reason_editText);
+    }
+
+    private void initializeReasonPhoto() {
+        Button add_reason_photo_button = findViewById(R.id.create_reason_photo_button);
+        reason_photo_imageView = findViewById(R.id.create_reason_photo_imageView);
+
+        add_reason_photo_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MoodEditor.setImage(CreateMoodActivity.this);
+            }
+        });
+    }
+
+    private void initializeSituation() {
+        Spinner situation_spinner = findViewById(R.id.create_situation_spinner);
+
+        // Initializing an ArrayAdapter for situation spinner
+        final ArrayAdapter<String> situationAdapter = MoodEditor.getSituationAdapter(
+                this, R.layout.spinner_situation);
+        MoodEditor.setSituationSpinner(this, situation_spinner, situationAdapter);
+    }
+
+    private void initializeLocation() {
+        Button add_location_button = findViewById(R.id.create_location_button);
+
+        // Gets users location
+        // create location manager and listener
+        final LocationManager locationManager = MoodEditor.getLocationManager(this);
+        final LocationListener locationListener = MoodEditor.getLocationListener(this);
+
+        // set the button onClickListener to request location
+        add_location_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MoodEditor.getLocationResult(CreateMoodActivity.this,
+                        locationManager, locationListener);
+            }
+        });
+    }
+
+    private boolean validMoodInputs() {
+        boolean areInputsValid = true;
+        mood_date = add_date_button.getText().toString();
+        try {
+            Mood.parseMoodDate(mood_date);
+            add_date_button.setError(null);
+        } catch (MoodInvalidInputException e) {
+            /*Toast.makeText(getApplicationContext(),
+                    e.getInputType()+": "+e.getMessage(),
+                    Toast.LENGTH_SHORT).show();*/
+            add_date_button.setError(e.getMessage());
+            areInputsValid = false;
+        }
+        mood_time = add_time_button.getText().toString();
+        try {
+            Mood.parseMoodTime(mood_time);
+            add_time_button.setError(null);
+        } catch (MoodInvalidInputException e) {
+            /*Toast.makeText(getApplicationContext(),
+                    e.getInputType()+": "+e.getMessage(),
+                    Toast.LENGTH_SHORT).show();*/
+            add_time_button.setError(e.getMessage());
+            areInputsValid = false;
+        }
+        try {
+            Mood.parseMoodEmotion(mood_emotion);
+        } catch (MoodInvalidInputException e) {
+            /*Toast.makeText(getApplicationContext(),
+                    e.getInputType()+": "+e.getMessage(),
+                    Toast.LENGTH_SHORT).show();*/
+            emotionAdapter.setError(emotion_spinner.getSelectedView(), e.getMessage());
+            areInputsValid = false;
+        }
+        mood_reason_text = reason_editText.getText().toString();
+        try {
+            Mood.parseMoodReasonText(mood_reason_text);
+        } catch (MoodInvalidInputException e) {
+            /*Toast.makeText(getApplicationContext(),
+                    e.getInputType()+": "+e.getMessage(),
+                    Toast.LENGTH_SHORT).show();*/
+            reason_editText.setError(e.getMessage());
+            areInputsValid = false;
+        }
+        return areInputsValid;
+    }
+
 }

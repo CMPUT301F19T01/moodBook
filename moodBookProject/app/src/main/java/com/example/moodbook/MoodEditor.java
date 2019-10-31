@@ -48,8 +48,9 @@ public class MoodEditor {
 
     // for accessing SelectedMoodState outside of activity
     public interface MoodInterface {
-        void setSelectedMoodState(String moodState);
-        void setLocation(Location location);
+        void setMoodEmotion(String emotion);
+        void setMoodSituation(String situation);
+        void setMoodLocation(Location location);
     }
 
 
@@ -94,17 +95,17 @@ public class MoodEditor {
 
     // Emotional State editor
     public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner spinner_emotion,
-                                         MoodStateAdapter emotionAdapter,
-                                         final String[] emotionStateList, final int[] emotionColors) {
+                                         MoodStateAdapter emotionAdapter) {
         spinner_emotion.setAdapter(emotionAdapter);
         spinner_emotion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(myActivity.getApplicationContext(), emotionStateList[i], Toast.LENGTH_LONG)
-                        .show();
-                ((MoodInterface)myActivity).setSelectedMoodState(emotionStateList[i]);
-                if(i != 0) {
-                    spinner_emotion.setBackgroundColor(myActivity.getResources().getColor(emotionColors[i]));
+            public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
+                // first item disabled
+                if(i > 0) {
+                    String selectionEmotion = EMOTION_STATE_LIST[i];
+                    ((MoodInterface)myActivity).setMoodEmotion(selectionEmotion);
+                    spinner_emotion.setBackgroundColor(
+                            myActivity.getResources().getColor(EMOTION_COLOR_LIST[i]));
                 }
             }
             @Override
@@ -117,10 +118,9 @@ public class MoodEditor {
 
     // Situation editor
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
-                                                           int spinnerLayoutId,
-                                                           String[] situationList) {
+                                                           int spinnerLayoutId) {
         ArrayAdapter<String> situationAdapter = new ArrayAdapter<String>(
-                myActivity, spinnerLayoutId, situationList){
+                myActivity, spinnerLayoutId, SITUATION_LIST){
             @Override
             public boolean isEnabled(int position){
                 return (position != 0);
@@ -143,13 +143,11 @@ public class MoodEditor {
         spinner_situation.setAdapter(situationAdapter);
         spinner_situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
+            public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
                 // first item disabled
-                if(position > 0){
-                    Toast.makeText(myActivity.getApplicationContext(),
-                            "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                            .show();
+                if(i > 0){
+                    String selectedSituation = (String) parent.getItemAtPosition(i);
+                    ((MoodInterface)myActivity).setMoodSituation(selectedSituation);
                 }
             }
             @Override
@@ -221,7 +219,7 @@ public class MoodEditor {
         return new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                ((MoodInterface)myActivity).setLocation(location);
+                ((MoodInterface)myActivity).setMoodLocation(location);
 
                 //redundant
                 double mood_lat = location.getLatitude();

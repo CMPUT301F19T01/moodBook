@@ -36,24 +36,23 @@ public class Mood implements Comparable<Mood> {
         setLocation(location);
     }
 
-    // for testing
     public Mood(String date_time_text, String emotion) throws MoodInvalidInputException {
         this(date_time_text, emotion, null, null, null, null);
     }
 
     // Date
     public void setDateTime(String date_time_text) throws MoodInvalidInputException {
-        // Initialize to current date
+        // Error: empty
         if (date_time_text == null) {
-            this.date_time = new Date();
-        } else {
-            try {
-                this.date_time = DATETIME_FORMATTER.parse(date_time_text);
-            }
-            // Error: invalid date time format
-            catch (ParseException e) {
-                throw new MoodInvalidInputException("Data and time must be yyyy-hh-dd hh:mm format");
-            }
+            throw new MoodInvalidInputException("date_time","cannot be empty");
+        }
+        // Valid argument
+        try {
+            this.date_time = DATETIME_FORMATTER.parse(date_time_text);
+        }
+        // Error: invalid date time format
+        catch (ParseException e) {
+            throw new MoodInvalidInputException("date_time","must be yyyy-hh-dd hh:mm format");
         }
     }
 
@@ -71,19 +70,8 @@ public class Mood implements Comparable<Mood> {
 
     // Emotion
     public void setEmotion(String emotion_text) throws MoodInvalidInputException {
-        // Error: empty
-        if (emotion_text == null) {
-            throw new MoodInvalidInputException("Must select an emotion");
-        }
-        emotion_text = emotion_text.toLowerCase();
-        // Valid argument
-        if (Emotion.hasName(emotion_text)) {
-            this.emotion_text = emotion_text;
-        }
-        // Error: no option is selected
-        else {
-            throw new MoodInvalidInputException("Must select an emotion");
-        }
+        parseMoodEmotion(emotion_text);
+        this.emotion_text = emotion_text.toLowerCase();
     }
 
     public String getEmotionText() {
@@ -101,21 +89,8 @@ public class Mood implements Comparable<Mood> {
 
     // Reason
     public void setReasonText(String reason_text) throws MoodInvalidInputException {
-        // Check if text is longer than 20 characters or 3 words
-        if (reason_text != null) {
-            // Error: > 20 characters
-            if (reason_text.length() > 20) {
-                throw new MoodInvalidInputException("Reason text cannot be longer than 20 characters");
-            } else {
-                String[] reason_text_words = reason_text.trim().split(" ");
-                // Error: > 3 words
-                if (reason_text_words.length > 3) {
-                    throw new MoodInvalidInputException("Reason text cannot have more than 3 words");
-                }
-            }
-        }
-        // Valid
-        this.reason_text = reason_text;
+        parseMoodReasonText(reason_text);
+        this.reason_text = reason_text == "" ? null : reason_text;
     }
 
     public String getReasonText() {
@@ -171,6 +146,76 @@ public class Mood implements Comparable<Mood> {
 
         return dateTime.compareTo(otherDateTime);
     }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getDateText()+"_"+getTimeText()+"_"+getEmotionText();
+    }
+
+
+    public static Date parseMoodDate(String date_text) throws MoodInvalidInputException {
+        Date date = null;
+        // Error: empty
+        if (date_text == null) {
+            throw new MoodInvalidInputException("date","cannot be empty");
+        }
+        // Valid argument
+        try {
+            date = DATE_FORMATTER.parse(date_text);
+        }
+        // Error: invalid date format
+        catch (ParseException e) {
+            throw new MoodInvalidInputException("date","must be yyyy-hh-dd format");
+        }
+        return date;
+    }
+
+    public static Date parseMoodTime(String time_text) throws MoodInvalidInputException {
+        Date time = null;
+        // Error: empty
+        if (time_text == null) {
+            throw new MoodInvalidInputException("time","cannot be empty");
+        }
+        // Valid argument
+        try {
+            time = TIME_FORMATTER.parse(time_text);
+        }
+        // Error: invalid time format
+        catch (ParseException e) {
+            throw new MoodInvalidInputException("time","must be hh:mm format");
+        }
+        return time;
+    }
+
+    public static void parseMoodEmotion(String emotion_text) throws MoodInvalidInputException {
+        // Error: empty
+        if (emotion_text == null) {
+            throw new MoodInvalidInputException("emotion","must be selected");
+        }
+        emotion_text = emotion_text.toLowerCase();
+        // Error: no option is selected
+        if (!Emotion.hasName(emotion_text)) {
+            throw new MoodInvalidInputException("emotion","must be selected");
+        }
+    }
+
+    public static void parseMoodReasonText(String reason_text) throws MoodInvalidInputException {
+        // Check if text is longer than 20 characters or 3 words
+        if (reason_text != null) {
+            // Error: > 20 characters
+            if (reason_text.length() > 20) {
+                throw new MoodInvalidInputException("reason_text","cannot be longer than 20 characters");
+            } else {
+                String[] reason_text_words = reason_text.trim().split(" ");
+                // Error: > 3 words
+                if (reason_text_words.length > 3) {
+                    throw new MoodInvalidInputException("reason_text","cannot have more than 3 words");
+                }
+            }
+        }
+    }
+
 
 
     public static class Emotion {
