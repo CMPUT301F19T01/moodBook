@@ -69,7 +69,7 @@ public class DBMoodSetter {
 
     }
     //gets from database what int it last used, so it could start counting from there
-    public void updateDocID(final Mood mood) {
+    public void addMood(final Mood mood) {
         DocumentReference intRef = db.collection("int").document("count");
         intRef
                 .get()
@@ -79,7 +79,7 @@ public class DBMoodSetter {
                         if (documentSnapshot!=null){
                             Double m = documentSnapshot.getDouble("mood_Count");
                             moodID = String.valueOf(m);
-                            addMood(mood);
+                            addMoodAfterDocId(mood);
                             setInt();
                             //moodID = Integer.valueOf(md.intValue());
                         }
@@ -98,7 +98,7 @@ public class DBMoodSetter {
     }
 
 
-    public void addMood(final Mood mood) {
+    private void addMoodAfterDocId(final Mood mood) {
         Map<String, Object> data = getDataFromMood(mood);
         // TODO: use the mood docId generated from db counter
        // final String docId = mood.toString();
