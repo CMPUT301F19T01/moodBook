@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.getInstance().signOut();
 
         mAuth = FirebaseAuth.getInstance();
-        dbAuth = new DBAuth(mAuth);
+        dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
 
 
         loginButton = findViewById(R.id.login);

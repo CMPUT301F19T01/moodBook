@@ -23,15 +23,13 @@ import java.util.HashMap;
 public class RequestHandler {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private CollectionReference collectionReference;
     private ArrayList<String> usernameList;
     private DBAuth dbAuth;
 
-    public RequestHandler(FirebaseAuth mAuth){
+    public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db, DBAuth dbAuth){
         this.mAuth = mAuth;
-        this.db = FirebaseFirestore.getInstance();
-        this.collectionReference = db.collection("USERS");
-        this.dbAuth = new DBAuth(mAuth);
+        this.db = db;
+        this.dbAuth = dbAuth;
         this.usernameList = dbAuth.updateUsernameList();
     }
 
@@ -56,6 +54,7 @@ public class RequestHandler {
     public void sendRequest(String addUser, String uidp, String usernamep){
         final String uid = uidp;
         final String username = usernamep;
+        final CollectionReference collectionReference = db.collection("USERS");
         // getting the addUser's uid
         DocumentReference docRef = db.collection("usernamelist").document(addUser);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

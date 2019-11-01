@@ -36,13 +36,11 @@ public class DBAuth {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private CollectionReference collectionReference;
     private ArrayList<String> usernameList;
 
-    public DBAuth(FirebaseAuth mAuth){
+    public DBAuth(FirebaseAuth mAuth, FirebaseFirestore db){
         this.mAuth = mAuth;
-        this.db = FirebaseFirestore.getInstance();
-        this.collectionReference = db.collection("USERS");
+        this.db = db;
         this.usernameList = this.updateUsernameList();
     }
 
@@ -118,6 +116,8 @@ public class DBAuth {
      * This method creates containers for a new user in the database
      */
     public void createUser(FirebaseUser user, String email, String username){
+
+        CollectionReference collectionReference = db.collection("USERS");
 
         String uid = user.getUid();
         Log.d(TAG, "creating user in db:"+ uid);

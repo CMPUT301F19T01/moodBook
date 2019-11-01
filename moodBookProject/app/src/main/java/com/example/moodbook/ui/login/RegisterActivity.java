@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -57,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
-        dbAuth = new DBAuth(mAuth);
+        dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
         dbAuth.updateUsernameList(); // fetch the usernamelist now so it is ready by the time the user clicks register
 
         email = findViewById(R.id.email);
