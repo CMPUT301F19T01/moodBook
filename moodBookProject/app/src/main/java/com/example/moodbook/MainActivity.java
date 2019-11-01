@@ -5,17 +5,25 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.moodbook.ui.friendMood.friendMoodFragment;
+import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.example.moodbook.ui.login.UsernameFragment;
+import com.example.moodbook.ui.myMood.myMoodFragment;
+import com.example.moodbook.ui.myRequests.myRequestsFragment;
+import com.example.moodbook.ui.request.RequestFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -31,28 +39,47 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
+    private NavigationView navigationView;
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Toast.makeText(MainActivity.this, " in main" ,Toast.LENGTH_SHORT).show();
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-    
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = (NavigationView)
+                getFragmentManager().findFragmentById(R.id.nav_view);
+
+        // Set up the drawer.
+        navigationView.setUp(
+                R.id.nav_view,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
+    }
+//        drawer =  findViewById(R.id.drawer_layout);
+//        navigationView =  findViewById(R.id.nav_view);
+//        setupDrawerContent(navigationView);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+//        Toast.makeText(this, "juuust checking", Toast.LENGTH_SHORT).show();
+
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
 
                 R.id.nav_myMood,R.id.nav_FriendMood,
-                R.id.nav_addFriendsMood, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout, R.id.nav_send)
+                R.id.nav_addFriendsMood, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -88,37 +115,9 @@ public class MainActivity extends AppCompatActivity {
                 // TODO
             }
         });*/
-//    displayView(R.id.nav_logout);
-//    }
-//    public void displayView(int viewId) {
-//
-//        Fragment fragment = null;
-//        String title = getString(R.string.app_name);
-//        switch (viewId){
-//            case R.id.nav_logout:
-//                fragment = new UsernameFragment();
-//                break;
-//        }
-//
-//        if (fragment != null) {
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            ft.replace(R.id.nav_host_fragment, fragment);//double check the which id to use
-//            ft.commit();
-//        }
-//
-//        // set the toolbar title
-//        if (getSupportActionBar() != null) {
-//            getSupportActionBar().setTitle(title);
-//        }
-//
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
+
     }
-//    @Override
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//        displayView(item.getItemId());
-//        return true;
-//    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -137,12 +136,6 @@ public class MainActivity extends AppCompatActivity {
          }
          return true;
     }
-    private void logout(){
-        mAuth.getInstance().signOut();
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
-
-    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -150,4 +143,119 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
+
+
+
+
+
+
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // The action bar home/up action should open or close the drawer.
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                drawer.openDrawer(GravityCompat.START);
+//                return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
+
+//    private void setupDrawerContent(NavigationView navigationView) {
+//        navigationView.setNavigationItemSelectedListener(
+//                new NavigationView.OnNavigationItemSelectedListener() {
+//                    @Override
+//                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+//
+//                        selectDrawerItem(menuItem);
+//
+//
+//                        return true;
+//                    }
+//                });
+//    }
+//
+//
+//
+//    public void selectDrawerItem(MenuItem menuItem) {
+//        Toast.makeText(this, "in nav", Toast.LENGTH_SHORT).show();
+//
+//        // Create a new fragment and specify the fragment to show based on nav item clicked
+//        Fragment fragment = null;
+//        Class fragmentClass;
+//        switch(menuItem.getItemId()) {
+//            case R.id.nav_request:
+//                                Toast.makeText(this, "Request", Toast.LENGTH_SHORT).show();
+//
+//                fragmentClass = RequestFragment.class;
+//                break;
+//            case R.id.nav_myMood:
+//                                Toast.makeText(this, "mymood", Toast.LENGTH_SHORT).show();
+//
+//                fragmentClass = HomeFragment.class;
+//                break;
+//            case R.id.nav_FriendMood:
+//                Toast.makeText(this, "frnd mood", Toast.LENGTH_SHORT).show();
+//
+//                fragmentClass = friendMoodFragment.class;
+//                break;
+//        }
+
+//        try {
+//            fragment = (Fragment) fragmentClass.newInstance();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        // Insert the fragment by replacing any existing fragment
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.nav_myMood, fragment).commit();
+//
+//        // Highlight the selected item has been done by NavigationView
+//        menuItem.setChecked(true);
+//        // Set action bar title
+//        setTitle(menuItem.getTitle());
+//        // Close the navigation drawer
+//        drawer.closeDrawers();}
+
+
+
+
+//
+//    @SuppressWarnings("StatementWithEmptyBody")
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//        switch (id) {
+//            case R.id.nav_FriendMood:
+//                Toast.makeText(this, "FM", Toast.LENGTH_SHORT).show();
+
+//                break;
+//            case R.id.nav_myRequests:
+//                Toast.makeText(this, "Request", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.nav_logout:
+//                Toast.makeText(this, "logout clicked", Toast.LENGTH_SHORT).show();
+//                logout();
+//                return true;
+//        }
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
+
+    private void logout(){
+        mAuth.getInstance().signOut();
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
+
+
+
+
+
+
 }
