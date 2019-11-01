@@ -209,7 +209,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         intent.putExtra("reason_text",mood.getReasonText());
         // TODO: pass Image into editIntent
         intent.putExtra("situation",mood.getSituation());
-        intent.putExtra("location_lat", location==null ? null : location.getLatitude());
-        intent.putExtra("location_lon", location==null ? null : location.getLongitude());
+        intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
+        intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
     }
 }

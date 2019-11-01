@@ -167,22 +167,20 @@ public class DBMoodSetter {
                 });
     }
     // used by MoodHistory to get all mood data from user's mood collection
-    public static EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodAdapter) {
+    public static EventListener<QuerySnapshot> getMoodHistoryListener(@NonNull final MoodListAdapter moodAdapter) {
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(moodAdapter!=null) {
-                    // clear the old list
-                    moodAdapter.clear();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        // ignore null item
-                        if (doc.getId() != "null") {
-                            // Adding mood from FireStore
-                            Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
-                            if (mood != null) {
-                                mood.setDocId(doc.getId());
-                                moodAdapter.addItem(mood);
-                            }
+                // clear the old list
+                moodAdapter.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    // ignore null item
+                    if (doc.getId() != "null") {
+                        // Adding mood from FireStore
+                        Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                        if (mood != null) {
+                            mood.setDocId(doc.getId());
+                            moodAdapter.addItem(mood);
                         }
                     }
                 }
@@ -218,7 +216,7 @@ public class DBMoodSetter {
         if(location_lat != null && location_lon != null) {
             location = new Location(LocationManager.GPS_PROVIDER);
             location.setLatitude((double)location_lat);
-            location.setLongitude((double)location_lat);
+            location.setLongitude((double)location_lon);
         }
         Mood newMood = null;
         try {
