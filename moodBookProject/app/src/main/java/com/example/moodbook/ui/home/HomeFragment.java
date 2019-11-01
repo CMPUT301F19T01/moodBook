@@ -202,6 +202,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
     private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
         Location location = mood.getLocation();
+        intent.putExtra("moodID", mood.getDocId());
         intent.putExtra("date",mood.getDateText());
         intent.putExtra("time",mood.getTimeText());
         intent.putExtra("emotion",mood.getEmotionText());

@@ -1,6 +1,7 @@
 package com.example.moodbook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
@@ -147,28 +148,48 @@ public class DBMoodSetter {
                 }
             });
     }
+    public void editMood(final String moodID, HashMap m) {
+        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
 
+        moodReference.document(moodID).update(m);
+        moodReference.document(moodID).update(m)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showStatusMessage(" Updated successfully: " + moodID.toString());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Updated failed for "+moodID.toString()+": " + e.toString());
+                    }
+                });
+    }
     // used by MoodHistory to get all mood data from user's mood collection
     public static EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodAdapter) {
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
-                moodAdapter.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // ignore null item
-                    if(doc.getId() != "null") {
-                        // Adding mood from FireStore
-                        Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
-                        if(mood != null) {
-                            mood.setDocId(doc.getId());
-                            moodAdapter.addItem(mood);
+                if(moodAdapter!=null) {
+                    // clear the old list
+                    moodAdapter.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        // ignore null item
+                        if (doc.getId() != "null") {
+                            // Adding mood from FireStore
+                            Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                            if (mood != null) {
+                                mood.setDocId(doc.getId());
+                                moodAdapter.addItem(mood);
+                            }
                         }
                     }
                 }
             }
         };
     }
+
 
 
     // helper functions to convert between Mood object and HashMap data
