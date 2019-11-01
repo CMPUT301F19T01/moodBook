@@ -1,7 +1,10 @@
 package com.example.moodbook;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.media.Image;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 
@@ -14,10 +17,10 @@ public class Mood implements Comparable<Mood> {
     private Date date_time;         // mandatory
     private String emotion_text;    // mandatory
     private String reason_text;     // optional
-    private Image reason_photo;     // optional
     private String situation;       // optional
     private Location location;      // optional
     private String doc_id;          // for editing & deleting
+    private Bitmap reason_photo;    // optional
 
     // date time formatter
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
@@ -25,7 +28,7 @@ public class Mood implements Comparable<Mood> {
     public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public Mood(String date_time_text, String emotion,
-                String reason_text, Image reason_photo,
+                String reason_text, Bitmap reason_photo,
                 String situation, Location location) throws MoodInvalidInputException {
         // Initialize
         setDateTime(date_time_text);
@@ -97,12 +100,13 @@ public class Mood implements Comparable<Mood> {
         return this.reason_text;
     }
 
-    public void setReasonPhoto(Image reason_photo) {
+    public Bitmap setReasonPhoto(Bitmap reason_photo) {
         this.reason_photo = reason_photo;
     }
 
-    public Image getReasonPhoto() {
-        return this.reason_photo;
+    public Bitmap getReasonPhoto(ImageView view) {
+        Bitmap bitmap = ((BitmapDrawable)view.getDrawable()).getBitmap();
+        return bitmap;
     }
 
     // Situation
@@ -114,6 +118,7 @@ public class Mood implements Comparable<Mood> {
         return this.situation;
     }
 
+
     // Location
     public void setLocation(Location location) {
         this.location = location;
@@ -123,7 +128,6 @@ public class Mood implements Comparable<Mood> {
         return this.location;
     }
 
-
     // Doc Id
     public void setDocId(String doc_id) {
         this.doc_id = doc_id;
@@ -132,7 +136,6 @@ public class Mood implements Comparable<Mood> {
     public String getDocId() {
         return this.doc_id;
     }
-
 
     @Override
     public int compareTo(@NonNull Mood other) {
