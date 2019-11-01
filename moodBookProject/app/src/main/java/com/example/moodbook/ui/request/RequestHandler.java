@@ -23,26 +23,12 @@ import java.util.HashMap;
 public class RequestHandler {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private ArrayList<String> usernameList;
     private DBAuth dbAuth;
 
     public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db, DBAuth dbAuth){
         this.mAuth = mAuth;
         this.db = db;
         this.dbAuth = dbAuth;
-        this.usernameList = dbAuth.updateUsernameList();
-    }
-
-    /**
-     * This method verifys that the username to be added exists
-     * @param username
-     * @return
-     *      true: username exists
-     *      false: username does not exist/username is the same as the user's username
-     */
-    public Boolean verifyRequest(String username){
-        dbAuth.updateUsernameList();
-        return usernameList.contains(username);
     }
 
     /**

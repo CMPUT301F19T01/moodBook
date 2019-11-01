@@ -31,7 +31,6 @@ public class DBAuthTest {
 
     @Test
     void testVerifyEmail(){
-        when(mockdb.collection(mockString)).then(Mockito.doNothing());
         DBAuth dbAuth = new DBAuth(mockmAuth, mockdb);
 
         // Test valid email

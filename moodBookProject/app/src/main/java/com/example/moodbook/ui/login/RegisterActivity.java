@@ -13,12 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moodbook.R;
+import com.example.moodbook.data.UsernameList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -42,6 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     protected DBAuth dbAuth;
+    private UsernameList usernameList;
 
 
     private Button registerButton;
@@ -61,6 +64,8 @@ public class RegisterActivity extends AppCompatActivity {
         dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
         dbAuth.updateUsernameList(); // fetch the usernamelist now so it is ready by the time the user clicks register
 
+        usernameList = new UsernameList(FirebaseFirestore.getInstance());
+
         email = findViewById(R.id.email);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
@@ -79,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (dbAuth.verifyEmail(emailS)){
                     if (dbAuth.verifyPass(passwordS)){
                         //new UsernameFragment().show(getSupportFragmentManager(), "registering");
-                        if (dbAuth.verifyUsername(usernameS)){
+                        if (usernameList.verifyUsername(usernameS)){
                             // all fields are good
                             //FirebaseUser user = dbAuth.register(emailS, passwordS, usernameS);
 

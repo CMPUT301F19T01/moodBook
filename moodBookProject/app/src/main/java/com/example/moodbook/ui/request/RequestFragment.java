@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.moodbook.R;
+import com.example.moodbook.data.UsernameList;
 import com.example.moodbook.ui.login.DBAuth;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +36,8 @@ public class RequestFragment extends Fragment {
     private RequestHandler requestHandler;
     private FirebaseUser user;
     private FirebaseFirestore db;
+    private DBAuth dbAuth;
+    private UsernameList usernameList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,17 +55,23 @@ public class RequestFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+        dbAuth = new DBAuth(mAuth, db);
+
+        usernameList = new UsernameList(FirebaseFirestore.getInstance());
+        usernameList.updateUsernameList();
+
         requestText = root.findViewById(R.id.usernameEditText);
         requestButton = root.findViewById(R.id.requestButton);
 
-        requestHandler = new RequestHandler(mAuth, db, new DBAuth(mAuth, db));
+        requestHandler = new RequestHandler(mAuth, db, dbAuth);
+
 
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String addUser = requestText.getText().toString();
 
-                if (requestHandler.verifyRequest(addUser)){ // check if username exists in db
+                if (usernameList.isUser(addUser)){ // check if username exists in db
                     requestHandler.sendRequest(addUser, user.getUid(), user.getDisplayName());
                     Toast.makeText(root.getContext(), "Sent request",
                             Toast.LENGTH_LONG).show();

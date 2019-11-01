@@ -41,7 +41,6 @@ public class DBAuth {
     public DBAuth(FirebaseAuth mAuth, FirebaseFirestore db){
         this.mAuth = mAuth;
         this.db = db;
-        this.usernameList = this.updateUsernameList();
     }
 
     /**
@@ -162,7 +161,7 @@ public class DBAuth {
      *      an ArrayList of usernames
      * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
      */
-    public ArrayList<String> updateUsernameList(){
+    public void updateUsernameList(){
         final ArrayList<String> usernameList = new ArrayList<>();
         db.collection("usernamelist")
                 .get()
@@ -178,20 +177,7 @@ public class DBAuth {
                         }
                     }
                 });
-
-        return usernameList;
-    }
-
-    /**
-     * This method verifys a given username for uniqueness and length
-     * @param username
-     * @return
-     *      true: username is unique and > length 0
-     *      false: username is not unique and/or is not > length 0
-     */
-    public Boolean verifyUsername(String username){
-        return (!usernameList.contains(username) && username.length() > 0);
-
+        this.usernameList = usernameList;
     }
 
     /**
@@ -211,4 +197,5 @@ public class DBAuth {
             }
         });
     }
+
 }
