@@ -5,11 +5,14 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.moodbook.ui.addFriends.addFriendFragment;
 import com.example.moodbook.ui.friendMood.friendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.example.moodbook.ui.login.UsernameFragment;
+import com.example.moodbook.ui.myFriendMoodMap.myFriendMoodMapFragment;
 import com.example.moodbook.ui.myMood.myMoodFragment;
+import com.example.moodbook.ui.myMoodMap.myMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.example.moodbook.ui.request.RequestFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -42,12 +45,12 @@ import android.view.Menu;
 import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
+public class MainActivity extends AppCompatActivity   {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
-//    private NavigationView navigationView;
-//    private DrawerLayout drawer;
+    private NavigationView navigationView;
+    private DrawerLayout drawer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
 
@@ -60,9 +63,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
 
-        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
-        NavigationView navigationView =  findViewById(R.id.nav_view);
-        navigationView.OnNavigationItemSelectedListener(this);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.bringToFront();
 //        setupDrawerContent(navigationView);
 
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,6 +84,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        selectDrawerItem(menuItem, drawer);
+                        return true;
+                    }
+                }
+        );
 
 
         /* Mood History */
@@ -141,7 +154,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    public void selectDrawerItem(MenuItem menuItem, DrawerLayout drawer){
+        Fragment fragment = new Fragment();
+        Class fragmentClass;
+        switch(menuItem.getItemId()){
+            case R.id.nav_FriendMood:
+                fragmentClass = friendMoodFragment.class;
+                Toast.makeText(MainActivity.this, " friends Mood clicked",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_addFriendsMood:
+                fragmentClass = addFriendFragment.class;
+                Toast.makeText(MainActivity.this, "add friends clicked",
+                        Toast.LENGTH_SHORT).show();
+                break;
 
+            case R.id.nav_myRequests:
+                Toast.makeText(MainActivity.this, "Request clicked",
+                        Toast.LENGTH_SHORT).show();
+                fragmentClass = RequestFragment.class;
+//                Toast.makeText(MainActivity.this, "Request here",
+//                        Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_myMoodMap:
+                fragmentClass = myMoodMapFragment.class;
+                Toast.makeText(MainActivity.this, "My mood map clicked",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_myFriendMoodMap:
+                fragmentClass = myFriendMoodMapFragment.class;
+                Toast.makeText(MainActivity.this, " friend mood map clicked",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_logout:
+                logout();
+                Toast.makeText(MainActivity.this, " log out",
+                        Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                fragmentClass = HomeFragment.class;
+        }
+//        try {
+//            fragment = (Fragment) fragmentClass.newInstance();
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.nav_host_fragment, fragment).commit();
+
+        menuItem.setChecked(true);
+        setTitle(menuItem.getTitle());
+        drawer.closeDrawers();
+
+    }
 
 
 
@@ -220,28 +287,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.nav_FriendMood:
-                Toast.makeText(this, "FM", Toast.LENGTH_SHORT).show();
-
-                break;
-            case R.id.nav_myRequests:
-                Toast.makeText(this, "Request", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_logout:
-                Toast.makeText(this, "logout clicked", Toast.LENGTH_SHORT).show();
-                logout();
-                return true;
-        }
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+//
+//    @SuppressWarnings("StatementWithEmptyBody")
+//    @Override
+//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+//        int id = item.getItemId();
+//        switch (id) {
+//            case R.id.nav_FriendMood:
+//                Toast.makeText(this, "FM", Toast.LENGTH_SHORT).show();
+//
+//                break;
+//            case R.id.nav_myRequests:
+//                Toast.makeText(this, "Request", Toast.LENGTH_SHORT).show();
+//                break;
+//            case R.id.nav_logout:
+//                Toast.makeText(this, "logout clicked", Toast.LENGTH_SHORT).show();
+//                logout();
+//                return true;
+//        }
+//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
+//        return true;
+//    }
 
     private void logout(){
         mAuth.getInstance().signOut();

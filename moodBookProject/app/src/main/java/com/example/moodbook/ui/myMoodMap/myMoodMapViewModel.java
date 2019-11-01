@@ -1,4 +1,19 @@
 package com.example.moodbook.ui.myMoodMap;
 
-public class myMoodMapViewModel {
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+
+public class myMoodMapViewModel extends ViewModel {
+
+    private MutableLiveData<String> mText;
+
+    public myMoodMapViewModel() {
+        mText = new MutableLiveData<>();
+        mText.setValue("This is my Mood map fragment");
+    }
+
+    public LiveData<String> getText() {
+        return mText;
+    }
 }
