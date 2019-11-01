@@ -153,6 +153,7 @@ public class EditMoodActivity extends AppCompatActivity {
         };
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_situation);
         edit_spinner_situation.setAdapter(spinnerArrayAdapter);
+        edit_spinner_situation.setSelection(spinnerArrayAdapter.getPosition(intent_situation));
         edit_spinner_situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -174,6 +175,7 @@ public class EditMoodActivity extends AppCompatActivity {
         spinner_emotion = findViewById(R.id.edit_emotion_spinner);
         emotionAdapter = new MoodStateAdapter(this, emotionStateList, emotionImages );
         spinner_emotion.setAdapter(emotionAdapter);
+        spinner_emotion.setSelection( emotionAdapter.getPosition(intent_emotion));
         spinner_emotion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -221,6 +223,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 final HashMap<String, Object> moodMap = new HashMap<>();
                 moodMap.put("reason_text",edit_text_reason.getText().toString());
                 moodMap.put("situation",edit_spinner_situation.getSelectedItem().toString());
+                moodMap.put("emotion",spinner_emotion.getSelectedItem().toString());
 
                 moodDB.editMood(intent_moodID,moodMap);
                 finish();
