@@ -21,6 +21,9 @@ import com.example.moodbook.ui.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/**
+ * This fragment is shown to allow the user to send requests to other users
+ */
 public class RequestFragment extends Fragment {
 
     private FirebaseAuth mAuth;

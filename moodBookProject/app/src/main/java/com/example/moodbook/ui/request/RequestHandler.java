@@ -16,6 +16,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class handles interaction with the db to send requests
+ */
+
 public class RequestHandler {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
