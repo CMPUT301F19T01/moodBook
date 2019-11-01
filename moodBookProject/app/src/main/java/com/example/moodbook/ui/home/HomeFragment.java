@@ -72,20 +72,6 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // initialize DB connector
-        mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getContext(), getMoodHistoryListener(), TAG);
-
-        // Add a mood: when floating add button is clicked, start add activity
-        FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
-        add_mood_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CreateMoodActivity.class);
-                startActivity(intent);
-            }
-        });
-
         // Set up recyclerView and adapter
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
         moodListView = root.findViewById(R.id.mood_history_listView);
@@ -96,6 +82,21 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
                 Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
                 startActivity(editIntent);
+            }
+        });
+
+        // initialize DB connector
+        mAuth = FirebaseAuth.getInstance();
+        moodDB = new DBMoodSetter(mAuth, getContext(),
+                DBMoodSetter.getMoodHistoryListener(moodAdapter), TAG);
+
+        // Add a mood: when floating add button is clicked, start add activity
+        FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
+        add_mood_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), CreateMoodActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -184,27 +185,6 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 return true;
             }
         });
-    }
-
-    private EventListener<QuerySnapshot> getMoodHistoryListener() {
-        return new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
-                moodAdapter.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // ignore null item
-                    if(doc.getId() != "null") {
-                        // Adding mood from FireStore
-                        Mood mood = moodDB.getMoodFromData(doc.getData());
-                        if(mood != null) {
-                            mood.setDocId(doc.getId());
-                            moodAdapter.addItem(mood);
-                        }
-                    }
-                }
-            }
-        };
     }
 
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
