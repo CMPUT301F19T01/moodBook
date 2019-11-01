@@ -47,13 +47,6 @@ public class RequestFragment extends Fragment {
                 ViewModelProviders.of(this).get(RequestViewModel.class);
         final View root = inflater.inflate(R.layout.fragment_request, container, false);
         db = FirebaseFirestore.getInstance();
-        /*final TextView textView = root.findViewById(R.id.text_send);
-        requestViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();

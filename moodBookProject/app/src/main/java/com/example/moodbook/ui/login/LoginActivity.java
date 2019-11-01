@@ -36,7 +36,6 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 //  BUG: toast message is shown as failing login/registration when actually succeeding
 //  POSSIBLE BUG: two users attempt registering at the (sameish) time.. depends on when activity was created
 //  currently, the list of all usernames is cached on creation of activity. this is used as a workaround. the firebase call to retrieve the documents in the usernamelist collection is done synchronously so it won't return in time if I update it as its needed
-    // fix by having the activity halt until a response from firebase is recieved maybe?
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -92,13 +91,6 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
 
-                        /*if (loginResult != null){
-                            updateUI(loginResult);
-
-                        }
-                        updateUI(null);
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();*/
                     } else {
                         password.setError("Password must be >= 6 chars");
                     }
@@ -114,16 +106,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                /*if (dbAuth.verifyEmail(email.getText().toString())){
-                    if (dbAuth.verifyPass(password.getText().toString())){
-                        new UsernameFragment().show(getSupportFragmentManager(), "registering");
-                    } else {
-                        password.setError("Password must be >= 6 chars");
-                    }
-                } else {
-                    email.setError("Incorrect email format");
-                }
-                *///register(email.getText().toString(), password.getText().toString());
 
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivityForResult(intent, 1);

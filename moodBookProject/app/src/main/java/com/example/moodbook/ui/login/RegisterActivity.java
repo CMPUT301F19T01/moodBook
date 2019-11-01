@@ -3,7 +3,6 @@ package com.example.moodbook.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,11 +19,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
-
-import java.util.ArrayList;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * This activity handles registration
@@ -83,10 +77,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (dbAuth.verifyEmail(emailS)){
                     if (dbAuth.verifyPass(passwordS)){
-                        //new UsernameFragment().show(getSupportFragmentManager(), "registering");
                         if (usernameList.verifyUsername(usernameS)){
                             // all fields are good
-                            //FirebaseUser user = dbAuth.register(emailS, passwordS, usernameS);
 
                             mAuth.createUserWithEmailAndPassword(emailS, passwordS)
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -107,15 +99,6 @@ public class RegisterActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
-
-                           /* if (userL.get(0) == null){
-                                email.setError("Email in use"); // Firebase call fails when email is in use
-                            } else {
-                                dbAuth.updateUsername(userL.get(0), usernameS);
-                                Intent intent = new Intent();
-                                setResult(Activity.RESULT_OK, intent);
-                                finish();
-                            }*/
                         } else {
                             username.setError("Username in use");
                         }
