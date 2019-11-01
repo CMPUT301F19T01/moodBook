@@ -23,12 +23,10 @@ import java.util.HashMap;
 public class RequestHandler {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private DBAuth dbAuth;
 
-    public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db, DBAuth dbAuth){
+    public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db){
         this.mAuth = mAuth;
         this.db = db;
-        this.dbAuth = dbAuth;
     }
 
     /**

@@ -30,13 +30,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class RequestFragment extends Fragment {
 
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
+    private FirebaseUser user;
+
     private RequestViewModel requestViewModel;
+
     private EditText requestText;
     private Button requestButton;
+
     private RequestHandler requestHandler;
-    private FirebaseUser user;
-    private FirebaseFirestore db;
-    private DBAuth dbAuth;
     private UsernameList usernameList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -55,7 +57,6 @@ public class RequestFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        dbAuth = new DBAuth(mAuth, db);
 
         usernameList = new UsernameList(FirebaseFirestore.getInstance());
         usernameList.updateUsernameList();
@@ -63,7 +64,7 @@ public class RequestFragment extends Fragment {
         requestText = root.findViewById(R.id.usernameEditText);
         requestButton = root.findViewById(R.id.requestButton);
 
-        requestHandler = new RequestHandler(mAuth, db, dbAuth);
+        requestHandler = new RequestHandler(mAuth, db);
 
 
         requestButton.setOnClickListener(new View.OnClickListener() {

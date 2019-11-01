@@ -24,12 +24,6 @@ public class UsernameList {
     }
 
     /**
-     * @return
-     *      ArrayList of usernames that have been registered
-     */
-    public ArrayList<String> getUsernameList(){ return this.list; }
-
-    /**
      * This method verifys a given username for uniqueness and length
      * @param username
      * @return
@@ -55,7 +49,6 @@ public class UsernameList {
                         if (task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 list.add(document.getId());
-                                Log.d("TESTINGG", document.getId());
                             }
                         } else {
                             Log.w("Email", "Error getting documents: ", task.getException());

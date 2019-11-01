@@ -62,7 +62,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
-        dbAuth.updateUsernameList(); // fetch the usernamelist now so it is ready by the time the user clicks register
+        usernameList.updateUsernameList(); // fetch the usernamelist now so it is ready by the time the user clicks register
 
         usernameList = new UsernameList(FirebaseFirestore.getInstance());
 

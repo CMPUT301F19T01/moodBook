@@ -36,7 +36,6 @@ public class DBAuth {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private ArrayList<String> usernameList;
 
     public DBAuth(FirebaseAuth mAuth, FirebaseFirestore db){
         this.mAuth = mAuth;
@@ -155,30 +154,6 @@ public class DBAuth {
 
     }
 
-    /**
-     * This method gets all the currently used usernames
-     * @return
-     *      an ArrayList of usernames
-     * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
-     */
-    public void updateUsernameList(){
-        final ArrayList<String> usernameList = new ArrayList<>();
-        db.collection("usernamelist")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                usernameList.add(document.getId());
-                            }
-                        } else {
-                            Log.w("Email", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-        this.usernameList = usernameList;
-    }
 
     /**
      * Stores the username in the user's FireBase auth profile
