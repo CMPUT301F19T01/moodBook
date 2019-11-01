@@ -91,7 +91,7 @@ public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void updateList(FirebaseFirestore db) {
         // todo: change document path to users token id
-        db.collection("USERS").document("3UqSQpyJRNTiH3TALB64mq0vymy2")
+        db.collection("USERS").document("MAP_TEST")
                 .collection("MOODS")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -107,27 +107,26 @@ public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCall
                         }
                     }
                 });
-
     }
+
 
     public void drawMoodMarkers(ArrayList<Mood> moodData){
         // iterate through moods
-        int emotionRes;
+        int emotionResource;
         LatLng emotionLatLng;
         int width = 100;
         int height = 100;
         for(int i = 0; i < moodData.size(); i++){
             // get latlng and image resource from Mood
-            emotionRes = moodData.get(i).getEmotionImageResource();
+            emotionResource = moodData.get(i).getEmotionImageResource();
             emotionLatLng = moodData.get(i).getlatLng();
 
             // convert and draw to map
-            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(emotionRes);
+            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(emotionResource);
             Bitmap b = bitmapdraw.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
             moodMap.addMarker(new MarkerOptions().position(emotionLatLng).icon(bitmapDescriptor));
         }
     }
-
 }

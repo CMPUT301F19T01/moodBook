@@ -6,6 +6,7 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+    <integer name="map_emoticon_dimensions">100</integer>
 
 
     <string name="menu_home">Home</string>
