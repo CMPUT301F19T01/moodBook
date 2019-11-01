@@ -170,8 +170,8 @@ public class DBMoodSetter {
     public static EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodAdapter) {
         return new EventListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(moodAdapter!=null) {
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
+                if(moodAdapter != null) {
                     // clear the old list
                     moodAdapter.clear();
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
@@ -218,7 +218,7 @@ public class DBMoodSetter {
         if(location_lat != null && location_lon != null) {
             location = new Location(LocationManager.GPS_PROVIDER);
             location.setLatitude((double)location_lat);
-            location.setLongitude((double)location_lat);
+            location.setLongitude((double)location_lon);
         }
         Mood newMood = null;
         try {
