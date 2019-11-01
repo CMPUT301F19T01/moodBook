@@ -42,12 +42,12 @@ import android.view.Menu;
 import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
-    private NavigationView navigationView;
-    private DrawerLayout drawer;
+//    private NavigationView navigationView;
+//    private DrawerLayout drawer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
 
@@ -58,18 +58,14 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        navigationView = (NavigationView)
-                getFragmentManager().findFragmentById(R.id.nav_view);
 
-        // Set up the drawer.
-        navigationView.setUp(
-                R.id.nav_view,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-    }
-//        drawer =  findViewById(R.id.drawer_layout);
-//        navigationView =  findViewById(R.id.nav_view);
+
+        DrawerLayout drawer =  findViewById(R.id.drawer_layout);
+        NavigationView navigationView =  findViewById(R.id.nav_view);
+        navigationView.OnNavigationItemSelectedListener(this);
 //        setupDrawerContent(navigationView);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 //        Toast.makeText(this, "juuust checking", Toast.LENGTH_SHORT).show();
 
@@ -127,15 +123,15 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-         super.onOptionsItemSelected(item);
-
-         if (item.getItemId() == R.id.action_settings){
-            logout();
-         }
-         return true;
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//         super.onOptionsItemSelected(item);
+//
+//         if (item.getItemId() == R.id.action_settings){
+//            logout();
+//         }
+//         return true;
+//    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -224,28 +220,28 @@ public class MainActivity extends AppCompatActivity  {
 
 
 
-//
-//    @SuppressWarnings("StatementWithEmptyBody")
-//    @Override
-//    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//        int id = item.getItemId();
-//        switch (id) {
-//            case R.id.nav_FriendMood:
-//                Toast.makeText(this, "FM", Toast.LENGTH_SHORT).show();
 
-//                break;
-//            case R.id.nav_myRequests:
-//                Toast.makeText(this, "Request", Toast.LENGTH_SHORT).show();
-//                break;
-//            case R.id.nav_logout:
-//                Toast.makeText(this, "logout clicked", Toast.LENGTH_SHORT).show();
-//                logout();
-//                return true;
-//        }
-//        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
-//        return true;
-//    }
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.nav_FriendMood:
+                Toast.makeText(this, "FM", Toast.LENGTH_SHORT).show();
+
+                break;
+            case R.id.nav_myRequests:
+                Toast.makeText(this, "Request", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_logout:
+                Toast.makeText(this, "logout clicked", Toast.LENGTH_SHORT).show();
+                logout();
+                return true;
+        }
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
     private void logout(){
         mAuth.getInstance().signOut();
