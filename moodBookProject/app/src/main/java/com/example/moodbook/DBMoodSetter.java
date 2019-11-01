@@ -167,20 +167,22 @@ public class DBMoodSetter {
                 });
     }
     // used by MoodHistory to get all mood data from user's mood collection
-    public static EventListener<QuerySnapshot> getMoodHistoryListener(@NonNull final MoodListAdapter moodAdapter) {
+    public static EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodAdapter) {
         return new EventListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
-                moodAdapter.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // ignore null item
-                    if (doc.getId() != "null") {
-                        // Adding mood from FireStore
-                        Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
-                        if (mood != null) {
-                            mood.setDocId(doc.getId());
-                            moodAdapter.addItem(mood);
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
+                if(moodAdapter != null) {
+                    // clear the old list
+                    moodAdapter.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        // ignore null item
+                        if (doc.getId() != "null") {
+                            // Adding mood from FireStore
+                            Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                            if (mood != null) {
+                                mood.setDocId(doc.getId());
+                                moodAdapter.addItem(mood);
+                            }
                         }
                     }
                 }
