@@ -175,7 +175,7 @@ public class DBMoodSetter {
 
     // used by add/edit to convert Mood object to HashMap data
     // data will be sent to db
-    private static Map<String, Object> getDataFromMood(Mood mood) {
+    public static Map<String, Object> getDataFromMood(Mood mood) {
         Location location = mood.getLocation();
         Map<String, Object> data = new HashMap<>();
         data.put("date",mood.getDateText());

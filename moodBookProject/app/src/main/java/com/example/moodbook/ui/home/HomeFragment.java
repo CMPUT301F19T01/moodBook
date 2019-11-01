@@ -6,6 +6,7 @@ package com.example.moodbook.ui.home;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
@@ -81,6 +83,8 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
             public void onItemClick(Mood item) {
                 Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
                 Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
+                // put attributes of selected mood into editIntent
+                getIntentDataFromMood(editIntent, item);
                 startActivity(editIntent);
             }
         });
@@ -95,8 +99,8 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         add_mood_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CreateMoodActivity.class);
-                startActivity(intent);
+                Intent addIntent = new Intent(getActivity(), CreateMoodActivity.class);
+                startActivity(addIntent);
             }
         });
 
@@ -194,5 +198,17 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         moodListView.setItemAnimator(new DefaultItemAnimator());
         moodListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         moodListView.setAdapter(moodAdapter);
+    }
+
+    private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
+        Location location = mood.getLocation();
+        intent.putExtra("date",mood.getDateText());
+        intent.putExtra("time",mood.getTimeText());
+        intent.putExtra("emotion",mood.getEmotionText());
+        intent.putExtra("reason_text",mood.getReasonText());
+        // TODO: pass Image into editIntent
+        intent.putExtra("situation",mood.getSituation());
+        intent.putExtra("location_lat", location==null ? null : location.getLatitude());
+        intent.putExtra("location_lon", location==null ? null : location.getLongitude());
     }
 }
