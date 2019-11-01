@@ -146,7 +146,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
                 else {
                     String filterPattern = constraint.toString().toLowerCase().trim();
                     for(Mood item : moodListFull) {
-                        if(item.getEmotionText().toLowerCase().contains(filterPattern)) {
+                        if(item.getEmotionText().toLowerCase().startsWith(filterPattern)) {
                             filteredList.add(item);
                         }
                     }
