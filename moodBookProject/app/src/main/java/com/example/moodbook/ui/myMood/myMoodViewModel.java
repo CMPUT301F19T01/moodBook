@@ -1,16 +1,15 @@
-package com.example.moodbook.ui.share;
+package com.example.moodbook.ui.myMood;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ShareViewModel extends ViewModel {
-
+public class myMoodViewModel extends ViewModel {
     private MutableLiveData<String> mText;
 
-    public ShareViewModel() {
+    public myMoodViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is share fragment");
+        mText.setValue("This is myMood fragment");
     }
 
     public LiveData<String> getText() {
