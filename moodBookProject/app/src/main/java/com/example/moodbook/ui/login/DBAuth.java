@@ -48,7 +48,7 @@ public class DBAuth {
      */
     public Boolean verifyEmail(String email){
         //TODO: verify email unique
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        return email.contains("@") && email != null && !email.isEmpty() ;
     }
 
     /**
