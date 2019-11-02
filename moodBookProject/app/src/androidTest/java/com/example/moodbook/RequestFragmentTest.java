@@ -32,10 +32,25 @@ public class RequestFragmentTest {
     }
 
     /**
+     * used in tests to first login to the app
+     */
+    public void login(){
+        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
+        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
+        solo.clickOnButton("login");
+        solo.sleep(5000); // wait for activity to change
+    }
+
+    /**
      * Tests login with test@test.com and password testtest
      */
     @Test
     public void sendRequest(){
+        login();
+        // navigate to request sending
+        solo.clickOnActionBarHomeButton();
+        //solo.clickOnMenuItem();
+
         solo.enterText((EditText) solo.getView(R.id.usernameEditText), "JIM");
         solo.clickOnButton("Send Request");
         solo.sleep(5000); // wait for activity to change
