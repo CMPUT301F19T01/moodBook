@@ -1,16 +1,15 @@
-package com.example.moodbook.ui.send;
+package com.example.moodbook.ui.addFriends;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class SendViewModel extends ViewModel {
-
+public class addFriendViewModel extends ViewModel {
     private MutableLiveData<String> mText;
 
-    public SendViewModel() {
+    public addFriendViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is send fragment");
+        mText.setValue("This is add friend  fragment");
     }
 
     public LiveData<String> getText() {

@@ -7,6 +7,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //Stuck logging in? use the following line once to log out the cached session:
-        mAuth.getInstance().signOut();
+//        mAuth.getInstance().signOut();
 
         mAuth = FirebaseAuth.getInstance();
         dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
@@ -120,8 +123,37 @@ public class LoginActivity extends AppCompatActivity {
                 updateUI(user);
             }
         };
+//        onOptionsItemSelected(R.id.nav_logout);
 
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.activity_main_drawer,menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == R.id.nav_logout){
+//
+//                mAuth.getInstance().signOut();
+//                finish();
+//                startActivity(new Intent(this, LoginActivity.class));
+//
+//        }
+//
+//        return true;
+//    }
+//    public  void logout(){
+//        mAuth.getInstance().signOut();
+//        Toast.makeText(LoginActivity.this, "mAuth instance", Toast.LENGTH_LONG).show();
+//
+//        startActivity(new Intent(this, LoginActivity.class));
+//        Toast.makeText(LoginActivity.this, "after new intent", Toast.LENGTH_LONG).show();
+//    }
+
 
     @Override
     public void onStart(){
