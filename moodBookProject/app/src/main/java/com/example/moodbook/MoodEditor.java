@@ -43,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+
 public class MoodEditor {
 
 
@@ -221,6 +222,7 @@ public class MoodEditor {
             public void onLocationChanged(Location location) {
                 ((MoodInterface)myActivity).setMoodLocation(location);
 
+
                 //redundant
                 double mood_lat = location.getLatitude();
                 double mood_lon = location.getLongitude();
@@ -240,6 +242,8 @@ public class MoodEditor {
             public void onProviderDisabled(String s) {} // not implemented
         };
     }
+
+
 
     public static void getLocationResult(AppCompatActivity myActivity, LocationManager locationManager,
                                          LocationListener locationListener) {
