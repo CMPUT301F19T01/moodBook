@@ -16,31 +16,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * This class handles interaction with the db to send requests
+ */
+
 public class RequestHandler {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private CollectionReference collectionReference;
-    private ArrayList<String> usernameList;
-    private DBAuth dbAuth;
 
-    public RequestHandler(FirebaseAuth mAuth){
+    public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db){
         this.mAuth = mAuth;
-        this.db = FirebaseFirestore.getInstance();
-        this.collectionReference = db.collection("USERS");
-        this.dbAuth = new DBAuth(mAuth);
-        this.usernameList = dbAuth.updateUsernameList();
-    }
-
-    /**
-     * This method verifys that the username to be added exists
-     * @param username
-     * @return
-     *      true: username exists
-     *      false: username does not exist/username is the same as the user's username
-     */
-    public Boolean verifyRequest(String username){
-        dbAuth.updateUsernameList();
-        return usernameList.contains(username);
+        this.db = db;
     }
 
     /**
@@ -52,6 +38,7 @@ public class RequestHandler {
     public void sendRequest(String addUser, String uidp, String usernamep){
         final String uid = uidp;
         final String username = usernamep;
+        final CollectionReference collectionReference = db.collection("USERS");
         // getting the addUser's uid
         DocumentReference docRef = db.collection("usernamelist").document(addUser);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

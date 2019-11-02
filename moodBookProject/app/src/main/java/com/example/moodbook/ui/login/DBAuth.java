@@ -17,10 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
@@ -36,14 +33,10 @@ public class DBAuth {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private CollectionReference collectionReference;
-    private ArrayList<String> usernameList;
 
-    public DBAuth(FirebaseAuth mAuth){
+    public DBAuth(FirebaseAuth mAuth, FirebaseFirestore db){
         this.mAuth = mAuth;
-        this.db = FirebaseFirestore.getInstance();
-        this.collectionReference = db.collection("USERS");
-        this.usernameList = this.updateUsernameList();
+        this.db = db;
     }
 
     /**
@@ -55,7 +48,7 @@ public class DBAuth {
      */
     public Boolean verifyEmail(String email){
         //TODO: verify email unique
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+        return email.contains("@") && email != null && !email.isEmpty() ;
     }
 
     /**
@@ -119,6 +112,8 @@ public class DBAuth {
      */
     public void createUser(FirebaseUser user, String email, String username){
 
+        CollectionReference collectionReference = db.collection("USERS");
+
         String uid = user.getUid();
         Log.d(TAG, "creating user in db:"+ uid);
 
@@ -156,43 +151,6 @@ public class DBAuth {
 
     }
 
-    /**
-     * This method gets all the currently used usernames
-     * @return
-     *      an ArrayList of usernames
-     * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
-     */
-    public ArrayList<String> updateUsernameList(){
-        final ArrayList<String> usernameList = new ArrayList<>();
-        db.collection("usernamelist")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                usernameList.add(document.getId());
-                            }
-                        } else {
-                            Log.w("Email", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
-        return usernameList;
-    }
-
-    /**
-     * This method verifys a given username for uniqueness and length
-     * @param username
-     * @return
-     *      true: username is unique and > length 0
-     *      false: username is not unique and/or is not > length 0
-     */
-    public Boolean verifyUsername(String username){
-        return (!usernameList.contains(username) && username.length() > 0);
-
-    }
 
     /**
      * Stores the username in the user's FireBase auth profile
@@ -211,4 +169,5 @@ public class DBAuth {
             }
         });
     }
+
 }
