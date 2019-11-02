@@ -150,7 +150,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     // set attributes in Activity
 
     /**
-     * This sets a value for a mood emotion
+     * This  is a method inherited from the MoodEditor Interface sets a value for a mood emotion
      * @param emotion
      *   A Mood Object attribute of emotion
      *   @see Mood
@@ -172,6 +172,13 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         this.mood_situation = situation;
     }
 
+    /**
+     * This is a method inherited the MoodEditor Interface sets a value for a mood location
+     * @param location
+     *     A Mood Object attribute of situation
+     *     @see  Mood
+     *
+     */
 
     @Override
     public void setMoodLocation(Location location) {
@@ -181,7 +188,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         add_location_button.setText(add_location_button_text);
     }
 
-
+    /**
+     * Initializes the current date
+     */
     private void initializeDate() {
         add_date_button = findViewById(R.id.create_date_button);
         // show current date
@@ -193,6 +202,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         });
     }
 
+    /**
+     * Initializes the current time
+     */
     private void initializeTime() {
         add_time_button = findViewById(R.id.create_time_button);
         // show current time
@@ -204,6 +216,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         });
     }
 
+    /**
+     * Initializes the emotion picked by the user
+     */
     private void initializeEmotion() {
         mood_emotion = null;
         emotion_spinner = findViewById(R.id.create_emotion_spinner);
@@ -214,10 +229,17 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         MoodEditor.setEmotionSpinner(this, emotion_spinner, emotionAdapter);
     }
 
+    /**
+     * Initializes the reason typed by the user
+     */
+
     private void initializeReasonText() {
         reason_editText = findViewById(R.id.create_reason_editText);
     }
 
+    /**
+     * Initializes the user's photo
+     */
     private void initializeReasonPhoto() {
         Button add_reason_photo_button = findViewById(R.id.create_reason_photo_button);
         reason_photo_imageView = findViewById(R.id.create_reason_photo_imageView);
@@ -230,6 +252,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         });
     }
 
+    /**
+     * Initializes the situation picked by the user
+     */
     private void initializeSituation() {
         Spinner situation_spinner = findViewById(R.id.create_situation_spinner);
 
@@ -238,7 +263,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                 this, R.layout.spinner_situation);
         MoodEditor.setSituationSpinner(this, situation_spinner, situationAdapter);
     }
-
+    /**
+     * Initializes the user's current location
+     */
     private void initializeLocation() {
         add_location_button = findViewById(R.id.create_location_button);
 
@@ -256,6 +283,12 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
             }
         });
     }
+
+    /**
+     * Checks if mood inputs are valid
+     * @return
+     *  A boolean with representing all inputs are valid or all inputs are not valid.
+     */
 
     private boolean validMoodInputs() {
         boolean areInputsValid = true;
