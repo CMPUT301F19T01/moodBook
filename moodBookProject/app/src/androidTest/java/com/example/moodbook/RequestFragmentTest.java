@@ -5,8 +5,6 @@ import android.widget.EditText;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.example.moodbook.ui.login.LoginActivity;
-import com.example.moodbook.ui.request.RequestFragment;
 import com.robotium.solo.Solo;
 
 import org.junit.Before;

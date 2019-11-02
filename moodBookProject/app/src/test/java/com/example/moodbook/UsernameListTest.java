@@ -1,10 +1,7 @@
 package com.example.moodbook;
 
 import com.example.moodbook.data.UsernameList;
-import com.example.moodbook.ui.request.RequestHandler;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
