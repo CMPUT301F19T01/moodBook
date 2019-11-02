@@ -25,6 +25,15 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 
+
+/**
+ * This activity is used to create a Mood Object by clicking on an add button
+ * @see com.example.moodbook.ui.home.HomeFragment
+ * @see Mood
+ * @see DBMoodSetter
+ * @see MoodListAdapter
+ * @see MoodEditor
+ */
 public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.MoodInterface{
 
     // moodSetter
@@ -58,7 +67,11 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     private Button add_location_button;
     private Location mood_location;
 
-
+    /**
+     * This is a method inherited from the AppCompatActivity
+     * @param savedInstanceState
+     *  Bundle Object is used to stored the data of this activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -113,25 +126,52 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     }
 
 
-    // gets the photo that was taken and let the image be shown in the page
+    /**
+     * This gets the photo that was taken and let the image be shown in the page
+     * @param requestCode
+     *   An int for requestCode
+     * @param resultCode
+     *   An int for the result Code
+     * @param data
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView);
     }
 
+    /**
+     * This method does shows the coordinates of a view
+     * @deprecated
+     */
     public void showCoords(View view){
     }
 
     // set attributes in Activity
+
+    /**
+     * This sets a value for a mood emotion
+     * @param emotion
+     *   A Mood Object attribute of emotion
+     *   @see Mood
+     */
     @Override
     public void setMoodEmotion(String emotion) {
         this.mood_emotion = emotion;
     }
 
+    /**
+     * This is a method inherited the MoodEditor Interface sets a value for a mood situation
+     * @param situation
+     *   A Mood Object attribute of situation
+     *   @see Mood
+     */
+
     @Override
     public void setMoodSituation(String situation) {
         this.mood_situation = situation;
     }
+
 
     @Override
     public void setMoodLocation(Location location) {
