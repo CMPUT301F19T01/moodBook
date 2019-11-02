@@ -55,6 +55,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     private String mood_situation;
 
     // location
+    private Button add_location_button;
     private Location mood_location;
 
 
@@ -135,6 +136,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     @Override
     public void setMoodLocation(Location location) {
         this.mood_location = location;
+        String add_location_button_text = ((Double)location.getLatitude()).toString() + " , "
+                + ((Double)location.getLongitude()).toString();
+        add_location_button.setText(add_location_button_text);
     }
 
 
@@ -196,7 +200,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     }
 
     private void initializeLocation() {
-        Button add_location_button = findViewById(R.id.create_location_button);
+        add_location_button = findViewById(R.id.create_location_button);
 
         // Gets users location
         // create location manager and listener
