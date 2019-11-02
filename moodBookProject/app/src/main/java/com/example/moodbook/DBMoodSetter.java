@@ -1,6 +1,7 @@
 package com.example.moodbook;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
@@ -85,9 +86,9 @@ public class DBMoodSetter {
                         if (documentSnapshot!=null){
                             // get mood docId from moodCount
                             Double m = documentSnapshot.getDouble("mood_Count");
-                            String moodID = String.valueOf(m);
+                            String moodDocID = String.valueOf(m);
                             // add new mood into db
-                            addMoodAfterDocId(mood, moodID);
+                            addMoodAfterDocId(moodDocID, mood);
                             // increment moodCount
                             setInt();
                             //moodID = Integer.valueOf(md.intValue());
@@ -107,7 +108,7 @@ public class DBMoodSetter {
     }
 
     // add Mood object into db after getting mood docId
-    private void addMoodAfterDocId(final Mood mood, String moodDocID) {
+    private void addMoodAfterDocId(final String moodDocID, final Mood mood) {
         Map<String, Object> data = getDataFromMood(mood);
         // TODO: use the mood docId generated from db counter
        // final String docId = mood.toString();
@@ -116,53 +117,72 @@ public class DBMoodSetter {
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    showStatusMessage("Added successfully: " + mood.toString());
+                    showStatusMessage("Added successfully: " + moodDocID);
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    showStatusMessage("Adding failed for "+mood.toString()+": " + e.toString());
+                    showStatusMessage("Adding failed for "+moodDocID+": " + e.toString());
                 }
             });
     }
 
     // remove Mood object from db
-    public void removeMood(final Mood mood) {
-        final String docId = mood.getDocId();
+    public void removeMood(final String moodDocID) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         // remove selected city
-        moodReference.document(docId).delete();
-        moodReference.document(docId).delete()
+        moodReference.document(moodDocID).delete()
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    showStatusMessage("Deleted successfully: " + mood.toString());
+                    showStatusMessage("Deleted successfully: " + moodDocID);
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    showStatusMessage("Deleting failed for "+mood.toString()+": " + e.toString());
+                    showStatusMessage("Deleting failed for "+moodDocID+": " + e.toString());
                 }
             });
+    }
+
+    // edit Mood object in db
+    public void editMood(final String moodDocID, HashMap data) {
+        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
+
+        moodReference.document(moodDocID).update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showStatusMessage("Updated successfully: " + moodDocID);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Updated failed for "+moodDocID+": " + e.toString());
+                    }
+                });
     }
 
     // used by MoodHistory to get all mood data from user's mood collection
     public static EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodAdapter) {
         return new EventListener<QuerySnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
-                moodAdapter.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // ignore null item
-                    if(doc.getId() != "null") {
-                        // Adding mood from FireStore
-                        Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
-                        if(mood != null) {
-                            mood.setDocId(doc.getId());
-                            moodAdapter.addItem(mood);
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
+                if(moodAdapter != null) {
+                    // clear the old list
+                    moodAdapter.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        // ignore null item
+                        if (doc.getId() != "null") {
+                            // Adding mood from FireStore
+                            Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                            if (mood != null) {
+                                mood.setDocId(doc.getId());
+                                moodAdapter.addItem(mood);
+                            }
                         }
                     }
                 }
@@ -171,11 +191,12 @@ public class DBMoodSetter {
     }
 
 
+
     // helper functions to convert between Mood object and HashMap data
 
     // used by add/edit to convert Mood object to HashMap data
     // data will be sent to db
-    private static Map<String, Object> getDataFromMood(Mood mood) {
+    public static Map<String, Object> getDataFromMood(Mood mood) {
         Location location = mood.getLocation();
         Map<String, Object> data = new HashMap<>();
         data.put("date",mood.getDateText());
@@ -197,7 +218,7 @@ public class DBMoodSetter {
         if(location_lat != null && location_lon != null) {
             location = new Location(LocationManager.GPS_PROVIDER);
             location.setLatitude((double)location_lat);
-            location.setLongitude((double)location_lat);
+            location.setLongitude((double)location_lon);
         }
         Mood newMood = null;
         try {
