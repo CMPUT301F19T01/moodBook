@@ -31,6 +31,9 @@ import org.w3c.dom.Document;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class gets the most current instance of a mood in the Database
+ */
 public class DBMoodSetter {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -42,6 +45,15 @@ public class DBMoodSetter {
     private String TAG;         // optional: for log message
 
     // used by CreateMoodActivity / EditMoodActivity
+
+    /**
+     * This is a constructor used by the for the Create and Edit Mood Activity to get the current instance of a mood in the databse
+     * @param mAuth
+     *   This is the FirebaseAuth instance for each logged in user
+     * @param context
+     *   This is a handle to get the data and resources that the app needs while it runs
+     *
+     */
     public DBMoodSetter(FirebaseAuth mAuth, Context context){
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
@@ -51,24 +63,56 @@ public class DBMoodSetter {
         this.intReference = db.collection("int");
     }
 
+    /**
+     * This another instance of the DBMoodSetter Constructor that used to get updated mood data from user's mood collection in the database
+     * @param mAuth
+     *     This is the FirebaseAuth instance for each logged in user
+     * @param context
+     *    This is a handle to get the data and resources that the app needs while it runs
+     * @param TAG
+     *    This is an optional string used for printing log messages
+     */
+
     public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG){
         this(mAuth, context);
         this.TAG = TAG;
     }
 
-    // used by Mood History to get updated mood data from user's mood collection in db
+    /**
+     * This is a constructor used by Mood History to get updated mood data from user's mood collection in the database
+     * @param mAuth
+     *  This is the FirebaseAuth instance for each logged in user
+     * @param context
+     *   This is a handle to get the data and resources that the app needs while it runs
+     * @param moodHistoryListener
+     *   This is a listener from Mood History
+     */
     public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener){
         this(mAuth, context);
         userReference.document(uid).collection("MOODS")
                 .addSnapshotListener(moodHistoryListener);
     }
 
+    /**
+     *
+     * @param mAuth
+     *  This is the FirebaseAuth instance for each logged in user
+     * @param context
+     *  This is a handle to get the data and resources that the app needs while it runs
+     * @param moodHistoryListener
+     *  This is a listener from Mood History
+     * @param TAG
+     *  This is an optional string used for printing log messages
+     *
+     */
     public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener, String TAG){
         this(mAuth, context, moodHistoryListener);
         this.TAG = TAG;
     }
 
-    // increment moodCount in db after adding a new Mood object
+    /**
+     * This increments moodCount in the database after a new Mood Object is added
+     */
     public void setInt() {
         intRef = intReference.document("count");
         // increment moodCount by 1
@@ -76,6 +120,16 @@ public class DBMoodSetter {
     }
 
     // gets from database what int it last used, so it could start counting from there
+
+    /**
+     * This adds new moods to the database by getting the mood DocID and Calling addMoodAfterDocId
+     * @param mood
+     *  This is a mood Object
+     *  @see Mood
+     * @see #addMoodAfterDocId(String, Mood)
+     * @see #setInt()
+     *
+     */
     public void addMood(final Mood mood) {
         DocumentReference intRef = db.collection("int").document("count");
         intRef
@@ -107,11 +161,17 @@ public class DBMoodSetter {
 
     }
 
-    // add Mood object into db after getting mood docId
+    /**
+     * This add a Mood object to the database after getting the mood docId
+     * @param moodDocID
+     *   This is the mood docID on the database
+     * @param mood
+     *   This is a mood Object
+     *   @see Mood
+     * @see #addMood(Mood)
+     */
     private void addMoodAfterDocId(final String moodDocID, final Mood mood) {
         Map<String, Object> data = getDataFromMood(mood);
-        // TODO: use the mood docId generated from db counter
-       // final String docId = mood.toString();
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         moodReference.document(moodDocID).set(data)
             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -128,7 +188,12 @@ public class DBMoodSetter {
             });
     }
 
-    // remove Mood object from db
+    /**
+     * This removes a Mood object from the database using its docID
+     * @param moodDocID
+     *   This is a String object of mood docID on the database
+     *
+     */
     public void removeMood(final String moodDocID) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         // remove selected city
@@ -147,7 +212,14 @@ public class DBMoodSetter {
             });
     }
 
-    // edit Mood object in db
+    /**
+     * This edits  a specific mood in the database given the mood's docID and the parameters to edit
+     * @param moodDocID
+     *   This is a String object of mood docID on the database
+     * @param data
+     *   This is a HashMap containing all the fields that need to be updated in the database and their new values
+     */
+
     public void editMood(final String moodDocID, HashMap data) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
 
@@ -166,6 +238,14 @@ public class DBMoodSetter {
                 });
     }
 
+    /**
+     * This is used by MoodHistory to get all mood data in the database from user's mood collection
+     * @param moodAdapter
+     *   This is a MoodList Adapter Object
+     *   @see MoodListAdapter
+     * @return
+     *  Returns a an EventListener that listens for changes in the mood database
+     */
     // used by MoodHistory to get all mood data from user's mood collection
     public static EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodAdapter) {
         return new EventListener<QuerySnapshot>() {
@@ -189,13 +269,15 @@ public class DBMoodSetter {
             }
         };
     }
-
-
-
-    // helper functions to convert between Mood object and HashMap data
-
-    // used by add/edit to convert Mood object to HashMap data
-    // data will be sent to db
+    /**
+     * This is used by a to convert Mood object to HashMap data
+     * @param mood
+     *   This is a Mood Object
+     *   @see Mood
+     * @return
+     *    Returns a hashmap with mood fields on the database and their corresponding values
+     * @see #getMoodFromData(Map)
+     */
     public static Map<String, Object> getDataFromMood(Mood mood) {
         Location location = mood.getLocation();
         Map<String, Object> data = new HashMap<>();
@@ -209,8 +291,13 @@ public class DBMoodSetter {
         return data;
     }
 
-    // used by Mood History to convert HashMap data to Mood object
-    // HashMap data comes from db
+    /**
+     * This is used to convert HashMap data gotten from the database to a Mood Object
+     * @param data
+     *   This is a hashmap with mood fields on the database and their corresponding values
+     * @return
+     *   A mood object with fields and values from the data(the hashmap passed into the function)
+     */
     public static Mood getMoodFromData(Map<String, Object> data) {
         Location location = null;
         Object location_lat = data.get("location_lat");
@@ -231,7 +318,11 @@ public class DBMoodSetter {
         return newMood;
     }
 
-    // helper function to show status message
+    /**
+     * This is a helper method to show status messages
+     * @param message
+     *  This is a string that contains the status to be shown
+     */
     private void showStatusMessage(String message) {
         Log.w(TAG, message);
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();

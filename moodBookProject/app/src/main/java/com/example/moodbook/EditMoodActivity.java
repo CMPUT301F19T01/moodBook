@@ -35,6 +35,13 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.HashMap;
 
+/**
+ * This activity is used to display a Mood Object's attribute values and allows the user to edit these values
+ * It gets this Mood's fields from the HomeFragment class which passes the needed fields to this activity using an intent
+ * @see com.example.moodbook.ui.home.HomeFragment
+ * @see DBMoodSetter
+ * @see MoodListAdapter
+ */
 public class EditMoodActivity extends AppCompatActivity {
 
     private String moodID;
@@ -42,7 +49,6 @@ public class EditMoodActivity extends AppCompatActivity {
     private MoodListAdapter moodAdapter;
     private FirebaseAuth mAuth;
     private static final String TAG = "DB";
-
 
     // date
     private Button edit_date_button;
@@ -87,6 +93,11 @@ public class EditMoodActivity extends AppCompatActivity {
     private String intent_lat, intent_lon;
 
 
+    /**
+     * This is a method inherited from the AppCompatActivity
+     * @param savedInstanceState
+     *  Bundle Object is used to stored the data of this activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -98,13 +109,9 @@ public class EditMoodActivity extends AppCompatActivity {
                 DBMoodSetter.getMoodHistoryListener(moodAdapter), TAG);
         final FragmentManager fm = getSupportFragmentManager();
         final SelectMoodStateFragment s = new SelectMoodStateFragment();
-
         edit_photo_button = findViewById(R.id.edit_reason_photo_button);
         image_view_photo = findViewById(R.id.edit_reason_photo_imageView);
-//        edit_date_button = findViewById(R.id.edit_date_button);
-//        edit_time_button = findViewById(R.id.edit_time_button);
         show_date_time = findViewById(R.id.show_date_time);
-
         edit_spinner_situation = findViewById(R.id.edit_situation_spinner);
         edit_text_reason = findViewById(R.id.edit_reason_editText);
         edit_location_button = findViewById(R.id.edit_location_button);
@@ -112,29 +119,15 @@ public class EditMoodActivity extends AppCompatActivity {
         //Getting and Setting intents
         final String intent_moodID = getIntent().getStringExtra("moodID");
         String intent_date = getIntent().getStringExtra( "date");
-//        edit_date_button.setText(intent_date );
         String intent_time = getIntent().getStringExtra("time");
-//        edit_time_button.setText(intent_time );
         show_date_time.setText("Created: " + intent_date +" at " + intent_time );
-
-        String intent_emotion = getIntent().getStringExtra("emotion");
-
         String intent_reason = getIntent().getStringExtra("reason_text");
         edit_text_reason.setText(intent_reason);
-        String intent_situation = getIntent().getStringExtra("situation");
         String intent_lat = getIntent().getStringExtra("location_lat");
         String intent_lon = getIntent().getStringExtra("location_lon");
-
         edit_location_button.setText(intent_lat + " , " +intent_lon);
-
-
-
-
-
-
         final Button save_button = findViewById(R.id.edit_save_button);
         final Button cancel_edit_button = findViewById(R.id.edit_cancel_button);
-
         // Initializing an ArrayAdapter for situation spinner
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this, R.layout.spinner_situation, situationList){
@@ -151,6 +144,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 return view;
             }
         };
+        String intent_situation = getIntent().getStringExtra("situation");
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_situation);
         edit_spinner_situation.setAdapter(spinnerArrayAdapter);
         edit_spinner_situation.setSelection(spinnerArrayAdapter.getPosition(intent_situation));
@@ -158,7 +152,6 @@ public class EditMoodActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItemText = (String) parent.getItemAtPosition(position);
-                // first item disabled
                 if(position > 0){
                     Toast.makeText(getApplicationContext(),
                             "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
@@ -172,6 +165,7 @@ public class EditMoodActivity extends AppCompatActivity {
         });
 
         // Initializing a MoodStateAdapter for emotional state spinner
+        String intent_emotion = getIntent().getStringExtra("emotion");
         spinner_emotion = findViewById(R.id.edit_emotion_spinner);
         emotionAdapter = new MoodStateAdapter(this, emotionStateList, emotionImages );
         spinner_emotion.setAdapter(emotionAdapter);
@@ -190,7 +184,6 @@ public class EditMoodActivity extends AppCompatActivity {
             }
         });
 
-
         // Sets mood photo
         edit_photo_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,25 +191,6 @@ public class EditMoodActivity extends AppCompatActivity {
                 MoodEditor.setImage(EditMoodActivity.this);
             }
         });
-
-        // Sets date, time
-//        // handles selecting a calendar
-//        edit_date_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                MoodEditor.showCalendar((Button)view);
-//            }
-//        });
-//        edit_time_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                MoodEditor.showTime((Button)view);
-//            }
-//        });
-
-
-
-        // When this button is clicked, we want to return a result
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -239,9 +213,6 @@ public class EditMoodActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
-
         // Gets users location
         // create location manager and listener
         final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -286,14 +257,18 @@ public class EditMoodActivity extends AppCompatActivity {
         });
     }
 
-    // gets the photo that was taken and let the image be shown in the page
+    /**
+     * This gets the photo that was taken and let the image be shown in the page
+     * @param requestCode
+     *   An int for requestCode
+     * @param resultCode
+     *   An int for the result Code
+     * @param data
+     *
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo);
     }
-
-
-    public void showCoords(View view){
-
-    }
+    
 }
