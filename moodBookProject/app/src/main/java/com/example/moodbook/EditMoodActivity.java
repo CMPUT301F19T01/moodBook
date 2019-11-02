@@ -6,12 +6,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -19,8 +16,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Looper;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -29,23 +24,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import android.widget.RelativeLayout;
-
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
-
-import javax.microedition.khronos.egl.EGLDisplay;
 
 public class EditMoodActivity extends AppCompatActivity {
 
@@ -87,21 +71,21 @@ public class EditMoodActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.edit_layout);
+        setContentView(R.layout.activity_edit_mood);
 
         final FragmentManager fm = getSupportFragmentManager();
         final SelectMoodStateFragment s = new SelectMoodStateFragment();
 
-        edit_photo_button = findViewById(R.id.edit_mood_photo);
-        image_view_photo = findViewById(R.id.fill_edit_photo);
-        edit_date_button = findViewById(R.id.pick_edit_date);
-        edit_time_button = findViewById(R.id.pick_edit_time);
-        edit_spinner_situation = findViewById(R.id.edit_mood_situation);
-        edit_text_reason = findViewById(R.id.edit_mood_reason);
-        edit_location_button = findViewById(R.id.edit_mood_location);
+        edit_photo_button = findViewById(R.id.edit_reason_photo_button);
+        image_view_photo = findViewById(R.id.edit_reason_photo_imageView);
+        edit_date_button = findViewById(R.id.edit_date_button);
+        edit_time_button = findViewById(R.id.edit_time_button);
+        edit_spinner_situation = findViewById(R.id.edit_situation_spinner);
+        edit_text_reason = findViewById(R.id.edit_reason_editText);
+        edit_location_button = findViewById(R.id.edit_location_button);
 
-        final Button save_button = findViewById(R.id.save_mood_button);
-        final Button cancel_edit_button = findViewById(R.id.cancel_edit_button);
+        final Button save_button = findViewById(R.id.edit_save_button);
+        final Button cancel_edit_button = findViewById(R.id.edit_cancel_button);
 
         // Initializing an ArrayAdapter for situation spinner
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
@@ -139,7 +123,7 @@ public class EditMoodActivity extends AppCompatActivity {
         });
 
         // Initializing a MoodStateAdapter for emotional state spinner
-        spinner_emotion = findViewById(R.id.edit_spinner);
+        spinner_emotion = findViewById(R.id.edit_emotion_spinner);
         emotionAdapter = new MoodStateAdapter(this, emotionStateList, emotionImages );
         spinner_emotion.setAdapter(emotionAdapter);
         spinner_emotion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -170,13 +154,13 @@ public class EditMoodActivity extends AppCompatActivity {
         edit_date_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.showCalendar((Button)view,EditMoodActivity.this);
+                MoodEditor.showCalendar((Button)view);
             }
         });
         edit_time_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.showTime((Button)view,EditMoodActivity.this);
+                MoodEditor.showTime((Button)view);
             }
         });
 

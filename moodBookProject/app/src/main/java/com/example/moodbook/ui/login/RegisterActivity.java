@@ -3,7 +3,6 @@ package com.example.moodbook.ui.login;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,15 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moodbook.R;
+import com.example.moodbook.data.UsernameList;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.ArrayList;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * This activity handles registration
@@ -41,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     protected DBAuth dbAuth;
+    private UsernameList usernameList;
 
 
     private Button registerButton;
@@ -57,8 +55,10 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAuth = FirebaseAuth.getInstance();
-        dbAuth = new DBAuth(mAuth);
-        dbAuth.updateUsernameList(); // fetch the usernamelist now so it is ready by the time the user clicks register
+        dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
+
+        usernameList = new UsernameList(FirebaseFirestore.getInstance());
+        usernameList.updateUsernameList(); // fetch the usernamelist now so it is ready by the time the user clicks register
 
         email = findViewById(R.id.email);
         username = findViewById(R.id.username);
@@ -77,10 +77,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (dbAuth.verifyEmail(emailS)){
                     if (dbAuth.verifyPass(passwordS)){
-                        //new UsernameFragment().show(getSupportFragmentManager(), "registering");
-                        if (dbAuth.verifyUsername(usernameS)){
+                        if (usernameList.verifyUsername(usernameS)){
                             // all fields are good
-                            //FirebaseUser user = dbAuth.register(emailS, passwordS, usernameS);
 
                             mAuth.createUserWithEmailAndPassword(emailS, passwordS)
                                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -101,15 +99,6 @@ public class RegisterActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
-
-                           /* if (userL.get(0) == null){
-                                email.setError("Email in use"); // Firebase call fails when email is in use
-                            } else {
-                                dbAuth.updateUsername(userL.get(0), usernameS);
-                                Intent intent = new Intent();
-                                setResult(Activity.RESULT_OK, intent);
-                                finish();
-                            }*/
                         } else {
                             username.setError("Username in use");
                         }

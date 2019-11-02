@@ -10,7 +10,7 @@
     <fragment
         android:id="@+id/nav_myMood"
         android:name="com.example.moodbook.ui.home.HomeFragment"
-        android:label="My Mood"
+        android:label="Mood History"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/nav_FriendMood"
@@ -47,6 +47,6 @@
     <fragment
         android:id="@+id/nav_request"
         android:name="com.example.moodbook.ui.request.RequestFragment"
-        android:label="Request Fragment"
+        android:label="Follow a user"
         tools:layout="@layout/fragment_request" />
 </navigation>
