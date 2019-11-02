@@ -24,7 +24,7 @@
         tools:layout="@layout/fragment_addfriends" />
     <fragment
         android:id="@+id/nav_myRequests"
-        android:name="com.example.moodbook.ui.request.RequestFragment"
+        android:name="com.example.moodbook.ui.Request.RequestFragment"
         android:label="My Requests"
         tools:layout="@layout/fragment_request" />
     <fragment
@@ -46,7 +46,7 @@
 
     <fragment
         android:id="@+id/nav_request"
-        android:name="com.example.moodbook.ui.request.RequestFragment"
+        android:name="com.example.moodbook.ui.Request.RequestFragment"
         android:label="Follow a user"
         tools:layout="@layout/fragment_request" />
 </navigation>

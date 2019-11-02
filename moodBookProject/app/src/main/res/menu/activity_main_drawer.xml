@@ -11,11 +11,11 @@
         <item
             android:id="@+id/nav_myMood"
             android:icon="@drawable/ic_format_list_bulleted_black_24dp"
-            android:title="My Mood" />
+            android:title="My MoodBook" />
         <item
             android:id="@+id/nav_FriendMood"
             android:icon="@drawable/ic_group_black_24dp"
-            android:title="Friend Mood" />
+            android:title="Friend MoodBook" />
         <item
             android:id="@+id/nav_addFriendsMood"
             android:icon="@drawable/ic_person_add_black_24dp"
@@ -35,7 +35,7 @@
 
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="User">
         <menu>
             <item
                 android:id="@+id/nav_logout"
