@@ -86,9 +86,9 @@ public class DBMoodSetter {
                         if (documentSnapshot!=null){
                             // get mood docId from moodCount
                             Double m = documentSnapshot.getDouble("mood_Count");
-                            String moodID = String.valueOf(m);
+                            String moodDocID = String.valueOf(m);
                             // add new mood into db
-                            addMoodAfterDocId(mood, moodID);
+                            addMoodAfterDocId(moodDocID, mood);
                             // increment moodCount
                             setInt();
                             //moodID = Integer.valueOf(md.intValue());
@@ -108,7 +108,7 @@ public class DBMoodSetter {
     }
 
     // add Mood object into db after getting mood docId
-    private void addMoodAfterDocId(final Mood mood, String moodDocID) {
+    private void addMoodAfterDocId(final String moodDocID, final Mood mood) {
         Map<String, Object> data = getDataFromMood(mood);
         // TODO: use the mood docId generated from db counter
        // final String docId = mood.toString();
@@ -117,55 +117,55 @@ public class DBMoodSetter {
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    showStatusMessage("Added successfully: " + mood.toString());
+                    showStatusMessage("Added successfully: " + moodDocID);
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    showStatusMessage("Adding failed for "+mood.toString()+": " + e.toString());
+                    showStatusMessage("Adding failed for "+moodDocID+": " + e.toString());
                 }
             });
     }
 
     // remove Mood object from db
-    public void removeMood(final Mood mood) {
-        final String docId = mood.getDocId();
+    public void removeMood(final String moodDocID) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         // remove selected city
-        moodReference.document(docId).delete();
-        moodReference.document(docId).delete()
+        moodReference.document(moodDocID).delete()
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    showStatusMessage("Deleted successfully: " + mood.toString());
+                    showStatusMessage("Deleted successfully: " + moodDocID);
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    showStatusMessage("Deleting failed for "+mood.toString()+": " + e.toString());
+                    showStatusMessage("Deleting failed for "+moodDocID+": " + e.toString());
                 }
             });
     }
-    public void editMood(final String moodID, HashMap m) {
+
+    // edit Mood object in db
+    public void editMood(final String moodDocID, HashMap data) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
 
-        moodReference.document(moodID).update(m);
-        moodReference.document(moodID).update(m)
+        moodReference.document(moodDocID).update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        showStatusMessage(" Updated successfully: " + moodID.toString());
+                        showStatusMessage("Updated successfully: " + moodDocID);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        showStatusMessage("Updated failed for "+moodID.toString()+": " + e.toString());
+                        showStatusMessage("Updated failed for "+moodDocID+": " + e.toString());
                     }
                 });
     }
+
     // used by MoodHistory to get all mood data from user's mood collection
     public static EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodAdapter) {
         return new EventListener<QuerySnapshot>() {

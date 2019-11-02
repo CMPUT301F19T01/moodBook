@@ -131,7 +131,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
             // remove the item from recycler view
             //moodAdapter.removeItem(deletedIndex);
-            moodDB.removeMood(deletedMood);
+            moodDB.removeMood(deletedMood.getDocId());
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
