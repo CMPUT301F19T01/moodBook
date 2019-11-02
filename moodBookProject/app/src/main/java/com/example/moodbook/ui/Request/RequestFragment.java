@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -64,8 +65,7 @@ public class RequestFragment extends Fragment {
                     Toast.makeText(root.getContext(), "Sent request",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(root.getContext(), "User does not exist",
-                            Toast.LENGTH_LONG).show();
+                    requestText.setError("User does not exist");
                 }
             }
         });
