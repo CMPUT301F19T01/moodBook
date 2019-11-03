@@ -1,9 +1,11 @@
 package com.example.moodbook;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,12 +24,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Document;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,8 +43,10 @@ import java.util.Map;
 public class DBMoodSetter {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private FirebaseStorage storage;
     private CollectionReference userReference;
     private CollectionReference intReference;
+    private StorageReference photoReference;
     private DocumentReference intRef;
     private Context context;
     private String uid;
@@ -57,11 +65,15 @@ public class DBMoodSetter {
     public DBMoodSetter(FirebaseAuth mAuth, Context context){
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
+        this.storage = FirebaseStorage.getInstance();
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
         this.context = context;
         this.intReference = db.collection("int");
+        this.photoReference = storage.getReferenceFromUrl("gs://moodbook-60da3.appspot.com");
     }
+
+    public DBMoodSetter(FirebaseAuth mAuth, Context context,  String TAG){
 
     /**
      * This another instance of the DBMoodSetter Constructor that used to get updated mood data from user's mood collection in the database
@@ -140,6 +152,9 @@ public class DBMoodSetter {
                         if (documentSnapshot!=null){
                             // get mood docId from moodCount
                             Double m = documentSnapshot.getDouble("mood_Count");
+                            moodID = String.valueOf(m);
+                            addImg(mood);
+                            addMoodAfterDocId(mood); //puts the info to DB
                             String moodDocID = String.valueOf(m);
                             // add new mood into db
                             addMoodAfterDocId(moodDocID, mood);
@@ -148,7 +163,6 @@ public class DBMoodSetter {
                             //moodID = Integer.valueOf(md.intValue());
                         }
                         else{
-
                         }
                     }
                 })
@@ -158,9 +172,9 @@ public class DBMoodSetter {
                         Log.d(TAG, e.toString());
                     }
                 });
-
     }
 
+    private void addMoodAfterDocId(final Mood mood) {
     /**
      * This add a Mood object to the database after getting the mood docId
      * @param moodDocID
@@ -188,6 +202,34 @@ public class DBMoodSetter {
             });
     }
 
+
+    // function to add the reason image to firebase storage
+    public void addImg(final Mood mood) {
+        String picID = moodID;
+        StorageReference photoRef = photoReference.child(picID);
+        Bitmap bitImage = mood.getReasonPhoto();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (bitImage != null) {
+            bitImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = photoRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                }
+            });
+        }
+    }
+
+    public void removeMood(final Mood mood) {
+        final String docId = mood.getDocId();
     /**
      * This removes a Mood object from the database using its docID
      * @param moodDocID
@@ -281,16 +323,18 @@ public class DBMoodSetter {
     public static Map<String, Object> getDataFromMood(Mood mood) {
         Location location = mood.getLocation();
         Map<String, Object> data = new HashMap<>();
-        data.put("date",mood.getDateText());
-        data.put("time",mood.getTimeText());
-        data.put("emotion",mood.getEmotionText());
-        data.put("reason_text",mood.getReasonText());
-        data.put("situation",mood.getSituation());
-        data.put("location_lat", location==null ? null : location.getLatitude());
-        data.put("location_lon", location==null ? null : location.getLongitude());
+        data.put("date", mood.getDateText());
+        data.put("time", mood.getTimeText());
+        data.put("emotion", mood.getEmotionText());
+        data.put("reason_text", mood.getReasonText());
+        data.put("situation", mood.getSituation());
+        data.put("location_lat", location == null ? null : location.getLatitude());
+        data.put("location_lon", location == null ? null : location.getLongitude());
         return data;
     }
 
+
+    public Mood getMoodFromData(Map<String, Object> data) {
     /**
      * This is used to convert HashMap data gotten from the database to a Mood Object
      * @param data
