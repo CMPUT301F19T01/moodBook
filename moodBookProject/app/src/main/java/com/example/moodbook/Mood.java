@@ -1,18 +1,13 @@
 package com.example.moodbook;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
-import android.media.Image;
-import android.net.Uri;
-import android.widget.ImageView;
-
 import androidx.annotation.NonNull;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+
 
 public class Mood implements Comparable<Mood> {
     private Date date_time;         // mandatory
