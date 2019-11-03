@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //Stuck logging in? use the following line once to log out the cached session:
-        //mAuth.getInstance().signOut();
+        mAuth.getInstance().signOut();
 
         mAuth = FirebaseAuth.getInstance();
         dbAuth = new DBAuth(mAuth);
