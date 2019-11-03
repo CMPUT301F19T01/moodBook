@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -109,8 +108,6 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                 finish();
             }
         });
-
-
     }
 
 

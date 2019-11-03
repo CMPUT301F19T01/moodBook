@@ -4,10 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,10 +36,9 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
 
     ///// Member Variables /////
     private GoogleMap moodMap;
-    private ArrayList<Mood> moodDataList;
+    private ArrayList<Mood> moodDataList = new ArrayList<>();
     private FirebaseFirestore db;
     private String userID;
-    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +53,12 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
         db = FirebaseFirestore.getInstance();
 
         // create moodDataList
-        moodDataList = new ArrayList<>();
+        //moodDataList = new ArrayList<>();
 
         // get current user
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getUid();
+
     }
 
 
@@ -69,8 +71,6 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // initialize map
@@ -78,13 +78,17 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
 
         // update list of markers
         updateList(db);
+
+    }
+
+    private void setMoodDataList(ArrayList<Mood> moodDataList){
+        this.moodDataList = moodDataList;
+
     }
 
     // update users mood list
     @Override
     public void updateList(FirebaseFirestore db) {
-        // todo: change document path to users token id
-
         db.collection("USERS")
                 .document(userID)
                 .collection("MOODS")
@@ -92,8 +96,7 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             Location tempLoc;
 
                             // iterate over each document and get fields for drawing mood markers
@@ -104,38 +107,49 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
                                     tempLoc.setLatitude(doc.getDouble("location_lat"));
                                     tempLoc.setLongitude(doc.getDouble("location_lon"));
 
-                                    try {
 
-                                        drawMoodMarker(new Mood("2016-01-01 12:12", doc.getString("emotion"), tempLoc));
+                                    try {
+                                        moodDataList.add(new Mood("2016-01-01 12:12", doc.getString("emotion"), tempLoc));
 
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
 
                                 }
+
                             }
+                            // draw markers
+                            setMoodDataList(moodDataList);
+                            drawMoodMarkers(moodDataList);
+
                         }
                     }
                 });
 
     }
 
-    private void drawMoodMarker(Mood mood){
-        // get image resource for the mood marker
-        int emotionResource = mood.getEmotionImageResource();
+    private void drawMoodMarkers(ArrayList<Mood> moodDataList){
+        int emotionResource;
+        LatLng moodLatLng;
 
-        // getting coordinates
-        Location moodLocation = mood.getLocation();
-        LatLng moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
+        for(Mood mood: moodDataList){
+            // get image resource for the mood marker
+            emotionResource = mood.getEmotionImageResource();
 
-        // use png image resource as marker icon
-        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(emotionResource);
-        Bitmap b = bitmapdraw.getBitmap();
-        Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
+            Location moodLocation = mood.getLocation();
+            moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
 
-        // draw on map
-        moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor));
+            // use png image resource as marker icon
+            BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(emotionResource);
+            Bitmap b = bitmapdraw.getBitmap();
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
+
+            // draw on map
+            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor));
+        }
     }
+
+
 
 }
