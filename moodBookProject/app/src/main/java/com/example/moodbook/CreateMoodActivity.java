@@ -108,7 +108,6 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                     try {
                         Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
                                 mood_reason_text,bitImage,mood_situation,mood_location);
-                        //moodDB.addMood(newMood);
                         moodDB.addMood(newMood);
                         finish();
                     } catch (MoodInvalidInputException e) {

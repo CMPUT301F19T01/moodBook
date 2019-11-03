@@ -43,7 +43,7 @@ import java.util.HashMap;
  * @see DBMoodSetter
  * @see MoodListAdapter
  */
-public class EditMoodActivity extends AppCompatActivity {
+public class EditMoodActivity extends AppCompatActivity implements MoodEditor.MoodInterface {
 
     private String moodID;
     private DBMoodSetter moodDB;
@@ -94,6 +94,7 @@ public class EditMoodActivity extends AppCompatActivity {
     private String intent_lat, intent_lon;
 
     private Bitmap obtainedImg;
+    private Bitmap bitImage;
 
 
     /**
@@ -189,14 +190,7 @@ public class EditMoodActivity extends AppCompatActivity {
                 // Do nothing
             }
         });
-
-        // Sets mood photo
-        edit_photo_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MoodEditor.setImage(EditMoodActivity.this);
-            }
-        });
+        initializeReasonPhoto();
         save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -204,7 +198,6 @@ public class EditMoodActivity extends AppCompatActivity {
                 moodMap.put("reason_text",edit_text_reason.getText().toString());
                 moodMap.put("situation",edit_spinner_situation.getSelectedItem().toString());
                 moodMap.put("emotion",spinner_emotion.getSelectedItem().toString());
-
                 moodDB.editMood(intent_moodID,moodMap);
                 finish();
 
@@ -275,6 +268,37 @@ public class EditMoodActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo, this);
+    }
+
+    private void initializeReasonPhoto() {
+        image_view_photo = findViewById(R.id.edit_reason_photo_imageView);
+
+        edit_photo_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MoodEditor.setImage(EditMoodActivity.this);
+            }
+        });
+    }
+
+    @Override
+    public void setMoodEmotion(String emotion) {
+
+    }
+
+    @Override
+    public void setMoodSituation(String situation) {
+
+    }
+
+    @Override
+    public void setMoodLocation(Location location) {
+
+    }
+
+    @Override
+    public void setMoodReasonPhoto(Bitmap bitImage) {
+        this.bitImage = bitImage;
     }
 
 }

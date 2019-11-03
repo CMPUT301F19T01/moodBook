@@ -234,6 +234,31 @@ public class DBMoodSetter {
         }
     }
 
+    //update image in storage
+    public void updateImg(String moodID){
+        StorageReference photoRef = photoReference.child(moodID);
+        Bitmap bitImage = MoodEditor.getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (bitImage != null) {
+            bitImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = photoRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                }
+            });
+        }
+
+    }
+
     /**
      * This removes a Mood object from the database using its docID
      * @param moodDocID
@@ -268,7 +293,7 @@ public class DBMoodSetter {
 
     public void editMood(final String moodDocID, HashMap data) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
-
+        updateImg(moodDocID);
         moodReference.document(moodDocID).update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -291,7 +316,7 @@ public class DBMoodSetter {
             ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener< FileDownloadTask.TaskSnapshot >() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    Bitmap obtainedImg = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    obtainedImg = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                     view.setImageBitmap(obtainedImg);
                 }
             }).addOnFailureListener(new OnFailureListener() {

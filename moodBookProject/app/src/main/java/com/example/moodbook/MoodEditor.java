@@ -87,6 +87,11 @@ public class MoodEditor {
             "With a crowd"
     };
 
+    public static Bitmap getBitmap(){
+        return imageBitmap;
+    }
+
+
 
     // Date editor
     // for showing calendar so user could select a date
