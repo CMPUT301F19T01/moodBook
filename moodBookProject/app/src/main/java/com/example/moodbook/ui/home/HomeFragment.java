@@ -6,6 +6,7 @@ package com.example.moodbook.ui.home;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,6 +51,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
@@ -72,20 +74,6 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // initialize DB connector
-        mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getContext(), getMoodHistoryListener(), TAG);
-
-        // Add a mood: when floating add button is clicked, start add activity
-        FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
-        add_mood_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), CreateMoodActivity.class);
-                startActivity(intent);
-            }
-        });
-
         // Set up recyclerView and adapter
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
         moodListView = root.findViewById(R.id.mood_history_listView);
@@ -95,7 +83,24 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
             public void onItemClick(Mood item) {
                 Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
                 Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
+                // put attributes of selected mood into editIntent
+                getIntentDataFromMood(editIntent, item);
                 startActivity(editIntent);
+            }
+        });
+
+        // initialize DB connector
+        mAuth = FirebaseAuth.getInstance();
+        moodDB = new DBMoodSetter(mAuth, getContext(),
+                DBMoodSetter.getMoodHistoryListener(moodAdapter), TAG);
+
+        // Add a mood: when floating add button is clicked, start add activity
+        FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
+        add_mood_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent addIntent = new Intent(getActivity(), CreateMoodActivity.class);
+                startActivity(addIntent);
             }
         });
 
@@ -126,7 +131,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
             // remove the item from recycler view
             //moodAdapter.removeItem(deletedIndex);
-            moodDB.removeMood(deletedMood);
+            moodDB.removeMood(deletedMood.getDocId());
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
@@ -186,27 +191,6 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         });
     }
 
-    private EventListener<QuerySnapshot> getMoodHistoryListener() {
-        return new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // clear the old list
-                moodAdapter.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // ignore null item
-                    if(doc.getId() != "null") {
-                        // Adding mood from FireStore
-                        Mood mood = moodDB.getMoodFromData(doc.getData());
-                        if(mood != null) {
-                            mood.setDocId(doc.getId());
-                            moodAdapter.addItem(mood);
-                        }
-                    }
-                }
-            }
-        };
-    }
-
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
         moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -214,5 +198,18 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         moodListView.setItemAnimator(new DefaultItemAnimator());
         moodListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         moodListView.setAdapter(moodAdapter);
+    }
+
+    private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
+        Location location = mood.getLocation();
+        intent.putExtra("moodID", mood.getDocId());
+        intent.putExtra("date",mood.getDateText());
+        intent.putExtra("time",mood.getTimeText());
+        intent.putExtra("emotion",mood.getEmotionText());
+        intent.putExtra("reason_text",mood.getReasonText());
+        // TODO: pass Image into editIntent
+        intent.putExtra("situation",mood.getSituation());
+        intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
+        intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
     }
 }
