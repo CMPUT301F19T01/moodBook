@@ -139,7 +139,6 @@ public class MoodEditor {
             }
         });
     }
-
     /**
      * A method that acts as a situation editor
      * Used by users to selects their current situation
@@ -167,6 +166,7 @@ public class MoodEditor {
         situationAdapter.setDropDownViewResource(R.layout.spinner_situation);
         return situationAdapter;
     }
+
 
     public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner spinner_situation,
                                            ArrayAdapter<String> situationAdapter) {
