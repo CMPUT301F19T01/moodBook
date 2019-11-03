@@ -207,7 +207,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         intent.putExtra("time",mood.getTimeText());
         intent.putExtra("emotion",mood.getEmotionText());
         intent.putExtra("reason_text",mood.getReasonText());
-        // TODO: pass Image into editIntent
+        intent.putExtra("reason_photo", mood.getReasonPhoto());
         intent.putExtra("situation",mood.getSituation());
         intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
