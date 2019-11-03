@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -92,6 +93,8 @@ public class EditMoodActivity extends AppCompatActivity {
     private double lat_mood, lon_mood;
     private String intent_lat, intent_lon;
 
+    private Bitmap obtainedImg;
+
 
     /**
      * This is a method inherited from the AppCompatActivity
@@ -126,6 +129,9 @@ public class EditMoodActivity extends AppCompatActivity {
         String intent_lat = getIntent().getStringExtra("location_lat");
         String intent_lon = getIntent().getStringExtra("location_lon");
         edit_location_button.setText(intent_lat + " , " +intent_lon);
+        moodDB.getImageFromDB(intent_moodID, image_view_photo);
+        //obtainedImg = moodDB.getImageFromDB(intent_moodID);
+        //image_view_photo.setImageBitmap(obtainedImg);
         final Button save_button = findViewById(R.id.edit_save_button);
         final Button cancel_edit_button = findViewById(R.id.edit_cancel_button);
         // Initializing an ArrayAdapter for situation spinner

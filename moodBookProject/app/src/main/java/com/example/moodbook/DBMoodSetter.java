@@ -3,10 +3,13 @@ package com.example.moodbook;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.Image;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +27,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -34,6 +38,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.w3c.dom.Document;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +49,7 @@ import java.util.Map;
 public class DBMoodSetter {
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
-    private FirebaseStorage storage;
+    private static FirebaseStorage storage;
     private CollectionReference userReference;
     private CollectionReference intReference;
     private StorageReference photoReference;
@@ -52,6 +58,7 @@ public class DBMoodSetter {
     private String uid;
     private String TAG;         // optional: for log message
     private String moodID;
+    private Bitmap obtainedImg;
 
     // used by CreateMoodActivity / EditMoodActivity
 
@@ -277,6 +284,28 @@ public class DBMoodSetter {
                 });
     }
 
+    public void getImageFromDB(String docID, final ImageView view) {
+        StorageReference ref = photoReference.child(docID);
+        try {
+            final File localFile = File.createTempFile("Images", "jpeg");
+            ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener< FileDownloadTask.TaskSnapshot >() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap obtainedImg = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    view.setImageBitmap(obtainedImg);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        return obtainedImg;
+    }
+
     /**
      * This is used by MoodHistory to get all mood data in the database from user's mood collection
      * @param moodAdapter
@@ -330,7 +359,6 @@ public class DBMoodSetter {
         return data;
     }
 
-
     /**
      * This is used to convert HashMap data gotten from the database to a Mood Object
      * @param data
@@ -339,6 +367,7 @@ public class DBMoodSetter {
      *   A mood object with fields and values from the data(the hashmap passed into the function)
      */
     public static Mood getMoodFromData(Map<String, Object> data) {
+
         Location location = null;
         Object location_lat = data.get("location_lat");
         Object location_lon = data.get("location_lon");
