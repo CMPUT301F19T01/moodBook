@@ -119,7 +119,8 @@ public class DBAuth {
 
         // Initialize moodcount
         HashMap<String, Object> data = new HashMap<>();
-        data.put("username", email);
+        data.put("email", email);
+        data.put("username", username);
         data.put("moodCount", 0);
         collectionReference
                 .document(uid)
