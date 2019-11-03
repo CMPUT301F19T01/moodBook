@@ -88,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                                             FirebaseUser loginResult = mAuth.getCurrentUser();
                                             updateUI(loginResult);
                                         } else {
-                                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                            Toast.makeText(LoginActivity.this, "Authentication failed",
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }
