@@ -1,8 +1,6 @@
 package com.example.moodbook;
 
 import android.Manifest;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,49 +13,46 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-import com.example.moodbook.DBMoodSetter;
-
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import io.opencensus.internal.Utils;
+
+/**
+ * This class contains generalized methods used by CreateMoodActivity and EditMoodActivity
+ * @see CreateMoodActivity
+ * @see EditMoodActivity
+ */
 
 public class MoodEditor {
 
-
-    // for accessing SelectedMoodState outside of activity
+    /**
+     * for accessing SetMoodSituation outside of activity
+     * for accessing SetMoodEmotion outside of activity
+     * for accessing SetMoodLocation outside of activity
+     * for accessing SetMoodReasonPhoto outside of activity
+     */
     public interface MoodInterface {
         void setMoodEmotion(String emotion);
         void setMoodSituation(String situation);
@@ -71,7 +66,7 @@ public class MoodEditor {
     private static final String TAG = "MyActivity";
     private static Bitmap imageBitmap;
 
-    // Emotion state spinner options
+
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
             new String[]{"Pick mood state ..."}, Mood.Emotion.getNames(), String.class);
     public static final int[] EMOTION_IMAGE_LIST = Ints.concat(
@@ -87,31 +82,43 @@ public class MoodEditor {
             "With a crowd"
     };
 
+    /**
+     * A method that returns a bitmap that was set in the imageView
+     * @return imageBitmap
+     */
     public static Bitmap getBitmap(){
         return imageBitmap;
     }
 
-
-
-    // Date editor
-    // for showing calendar so user could select a date
+    /**
+     * A method that acts as a Date editor
+     * Used by users to set the current date
+     * @param view
+     */
     public static void showCalendar(final Button view){
         Calendar c = Calendar.getInstance();
         String currentDateString = Mood.DATE_FORMATTER.format(c.getTime());
         view.setText(currentDateString);
     }
 
-
-    // Time editor
-    // for showing time so user could select a time
+    /**
+     * A method that acts as a time editor
+     * Used by users to set a current time
+     * @param view
+     */
     public static void showTime(final Button view){
         Date d = new Date();
         String currentTimeString = Mood.TIME_FORMATTER.format(d);
         view.setText(currentTimeString);
     }
 
-
-    // Emotional State editor
+    /**
+     * A method that acts as an emotion state editor
+     * Used by users to select their current emotional state
+     * @param myActivity
+     * @param spinner_emotion
+     * @param emotionAdapter
+     */
     public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner spinner_emotion,
                                          MoodStateAdapter emotionAdapter) {
         spinner_emotion.setAdapter(emotionAdapter);
@@ -132,8 +139,13 @@ public class MoodEditor {
             }
         });
     }
-
-
+    /**
+     * A method that acts as a situation editor
+     * Used by users to selects their current situation
+     * @param myActivity
+     * @param spinnerLayoutId
+     * @return situationAdapter
+     */
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
                                                            int spinnerLayoutId) {
         ArrayAdapter<String> situationAdapter = new ArrayAdapter<String>(
