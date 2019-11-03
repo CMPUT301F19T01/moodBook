@@ -134,7 +134,6 @@ public class MoodEditor {
     }
 
 
-    // Situation editor
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
                                                            int spinnerLayoutId) {
         ArrayAdapter<String> situationAdapter = new ArrayAdapter<String>(
@@ -155,6 +154,7 @@ public class MoodEditor {
         situationAdapter.setDropDownViewResource(R.layout.spinner_situation);
         return situationAdapter;
     }
+
 
     public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner spinner_situation,
                                            ArrayAdapter<String> situationAdapter) {
