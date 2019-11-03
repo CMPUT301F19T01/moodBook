@@ -55,7 +55,7 @@ import java.util.Map;
 
 public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
-    private HomeViewModel homeViewModel;
+    //private HomeViewModel homeViewModel;
 
     // Mood History
     private RecyclerView moodListView;
@@ -70,8 +70,8 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+        /*homeViewModel =
+                ViewModelProviders.of(this).get(HomeViewModel.class);*/
         View root = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Set up recyclerView and adapter
