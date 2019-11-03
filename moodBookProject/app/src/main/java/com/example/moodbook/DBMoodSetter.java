@@ -51,6 +51,7 @@ public class DBMoodSetter {
     private Context context;
     private String uid;
     private String TAG;         // optional: for log message
+    private String moodID;
 
     // used by CreateMoodActivity / EditMoodActivity
 
@@ -73,7 +74,6 @@ public class DBMoodSetter {
         this.photoReference = storage.getReferenceFromUrl("gs://moodbook-60da3.appspot.com");
     }
 
-    public DBMoodSetter(FirebaseAuth mAuth, Context context,  String TAG){
 
     /**
      * This another instance of the DBMoodSetter Constructor that used to get updated mood data from user's mood collection in the database
@@ -154,7 +154,7 @@ public class DBMoodSetter {
                             Double m = documentSnapshot.getDouble("mood_Count");
                             moodID = String.valueOf(m);
                             addImg(mood);
-                            addMoodAfterDocId(mood); //puts the info to DB
+                            addMoodAfterDocId(moodID, mood); //puts the info to DB
                             String moodDocID = String.valueOf(m);
                             // add new mood into db
                             addMoodAfterDocId(moodDocID, mood);
@@ -174,7 +174,6 @@ public class DBMoodSetter {
                 });
     }
 
-    private void addMoodAfterDocId(final Mood mood) {
     /**
      * This add a Mood object to the database after getting the mood docId
      * @param moodDocID
@@ -228,8 +227,6 @@ public class DBMoodSetter {
         }
     }
 
-    public void removeMood(final Mood mood) {
-        final String docId = mood.getDocId();
     /**
      * This removes a Mood object from the database using its docID
      * @param moodDocID
@@ -334,7 +331,6 @@ public class DBMoodSetter {
     }
 
 
-    public Mood getMoodFromData(Map<String, Object> data) {
     /**
      * This is used to convert HashMap data gotten from the database to a Mood Object
      * @param data
