@@ -134,14 +134,14 @@ public class DBMoodSetter {
     // function to add the reason image to firebase storage
     public void addImg(final Mood mood) {
         String picID = moodID;
-        StorageReference mountainsRef = photoReference.child(picID+".jpg");
+        StorageReference photoRef = photoReference.child(picID+".jpg");
         Bitmap bitImage = mood.getReasonPhoto();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         if (bitImage != null) {
             bitImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
 
-            UploadTask uploadTask = mountainsRef.putBytes(data);
+            UploadTask uploadTask = photoRef.putBytes(data);
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
