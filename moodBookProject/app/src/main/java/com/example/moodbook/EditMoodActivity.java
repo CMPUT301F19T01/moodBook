@@ -234,7 +234,7 @@ public class EditMoodActivity extends AppCompatActivity {
     // gets the photo that was taken and let the image be shown in the page
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo);
+        MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo, this);
     }
 
     public void showCoords(View view){

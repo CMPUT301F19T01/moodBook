@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -57,6 +59,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     // location
     private Location mood_location;
 
+    //image
+    private Bitmap bitImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +92,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                 if(validMoodInputs()){
                     try {
                         Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
-                                mood_reason_text,null,mood_situation,mood_location);
+                                mood_reason_text,bitImage,mood_situation,mood_location);
                         //moodDB.addMood(newMood);
+                        moodDB.addImg(newMood);
                         moodDB.addMood(newMood);
                         finish();
                     } catch (MoodInvalidInputException e) {
@@ -115,7 +121,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     // gets the photo that was taken and let the image be shown in the page
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView);
+        MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView, this);
     }
 
     public void showCoords(View view){
@@ -137,6 +143,10 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         this.mood_location = location;
     }
 
+    @Override
+    public void setMoodReasonPhoto(Bitmap bitImage) {
+        this.bitImage = bitImage;
+    }
 
     private void initializeDate() {
         add_date_button = findViewById(R.id.create_date_button);
@@ -258,5 +268,6 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         }
         return areInputsValid;
     }
+
 
 }

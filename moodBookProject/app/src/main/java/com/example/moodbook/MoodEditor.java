@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -15,8 +16,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -30,8 +34,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import com.example.moodbook.DBMoodSetter;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -39,9 +45,15 @@ import androidx.core.app.ActivityCompat;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import io.opencensus.internal.Utils;
 
 public class MoodEditor {
 
@@ -51,12 +63,14 @@ public class MoodEditor {
         void setMoodEmotion(String emotion);
         void setMoodSituation(String situation);
         void setMoodLocation(Location location);
+        void setMoodReasonPhoto(Bitmap bitImage);
     }
 
 
     private static final int REQUEST_IMAGE = 101;
     private static final int GET_IMAGE = 102;
     private static final String TAG = "MyActivity";
+    private static Bitmap imageBitmap;
 
     // Emotion state spinner options
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
@@ -166,12 +180,14 @@ public class MoodEditor {
                 "Select photo from gallery"};
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
                                 Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
+
                                     myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
                                 }
                                 break;
@@ -187,26 +203,43 @@ public class MoodEditor {
         pictureDialog.show();
     }
 
-
     // gets the photo that was taken and let the image be shown in the page
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
-                                      ImageView image_view_photo) {
+                               ImageView image_view_photo, final AppCompatActivity myActivity) {
         if (requestCode == REQUEST_IMAGE
                 && resultCode == AppCompatActivity.RESULT_OK){
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            image_view_photo.setImageBitmap(imageBitmap);
+            if (data != null) {
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+                if (imageBitmap!= null){
+                    ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
+                    image_view_photo.setImageBitmap(imageBitmap); //after getting bitmap, set to imageView
+                }
+            }
         }
-        else if (requestCode == GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK){
+        else if (requestCode == GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK) {
             Uri uri = null;
+            Bitmap image = null;
             if (data != null) {
                 uri = data.getData();
-                Log.i(TAG, "Uri: " + uri.toString());
-                image_view_photo.setImageURI(uri);
+                try {
+                    ParcelFileDescriptor parcelFileDescriptor =
+                            myActivity.getContentResolver().openFileDescriptor(uri, "r");
+                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                    image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+                    parcelFileDescriptor.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //send to DBMoodSetter
+                if (image!=null){
+                    ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
+                    image_view_photo.setImageBitmap(image);
+                }
             }
         }
         else {
-            // does nothing if fails to deliver data
+            //does nothing if fails to deliver data
         }
     }
 

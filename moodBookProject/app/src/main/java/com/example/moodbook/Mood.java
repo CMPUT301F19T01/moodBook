@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.media.Image;
+import android.net.Uri;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -89,7 +90,6 @@ public class Mood implements Comparable<Mood> {
         return Emotion.getColorResourceId(this.emotion_text);
     }
 
-
     // Reason
     public void setReasonText(String reason_text) throws MoodInvalidInputException {
         parseMoodReasonText(reason_text);
@@ -100,14 +100,14 @@ public class Mood implements Comparable<Mood> {
         return this.reason_text;
     }
 
-    public Bitmap setReasonPhoto(Bitmap reason_photo) {
+    public void setReasonPhoto(Bitmap reason_photo) {
         this.reason_photo = reason_photo;
     }
 
-    public Bitmap getReasonPhoto(ImageView view) {
-        Bitmap bitmap = ((BitmapDrawable)view.getDrawable()).getBitmap();
-        return bitmap;
+    public Bitmap getReasonPhoto() {
+        return this.reason_photo;
     }
+
 
     // Situation
     public void setSituation(String situation) {
@@ -218,8 +218,6 @@ public class Mood implements Comparable<Mood> {
             }
         }
     }
-
-
 
     public static class Emotion {
 
