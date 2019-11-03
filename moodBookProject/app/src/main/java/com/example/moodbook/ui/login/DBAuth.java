@@ -3,6 +3,7 @@ package com.example.moodbook.ui.login;
 import android.content.Context;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -13,6 +14,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,22 +27,23 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * This class handles interaction with the DB to login and register
+ * Citation
+ * https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira    used to find out what argument to use in .addOnCompleteListener
+ * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
  */
-// Citation
-// https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira    used to find out what argument to use in .addOnCompleteListener
+
 public class DBAuth {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private CollectionReference collectionReference;
-    private Context context;
+    private ArrayList<String> usernameList;
 
-    public DBAuth(FirebaseAuth mAuth, Context context){
+    public DBAuth(FirebaseAuth mAuth){
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
         this.collectionReference = db.collection("USERS");
-        this.context = context;
-
+        this.usernameList = this.updateUsernameList();
     }
 
     /**
@@ -70,6 +73,7 @@ public class DBAuth {
      * This method attempts to log a user in
      */
     // https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira    used to find out what argument to use in .addOnCompleteListener
+    @Deprecated
     public FirebaseUser login(String email, String password){
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -90,6 +94,7 @@ public class DBAuth {
     /**
      * This method creates a new user in Firebase
      */
+    @Deprecated
     public FirebaseUser register(String email, String password, String userParam){
         final String username = userParam;
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -99,7 +104,7 @@ public class DBAuth {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            createUser(user, username);
+                            //createUser(user, username);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                         }
@@ -112,14 +117,14 @@ public class DBAuth {
     /**
      * This method creates containers for a new user in the database
      */
-    public void createUser(FirebaseUser user, String username){
+    public void createUser(FirebaseUser user, String email, String username){
 
         String uid = user.getUid();
         Log.d(TAG, "creating user in db:"+ uid);
 
         // Initialize moodcount
         HashMap<String, Object> data = new HashMap<>();
-        data.put("username", username);
+        data.put("username", email);
         data.put("moodCount", 0);
         collectionReference
                 .document(uid)
@@ -140,12 +145,14 @@ public class DBAuth {
         // Initialize containers
 
         HashMap<String, Object> nullData = new HashMap<>();
-        data.put("null", null);
+        nullData.put("null", null);
 
-        db.collection("usernamelist").document(username).set(nullData); // add username to usernamelist
         collectionReference.document(uid).collection("MOODS").document("null").set(nullData);
         collectionReference.document(uid).collection("FRIENDS").document("null").set(nullData);
         collectionReference.document(uid).collection("REQUESTS").document("null").set(nullData);
+
+        nullData.put("uid", user.getUid());
+        db.collection("usernamelist").document(username).set(nullData); // add username to usernamelist
 
     }
 
@@ -153,9 +160,9 @@ public class DBAuth {
      * This method gets all the currently used usernames
      * @return
      *      an ArrayList of usernames
+     * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
      */
-    public ArrayList<String> getUsernameList(){
-        FirebaseFirestore db = db = FirebaseFirestore.getInstance();
+    public ArrayList<String> updateUsernameList(){
         final ArrayList<String> usernameList = new ArrayList<>();
         db.collection("usernamelist")
                 .get()
@@ -173,5 +180,35 @@ public class DBAuth {
                 });
 
         return usernameList;
+    }
+
+    /**
+     * This method verifys a given username for uniqueness and length
+     * @param username
+     * @return
+     *      true: username is unique and > length 0
+     *      false: username is not unique and/or is not > length 0
+     */
+    public Boolean verifyUsername(String username){
+        return (!usernameList.contains(username) && username.length() > 0);
+
+    }
+
+    /**
+     * Stores the username in the user's FireBase auth profile
+     * @param user
+     * @param username
+     */
+    public void updateUsername(FirebaseUser user, String username){
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(username).build();
+        user.updateProfile(profileUpdates) .addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d("PROFILE", "User profile updated.");
+                }
+            }
+        });
     }
 }

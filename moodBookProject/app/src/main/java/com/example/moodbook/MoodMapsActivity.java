@@ -6,9 +6,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,14 +19,18 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 
-public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCallback, DBUpdate {
+public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCallback, DBUpdate {
 
     ///// Member Variables /////
     private GoogleMap moodMap;
@@ -41,6 +45,8 @@ public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCall
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        // connect to db
+        db = FirebaseFirestore.getInstance();
     }
 
 
@@ -60,30 +66,55 @@ public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCall
         // initialize map
         moodMap = googleMap;
 
-        // connect to db
-        db = FirebaseFirestore.getInstance();
-
         // test data
-        ArrayList<Mood> moodTESTDATA= new ArrayList<>();
+        moodDataList = new ArrayList<>();
 
-        LatLng loc1 = new LatLng(60.03547, -123.75790);
-        LatLng loc2 = new LatLng(24.26711, 125.54427);
-        LatLng loc3 = new LatLng(3.28003, 107.63163);
-        LatLng loc4 = new LatLng(53.28003, -134.63163);
 
-        Mood moodAfraid = new Mood("Afraid", loc1);
-        Mood moodAngry = new Mood("Angry", loc2);
-        Mood moodHappy = new Mood("Happy", loc3);
-        Mood moodSad = new Mood("Sad", loc4);
+        Location l1 = new Location("");
+        l1.setLatitude(60.03547);
+        l1.setLongitude(-123.75790);
 
-        moodTESTDATA.add(moodAfraid);
-        moodTESTDATA.add(moodAngry);
-        moodTESTDATA.add(moodHappy);
-        moodTESTDATA.add(moodSad);
+        Location l2 = new Location("");
+        l2.setLatitude(24.26711);
+        l2.setLongitude(125.54427);
 
-        drawMoodMarkers(moodTESTDATA);
+        Location l3 = new Location("");
+        l3.setLatitude(3.28003);
+        l3.setLongitude(107.63163);
 
+        Location l4 = new Location("");
+        l4.setLatitude(53.28003);
+        l4.setLongitude(-134.63163);
+
+    /*
+        Mood moodAfraid = null;
+        try {
+            moodAfraid = new Mood("Afraid", l1);
+        } catch (MoodInvalidInputException e) {
+            e.printStackTrace();
+        }
+        Mood moodAngry = null;
+        try {
+            moodAngry = new Mood("Angry", l2);
+        } catch (MoodInvalidInputException e) {
+            e.printStackTrace();
+        }
+        Mood moodHappy = null;
+        try {
+            moodHappy = new Mood("Happy", l3);
+        } catch (MoodInvalidInputException e) {
+            e.printStackTrace();
+        }
+        Mood moodSad = null;
+        try {
+            moodSad = new Mood("Sad", l4);
+        } catch (MoodInvalidInputException e) {
+            e.printStackTrace();
+        }
+*/
         updateList(db);
+
+        drawMoodMarkers(moodDataList);
 
     }
 
@@ -91,42 +122,64 @@ public class MoodMapActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void updateList(FirebaseFirestore db) {
         // todo: change document path to users token id
-        db.collection("USERS").document("MAP_TEST")
+
+        db.collection("USERS")
+                .document("dU0J4P52UxbcGUyYq9uJjlLvBE82")
                 .collection("MOODS")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.i("uwu", document.getId() + " => " + document.getData());
-                                // todo: get the moods and put them in the arrayList
+                        Location tempLoc;
+                        Mood m;
+                        if (task.isSuccessful()){
+
+                            for (QueryDocumentSnapshot doc : task.getResult()){
+                                Log.d("message uwu", doc.getString("emotion") + " " + doc.getDouble("location_lat") + " " + doc.getDouble("location_lon"));
+                                tempLoc = new Location("");
+                                tempLoc.setLatitude(doc.getDouble("location_lat"));
+                                tempLoc.setLongitude(doc.getDouble("location_lon"));
+                                try {
+
+                                    Date date = Mood.DATETIME_FORMATTER.parse("2016-01-01 12:12");
+                                    Log.i("djfkal", date.toString());
+                                    m = new Mood(date.toString(), doc.getString("emotion"), tempLoc);
+
+                                    moodDataList.add(m);
+                                } catch (Exception e){
+                                    e.printStackTrace();
+                                }
+
                             }
-                        } else {
-                            Log.w("uwu", "Error getting documents.", task.getException());
                         }
                     }
                 });
     }
 
 
-    public void drawMoodMarkers(ArrayList<Mood> moodData){
+    public void drawMoodMarkers(ArrayList<Mood> moodData) {
         // iterate through moods
         int emotionResource;
         LatLng emotionLatLng;
         int width = 100;
         int height = 100;
-        for(int i = 0; i < moodData.size(); i++){
+        for (int i = 0; i < moodData.size(); i++) {
             // get latlng and image resource from Mood
             emotionResource = moodData.get(i).getEmotionImageResource();
-            emotionLatLng = moodData.get(i).getlatLng();
+            Log.i("image", moodData.get(i).getEmotionImageResource().toString());
+            Location location = moodData.get(i).getLocation();
+            double l = location.getLatitude();
+            Log.i("locafda", "fd" );
+
+            emotionLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
             // convert and draw to map
-            BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(emotionResource);
+            BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(emotionResource);
             Bitmap b = bitmapdraw.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
             moodMap.addMarker(new MarkerOptions().position(emotionLatLng).icon(bitmapDescriptor));
         }
     }
+
 }

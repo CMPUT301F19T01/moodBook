@@ -6,4 +6,5 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="emoticon_size">60dp</dimen>
+    <dimen name="spinner_item_height">80dp</dimen>
 </resources>

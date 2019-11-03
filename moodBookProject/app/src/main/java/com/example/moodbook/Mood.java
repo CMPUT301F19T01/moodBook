@@ -1,146 +1,103 @@
 package com.example.moodbook;
 
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.Image;
 
-import com.google.android.gms.maps.model.LatLng;
+import androidx.annotation.NonNull;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Mood {
-    private Date date;
-    private Date time;
-    private String emotion_text;
+public class Mood implements Comparable<Mood> {
+    private Date date_time;         // mandatory
+    private String emotion_text;    // mandatory
     private String reason_text;     // optional
     private Image reason_photo;     // optional
     private String situation;       // optional
-    private LatLng latLng;      // optional
+    private Location location;      // optional
+    private String doc_id;          // for editing & deleting
 
-    private  SimpleDateFormat dateFt;    // date format
-    private  SimpleDateFormat timeFt;    // time format
-    private HashMap<String, Emotion> emotionMap;
+    // date time formatter
+    public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+    public static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("HH:mm");
+    public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-    public Mood(Date date, Date time, String emotion,
+    public Mood(String date_time_text, String emotion,
                 String reason_text, Image reason_photo,
-                String situation, LatLng latLng) {
+                String situation, Location location) throws MoodInvalidInputException {
         // Initialize
-        dateFt = new SimpleDateFormat ("yyyy-MM-dd");
-        timeFt = new SimpleDateFormat ("HH:mm");
-        emotionMap = new HashMap<>();
-        emotionMap.put("happy",new Emotion("happy"));
-        emotionMap.put("sad",new Emotion("sad"));
-        emotionMap.put("angry",new Emotion("angry"));
-        emotionMap.put("afraid",new Emotion("afraid"));
-
-        setAll(date, time, emotion, reason_text, reason_photo, situation, latLng);
-    }
-
-    public Mood(Date date, Date time, String emotion) {
-        this(date, time, emotion, null, null, null, null);
-    }
-
-    ////////////////////////// constructor to test moodMaps ///////////////////////////////////
-    public Mood(String emotion, LatLng latLng){
-        this(null, null, emotion, null, null, null, latLng);
-    }
-
-    public void setAll(Date date, Date time, String emotion,
-                       String reason_text, Image reason_photo,
-                       String situation, LatLng latLng) {
-        setDate(date);
-        setTime(time);
+        setDateTime(date_time_text);
         setEmotion(emotion);
         setReasonText(reason_text);
         setReasonPhoto(reason_photo);
         setSituation(situation);
-        setlatLng(latLng);
+        setLocation(location);
+    }
+
+    public Mood(String date_time_text, String emotion) throws MoodInvalidInputException {
+        this(date_time_text, emotion, null, null, null, null);
+    }
+
+    // constructor for testing maps
+    public Mood(String date,String emotion, Location location)  throws MoodInvalidInputException {
+        this(date, emotion, null, null, null, location);
+
     }
 
     // Date
-    public void setDate(Date date) {
-        // Initialize to current date
-        if(date == null) {
-            date = new Date();
+    public void setDateTime(String date_time_text) throws MoodInvalidInputException {
+        // Error: empty
+        if (date_time_text == null) {
+            throw new MoodInvalidInputException("date_time","cannot be empty");
         }
-        this.date = date;
+        // Valid argument
+        try {
+            this.date_time = DATETIME_FORMATTER.parse(date_time_text);
+        }
+        // Error: invalid date time format
+        catch (ParseException e) {
+            throw new MoodInvalidInputException("date_time","must be yyyy-hh-dd hh:mm format");
+        }
     }
 
     public String getDateText() {
-        return dateFt.format(this.date);
-    }
-
-    // Time
-    public void setTime(Date time) {
-        // Initialize to current time
-        if(time == null) {
-            time = new Date();
-        }
-        this.time = time;
+        return DATE_FORMATTER.format(this.date_time);
     }
 
     public String getTimeText() {
-        return timeFt.format(this.time);
+        return TIME_FORMATTER.format(this.date_time);
+    }
+
+    public Date getDateTime() {
+        return this.date_time;
     }
 
     // Emotion
-    public void setEmotion(String emotion_text) {
-        // Error: empty
-        if(emotion_text == null) {
-            // TODO
-            return;
-        }
-        emotion_text = emotion_text.toLowerCase();
-        // Valid argument
-        if(emotionMap.containsKey(emotion_text)){
-            this.emotion_text = emotion_text;
-        }
-        // Error: invalid argument
-        else{
-            // TODO
-        }
+    public void setEmotion(String emotion_text) throws MoodInvalidInputException {
+        parseMoodEmotion(emotion_text);
+        this.emotion_text = emotion_text.toLowerCase();
     }
 
     public String getEmotionText() {
-        return emotionMap.get(this.emotion_text).getName();
+        return this.emotion_text;
     }
 
     public Integer getEmotionImageResource() {
-        Integer imageId = null;
-        if(this.emotion_text != null){
-            imageId = emotionMap.get(this.emotion_text).getImageId();
-        }
-        return imageId;
+        return Emotion.getImageResourceId(this.emotion_text);
     }
 
     public Integer getEmotionColorResource() {
-        Integer colorId = null;
-        if(this.emotion_text != null){
-            colorId = emotionMap.get(this.emotion_text).getColorId();
-        }
-        return colorId;
+        return Emotion.getColorResourceId(this.emotion_text);
     }
 
+
     // Reason
-    public void setReasonText(String reason_text) {
-        // Check if text is longer than 20 characters or 3 words
-        if(reason_text != null){
-            // Error: > 20 characters
-            if(reason_text.length() > 20){
-                // TODO
-                return;
-            }
-            else{
-                String[] reason_text_words = reason_text.trim().split(" ");
-                // Error: > 3 words
-                if(reason_text_words.length > 3){
-                    // TODO
-                    return;
-                }
-            }
-        }
-        // Valid
-        this.reason_text = reason_text;
+    public void setReasonText(String reason_text) throws MoodInvalidInputException {
+        parseMoodReasonText(reason_text);
+        this.reason_text = reason_text == "" ? null : reason_text;
     }
 
     public String getReasonText() {
@@ -164,71 +121,161 @@ public class Mood {
         return this.situation;
     }
 
-    // latLng
-    public void setlatLng(LatLng latLng) {
-        this.latLng = latLng;
+    // Location
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
-    public LatLng getlatLng() {
-        return this.latLng;
+    public Location getLocation() {
+        return this.location;
     }
 
 
-    protected class Emotion{
-        String name;
-        Integer image_id;
-        Integer color_id;
+    // Doc Id
+    public void setDocId(String doc_id) {
+        this.doc_id = doc_id;
+    }
 
-        public Emotion(String name) {
-            this.name = name;
-            setImageId();
-            setColorId();
+    public String getDocId() {
+        return this.doc_id;
+    }
+
+
+    @Override
+    public int compareTo(@NonNull Mood other) {
+        if (this == other) return 0;
+        Date dateTime = this.getDateTime();
+        Date otherDateTime = other.getDateTime();
+        // smaller if dateTime for this object has parsing error
+        if (dateTime == null) return -1000;
+        // larger if dateTime for other object has parsing error
+        if (otherDateTime == null) return 1000;
+
+        return dateTime.compareTo(otherDateTime);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return getDateText()+"_"+getTimeText()+"_"+getEmotionText();
+    }
+
+
+    public static Date parseMoodDate(String date_text) throws MoodInvalidInputException {
+        Date date = null;
+        // Error: empty
+        if (date_text == null) {
+            throw new MoodInvalidInputException("date","cannot be empty");
         }
+        // Valid argument
+        try {
+            date = DATE_FORMATTER.parse(date_text);
+        }
+        // Error: invalid date format
+        catch (ParseException e) {
+            throw new MoodInvalidInputException("date","must be yyyy-hh-dd format");
+        }
+        return date;
+    }
 
-        private void setImageId() {
-            switch(this.name){
-                case "happy":
-                    this.image_id = R.drawable.happy;
-                    break;
-                case "sad":
-                    this.image_id = R.drawable.sad;
-                    break;
-                case "angry":
-                    this.image_id = R.drawable.angry;
-                    break;
-                case "afraid":
-                    this.image_id = R.drawable.afraid;
-                    break;
+    public static Date parseMoodTime(String time_text) throws MoodInvalidInputException {
+        Date time = null;
+        // Error: empty
+        if (time_text == null) {
+            throw new MoodInvalidInputException("time","cannot be empty");
+        }
+        // Valid argument
+        try {
+            time = TIME_FORMATTER.parse(time_text);
+        }
+        // Error: invalid time format
+        catch (ParseException e) {
+            throw new MoodInvalidInputException("time","must be hh:mm format");
+        }
+        return time;
+    }
+
+    public static void parseMoodEmotion(String emotion_text) throws MoodInvalidInputException {
+        // Error: empty
+        if (emotion_text == null) {
+            throw new MoodInvalidInputException("emotion","must be selected");
+        }
+        emotion_text = emotion_text.toLowerCase();
+        // Error: no option is selected
+        if (!Emotion.hasName(emotion_text)) {
+            throw new MoodInvalidInputException("emotion","must be selected");
+        }
+    }
+
+    public static void parseMoodReasonText(String reason_text) throws MoodInvalidInputException {
+        // Check if text is longer than 20 characters or 3 words
+        if (reason_text != null) {
+            // Error: > 20 characters
+            if (reason_text.length() > 20) {
+                throw new MoodInvalidInputException("reason_text","cannot be longer than 20 characters");
+            } else {
+                String[] reason_text_words = reason_text.trim().split(" ");
+                // Error: > 3 words
+                if (reason_text_words.length > 3) {
+                    throw new MoodInvalidInputException("reason_text","cannot have more than 3 words");
+                }
+            }
+        }
+    }
+
+
+
+    public static class Emotion {
+
+        private static String[] names;
+        private static int[] image_resource_id;
+        private static int[] color_resource_id;
+        private static HashMap<String, Integer> name_index;
+
+        static {
+            names = new String[]{"happy", "sad", "angry", "afraid"};
+            image_resource_id = new int[]{
+                    R.drawable.happy, R.drawable.sad, R.drawable.angry, R.drawable.afraid};
+            color_resource_id = new int[]{
+                    R.color.happyYellow, R.color.sadBlue, R.color.angryRed, R.color.afraidBrown};
+            // map emotion name to index
+            name_index = new HashMap<>();
+            for (int i = 0; i < names.length; i++) {
+                name_index.put(names[i], i);
             }
         }
 
-        private void setColorId() {
-            switch(this.name){
-                case "happy":
-                    this.color_id = R.color.happyYellow;
-                    break;
-                case "sad":
-                    this.color_id = R.color.sadBlue;
-                    break;
-                case "angry":
-                    this.color_id = R.color.angryRed;
-                    break;
-                case "afraid":
-                    this.color_id = R.color.afraidBrown;
-                    break;
+        public static Boolean hasName(String name) {
+            return name_index.containsKey(name);
+        }
+
+        public static Integer getImageResourceId(String name) {
+            Integer resourceId = null;
+            if (name_index.containsKey(name)) {
+                resourceId = image_resource_id[name_index.get(name)];
             }
+            return resourceId;
         }
 
-        public String getName() {
-            return this.name;
+        public static Integer getColorResourceId(String name) {
+            Integer resourceId = null;
+            if (name_index.containsKey(name)) {
+                resourceId = color_resource_id[name_index.get(name)];
+            }
+            return resourceId;
         }
 
-        public Integer getImageId() {
-            return this.image_id;
+        public static String[] getNames() {
+            return names.clone();
         }
 
-        public Integer getColorId() {
-            return this.color_id;
+        public static int[] getImageResources() {
+            return image_resource_id.clone();
         }
+
+        public static int[] getColorResources() {
+            return color_resource_id.clone();
+        }
+
     }
 }

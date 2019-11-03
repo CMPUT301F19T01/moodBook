@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -68,7 +69,8 @@ public class FriendMoodMapActivity extends FragmentActivity implements OnMapRead
         for(int i = 0; i < moodData.size(); i++){
             // get latlng and image resource from Mood
             emotionRes = moodData.get(i).getEmotionImageResource();
-            emotionLatLng = moodData.get(i).getlatLng();
+            Location location = moodData.get(i).getLocation();
+            emotionLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
             // convert and draw to map
             BitmapDrawable bitmapdraw = (BitmapDrawable)getResources().getDrawable(emotionRes);

@@ -2,6 +2,7 @@ package com.example.moodbook;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,11 @@ public class MoodStateAdapter extends ArrayAdapter<String> {
     }
 
     @Override
+    public boolean isEnabled(int position) {
+        return (position != 0);
+    }
+
+    @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = inflater.inflate(R.layout.spinner_item, null);
@@ -34,6 +40,7 @@ public class MoodStateAdapter extends ArrayAdapter<String> {
 
             t1.setText(states[position]);
             i1.setImageResource(images[position]);
+            t1.setTextColor((position == 0) ? Color.GRAY : Color.BLACK);
             return row;
     }
 
@@ -49,6 +56,12 @@ public class MoodStateAdapter extends ArrayAdapter<String> {
         i1.setImageResource(images[position]);
         return row;
     }
+
+    public void setError(View v, CharSequence s) {
+        TextView name = (TextView) v.findViewById(R.id.mood_text);
+        name.setError(s);
+    }
+
 }
 
 
