@@ -133,7 +133,6 @@ public class MoodEditor {
         });
     }
 
-
     // Situation editor
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
                                                            int spinnerLayoutId) {
