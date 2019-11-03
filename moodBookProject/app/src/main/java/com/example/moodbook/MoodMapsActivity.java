@@ -70,6 +70,7 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
         moodDataList = new ArrayList<>();
 
 
+
         Location l1 = new Location("");
         l1.setLatitude(60.03547);
         l1.setLongitude(-123.75790);
@@ -89,29 +90,29 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
     /*
         Mood moodAfraid = null;
         try {
-            moodAfraid = new Mood("Afraid", l1);
+            moodAfraid = new Mood("2016-01-01 12:12","Afraid", l1);
         } catch (MoodInvalidInputException e) {
             e.printStackTrace();
         }
         Mood moodAngry = null;
         try {
-            moodAngry = new Mood("Angry", l2);
+            moodAngry = new Mood("2016-01-01 12:12","Angry", l2);
         } catch (MoodInvalidInputException e) {
             e.printStackTrace();
         }
         Mood moodHappy = null;
         try {
-            moodHappy = new Mood("Happy", l3);
+            moodHappy = new Mood("2016-01-01 12:12","Happy", l3);
         } catch (MoodInvalidInputException e) {
             e.printStackTrace();
         }
         Mood moodSad = null;
         try {
-            moodSad = new Mood("Sad", l4);
+            moodSad = new Mood("2016-01-01 12:12","Sad", l4);
         } catch (MoodInvalidInputException e) {
             e.printStackTrace();
-        }
-*/
+        }*/
+
         updateList(db);
 
         drawMoodMarkers(moodDataList);
@@ -130,25 +131,26 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Location tempLoc;
-                        Mood m;
-                        if (task.isSuccessful()){
 
+                        if (task.isSuccessful()){
+                            Location tempLoc;
+                            Mood m;
                             for (QueryDocumentSnapshot doc : task.getResult()){
-                                Log.d("message uwu", doc.getString("emotion") + " " + doc.getDouble("location_lat") + " " + doc.getDouble("location_lon"));
                                 tempLoc = new Location("");
                                 tempLoc.setLatitude(doc.getDouble("location_lat"));
                                 tempLoc.setLongitude(doc.getDouble("location_lon"));
+
+                                Log.i("message uwu", doc.getString("emotion") + " " + tempLoc.getLatitude() + " " + tempLoc.getLongitude());
+                                /*
                                 try {
 
-                                    Date date = Mood.DATETIME_FORMATTER.parse("2016-01-01 12:12");
-                                    Log.i("djfkal", date.toString());
-                                    m = new Mood(date.toString(), doc.getString("emotion"), tempLoc);
+                                    m = new Mood("2016-01-01 12:12", doc.getString("emotion"), tempLoc);
 
                                     moodDataList.add(m);
                                 } catch (Exception e){
                                     e.printStackTrace();
                                 }
+*/
 
                             }
                         }
@@ -159,6 +161,7 @@ public class MoodMapsActivity extends AppCompatActivity implements OnMapReadyCal
 
     public void drawMoodMarkers(ArrayList<Mood> moodData) {
         // iterate through moods
+
         int emotionResource;
         LatLng emotionLatLng;
         int width = 100;
