@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6b95dd44-1db6-4ca5-8e79-00da6b943bf4" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/moodBookProject/app/src/main/java/com/example/moodbook/EditMoodActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/moodBookProject/app/src/main/java/com/example/moodbook/EditMoodActivity.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,13 +12,8 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/moodBookProject/app/src/main/java/com/example/moodbook/CreateMoodActivity.java">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/moodBookProject/app/src/main/java/com/example/moodbook/CustomAdapter.java">
+        <entry file="file://$PROJECT_DIR$/moodBookProject/app/src/main/java/com/example/moodbook/CreateMoodActivity.java">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
@@ -38,8 +33,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -119,11 +112,14 @@
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/Library/Android/sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/moodBookProject" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -155,7 +151,7 @@
     <layout>
       <window_info id="Captures" order="0" weight="0.25" />
       <window_info id="Capture Tool" order="1" />
-      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.21759747" />
+      <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.21729958" />
       <window_info id="Structure" order="3" side_tool="true" />
       <window_info id="Image Layers" order="4" />
       <window_info id="Designer" order="5" />
@@ -171,10 +167,8 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/moodBookProject/app/src/main/java/com/example/moodbook/CustomAdapter.java" />
     <entry file="file://$PROJECT_DIR$/moodBookProject/app/src/main/java/com/example/moodbook/CreateMoodActivity.java">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/moodBookProject/app/src/main/java/com/example/moodbook/CustomAdapter.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>

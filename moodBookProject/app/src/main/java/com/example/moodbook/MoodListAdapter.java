@@ -112,24 +112,12 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         notifyDataSetChanged();
     }
 
-    // Edit a mood item, and sort mood list by dateTime starting from most recent
-    public void editItem(Mood item, int position) {
-        // get index of edited item in full moodList
-        int posInListFull = moodListFull.indexOf(moodList.get(position));
-        // change item in filtered moodList
-        moodList.set(position, item);
-        Collections.sort(moodList, Collections.reverseOrder());
-        // change item in full moodList
-        moodListFull.set(posInListFull, item);
-        Collections.sort(moodList, Collections.reverseOrder());
-        // notify item edited
-        notifyItemChanged(position);
-    }
-
     // Remove all mood items
     public void clear() {
         moodList.clear();
         moodListFull.clear();
+        // notify list is cleared
+        notifyDataSetChanged();
     }
 
     @Override
@@ -146,7 +134,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
                 else {
                     String filterPattern = constraint.toString().toLowerCase().trim();
                     for(Mood item : moodListFull) {
-                        if(item.getEmotionText().toLowerCase().contains(filterPattern)) {
+                        if(item.getEmotionText().toLowerCase().startsWith(filterPattern)) {
                             filteredList.add(item);
                         }
                     }
@@ -192,5 +180,20 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         Collections.sort(moodListFull, Collections.reverseOrder());
         // notify item added by position
         notifyItemInserted(position);
+    }
+
+    // Edit a mood item, and sort mood list by dateTime starting from most recent
+    @Deprecated
+    public void editItem(Mood item, int position) {
+        // get index of edited item in full moodList
+        int posInListFull = moodListFull.indexOf(moodList.get(position));
+        // change item in filtered moodList
+        moodList.set(position, item);
+        Collections.sort(moodList, Collections.reverseOrder());
+        // change item in full moodList
+        moodListFull.set(posInListFull, item);
+        Collections.sort(moodList, Collections.reverseOrder());
+        // notify item edited
+        notifyItemChanged(position);
     }
 }
