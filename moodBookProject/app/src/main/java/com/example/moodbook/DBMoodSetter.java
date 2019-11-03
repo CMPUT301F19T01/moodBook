@@ -89,6 +89,7 @@ public class DBMoodSetter {
                         if (documentSnapshot!=null){
                             Double m = documentSnapshot.getDouble("mood_Count");
                             moodID = String.valueOf(m);
+                            addImg(mood);
                             addMoodAfterDocId(mood); //puts the info to DB
                             setInt();
                             //moodID = Integer.valueOf(md.intValue());
@@ -134,7 +135,7 @@ public class DBMoodSetter {
     // function to add the reason image to firebase storage
     public void addImg(final Mood mood) {
         String picID = moodID;
-        StorageReference photoRef = photoReference.child(picID+".jpg");
+        StorageReference photoRef = photoReference.child(picID);
         Bitmap bitImage = mood.getReasonPhoto();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         if (bitImage != null) {
