@@ -2,31 +2,26 @@ package com.example.moodbook;
 
 import android.widget.EditText;
 
-import com.example.moodbook.ui.login.LoginActivity;
-import com.example.moodbook.ui.login.RegisterActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.robotium.solo.Solo;
-
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import org.junit.After;
+import com.example.moodbook.ui.login.LoginActivity;
+import com.example.moodbook.ui.login.RegisterActivity;
+import com.robotium.solo.Solo;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 
-public class LoginActivityTest {
+public class RegisterActivityTest {
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<LoginActivity> rule =
-            new ActivityTestRule<>(LoginActivity.class, true, true);
+    public ActivityTestRule<RegisterActivity> rule =
+            new ActivityTestRule<>(RegisterActivity.class, true, true);
 
 
     @Before
@@ -107,16 +102,5 @@ public class LoginActivityTest {
 
         assertTrue(solo.waitForText("Password must be"));
 
-    }
-
-    /**
-     * Tests register button
-     */
-    @Test
-    public void loginRegister(){
-        solo.clickOnButton("register");
-
-        solo.sleep(5000); // wait for activity to change
-        solo.assertCurrentActivity("Wrong activity", RegisterActivity.class);
     }
 }
