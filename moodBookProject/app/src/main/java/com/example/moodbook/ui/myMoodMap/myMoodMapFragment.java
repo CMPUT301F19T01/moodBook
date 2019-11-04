@@ -61,7 +61,6 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
      * @param inflater
      * @param container
      * @param savedInstanceState
-     *
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

@@ -258,7 +258,6 @@ public class MoodEditor {
             public void onLocationChanged(Location location) {
                 ((MoodInterface)myActivity).setMoodLocation(location);
 
-
                 //redundant
                 double mood_lat = location.getLatitude();
                 double mood_lon = location.getLongitude();
@@ -296,10 +295,7 @@ public class MoodEditor {
             criteria.setAccuracy(Criteria.ACCURACY_FINE);
             criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
 
-            // set to null because we are required to supply looper but not going to use it
-            final Looper looper = null;
-
-            locationManager.requestSingleUpdate(criteria, locationListener, looper);
+            locationManager.requestSingleUpdate(criteria, locationListener, null);
         }
     }
 }
