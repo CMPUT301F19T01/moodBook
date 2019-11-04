@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity   {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
 
                 R.id.nav_myMood,R.id.nav_FriendMood,
-                R.id.nav_addFriendsMood, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
+                R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

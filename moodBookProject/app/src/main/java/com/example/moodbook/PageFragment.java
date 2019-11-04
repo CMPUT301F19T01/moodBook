@@ -24,9 +24,11 @@ public class PageFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // remove old search action menu
+        // remove all the useless menu options
+        menu.clear();
+        /*// remove old search action menu
         if(menu.findItem(R.id.mood_history_action_search) != null) {
             menu.removeItem(R.id.mood_history_action_search);
-        }
+        }*/
     }
 }
