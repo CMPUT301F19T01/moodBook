@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -15,8 +16,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -30,8 +34,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import com.example.moodbook.DBMoodSetter;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -39,23 +45,31 @@ import androidx.core.app.ActivityCompat;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import io.opencensus.internal.Utils;
 
 public class MoodEditor {
 
 
     // for accessing SelectedMoodState outside of activity
     public interface MoodInterface {
-        void setSelectedMoodState(String moodState);
-        void setLocation(Location location);
+        void setMoodEmotion(String emotion);
+        void setMoodSituation(String situation);
+        void setMoodLocation(Location location);
+        void setMoodReasonPhoto(Bitmap bitImage);
     }
 
 
     private static final int REQUEST_IMAGE = 101;
     private static final int GET_IMAGE = 102;
     private static final String TAG = "MyActivity";
+    private static Bitmap imageBitmap;
 
     // Emotion state spinner options
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
@@ -73,43 +87,43 @@ public class MoodEditor {
             "With a crowd"
     };
 
+    public static Bitmap getBitmap(){
+        return imageBitmap;
+    }
+
+
 
     // Date editor
     // for showing calendar so user could select a date
-    public static void showCalendar(final Button view, AppCompatActivity myActivity){
-
+    public static void showCalendar(final Button view){
         Calendar c = Calendar.getInstance();
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = df.format(c.getTime());
-        view.setText(formattedDate);
-
+        String currentDateString = Mood.DATE_FORMATTER.format(c.getTime());
+        view.setText(currentDateString);
     }
 
 
     // Time editor
     // for showing time so user could select a time
-    public static void showTime(final Button view, AppCompatActivity myActivity){
-        Date d=new Date();
-        SimpleDateFormat sdf=new SimpleDateFormat("hh:mm");
-        String currentDateTimeString = sdf.format(d);
-        view.setText(currentDateTimeString);
+    public static void showTime(final Button view){
+        Date d = new Date();
+        String currentTimeString = Mood.TIME_FORMATTER.format(d);
+        view.setText(currentTimeString);
     }
 
 
     // Emotional State editor
     public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner spinner_emotion,
-                                         MoodStateAdapter emotionAdapter,
-                                         final String[] emotionStateList, final int[] emotionColors) {
+                                         MoodStateAdapter emotionAdapter) {
         spinner_emotion.setAdapter(emotionAdapter);
         spinner_emotion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(myActivity.getApplicationContext(), emotionStateList[i], Toast.LENGTH_LONG)
-                        .show();
-                ((MoodInterface)myActivity).setSelectedMoodState(emotionStateList[i]);
-                if(i != 0) {
-                    spinner_emotion.setBackgroundColor(myActivity.getResources().getColor(emotionColors[i]));
+            public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
+                // first item disabled
+                if(i > 0) {
+                    String selectionEmotion = EMOTION_STATE_LIST[i];
+                    ((MoodInterface)myActivity).setMoodEmotion(selectionEmotion);
+                    spinner_emotion.setBackgroundColor(
+                            myActivity.getResources().getColor(EMOTION_COLOR_LIST[i]));
                 }
             }
             @Override
@@ -122,10 +136,9 @@ public class MoodEditor {
 
     // Situation editor
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
-                                                           int spinnerLayoutId,
-                                                           String[] situationList) {
+                                                           int spinnerLayoutId) {
         ArrayAdapter<String> situationAdapter = new ArrayAdapter<String>(
-                myActivity, spinnerLayoutId, situationList){
+                myActivity, spinnerLayoutId, SITUATION_LIST){
             @Override
             public boolean isEnabled(int position){
                 return (position != 0);
@@ -148,13 +161,11 @@ public class MoodEditor {
         spinner_situation.setAdapter(situationAdapter);
         spinner_situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
+            public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
                 // first item disabled
-                if(position > 0){
-                    Toast.makeText(myActivity.getApplicationContext(),
-                            "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                            .show();
+                if(i > 0){
+                    String selectedSituation = (String) parent.getItemAtPosition(i);
+                    ((MoodInterface)myActivity).setMoodSituation(selectedSituation);
                 }
             }
             @Override
@@ -173,12 +184,14 @@ public class MoodEditor {
                 "Select photo from gallery"};
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
                                 Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
+
                                     myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
                                 }
                                 break;
@@ -194,26 +207,43 @@ public class MoodEditor {
         pictureDialog.show();
     }
 
-
     // gets the photo that was taken and let the image be shown in the page
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
-                                      ImageView image_view_photo) {
+                               ImageView image_view_photo, final AppCompatActivity myActivity) {
         if (requestCode == REQUEST_IMAGE
                 && resultCode == AppCompatActivity.RESULT_OK){
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            image_view_photo.setImageBitmap(imageBitmap);
+            if (data != null) {
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+                if (imageBitmap!= null){
+                    ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
+                    image_view_photo.setImageBitmap(imageBitmap); //after getting bitmap, set to imageView
+                }
+            }
         }
-        else if (requestCode == GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK){
+        else if (requestCode == GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK) {
             Uri uri = null;
+            Bitmap image = null;
             if (data != null) {
                 uri = data.getData();
-                Log.i(TAG, "Uri: " + uri.toString());
-                image_view_photo.setImageURI(uri);
+                try {
+                    ParcelFileDescriptor parcelFileDescriptor =
+                            myActivity.getContentResolver().openFileDescriptor(uri, "r");
+                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                    image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+                    parcelFileDescriptor.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //send to DBMoodSetter
+                if (image!=null){
+                    ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
+                    image_view_photo.setImageBitmap(image);
+                }
             }
         }
         else {
-            // does nothing if fails to deliver data
+            //does nothing if fails to deliver data
         }
     }
 
@@ -226,7 +256,8 @@ public class MoodEditor {
         return new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                ((MoodInterface)myActivity).setLocation(location);
+                ((MoodInterface)myActivity).setMoodLocation(location);
+
 
                 //redundant
                 double mood_lat = location.getLatitude();
@@ -247,6 +278,8 @@ public class MoodEditor {
             public void onProviderDisabled(String s) {} // not implemented
         };
     }
+
+
 
     public static void getLocationResult(AppCompatActivity myActivity, LocationManager locationManager,
                                          LocationListener locationListener) {

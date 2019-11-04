@@ -7,6 +7,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -35,7 +39,6 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 //  BUG: toast message is shown as failing login/registration when actually succeeding
 //  POSSIBLE BUG: two users attempt registering at the (sameish) time.. depends on when activity was created
 //  currently, the list of all usernames is cached on creation of activity. this is used as a workaround. the firebase call to retrieve the documents in the usernamelist collection is done synchronously so it won't return in time if I update it as its needed
-    // fix by having the activity halt until a response from firebase is recieved maybe?
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -56,10 +59,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         //Stuck logging in? use the following line once to log out the cached session:
-        mAuth.getInstance().signOut();
+//        mAuth.getInstance().signOut();
 
         mAuth = FirebaseAuth.getInstance();
-        dbAuth = new DBAuth(mAuth);
+        dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
 
 
         loginButton = findViewById(R.id.login);
@@ -85,19 +88,12 @@ public class LoginActivity extends AppCompatActivity {
                                             FirebaseUser loginResult = mAuth.getCurrentUser();
                                             updateUI(loginResult);
                                         } else {
-                                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                            Toast.makeText(LoginActivity.this, "Authentication failed",
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
 
-                        /*if (loginResult != null){
-                            updateUI(loginResult);
-
-                        }
-                        updateUI(null);
-                        Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();*/
                     } else {
                         password.setError("Password must be >= 6 chars");
                     }
@@ -113,16 +109,6 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                /*if (dbAuth.verifyEmail(email.getText().toString())){
-                    if (dbAuth.verifyPass(password.getText().toString())){
-                        new UsernameFragment().show(getSupportFragmentManager(), "registering");
-                    } else {
-                        password.setError("Password must be >= 6 chars");
-                    }
-                } else {
-                    email.setError("Incorrect email format");
-                }
-                *///register(email.getText().toString(), password.getText().toString());
 
                 Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                 startActivityForResult(intent, 1);
@@ -137,8 +123,37 @@ public class LoginActivity extends AppCompatActivity {
                 updateUI(user);
             }
         };
+//        onOptionsItemSelected(R.id.nav_logout);
 
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.activity_main_drawer,menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == R.id.nav_logout){
+//
+//                mAuth.getInstance().signOut();
+//                finish();
+//                startActivity(new Intent(this, LoginActivity.class));
+//
+//        }
+//
+//        return true;
+//    }
+//    public  void logout(){
+//        mAuth.getInstance().signOut();
+//        Toast.makeText(LoginActivity.this, "mAuth instance", Toast.LENGTH_LONG).show();
+//
+//        startActivity(new Intent(this, LoginActivity.class));
+//        Toast.makeText(LoginActivity.this, "after new intent", Toast.LENGTH_LONG).show();
+//    }
+
 
     @Override
     public void onStart(){

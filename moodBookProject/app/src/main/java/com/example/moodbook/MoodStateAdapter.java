@@ -56,6 +56,12 @@ public class MoodStateAdapter extends ArrayAdapter<String> {
         i1.setImageResource(images[position]);
         return row;
     }
+
+    public void setError(View v, CharSequence s) {
+        TextView name = (TextView) v.findViewById(R.id.mood_text);
+        name.setError(s);
+    }
+
 }
 
 
