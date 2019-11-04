@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity   {
                 toolbar.setTitle("Add Friends");
                 break;
             case R.id.nav_myRequests:
-                fragmentClass = addFriendFragment.class;
+                fragmentClass = myRequestsFragment.class;
                 toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_myMoodMap:

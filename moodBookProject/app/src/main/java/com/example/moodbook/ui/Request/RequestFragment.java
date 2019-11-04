@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
@@ -36,8 +37,8 @@ public class RequestFragment extends PageFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        requestViewModel =
-                ViewModelProviders.of(this).get(RequestViewModel.class);
+        //requestViewModel =
+        //        ViewModelProviders.of(this).get(RequestViewModel.class);
 
         final View root = inflater.inflate(R.layout.fragment_request, container, false);
         db = FirebaseFirestore.getInstance();
