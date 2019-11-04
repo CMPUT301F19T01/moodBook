@@ -48,11 +48,21 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     private FirebaseFirestore db;
     private String userID;
 
+    /**
+     * Required empty public constructor
+     */
     public myMoodMapFragment() {
         // Required empty public constructor
     }
 
 
+    /**
+     * This method is inherited by Fragment
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     *
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_mymoodmap, container, false);
@@ -62,6 +72,8 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
         mapView.onCreate(savedInstanceState);
 
         mapView.getMapAsync(this);
+
+        mapView.onResume();
 
         // connect to db
         db = FirebaseFirestore.getInstance();
@@ -76,6 +88,11 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
         return root;
     }
 
+    /**
+     * This method is inherited by OnMapReadyCallback
+     * @param googleMap
+     *  internal representation of the map itself
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // initialize map
@@ -85,40 +102,59 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
         updateList(db);
     }
 
-
-
+    /**
+    * This method is inherited by OnMapReadyCallback
+     */
     @Override
     public void onResume() {
         mapView.onResume();
+        updateList(db);
         super.onResume();
     }
 
-
+    /**
+     * This method is inherited by OnMapReadyCallback
+     */
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
 
+    /**
+     * This method is inherited by OnMapReadyCallback
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
 
+    /**
+     * This method is inherited by OnMapReadyCallback
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
     }
 
-
+    /**
+     * This method is a helper method to set the Array List for moods
+     * @param moodDataList
+     *  ArrayList that stores Mood objects
+     */
     private void setMoodDataList(ArrayList<Mood> moodDataList){
         this.moodDataList = moodDataList;
 
     }
 
-    // update users mood list
+    /**
+     * This method is inherited by DBUpdate and queries FireBase
+     * for the all the Current users moods
+     * @param db
+     *  reference to the FireBaseFireStore instance
+     */
     @Override
     public void updateList(FirebaseFirestore db) {
         db.collection("USERS")
@@ -154,6 +190,11 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
 
     }
 
+    /**
+     * This method draws all the Users moods on the map
+     * @param moodDataList
+     *  ArrayList of the users Mood objects
+     */
     private void drawMoodMarkers(ArrayList<Mood> moodDataList){
         int emotionResource;
         LatLng moodLatLng;
@@ -166,8 +207,8 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
             moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
 
             // use png image resource as marker icon
-            BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(emotionResource);
-            Bitmap b = bitmapdraw.getBitmap();
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
+            Bitmap b = bitmapDrawable.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
 

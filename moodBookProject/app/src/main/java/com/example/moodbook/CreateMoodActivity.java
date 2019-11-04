@@ -184,7 +184,6 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
      *     @see  Mood
      *
      */
-
     @Override
     public void setMoodLocation(Location location) {
         this.mood_location = location;
@@ -290,6 +289,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
             public void onClick(View view) {
                 MoodEditor.getLocationResult(CreateMoodActivity.this,
                         locationManager, locationListener);
+                Toast.makeText(getApplicationContext(), "hello", Toast.LENGTH_SHORT).show();
             }
         });
     }
