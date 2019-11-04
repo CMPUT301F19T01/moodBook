@@ -176,11 +176,6 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         });
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
-
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
         moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
