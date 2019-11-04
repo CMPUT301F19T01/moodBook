@@ -41,7 +41,7 @@ public class LoginActivityTest {
     }
 
     /**
-     * Tests login with test@test.com and password testtest for successful login
+     * Tests login with premade test@test.com and password testtest for successful login
      */
     @Test
     public void loginSucceed(){
