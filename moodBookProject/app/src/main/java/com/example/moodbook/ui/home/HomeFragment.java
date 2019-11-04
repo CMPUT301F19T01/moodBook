@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,13 +19,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.view.MenuItemCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -35,27 +28,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moodbook.CreateMoodActivity;
 import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.MainActivity;
 import com.example.moodbook.EditMoodActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodListAdapter;
+import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.RecyclerItemTouchHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
-    private HomeViewModel homeViewModel;
+    //private HomeViewModel homeViewModel;
 
     // Mood History
     private RecyclerView moodListView;
@@ -70,9 +57,7 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
+        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_home);
 
         // Set up recyclerView and adapter
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
@@ -110,9 +95,6 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
         // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(moodListView);
-
-        // to allow search action
-        setHasOptionsMenu(true);
 
         return root;
     }
@@ -157,6 +139,8 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        // inflate new search action menu
         if (inflater == null) {
             inflater = getActivity().getMenuInflater();
         }
@@ -177,18 +161,24 @@ public class HomeFragment extends Fragment implements RecyclerItemTouchHelper.Re
                 return false;
             }
         });
-        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
-            public boolean onMenuItemActionExpand(MenuItem item) {
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
                 return true;
             }
+
             @Override
-            public boolean onMenuItemActionCollapse(MenuItem item) {
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
                 searchView.setQuery("",false);
                 moodAdapter.getFilter().filter("");
                 return true;
             }
         });
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
