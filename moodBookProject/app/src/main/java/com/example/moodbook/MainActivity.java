@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.view.View;
 import android.widget.Toast;
 
 
@@ -43,13 +44,14 @@ public class MainActivity extends AppCompatActivity   {
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -105,18 +107,23 @@ public class MainActivity extends AppCompatActivity   {
         switch(menuItem.getItemId()){
             case R.id.nav_FriendMood:
                 fragmentClass = friendMoodFragment.class;
+                toolbar.setTitle("Friend Mood History");
                 break;
             case R.id.nav_addFriendsMood:
                 fragmentClass = RequestFragment.class;
+                toolbar.setTitle("Add Friends");
                 break;
             case R.id.nav_myRequests:
                 fragmentClass = addFriendFragment.class;
+                toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_myMoodMap:
                 fragmentClass = myMoodMapFragment.class;
+                toolbar.setTitle("Mood History Map");
                 break;
             case R.id.nav_myFriendMoodMap:
                 fragmentClass = myFriendMoodMapFragment.class;
+                toolbar.setTitle("Friend History Map");
                 break;
             case R.id.nav_logout:
                 fragmentClass = null;
@@ -124,6 +131,7 @@ public class MainActivity extends AppCompatActivity   {
                 break;
             default:
                 fragmentClass = HomeFragment.class;
+                toolbar.setTitle("Mood History");
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();

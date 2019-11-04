@@ -40,6 +40,7 @@ public class RequestFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         requestViewModel =
                 ViewModelProviders.of(this).get(RequestViewModel.class);
+
         final View root = inflater.inflate(R.layout.fragment_request, container, false);
         db = FirebaseFirestore.getInstance();
 
