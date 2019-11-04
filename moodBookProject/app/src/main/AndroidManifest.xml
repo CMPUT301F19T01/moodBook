@@ -31,9 +31,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".MoodMapActivity"
-            android:label="@string/title_activity_mood_map"></activity>
         <activity android:name=".ViewMoodActivity" />
         <activity android:name=".CreateMoodActivity" />
         <activity android:name=".EditMoodActivity" />
