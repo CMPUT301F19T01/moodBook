@@ -6,22 +6,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.moodbook.R;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-public class myRequestsFragment extends Fragment {
+import com.example.moodbook.PageFragment;
+import com.example.moodbook.R;
+
+public class myRequestsFragment extends PageFragment {
+    // temporary, will be removed
+    @Deprecated
     private myRequestsViewModel MyRequestsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_myrequests);
+
         MyRequestsViewModel =
                 ViewModelProviders.of(this).get(myRequestsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_myrequests, container, false);
         final TextView textView = root.findViewById(R.id.text_myrequests);
         MyRequestsViewModel.getText().observe(this, new Observer<String>() {
             @Override
@@ -29,6 +32,7 @@ public class myRequestsFragment extends Fragment {
                 textView.setText(s);
             }
         });
+
         return root;
     }
 }
