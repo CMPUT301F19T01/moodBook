@@ -36,8 +36,10 @@ public class RequestFragment extends PageFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        final View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_request);
+        requestViewModel =
+                ViewModelProviders.of(this).get(RequestViewModel.class);
 
+        final View root = inflater.inflate(R.layout.fragment_request, container, false);
         db = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();

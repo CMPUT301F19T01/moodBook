@@ -28,6 +28,8 @@ import com.example.moodbook.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import android.view.View;
+import android.widget.Toast;
 
 //https://guides.codepath.com/android/fragment-navigation-drawer  - used for linking navigation
 public class MainActivity extends AppCompatActivity   {
@@ -37,13 +39,14 @@ public class MainActivity extends AppCompatActivity   {
     private NavigationView navigationView;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -99,18 +102,23 @@ public class MainActivity extends AppCompatActivity   {
         switch(menuItem.getItemId()){
             case R.id.nav_FriendMood:
                 fragmentClass = friendMoodFragment.class;
+                toolbar.setTitle("Friend Mood History");
                 break;
             case R.id.nav_addFriends:
                 fragmentClass = RequestFragment.class;
+                toolbar.setTitle("Add Friends");
                 break;
             case R.id.nav_myRequests:
-                fragmentClass = myRequestsFragment.class;
+                fragmentClass = addFriendFragment.class;
+                toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_myMoodMap:
                 fragmentClass = myMoodMapFragment.class;
+                toolbar.setTitle("Mood History Map");
                 break;
             case R.id.nav_myFriendMoodMap:
                 fragmentClass = myFriendMoodMapFragment.class;
+                toolbar.setTitle("Friend History Map");
                 break;
             case R.id.nav_logout:
                 fragmentClass = null;
@@ -118,6 +126,7 @@ public class MainActivity extends AppCompatActivity   {
                 break;
             default:
                 fragmentClass = HomeFragment.class;
+                toolbar.setTitle("Mood History");
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();

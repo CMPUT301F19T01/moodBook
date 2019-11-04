@@ -3,6 +3,7 @@ package com.example.moodbook;
 import android.widget.EditText;
 
 import com.example.moodbook.ui.login.LoginActivity;
+import com.example.moodbook.ui.login.RegisterActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.robotium.solo.Solo;
@@ -40,7 +41,7 @@ public class LoginActivityTest {
     }
 
     /**
-     * Tests login with test@test.com and password testtest for successful login
+     * Tests login with premade test@test.com and password testtest for successful login
      */
     @Test
     public void loginSucceed(){
@@ -106,5 +107,16 @@ public class LoginActivityTest {
 
         assertTrue(solo.waitForText("Password must be"));
 
+    }
+
+    /**
+     * Tests register button
+     */
+    @Test
+    public void loginRegister(){
+        solo.clickOnButton("register");
+
+        solo.sleep(5000); // wait for activity to change
+        solo.assertCurrentActivity("Wrong activity", RegisterActivity.class);
     }
 }
