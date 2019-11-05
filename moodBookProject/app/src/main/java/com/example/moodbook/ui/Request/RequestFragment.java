@@ -4,15 +4,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.data.UsernameList;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,13 +20,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**
  * This fragment is shown to allow the user to send requests to other users
  */
-public class RequestFragment extends Fragment {
+public class RequestFragment extends PageFragment {
+
+    //private RequestViewModel requestViewModel;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser user;
-
-    private RequestViewModel requestViewModel;
 
     private EditText requestText;
     private Button requestButton;
@@ -38,10 +36,7 @@ public class RequestFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        requestViewModel =
-                ViewModelProviders.of(this).get(RequestViewModel.class);
-
-        final View root = inflater.inflate(R.layout.fragment_request, container, false);
+        final View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_request);
         db = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
@@ -54,7 +49,6 @@ public class RequestFragment extends Fragment {
         requestButton = root.findViewById(R.id.requestButton);
 
         requestHandler = new RequestHandler(mAuth, db);
-
 
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +64,7 @@ public class RequestFragment extends Fragment {
                 }
             }
         });
-        return root;
 
+        return root;
     }
 }

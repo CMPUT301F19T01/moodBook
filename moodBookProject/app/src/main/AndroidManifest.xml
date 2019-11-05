@@ -31,6 +31,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <activity
+            android:name=".LocationPickerActivity"
+            android:label="@string/title_activity_location_picker"></activity>
         <activity android:name=".ViewMoodActivity" />
         <activity android:name=".CreateMoodActivity" />
         <activity android:name=".EditMoodActivity" />

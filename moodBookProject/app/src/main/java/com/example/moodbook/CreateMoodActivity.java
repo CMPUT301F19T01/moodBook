@@ -272,7 +272,6 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                 this, R.layout.spinner_situation);
         MoodEditor.setSituationSpinner(this, situation_spinner, situationAdapter);
     }
-
     /**
      * Initializes the user's current location
      */
@@ -291,7 +290,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                 MoodEditor.getLocationResult(CreateMoodActivity.this,
                         locationManager, locationListener);
 
-
+                Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
+                
+                startActivity(intent);
             }
         });
     }
@@ -301,6 +302,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
      * @return
      *  A boolean with representing all inputs are valid or all inputs are not valid.
      */
+
     private boolean validMoodInputs() {
         boolean areInputsValid = true;
         mood_date = add_date_button.getText().toString();
