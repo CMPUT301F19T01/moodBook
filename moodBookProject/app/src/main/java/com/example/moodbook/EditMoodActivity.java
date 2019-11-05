@@ -233,6 +233,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo, this);
+        MoodEditor.getLocationResult(requestCode, resultCode, data, this);
     }
 
     private void initializeReasonPhoto() {
