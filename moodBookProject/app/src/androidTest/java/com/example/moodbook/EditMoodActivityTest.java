@@ -16,9 +16,12 @@ public class EditMoodActivityTest {
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<EditMoodActivity> rule =
-            new ActivityTestRule<>(EditMoodActivity.class,true,true);
+    public ActivityTestRule<MainActivity> rule =
+            new ActivityTestRule<>(MainActivity.class,true,true);
 
+    @Rule
+    public ActivityTestRule<EditMoodActivity> rule2 =
+            new ActivityTestRule<>(EditMoodActivity.class,true,true);
 
     /**
      * Runs before all tests and creates solo instance.
