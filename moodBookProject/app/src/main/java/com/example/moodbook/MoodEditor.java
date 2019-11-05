@@ -259,8 +259,19 @@ public class MoodEditor {
         }
     }
 
-    public static void getLocationResult(AppCompatActivity myActivity, Location location) {
+    public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data, final AppCompatActivity myActivity) {
+        if(requestCode == LocationPickerActivity.REQUEST_EDIT_LOCATION){
+            if(resultCode == LocationPickerActivity.EDIT_LOCATION_OK){
+                double lat = data.getDoubleExtra("location_lat", 0);
+                double lon = data.getDoubleExtra("location_lon", 0);
 
+                Location location = new Location("");
+                location.setLatitude(lat);
+                location.setLongitude(lon);
+                ((MoodInterface)myActivity).setMoodLocation(location);
+
+            }
+        }
 
     }
 }

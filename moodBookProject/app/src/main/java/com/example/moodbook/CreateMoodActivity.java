@@ -142,7 +142,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView, this);
+        MoodEditor.getLocationResult(requestCode, resultCode, data, this);
     }
 
     /**
@@ -284,7 +286,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
             public void onClick(View view) {
                 // start activity to edit location
                 Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, LocationPickerActivity.REQUEST_EDIT_LOCATION);
 
 
             }

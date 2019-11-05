@@ -7,42 +7,31 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.internal.ConnectionCallbacks;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 public class LocationPickerActivity extends FragmentActivity implements OnMapReadyCallback {
+    public static final int REQUEST_EDIT_LOCATION = 1;
+    public static final int EDIT_LOCATION_OK = 1;
 
     private GoogleMap mMap;
     private Button confirmButton;
     private LatLng pickedLocation;
-    private FusedLocationProviderClient mFusedLocationClient;
-    private LocationRequest locationRequest;
-    private LocationCallback locationCallback;
-
 
     /**
-     * This method was inherited from FragmentActivity
+     * This method was inherited from FragmentActivity.
+     * Used to set map fragment and button click listeners
      * @param savedInstanceState
      */
     @Override
@@ -50,11 +39,8 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_picker);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // set confirm button
         confirmButton = findViewById(R.id.confirmButton);
@@ -65,38 +51,10 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
                 Intent intent = new Intent();
                 intent.putExtra("location_lat", pickedLocation.latitude);
                 intent.putExtra("location_lon", pickedLocation.longitude);
-                setResult(1, intent);
+                setResult(EDIT_LOCATION_OK, intent);
                 finish();
             }
         });
-
-
-
-
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(20 * 1000);
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        double wayLatitude = location.getLatitude();
-                        double wayLongitude = location.getLongitude();
-                    }
-                }
-            }
-        };
-
-
-
-
-
-
-
     }
 
     /**
@@ -111,9 +69,27 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
         // Gets users location
         // create location manager and listener
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                pickedLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(pickedLocation));
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {}
+
+            @Override
+            public void onProviderEnabled(String s) {}
+
+            @Override
+            public void onProviderDisabled(String s) {}
+        };
 
 
         // ask user for permission to access their location
@@ -125,36 +101,14 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
             return;
         }
 
-
-        // call for location update
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            pickedLocation = new LatLng(location.getLatitude(), location.getLongitude());
-
-                            mMap.addMarker(new MarkerOptions().position(pickedLocation));
-                        }
-                    }
-                });
-        // Add a marker in Sydney and move the camera
-
-        if (mFusedLocationClient != null) {
-            mFusedLocationClient.removeLocationUpdates(locationCallback);
-        }
-
-
+        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER,  locationListener, null);
 
         mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng));
-                //Log.i("sal;kdjf", String.valueOf(pickedLocation.latitude));
                 pickedLocation = latLng;
-                Toast.makeText(getApplicationContext(), String.valueOf(pickedLocation.latitude) , Toast.LENGTH_SHORT).show();
             }
         });
     }
