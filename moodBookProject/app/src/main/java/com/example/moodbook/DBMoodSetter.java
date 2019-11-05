@@ -212,6 +212,7 @@ public class DBMoodSetter {
     /**
      * This adds an image object to the FireBase storage
      * @param mood
+     *   This is a mood object
      */
     public void addImg(final Mood mood) {
         String picID = moodID;
@@ -242,6 +243,7 @@ public class DBMoodSetter {
      * Instead of taking an a whole Mood object, it will only have to take in a moodID
      * to update the image.
      * @param moodID
+     *  This is the moodID of the mood that a user wants to view/edit the image at.
      */
     public void updateImg(String moodID){
         StorageReference photoRef = photoReference.child(moodID);
@@ -374,7 +376,7 @@ public class DBMoodSetter {
             }
         };
     }
-    
+
     /**
      * This is used by a to convert Mood object to HashMap data
      * @param mood
