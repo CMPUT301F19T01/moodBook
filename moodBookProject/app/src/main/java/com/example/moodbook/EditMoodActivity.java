@@ -236,6 +236,9 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo, this);
     }
 
+    /**
+     * This allows a user to edit a mood image.
+     */
     private void initializeReasonPhoto() {
         image_view_photo = findViewById(R.id.edit_reason_photo_imageView);
 
@@ -247,16 +250,36 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         });
     }
 
+    /**
+     * This  is a method inherited from the MoodEditor Interface sets a value for a mood emotion
+     * @param emotion
+     *   A Mood Object attribute of emotion
+     *   @see Mood
+     */
     @Override
     public void setMoodEmotion(String emotion) {
         // do nothing
     }
+
+    /**
+     * This is a method inherited from the MoodEditor Interface sets a value for a mood situation
+     * @param situation
+     *   A Mood Object attribute of situation
+     *   @see Mood
+     */
 
     @Override
     public void setMoodSituation(String situation) {
         this.mood_situation = situation;
     }
 
+    /**
+     * This is a method inherited from the MoodEditor Interface sets a value for a mood location
+     * @param location
+     *     A Mood Object attribute of situation
+     *     @see  Mood
+     *
+     */
     @Override
     public void setMoodLocation(Location location) {
         this.mood_location = location;
@@ -265,6 +288,11 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         edit_location_button.setText(edit_location_button_text);
     }
 
+    /**
+     * This is a method inherited from the MoodEditor Interface that sets a value for a bitmap Image
+     * @param bitImage
+     *  This is a bitmap image
+     */
     @Override
     public void setMoodReasonPhoto(Bitmap bitImage) {
         this.bitImage = bitImage;
