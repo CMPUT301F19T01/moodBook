@@ -235,22 +235,21 @@ public class MoodEditor {
         }
         else if (requestCode == GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK) {
             Uri uri = null;
-            Bitmap image = null;
             if (data != null) {
                 uri = data.getData();
                 try {
                     ParcelFileDescriptor parcelFileDescriptor =
                             myActivity.getContentResolver().openFileDescriptor(uri, "r");
                     FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                    image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+                    imageBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
                     parcelFileDescriptor.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 //send to DBMoodSetter
-                if (image!=null){
+                if (imageBitmap!=null){
                     ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
-                    image_view_photo.setImageBitmap(image);
+                    image_view_photo.setImageBitmap(imageBitmap);
                 }
             }
         }

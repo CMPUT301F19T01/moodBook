@@ -23,15 +23,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 /**
  * This activity handles registration
  * Citation: https://firebase.google.com/docs/auth/android/manage-users?authuser=0
- * https://stackoverflow.com/questions/43599638/firebase-signinwithemailandpassword-and-createuserwithemailandpassword-not-worki -Sagar Raut   used for mAuthListener
- * https://stackoverflow.com/questions/16812039/how-to-check-valid-email-format-entered-in-edittext  - iversoncru   used for verifying email format
- * https://stackoverflow.com/questions/34110565/how-to-add-back-button-on-actionbar-in-android-studio  - adnbsr    used for back button
  */
-//TODO:
-//  BUG: toast message is shown as failing login/registration when actually succeeding
-//  POSSIBLE BUG: two users attempt registering at the (sameish) time.. depends on when activity was created
-//  currently, the list of all usernames is cached on creation of activity. this is used as a workaround. the firebase call to retrieve the documents in the usernamelist collection is done synchronously so it won't return in time if I update it as its needed
-    // fix by having the activity halt until a response from firebase is recieved maybe?
 
 public class RegisterActivity extends AppCompatActivity {
 

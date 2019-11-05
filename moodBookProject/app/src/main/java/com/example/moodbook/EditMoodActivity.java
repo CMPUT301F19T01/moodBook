@@ -1,36 +1,28 @@
 package com.example.moodbook;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-
-import android.Manifest;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-
 import android.widget.ArrayAdapter;
-
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -71,11 +63,11 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
 
     // location
     private Button edit_location_button;
-    private String intent_location;
+    private Location mood_location;
 
     // situation
     private Spinner edit_spinner_situation;
-    private String intent_situation;
+    private String mood_situation;
     // initialize string array for situation
     private final String[] situationList = MoodEditor.SITUATION_LIST;
 
@@ -88,10 +80,6 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     private ImageView image_view_photo;
     public static final int REQUEST_IMAGE = 101;
 
-    //location
-    private String date_mood, time_mood, reason_mood, situation_mood;
-    private double lat_mood, lon_mood;
-    private String intent_lat, intent_lon;
 
     private Bitmap obtainedImg;
     private Bitmap bitImage;
@@ -129,12 +117,14 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         edit_text_reason.setText(intent_reason);
         String intent_lat = getIntent().getStringExtra("location_lat");
         String intent_lon = getIntent().getStringExtra("location_lon");
-        edit_location_button.setText(intent_lat + " , " +intent_lon);
+        edit_location_button.setText(intent_lat + " , " + intent_lon);
         moodDB.getImageFromDB(intent_moodID, image_view_photo);
         //obtainedImg = moodDB.getImageFromDB(intent_moodID);
         //image_view_photo.setImageBitmap(obtainedImg);
+
         final Button save_button = findViewById(R.id.edit_save_button);
         final Button cancel_edit_button = findViewById(R.id.edit_cancel_button);
+
         // Initializing an ArrayAdapter for situation spinner
         final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this, R.layout.spinner_situation, situationList){
@@ -158,11 +148,9 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         edit_spinner_situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedItemText = (String) parent.getItemAtPosition(position);
                 if(position > 0){
-                    Toast.makeText(getApplicationContext(),
-                            "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                            .show();
+                    String selectedSituation = (String) parent.getItemAtPosition(position);
+                    setMoodSituation(selectedSituation);
                 }
             }
             @Override
@@ -195,9 +183,15 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
             @Override
             public void onClick(View view) {
                 final HashMap<String, Object> moodMap = new HashMap<>();
-                moodMap.put("reason_text",edit_text_reason.getText().toString());
-                moodMap.put("situation",edit_spinner_situation.getSelectedItem().toString());
                 moodMap.put("emotion",spinner_emotion.getSelectedItem().toString());
+                moodMap.put("reason_text",edit_text_reason.getText().toString());
+                if(mood_situation != null) {
+                    moodMap.put("situation",mood_situation);
+                }
+                if(mood_location != null) {
+                    moodMap.put("location_lat",mood_location.getLatitude());
+                    moodMap.put("location_lon",mood_location.getLongitude());
+                }
                 moodDB.editMood(intent_moodID,moodMap);
                 finish();
 
@@ -214,44 +208,15 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         });
         // Gets users location
         // create location manager and listener
-        final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        final LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                lat_mood = location.getLatitude();
-                lon_mood = location.getLongitude();
-                Toast.makeText(getApplicationContext(), lat_mood + "   " + lon_mood, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {} // not implemented
-
-            @Override
-            public void onProviderEnabled(String s) {} // not implemented
-
-            @Override
-            public void onProviderDisabled(String s) {} // not implemented
-        };
-
-        // set criteria for accuracy of location provider
-        final Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-
-        // set to null because we are required to supply looper but not going to use it
-        final Looper looper = null;
+        final LocationManager locationManager = MoodEditor.getLocationManager(this);
+        final LocationListener locationListener = MoodEditor.getLocationListener(this);
 
         // set the button onClickListener to request location
         edit_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // ask user for permission to get location
-                if (ActivityCompat.checkSelfPermission(EditMoodActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(EditMoodActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(EditMoodActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                    return;
-                } else { // permission granted
-                    locationManager.requestSingleUpdate(criteria, locationListener, looper);
-                }
+                MoodEditor.getLocationResult(EditMoodActivity.this,
+                        locationManager, locationListener);
             }
         });
     }
@@ -265,6 +230,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
      * @param data
      *
      */
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo, this);
@@ -283,17 +249,20 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
 
     @Override
     public void setMoodEmotion(String emotion) {
-
+        // do nothing
     }
 
     @Override
     public void setMoodSituation(String situation) {
-
+        this.mood_situation = situation;
     }
 
     @Override
     public void setMoodLocation(Location location) {
-
+        this.mood_location = location;
+        String edit_location_button_text = ((Double)location.getLatitude()).toString() + " , "
+                + ((Double)location.getLongitude()).toString();
+        edit_location_button.setText(edit_location_button_text);
     }
 
     @Override

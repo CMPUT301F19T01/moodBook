@@ -3,6 +3,8 @@ package com.example.moodbook;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -132,6 +134,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
      * @param data
      *
      */
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView, this);

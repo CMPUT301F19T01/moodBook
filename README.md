@@ -15,5 +15,7 @@ https://github.com/CMPUT301F19T01/moodBook/wiki
 
 [Information References](https://github.com/CMPUT301F19T01/moodBook/wiki/Information-References)
 
+[Citations](https://github.com/CMPUT301F19T01/moodBook/wiki/Citations)
+
 # License
 This project is licensed under the terms of the MIT [license](LICENSE).
