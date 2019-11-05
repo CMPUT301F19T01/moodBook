@@ -278,21 +278,15 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     private void initializeLocation() {
         add_location_button = findViewById(R.id.create_location_button);
 
-        // Gets users location
-        // create location manager and listener
-        final LocationManager locationManager = MoodEditor.getLocationManager(this);
-        final LocationListener locationListener = MoodEditor.getLocationListener(this);
-
         // set the button onClickListener to request location
         add_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.getLocationResult(CreateMoodActivity.this,
-                        locationManager, locationListener);
-
+                // start activity to edit location
                 Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
-                
                 startActivity(intent);
+
+
             }
         });
     }

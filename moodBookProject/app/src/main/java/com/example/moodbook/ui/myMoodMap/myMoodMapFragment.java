@@ -202,6 +202,7 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
             // get image resource for the mood marker
             emotionResource = mood.getEmotionImageResource();
 
+            // get location of mood
             Location moodLocation = mood.getLocation();
             moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
 

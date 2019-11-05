@@ -1,6 +1,7 @@
 package com.example.moodbook;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -258,55 +259,8 @@ public class MoodEditor {
         }
     }
 
-    // Location editor
-    public static LocationManager getLocationManager(AppCompatActivity myActivity) {
-        return (LocationManager) myActivity.getSystemService(Context.LOCATION_SERVICE);
-    }
-
-    public static LocationListener getLocationListener(final AppCompatActivity myActivity) {
-        return new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                ((MoodInterface)myActivity).setMoodLocation(location);
-
-                //redundant
-                double mood_lat = location.getLatitude();
-                double mood_lon = location.getLongitude();
-
-                Toast.makeText(myActivity.getApplicationContext(),
-                        mood_lat + "   " + mood_lon, Toast.LENGTH_SHORT)
-                        .show();
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {} // not implemented
-
-            @Override
-            public void onProviderEnabled(String s) {} // not implemented
-
-            @Override
-            public void onProviderDisabled(String s) {} // not implemented
-        };
-    }
+    public static void getLocationResult(AppCompatActivity myActivity, Location location) {
 
 
-
-    public static void getLocationResult(AppCompatActivity myActivity, LocationManager locationManager,
-                                         LocationListener locationListener) {
-        // ask user for permission to get location
-        if (ActivityCompat.checkSelfPermission(myActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(myActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(myActivity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-            return;
-        } else { // permission granted
-            // set criteria for accuracy of location provider
-            final Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-
-            locationManager.requestSingleUpdate(criteria, locationListener, null);
-        }
     }
 }
