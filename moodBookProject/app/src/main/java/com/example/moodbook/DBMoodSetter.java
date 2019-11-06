@@ -209,7 +209,11 @@ public class DBMoodSetter {
     }
 
 
-    // function to add the reason image to firebase storage
+    /**
+     * This adds an image object to the FireBase storage
+     * @param mood
+     *   This is a mood object
+     */
     public void addImg(final Mood mood) {
         String picID = moodID;
         StorageReference photoRef = photoReference.child(picID);
@@ -223,18 +227,24 @@ public class DBMoodSetter {
             uploadTask.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
-                    // Handle unsuccessful uploads
+                    showStatusMessage("Failed to add mood photo.");
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    showStatusMessage("Succesfully added the mood photo");
                 }
             });
         }
     }
 
-    //update image in storage
+    /**
+     * This updates an image object to the FireBase storage
+     * Instead of taking an a whole Mood object, it will only have to take in a moodID
+     * to update the image.
+     * @param moodID
+     *  This is the moodID of the mood that a user wants to view/edit the image at.
+     */
     public void updateImg(String moodID){
         StorageReference photoRef = photoReference.child(moodID);
         Bitmap bitImage = MoodEditor.getBitmap();
@@ -309,6 +319,12 @@ public class DBMoodSetter {
                 });
     }
 
+    /**
+     * This gets the image stored from DB
+     * Useful when a user wants to view the image that they have previously added for this mood.
+     * @param docID
+     * @param view
+     */
     public void getImageFromDB(String docID, final ImageView view) {
         StorageReference ref = photoReference.child(docID);
         try {
@@ -328,7 +344,6 @@ public class DBMoodSetter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        return obtainedImg;
     }
 
     /**
@@ -339,7 +354,6 @@ public class DBMoodSetter {
      * @return
      *  Returns a an EventListener that listens for changes in the mood database
      */
-    // used by MoodHistory to get all mood data from user's mood collection
     public static EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodAdapter) {
         return new EventListener<QuerySnapshot>() {
             @Override
@@ -362,6 +376,7 @@ public class DBMoodSetter {
             }
         };
     }
+
     /**
      * This is used by a to convert Mood object to HashMap data
      * @param mood

@@ -191,6 +191,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     /**
      * This is a method inherited from the MoodEditor Interface that sets a value for a bitmap Image
      * @param bitImage
+     *  This is a bitmap image
      */
     @Override
     public void setMoodReasonPhoto(Bitmap bitImage) {
