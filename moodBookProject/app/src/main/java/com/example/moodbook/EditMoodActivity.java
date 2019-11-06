@@ -280,7 +280,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
      *     @see  Mood
      *
      */
-    @Override
+//    @Ov erride
     public void setMoodLocation(Location location) {
         this.mood_location = location;
         String edit_location_button_text = ((Double)location.getLatitude()).toString() + " , "

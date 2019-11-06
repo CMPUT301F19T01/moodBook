@@ -53,7 +53,6 @@ public class CreateMoodActivityTest {
     /**
      * Clicks on the Fab button for adding moods to go to createMood Activity
      */
-
     @Test
     public void clickAdd(){
         solo.clickOnView(solo.getView(R.id.mood_history_add_button));
@@ -66,15 +65,10 @@ public class CreateMoodActivityTest {
         solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
         solo.clickOnView(solo.getView(R.id.create_time_button)); //time button
         solo.clickOnView(solo.getView(R.id.create_location_button)); //time button
-
         solo.clickOnView(solo.getView(R.id.create_emotion_spinner, 0));//emotion --Picks alone
         solo.clickOnView(solo.getView(R.id.create_location_button));
         solo.clickOnView(solo.getView(R.id.create_emotion_spinner, 0));
-
         solo.clickOnView(solo.getView(R.id.create_add_button)); //Select CONFIRM Button
-
-
-
 
     }
 

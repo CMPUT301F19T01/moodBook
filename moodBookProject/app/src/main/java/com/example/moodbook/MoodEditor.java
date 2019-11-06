@@ -84,7 +84,7 @@ public class MoodEditor {
 
     /**
      * A method that returns a bitmap that was set in the imageView
-     * @return imageBitmap
+     * @return imageBitmap This is a Bitmap image
      */
     public static Bitmap getBitmap(){
         return imageBitmap;
@@ -93,7 +93,7 @@ public class MoodEditor {
     /**
      * A method that acts as a Date editor
      * Used by users to set the current date
-     * @param view
+     * @param view This is a view for a button
      */
     public static void showCalendar(final Button view){
         Calendar c = Calendar.getInstance();
@@ -105,6 +105,7 @@ public class MoodEditor {
      * A method that acts as a time editor
      * Used by users to set a current time
      * @param view
+     *  This is a view for a button
      */
     public static void showTime(final Button view){
         Date d = new Date();
@@ -115,9 +116,9 @@ public class MoodEditor {
     /**
      * A method that acts as an emotion state editor
      * Used by users to select their current emotional state
-     * @param myActivity
-     * @param spinner_emotion
-     * @param emotionAdapter
+     * @param myActivity This is the class that calls on this method
+     * @param spinner_emotion This is the spinner for choosing an emotion state
+     * @param emotionAdapter This is the adapter for emotion states
      */
     public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner spinner_emotion,
                                          MoodStateAdapter emotionAdapter) {
@@ -139,12 +140,12 @@ public class MoodEditor {
             }
         });
     }
+
     /**
-     * A method that acts as a situation editor
-     * Used by users to selects their current situation
-     * @param myActivity
-     * @param spinnerLayoutId
-     * @return situationAdapter
+     * A method that shows the situation options
+     * @param myActivity The class that calls in this method
+     * @param spinnerLayoutId The view that contains the situation options
+     * @return Returns the adapter
      */
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
                                                            int spinnerLayoutId) {
@@ -168,6 +169,12 @@ public class MoodEditor {
     }
 
 
+    /**
+     * This is a method that allows users to choose a situation from the adapter
+     * @param myActivity The class that calls in this method
+     * @param spinner_situation The spinner view
+     * @param situationAdapter The situation adapter
+     */
     public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner spinner_situation,
                                            ArrayAdapter<String> situationAdapter) {
         spinner_situation.setAdapter(situationAdapter);
@@ -187,7 +194,11 @@ public class MoodEditor {
         });
     }
 
-
+    /**
+     * This is a method that allows the users to add an image to their mood
+     * Involves two options, Camera and Gallery, and will take the users to a new activity to choose/take a picture
+     * @param myActivity The class that calls in this method
+     */
     public static void setImage(final AppCompatActivity myActivity){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(myActivity);
         pictureDialog.setTitle("Select Action");
@@ -219,7 +230,14 @@ public class MoodEditor {
         pictureDialog.show();
     }
 
-    // gets the photo that was taken and let the image be shown in the page
+    /**
+     * This is a method that gets the photo that was taken/chosen and let the image be shown on the screen
+     * @param requestCode This is a result code
+     * @param resultCode This is a result code
+     * @param data This is the data obtained from the Camera/Gallery intent
+     * @param image_view_photo This is an ImageView
+     * @param myActivity The class that calls in this method
+     */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
                                ImageView image_view_photo, final AppCompatActivity myActivity) {
         if (requestCode == REQUEST_IMAGE
@@ -258,11 +276,20 @@ public class MoodEditor {
         }
     }
 
-    // Location editor
+    /**
+     * This method is the location editor
+     * @param myActivity The class that calls in this method
+     * @return
+     */
     public static LocationManager getLocationManager(AppCompatActivity myActivity) {
         return (LocationManager) myActivity.getSystemService(Context.LOCATION_SERVICE);
     }
 
+    /**
+     * The method that sets the mood location
+     * @param myActivity The class that calls in this method
+     * @return
+     */
     public static LocationListener getLocationListener(final AppCompatActivity myActivity) {
         return new LocationListener() {
             @Override
@@ -270,13 +297,13 @@ public class MoodEditor {
                 ((MoodInterface)myActivity).setMoodLocation(location);
 
 
-                //redundant
-                double mood_lat = location.getLatitude();
-                double mood_lon = location.getLongitude();
-
-                Toast.makeText(myActivity.getApplicationContext(),
-                        mood_lat + "   " + mood_lon, Toast.LENGTH_SHORT)
-                        .show();
+//                //redundant
+//                double mood_lat = location.getLatitude();
+//                double mood_lon = location.getLongitude();
+//
+//                Toast.makeText(myActivity.getApplicationContext(),
+//                        mood_lat + "   " + mood_lon, Toast.LENGTH_SHORT)
+//                        .show();
             }
 
             @Override
@@ -291,7 +318,12 @@ public class MoodEditor {
     }
 
 
-
+    /**
+     * The method that gets the result for location
+     * @param myActivity The class that calls in this method
+     * @param locationManager
+     * @param locationListener
+     */
     public static void getLocationResult(AppCompatActivity myActivity, LocationManager locationManager,
                                          LocationListener locationListener) {
         // ask user for permission to get location
