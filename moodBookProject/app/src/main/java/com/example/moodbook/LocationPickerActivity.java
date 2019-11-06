@@ -103,10 +103,10 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
         // get the users current location
         locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER,  locationListener, null);
 
-        // functionality for placing marker with long clicks
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        // functionality for placing marker with on clicks
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapLongClick(LatLng latLng) {
+            public void onMapClick(LatLng latLng) {
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng));
                 pickedLocation = latLng;

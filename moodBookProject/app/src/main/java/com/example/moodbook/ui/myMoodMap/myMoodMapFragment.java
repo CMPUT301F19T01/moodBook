@@ -156,37 +156,40 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
      */
     @Override
     public void updateList(FirebaseFirestore db) {
-        db.collection("USERS")
-                .document(userID)
-                .collection("MOODS")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Location tempLoc;
+        try {
+            db.collection("USERS")
+                    .document(userID)
+                    .collection("MOODS")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                Location tempLoc;
 
-                            // iterate over each document and get fields for drawing mood markers
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                if (doc.exists() && doc.getDouble("location_lat") != null && doc.getDouble("location_lon") != null) {
-                                    try {
-                                        moodDataList.add(DBMoodSetter.getMoodFromData(doc.getData()));
+                                // iterate over each document and get fields for drawing mood markers
+                                for (QueryDocumentSnapshot doc : task.getResult()) {
+                                    if (doc.exists() && doc.getDouble("location_lat") != null && doc.getDouble("location_lon") != null) {
+                                        try {
+                                            moodDataList.add(DBMoodSetter.getMoodFromData(doc.getData()));
 
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
                                     }
 
                                 }
+                                // draw markers
+                                setMoodDataList(moodDataList);
+                                drawMoodMarkers(moodDataList);
 
                             }
-                            // draw markers
-                            setMoodDataList(moodDataList);
-                            drawMoodMarkers(moodDataList);
-
                         }
-                    }
-                });
-
+                    });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -15,6 +15,8 @@ import androidx.test.rule.ActivityTestRule;
 /**
  * Test class for CreateMoodActivity. All the UI tests are written here. Robotium test framework is
  used
+ * todo:
+ *  * write tests for location picker
  */
 public class CreateMoodActivityTest {
 
