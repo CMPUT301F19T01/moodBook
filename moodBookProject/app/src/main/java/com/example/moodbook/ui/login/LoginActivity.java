@@ -30,15 +30,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * This activity handles login and registration
- * Citation: https://firebase.google.com/docs/auth/android/manage-users?authuser=0
- * https://stackoverflow.com/questions/43599638/firebase-signinwithemailandpassword-and-createuserwithemailandpassword-not-worki -Sagar Raut   used for mAuthListener
- * https://stackoverflow.com/questions/16812039/how-to-check-valid-email-format-entered-in-edittext  - iversoncru   used for verifying email format
- * https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant    used for activity results
  */
-//TODO:
-//  BUG: toast message is shown as failing login/registration when actually succeeding
-//  POSSIBLE BUG: two users attempt registering at the (sameish) time.. depends on when activity was created
-//  currently, the list of all usernames is cached on creation of activity. this is used as a workaround. the firebase call to retrieve the documents in the usernamelist collection is done synchronously so it won't return in time if I update it as its needed
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -123,36 +115,8 @@ public class LoginActivity extends AppCompatActivity {
                 updateUI(user);
             }
         };
-//        onOptionsItemSelected(R.id.nav_logout);
 
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.activity_main_drawer,menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        if (item.getItemId() == R.id.nav_logout){
-//
-//                mAuth.getInstance().signOut();
-//                finish();
-//                startActivity(new Intent(this, LoginActivity.class));
-//
-//        }
-//
-//        return true;
-//    }
-//    public  void logout(){
-//        mAuth.getInstance().signOut();
-//        Toast.makeText(LoginActivity.this, "mAuth instance", Toast.LENGTH_LONG).show();
-//
-//        startActivity(new Intent(this, LoginActivity.class));
-//        Toast.makeText(LoginActivity.this, "after new intent", Toast.LENGTH_LONG).show();
-//    }
 
 
     @Override
@@ -187,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
     // https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant    used for activity results
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
             if(resultCode == Activity.RESULT_OK){
                 FirebaseUser user = mAuth.getCurrentUser();
