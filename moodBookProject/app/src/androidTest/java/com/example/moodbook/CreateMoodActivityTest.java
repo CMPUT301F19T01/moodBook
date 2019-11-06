@@ -50,6 +50,7 @@ public class CreateMoodActivityTest {
         Activity activity = rule.getActivity();
     }
 
+
     /**
      * Clicks on the Fab button for adding moods to go to createMood Activity
      */
@@ -63,24 +64,18 @@ public class CreateMoodActivityTest {
 
     @Test
     public void addMood(){
-        solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
-        solo.clickOnView(solo.getView(R.id.create_time_button)); //time button
-        solo.clickOnView(solo.getView(R.id.create_location_button)); //time button
+        solo2.clickOnView(solo2.getView(R.id.create_date_button)); //date button
+        solo2.clickOnView(solo2.getView(R.id.create_time_button)); //time button
+        solo2.clickOnView(solo2.getView(R.id.create_location_button)); //time button
 
-        solo.clickOnView(solo.getView(R.id.create_emotion_spinner, 0));//emotion --Picks alone
-        solo.clickOnView(solo.getView(R.id.create_location_button));
-        solo.clickOnView(solo.getView(R.id.create_emotion_spinner, 0));
+        solo2.clickOnView(solo2.getView(R.id.create_emotion_spinner, 0));//emotion --Picks alone
+        solo2.clickOnView(solo2.getView(R.id.create_location_button));
+        solo2.clickOnView(solo2.getView(R.id.create_emotion_spinner, 0));
 
-        solo.clickOnView(solo.getView(R.id.create_add_button)); //Select CONFIRM Button
+        solo2.clickOnView(solo2.getView(R.id.create_add_button)); //Select CONFIRM Button
 
 
 
 
     }
-
-
-
-
-
-
 }
