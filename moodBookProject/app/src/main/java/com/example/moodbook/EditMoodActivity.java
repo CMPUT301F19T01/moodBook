@@ -80,8 +80,6 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     private ImageView image_view_photo;
     public static final int REQUEST_IMAGE = 101;
 
-
-    private Bitmap obtainedImg;
     private Bitmap bitImage;
 
 
@@ -119,8 +117,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         String intent_lon = getIntent().getStringExtra("location_lon");
         edit_location_button.setText(intent_lat + " , " + intent_lon);
         moodDB.getImageFromDB(intent_moodID, image_view_photo);
-        //obtainedImg = moodDB.getImageFromDB(intent_moodID);
-        //image_view_photo.setImageBitmap(obtainedImg);
+
 
         final Button save_button = findViewById(R.id.edit_save_button);
         final Button cancel_edit_button = findViewById(R.id.edit_cancel_button);

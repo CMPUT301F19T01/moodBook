@@ -40,6 +40,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
+/**
+ * This class shows the mood history of the user, showing the date, time, and emotion state
+ */
 public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     //private HomeViewModel homeViewModel;
@@ -176,6 +179,10 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         });
     }
 
+    /**
+     * This method is for setting up the mood list adapter
+     * @param itemClickListener
+     */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
         moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -185,6 +192,11 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         moodListView.setAdapter(moodAdapter);
     }
 
+    /**
+     * This method takes in the Mood object from the clicked row
+     * @param intent
+     * @param mood
+     */
     private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
         Location location = mood.getLocation();
         intent.putExtra("moodID", mood.getDocId());

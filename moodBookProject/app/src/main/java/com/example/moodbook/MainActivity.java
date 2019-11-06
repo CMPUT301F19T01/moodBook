@@ -32,6 +32,10 @@ import android.view.View;
 import android.widget.Toast;
 
 //https://guides.codepath.com/android/fragment-navigation-drawer  - used for linking navigation
+
+/**
+ * The Main Activity is set to HomeFragment as default, which in turn lists the Mood History list
+ */
 public class MainActivity extends AppCompatActivity   {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -95,7 +99,11 @@ public class MainActivity extends AppCompatActivity   {
                 || super.onSupportNavigateUp();
     }
 
-
+    /**
+     * This method is for switching between different intent activities
+     * @param menuItem
+     * @param drawer
+     */
     public void selectDrawerItem(MenuItem menuItem, DrawerLayout drawer){
         Fragment fragment;
         Class fragmentClass;
@@ -145,17 +153,14 @@ public class MainActivity extends AppCompatActivity   {
     }
 
 
-
+    /**
+     * This method allows the user to log out of the application.
+     */
 
     private void logout(){
         mAuth.getInstance().signOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
-
-
-
-
-
 
 }
