@@ -59,6 +59,15 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         }
     }
 
+    /**
+     * This is a constructor used by Create and Edit Mood Activity to get the current instance of a mood in the database
+     * @param context
+     *   This is a handler to get the data and resources that the app needs while it runs
+     * @param moodList
+     *   This is the arrayList that stores all the moods that will be displayed
+     * @param listener
+     *   This is a item click event listener, which will start EditMoodActivity
+     */
     public MoodListAdapter(Context context, ArrayList<Mood> moodList, OnItemClickListener listener){
         this.moodList = moodList;
         this.context = context;
@@ -91,16 +100,32 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         holder.bind(mood, listener);
     }
 
+    /**
+     * This return the number of moods to be displayed
+     * @return
+     *    Returns the size of arraylist of all the moods that will be displayed
+     */
     @Override
     public int getItemCount() {
         return moodList.size();
     }
 
+    /**
+     * This return the mood at the specified position
+     * @param position
+     *   This is the position of a mood
+     * @return
+     *   Returns the mood at the given position
+     */
     public Mood getItem(int position) {
         return moodList.get(position);
     }
 
-    // Add a mood item, and sort mood list by dateTime starting from most recent
+    /**
+     * This add a mood, and sort arrayList and full arrayList of moods by dateTime starting from most recent
+     * @param item
+     *   This is the new mood
+     */
     public void addItem(Mood item) {
         // add to filtered moodList
         moodList.add(item);
@@ -112,6 +137,9 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         notifyDataSetChanged();
     }
 
+    /**
+     * This remove all the moods from arrayList and full arrayList
+     */
     // Remove all mood items
     public void clear() {
         moodList.clear();

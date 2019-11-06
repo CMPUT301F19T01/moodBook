@@ -15,8 +15,8 @@ public class Mood implements Comparable<Mood> {
     private String reason_text;     // optional
     private String situation;       // optional
     private Location location;      // optional
-    private String doc_id;          // for editing & deleting
     private Bitmap reason_photo;    // optional
+    private String doc_id;          // for editing & deleting
 
     // date time formatter
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
