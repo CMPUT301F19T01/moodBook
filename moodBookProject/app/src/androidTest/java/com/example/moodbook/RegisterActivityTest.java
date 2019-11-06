@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Random;
+
 import static junit.framework.TestCase.assertTrue;
 
 
@@ -21,9 +23,22 @@ public class RegisterActivityTest {
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<RegisterActivity> rule =
-            new ActivityTestRule<>(RegisterActivity.class, true, true);
+    public ActivityTestRule<LoginActivity> rule =
+            new ActivityTestRule<>(LoginActivity.class, true, true);
 
+    // https://stackoverflow.com/questions/20536566/creating-a-random-string-with-a-z-and-0-9-in-java   - Suresh Atta     used to generate unique username and email address
+    private String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 18) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
+    }
 
     @Before
     public void setUp() throws Exception{
@@ -33,25 +48,26 @@ public class RegisterActivityTest {
             solo.clickOnImageButton(0);
             solo.clickOnText("Logout");
             solo.sleep(3000);
-            solo.clickOnText("register");
-            solo.sleep(3000);
         }
+        solo.clickOnText("register");
+        solo.sleep(3000);
     }
 
-//    /**
-//     * Tests register
-//     */
-//    //TODO
-//    @Test
-//    public void registerSucceed(){
-//        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
-//        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-//        solo.clickOnButton("login");
-//        solo.sleep(5000); // wait for activity to change
-//
-//        solo.assertCurrentActivity("Wrong activity", MainActivity.class);
-//
-//    }
+    /**
+     * Tests register
+     */
+    @Test
+    public void registerSucceed(){
+        String unique = getSaltString();
+        String email = unique + "@test.com";
+        solo.enterText((EditText) solo.getView(R.id.email), email);
+        solo.enterText((EditText) solo.getView(R.id.username), unique);
+        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
+        solo.clickOnButton("register");
+        solo.sleep(5000); // wait for activity to change
+        assertTrue(solo.waitForText("Mood History"));
+
+    }
 
     /**
      * Tests register for a failed register due to email
