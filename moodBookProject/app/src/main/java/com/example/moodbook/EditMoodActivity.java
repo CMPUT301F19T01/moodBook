@@ -80,15 +80,13 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     private ImageView image_view_photo;
     public static final int REQUEST_IMAGE = 101;
 
-
-    private Bitmap obtainedImg;
     private Bitmap bitImage;
 
 
     /**
      * This is a method inherited from the AppCompatActivity
      * @param savedInstanceState
-     *  Bundle Object is used to stored the data of this activity
+     *  Bundle Object is used to store the data of this activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +117,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         String intent_lon = getIntent().getStringExtra("location_lon");
         edit_location_button.setText(intent_lat + " , " + intent_lon);
         moodDB.getImageFromDB(intent_moodID, image_view_photo);
-        //obtainedImg = moodDB.getImageFromDB(intent_moodID);
-        //image_view_photo.setImageBitmap(obtainedImg);
+
 
         final Button save_button = findViewById(R.id.edit_save_button);
         final Button cancel_edit_button = findViewById(R.id.edit_cancel_button);
@@ -236,6 +233,9 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo, this);
     }
 
+    /**
+     * This allows a user to edit a mood image.
+     */
     private void initializeReasonPhoto() {
         image_view_photo = findViewById(R.id.edit_reason_photo_imageView);
 
@@ -247,17 +247,37 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         });
     }
 
+    /**
+     * This  is a method inherited from the MoodEditor Interface sets a value for a mood emotion
+     * @param emotion
+     *   A Mood Object attribute of emotion
+     *   @see Mood
+     */
     @Override
     public void setMoodEmotion(String emotion) {
         // do nothing
     }
+
+    /**
+     * This is a method inherited from the MoodEditor Interface sets a value for a mood situation
+     * @param situation
+     *   A Mood Object attribute of situation
+     *   @see Mood
+     */
 
     @Override
     public void setMoodSituation(String situation) {
         this.mood_situation = situation;
     }
 
-    @Override
+    /**
+     * This is a method inherited from the MoodEditor Interface sets a value for a mood location
+     * @param location
+     *     A Mood Object attribute of situation
+     *     @see  Mood
+     *
+     */
+//    @Ov erride
     public void setMoodLocation(Location location) {
         this.mood_location = location;
         String edit_location_button_text = ((Double)location.getLatitude()).toString() + " , "
@@ -265,6 +285,11 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         edit_location_button.setText(edit_location_button_text);
     }
 
+    /**
+     * This is a method inherited from the MoodEditor Interface that sets a value for a bitmap Image
+     * @param bitImage
+     *  This is a bitmap image
+     */
     @Override
     public void setMoodReasonPhoto(Bitmap bitImage) {
         this.bitImage = bitImage;
