@@ -62,6 +62,10 @@ public class CreateMoodActivityTest {
 
     }
 
+    /**
+     * Tests that the Createmood UI works
+     */
+
     @Test
     public void addMood(){
         solo2.clickOnView(solo2.getView(R.id.create_date_button)); //date button
@@ -73,9 +77,6 @@ public class CreateMoodActivityTest {
         solo2.clickOnView(solo2.getView(R.id.create_emotion_spinner, 0));
 
         solo2.clickOnView(solo2.getView(R.id.create_add_button)); //Select CONFIRM Button
-
-
-
 
     }
 }
