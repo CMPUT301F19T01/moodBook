@@ -88,7 +88,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     /**
      * This is a method inherited from the AppCompatActivity
      * @param savedInstanceState
-     *  Bundle Object is used to stored the data of this activity
+     *  Bundle Object is used to store the data of this activity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
