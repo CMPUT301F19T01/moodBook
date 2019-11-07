@@ -1,5 +1,6 @@
 package com.example.moodbook;
 
+import android.graphics.PointF;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -14,7 +15,7 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
 
-public class UpdateMoodObjectTest {
+public class DeleteMoodTest {
     private Solo solo;
 
     @Rule
@@ -45,18 +46,10 @@ public class UpdateMoodObjectTest {
         solo.enterText((EditText) solo.getView(R.id.password), "testing");
         solo.clickOnButton("login");
     }
-
-
-    @Test
-    public void editMoodTest() {
-        solo.clickInRecyclerView(1);
-        solo.sleep(5000); // wait for activity to change
-        solo.clickOnView(solo.getView(R.id.edit_emotion_spinner));//emotion --Picks alone
-        solo.pressSpinnerItem(0,1);
-        solo.clickOnView(solo.getView(R.id.edit_reason_editText));
-        solo.clickOnView(solo.getView(R.id.edit_situation_spinner));
-        solo.pressSpinnerItem(1,1);
-        solo.clickOnView(solo.getView(R.id.edit_save_button)); //Select SAVE Button
-        assertTrue(solo.waitForLogMessage("Updated Successful"));
-    }
+// NOT WORKING
+//    @Test
+//    public void testDelete(){
+//        solo.swipe(new PointF(400, 200), new PointF(400, 200), new PointF(10, 200), new PointF(10, 200));
+//        assertTrue(solo.waitForLogMessage("Deleted mood."));
+//    }
 }

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,6 +57,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = HomeFragment.class.getSimpleName();
+    private String testDel;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -132,6 +134,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                     moodDB.addMood(deletedMood);
                 }
             });
+            Log.i(testDel, "Deleted mood.");
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
         }
