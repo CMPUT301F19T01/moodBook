@@ -40,6 +40,12 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
+/**
+ * This fragment is for Mood History that allows user to view, add, edit and remove moods.
+ * @see Mood
+ * @see DBMoodSetter
+ * @see MoodListAdapter
+ */
 public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     //private HomeViewModel homeViewModel;

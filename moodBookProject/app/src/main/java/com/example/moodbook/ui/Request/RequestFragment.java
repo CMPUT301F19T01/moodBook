@@ -21,7 +21,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * This fragment is shown to allow the user to send requests to other users
  */
 public class RequestFragment extends PageFragment {
-
     //private RequestViewModel requestViewModel;
 
     private FirebaseAuth mAuth;
@@ -36,7 +35,7 @@ public class RequestFragment extends PageFragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        final View root = inflater.inflate(R.layout.fragment_request, container, false);
+        final View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_request);
         db = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();

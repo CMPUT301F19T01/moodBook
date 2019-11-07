@@ -4,21 +4,20 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.DBUpdate;
 import com.example.moodbook.Mood;
+import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -30,15 +29,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import java.util.ArrayList;
 
-public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, DBUpdate {
-    private myMoodMapViewModel MyMoodMapViewModel;
+public class myMoodMapFragment extends PageFragment implements OnMapReadyCallback, DBUpdate {
+    //private myMoodMapViewModel MyMoodMapViewModel;
 
     ///// Member Variables /////
     private MapView mapView;
@@ -54,8 +48,7 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_mymoodmap, container, false);
-        MyMoodMapViewModel = ViewModelProviders.of(this).get(myMoodMapViewModel.class);
+        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_mymoodmap);
 
         mapView = root.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);

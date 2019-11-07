@@ -1,9 +1,5 @@
 package com.example.moodbook;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,15 +15,19 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 
 /**
- * This activity is used to create a Mood Object by clicking on an add button
+ * This activity is used by Mood History to create a Mood Object by clicking on an add button
  * @see com.example.moodbook.ui.home.HomeFragment
  * @see Mood
  * @see DBMoodSetter
- * @see MoodListAdapter
  * @see MoodEditor
  */
 public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.MoodInterface{

@@ -4,25 +4,22 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBUpdate;
 import com.example.moodbook.Mood;
+import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 import java.util.ArrayList;
 
-public class myFriendMoodMapFragment extends Fragment implements OnMapReadyCallback, DBUpdate {
-    private myFriendMoodMapViewModel MyFriendMoodMapViewModel;
+public class myFriendMoodMapFragment extends PageFragment implements OnMapReadyCallback, DBUpdate {
+    //private myFriendMoodMapViewModel MyFriendMoodMapViewModel;
 
     private MapView mapView;
     private GoogleMap moodMap;
@@ -30,9 +27,7 @@ public class myFriendMoodMapFragment extends Fragment implements OnMapReadyCallb
     private FirebaseFirestore db;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_friendmoodmap, container, false);
-        MyFriendMoodMapViewModel = ViewModelProviders.of(this).get(myFriendMoodMapViewModel.class);
-
+        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_friendmoodmap);
 
         mapView = root.findViewById(R.id.friendMapView);
         mapView.onCreate(savedInstanceState);
