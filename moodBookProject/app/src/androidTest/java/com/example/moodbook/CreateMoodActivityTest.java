@@ -32,7 +32,6 @@ public class CreateMoodActivityTest {
     public  ActivityTestRule<CreateMoodActivity> rule2 =
             new ActivityTestRule<>(CreateMoodActivity.class,true,true);
 
-
     /**
      * Runs before all tests and creates solo instance.
      * @throws Exception
@@ -43,14 +42,18 @@ public class CreateMoodActivityTest {
         solo2 = new Solo(InstrumentationRegistry.getInstrumentation(),rule2.getActivity());
     }
 
+
     /**
      * Gets the Activity
      * @throws Exception
      */
+
+    /*
     @Test
     public void start() throws Exception {
         Activity activity = rule.getActivity();
-    }
+    }*/
+
 
     /**
      * Clicks on the Fab button for adding moods to go to createMood Activity
@@ -75,7 +78,7 @@ public class CreateMoodActivityTest {
 
         // check if we are on LocationPickerActivity
         solo.assertCurrentActivity("Expected Maps Activity to launch", LocationPickerActivity.class);
-/*
+
         // add location
         solo.clickOnView(solo.getView(R.id.confirmButton));
         solo.sleep(70000);
@@ -84,10 +87,9 @@ public class CreateMoodActivityTest {
         solo.assertCurrentActivity("Expected create mood activity to launch", CreateMoodActivity.class);
 
         solo.getView(R.id.create_location_button);
-        */
+
 
     }
-
 
 /*
     @Test
@@ -102,14 +104,6 @@ public class CreateMoodActivityTest {
 
         solo.clickOnView(solo.getView(R.id.create_add_button)); //Select CONFIRM Button
 
-
-
-
-    }*/
-
-
-
-
-
-
+    }
+*/
 }
