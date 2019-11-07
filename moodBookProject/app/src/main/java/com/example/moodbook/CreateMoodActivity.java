@@ -4,22 +4,24 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+
 import android.widget.ArrayAdapter;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
+
 
 
 /**
@@ -134,14 +136,15 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
      * @param data
      *
      */
-    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView, this);
+        MoodEditor.getLocationResult(requestCode, resultCode, data, this);
     }
 
     /**
-     * This method shows the coordinates of a view
+     * This method does shows the coordinates of a view
      * @deprecated
      */
     public void showCoords(View view){
@@ -161,7 +164,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     }
 
     /**
-     * This is a method inherited from the MoodEditor Interface sets a value for a mood situation
+     * This is a method inherited the MoodEditor Interface sets a value for a mood situation
      * @param situation
      *   A Mood Object attribute of situation
      *   @see Mood
@@ -173,13 +176,12 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     }
 
     /**
-     * This is a method inherited from the MoodEditor Interface sets a value for a mood location
+     * This is a method inherited the MoodEditor Interface sets a value for a mood location
      * @param location
      *     A Mood Object attribute of situation
      *     @see  Mood
      *
      */
-
     @Override
     public void setMoodLocation(Location location) {
         this.mood_location = location;
@@ -188,19 +190,14 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         add_location_button.setText(add_location_button_text);
     }
 
-    /**
-     * This is a method inherited from the MoodEditor Interface that sets a value for a bitmap Image
-     * @param bitImage
-     */
     @Override
     public void setMoodReasonPhoto(Bitmap bitImage) {
         this.bitImage = bitImage;
     }
-
-
     /**
      * Initializes the current date
      */
+
     private void initializeDate() {
         add_date_button = findViewById(R.id.create_date_button);
         // show current date
@@ -279,17 +276,15 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     private void initializeLocation() {
         add_location_button = findViewById(R.id.create_location_button);
 
-        // Gets users location
-        // create location manager and listener
-        final LocationManager locationManager = MoodEditor.getLocationManager(this);
-        final LocationListener locationListener = MoodEditor.getLocationListener(this);
-
         // set the button onClickListener to request location
         add_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.getLocationResult(CreateMoodActivity.this,
-                        locationManager, locationListener);
+                // start activity to edit location
+                Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
+                startActivityForResult(intent, LocationPickerActivity.REQUEST_EDIT_LOCATION);
+
+
             }
         });
     }
@@ -307,6 +302,9 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
             Mood.parseMoodDate(mood_date);
             add_date_button.setError(null);
         } catch (MoodInvalidInputException e) {
+            /*Toast.makeText(getApplicationContext(),
+                    e.getInputType()+": "+e.getMessage(),
+                    Toast.LENGTH_SHORT).show();*/
             add_date_button.setError(e.getMessage());
             areInputsValid = false;
         }
@@ -315,12 +313,18 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
             Mood.parseMoodTime(mood_time);
             add_time_button.setError(null);
         } catch (MoodInvalidInputException e) {
+            /*Toast.makeText(getApplicationContext(),
+                    e.getInputType()+": "+e.getMessage(),
+                    Toast.LENGTH_SHORT).show();*/
             add_time_button.setError(e.getMessage());
             areInputsValid = false;
         }
         try {
             Mood.parseMoodEmotion(mood_emotion);
         } catch (MoodInvalidInputException e) {
+            /*Toast.makeText(getApplicationContext(),
+                    e.getInputType()+": "+e.getMessage(),
+                    Toast.LENGTH_SHORT).show();*/
             emotionAdapter.setError(emotion_spinner.getSelectedView(), e.getMessage());
             areInputsValid = false;
         }
@@ -328,9 +332,14 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         try {
             Mood.parseMoodReasonText(mood_reason_text);
         } catch (MoodInvalidInputException e) {
+            /*Toast.makeText(getApplicationContext(),
+                    e.getInputType()+": "+e.getMessage(),
+                    Toast.LENGTH_SHORT).show();*/
             reason_editText.setError(e.getMessage());
             areInputsValid = false;
         }
         return areInputsValid;
     }
+
+
 }
