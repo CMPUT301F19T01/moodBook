@@ -65,10 +65,9 @@ public class myRequestsFragment extends PageFragment implements RecyclerItemTouc
                          }
                      });
 
-        // initialize DB connector
-        mAuth = FirebaseAuth.getInstance();
-//        moodDB = new DBMoodSetter(mAuth, getContext(),
-//                DBMoodSetter.getMoodHistoryListener(requestAdapter), TAG);
+//        // initialize DB connector
+//        mAuth = FirebaseAuth.getInstance();
+//        moodDB = new DBMoodSetter(mAuth, getContext(), DBMoodSetter.getMoodHistoryListener(requestAdapter), TAG);
 
 
 //
