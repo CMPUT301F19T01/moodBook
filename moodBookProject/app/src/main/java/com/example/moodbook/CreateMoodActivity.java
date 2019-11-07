@@ -71,7 +71,6 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
      * @param savedInstanceState
      *  Bundle Object is used to stored the data of this activity
      */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);

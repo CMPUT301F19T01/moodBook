@@ -1,6 +1,6 @@
 /**
  * Reference:
- *  https://guides.codepath.com/android/fragment-navigation-drawer - used for linking navigation
+ * Linking navigation - https://guides.codepath.com/android/fragment-navigation-drawer
  */
 package com.example.moodbook;
 

@@ -1,7 +1,9 @@
-// Reference:   Swipe to delete - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
-//              Item click to edit - https://antonioleiva.com/recyclerview-listener/
-//              Filterable - https://www.youtube.com/watch?v=sJ-Z9G0SDhc
-
+/**
+ * Reference:
+ * Swipe to delete - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
+ * Item click to edit - https://antonioleiva.com/recyclerview-listener/
+ * Filterable - https://www.youtube.com/watch?v=sJ-Z9G0SDhc
+ */
 package com.example.moodbook.ui.home;
 
 import android.content.Intent;
@@ -41,10 +43,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 
 /**
- * This fragment is for Mood History that allows user to view, add, edit and remove moods.
+ * This fragment for Mood History allows user to view, add, edit and remove moods.
  * @see Mood
  * @see DBMoodSetter
  * @see MoodListAdapter
+ * @see com.example.moodbook.PageFragment
+ * @see com.example.moodbook.RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
  */
 public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
