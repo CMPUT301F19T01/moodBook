@@ -13,11 +13,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -214,7 +216,7 @@ public class MoodEditor {
                             case 0:
                                 Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
-
+                                    Log.i(TAG, "Camera intent successful");
                                     myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
                                 }
                                 break;
@@ -222,6 +224,7 @@ public class MoodEditor {
                                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                                 photoPickerIntent.setType("image/*");
                                 photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*"});
+                                Log.i(TAG, "Gallery intent successful");
                                 myActivity.startActivityForResult(photoPickerIntent, GET_IMAGE);
                                 break;
                         }
