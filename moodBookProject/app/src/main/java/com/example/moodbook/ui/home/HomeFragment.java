@@ -88,6 +88,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
             @Override
             public void onClick(View view) {
                 Intent addIntent = new Intent(getActivity(), CreateMoodActivity.class);
+                Toast.makeText(getContext(), "Add a mood", Toast.LENGTH_LONG).show();
                 startActivity(addIntent);
             }
         });

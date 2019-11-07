@@ -1,7 +1,9 @@
 package com.example.moodbook;
 
-import android.app.Activity;
 import android.widget.EditText;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
@@ -10,17 +12,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
-
 import static junit.framework.TestCase.assertTrue;
 
-/**
- * Test class for CreateMoodActivity. All the UI tests are written here. Robotium test framework is
- used
- */
-public class CreateMoodActivityTest {
-
+public class UpdateMoodObjectTest {
     private Solo solo;
 
     @Rule
@@ -52,15 +46,16 @@ public class CreateMoodActivityTest {
         solo.clickOnButton("login");
     }
 
-
-    /**
-     * Clicks on the Fab button for adding moods to go to createMood Activity
-     */
     @Test
-    public void CreateActivityTest(){
-        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
+    public void editMoodTest() {
+        solo.clickInRecyclerView(1);
         solo.sleep(5000); // wait for activity to change
-        assertTrue(solo.waitForActivity(CreateMoodActivity.class));
+        solo.clickOnView(solo.getView(R.id.edit_emotion_spinner));//emotion --Picks alone
+        solo.pressSpinnerItem(0,1);
+        solo.clickOnView(solo.getView(R.id.edit_reason_editText));
+        solo.clickOnView(solo.getView(R.id.edit_situation_spinner));
+        solo.pressSpinnerItem(1,1);
+        solo.clickOnView(solo.getView(R.id.edit_save_button)); //Select SAVE Button
+        assertTrue(solo.waitForLogMessage("Updated Successful"));
     }
-
 }

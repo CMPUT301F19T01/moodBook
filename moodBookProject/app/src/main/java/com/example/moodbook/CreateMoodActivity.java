@@ -11,6 +11,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -65,6 +66,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
 
     //image
     private Bitmap bitImage;
+    private final String TEST = "test";
 
     /**
      * This is a method inherited from the AppCompatActivity
@@ -103,6 +105,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                         Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
                                 mood_reason_text,bitImage,mood_situation,mood_location);
                         moodDB.addMood(newMood);
+                        Log.i(TEST, "Mood successfully added");
                         finish();
                     } catch (MoodInvalidInputException e) {
                         // shouldn't happen since inputs are already checked

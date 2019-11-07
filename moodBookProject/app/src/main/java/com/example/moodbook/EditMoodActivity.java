@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -81,6 +82,8 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     public static final int REQUEST_IMAGE = 101;
 
     private Bitmap bitImage;
+
+    private final String TEST = "test";
 
 
     /**
@@ -190,6 +193,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
                     moodMap.put("location_lon",mood_location.getLongitude());
                 }
                 moodDB.editMood(intent_moodID,moodMap);
+                Log.i(TEST, "Updated Successful");
                 finish();
 
             }
