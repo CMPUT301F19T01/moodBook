@@ -101,6 +101,9 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
 
         // update list of markers
         updateList(db);
+
+        // for testing purposes
+        mapView.setContentDescription("MAP READY");
     }
 
     /**
