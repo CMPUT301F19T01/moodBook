@@ -14,6 +14,7 @@ import com.example.moodbook.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -21,10 +22,13 @@ import java.util.ArrayList;
 public class myFriendMoodMapFragment extends PageFragment implements OnMapReadyCallback, DBUpdate {
     //private myFriendMoodMapViewModel MyFriendMoodMapViewModel;
 
+    ///// Member Variables /////
     private MapView mapView;
     private GoogleMap moodMap;
     private ArrayList<Mood> moodDataList;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+    private String userID;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_friendmoodmap);

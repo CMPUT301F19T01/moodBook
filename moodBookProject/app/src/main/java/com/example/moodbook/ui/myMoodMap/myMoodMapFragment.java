@@ -46,7 +46,9 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     private GoogleMap moodMap;
     private ArrayList<Mood> moodDataList;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
     private String userID;
+
 
     /**
      * Required empty public constructor
@@ -81,7 +83,7 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
         moodDataList = new ArrayList<>();
 
         // get current user
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getUid();
 
         return root;

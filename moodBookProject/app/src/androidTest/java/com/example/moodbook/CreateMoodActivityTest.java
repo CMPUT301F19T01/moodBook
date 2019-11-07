@@ -55,7 +55,6 @@ public class CreateMoodActivityTest {
     /**
      * Clicks on the Fab button for adding moods to go to createMood Activity
      */
-
     @Test
     public void clickAdd(){
         solo.clickOnView(solo.getView(R.id.mood_history_add_button));
@@ -63,6 +62,32 @@ public class CreateMoodActivityTest {
 
     }
 
+    /**
+     * Tests the adding of location
+     */
+    @Test
+    public void addLocationTest(){
+        // add location by clicking on button
+        solo.clickOnView(solo.getView(R.id.create_location_button));
+
+        // wait for activity to launch
+        solo.sleep(10000);
+
+        // check if we are on LocationPickerActivity
+        solo.assertCurrentActivity("Expected Maps Activity to launch", LocationPickerActivity.class);
+
+        // add location
+        solo.clickOnView(solo.getView(R.id.confirmButton));
+        solo.sleep(70000);
+
+        // check if we got back to CreateMoodActivity
+        solo.assertCurrentActivity("Expected create mood activity to launch", CreateMoodActivity.class);
+
+        solo.getView(R.id.create_location_button);
+    }
+
+
+/*
     @Test
     public void addMood(){
         solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
@@ -78,7 +103,7 @@ public class CreateMoodActivityTest {
 
 
 
-    }
+    }*/
 
 
 
