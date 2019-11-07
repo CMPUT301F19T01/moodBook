@@ -21,8 +21,9 @@ public class PageFragment extends Fragment {
      * @param container
      * @param savedInstanceState
      * @param layoutId
-     *  This is resource id of layout for pageFragment
+     *  This is resource id of layout for PageFragment
      * @return
+     *  Return root view for PageFragment
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState,
