@@ -108,7 +108,8 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     }
 
     /**
-     * This return MyViewHolder that holds fields and layouts for each mood item in RecyclerView
+     * This override RecyclerView.Adapter onCreateViewHolder(),
+     * and return MyViewHolder that holds fields and layouts for each mood item in RecyclerView
      * @param parent
      *   This is the parent view that hold all mood item views.
      * @return
@@ -123,7 +124,8 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     }
 
     /**
-     * This use the mood to set text & images for the fields in the corresponding Recycler item
+     * This override RecyclerView.Adapter onBindViewHolder(),
+     * and use the mood to set text & images for the fields in the corresponding Recycler item
      * @param holder
      *   This is MyViewHolder that holds fields and layouts for a mood item
      * @param position
@@ -147,7 +149,8 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     }
 
     /**
-     * This return the number of moods to be displayed
+     * This override RecyclerView.Adapter getItemCount(),
+     * and return the number of moods to be displayed
      * @return
      *    Returns the size of arrayList of all the moods that will be displayed
      */
@@ -194,7 +197,8 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     }
 
     /**
-     * This return the filter for filter out moods that don't have matching emotional state
+     * This override Filterable getFilter(),
+     * and return the filter for filter out moods that don't have matching emotional state
      * @return
      *  Return the filter that finds moods with matching emotional state
      */
@@ -234,6 +238,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
 
     /**
      * This remove a mood at specified position
+     * Not used in this project
      * @param position
      *  This is the position of a mood to be removed
      */
@@ -253,6 +258,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
 
     /**
      * This restore a mood at specified position, and sort full arrayList of moods by dateTime
+     * Not used in this project
      * @param item
      *  This is the mood to be restored
      * @param position
@@ -272,6 +278,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
 
     /**
      * This update a mood at specified position, and sort arrayList and full arrayList of moods by dateTime
+     * Not used in this project
      * @param item
      *  This is the new mood to replace the old one
      * @param position
