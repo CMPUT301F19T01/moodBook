@@ -72,7 +72,6 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
         // Gets users location
         // create location manager and listener
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
