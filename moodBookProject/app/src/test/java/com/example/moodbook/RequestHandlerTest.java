@@ -25,7 +25,7 @@ public class RequestHandlerTest {
 
 
     /**
-     * This test the verifyEmail method to
+     * nothing to test as the method is void and only interacts with db
      */
     @Test
     public void testSendRequest(){

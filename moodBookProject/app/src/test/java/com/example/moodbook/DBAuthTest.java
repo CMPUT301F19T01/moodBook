@@ -23,7 +23,6 @@ public class DBAuthTest {
 
     @Mock
     FirebaseAuth mockmAuth;
-    //when(mockmAuth.signInWithEmailAndPassword(mockString, mockString));
 
     @Mock
     FirebaseFirestore mockdb;
@@ -32,7 +31,7 @@ public class DBAuthTest {
 
 
     /**
-     * This test the verifyEmail method to
+     * This tests the verifyEmail method to ensure an email string is verified correctly
      */
     @Test
     public void testVerifyEmail(){
@@ -48,6 +47,9 @@ public class DBAuthTest {
 
     }
 
+    /**
+     * This tests the verifyPass method to ensure a password string is verified correctly
+     */
     @Test
     public void testVerifyPass(){
         // Test valid password
@@ -59,13 +61,5 @@ public class DBAuthTest {
         password = "12345";
         result = dbAuth.verifyPass(password);
         assertEquals(false, result);
-    }
-
-    @Test
-    public void testCreateUser(){
-
-    }@Test
-    public void testUpdateUser(){
-
     }
 }
