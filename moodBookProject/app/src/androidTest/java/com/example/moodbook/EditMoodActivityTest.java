@@ -22,8 +22,8 @@ public class EditMoodActivityTest {
             new ActivityTestRule<>(MainActivity.class,true,true);
 
     @Rule
-    public ActivityTestRule<EditMoodActivity> rule2 =
-            new ActivityTestRule<>(EditMoodActivity.class,true,true);
+    public ActivityTestRule<CreateMoodActivity> rule2 =
+            new ActivityTestRule<>(CreateMoodActivity.class,true,true);
 
     /**
      * Runs before all tests and creates solo instance.
@@ -35,26 +35,26 @@ public class EditMoodActivityTest {
         solo2 = new Solo(InstrumentationRegistry.getInstrumentation(),rule2.getActivity());
     }
 
-    @Test
-    public void start() throws Exception{
-        Activity activity = rule.getActivity();
-    }
-
+//    @Test
+//    public void start() throws Exception{
+//        Activity activity = rule.getActivity();
+//    }
+//
     @Test
     public void clickEdit(){
-        solo.clickOnView(solo.getView(R.id.mood_history_listView));
+        solo.clickInRecyclerView(0);
         solo.sleep(5000); // wait for activity to change
     }
 
-    @Test
-    public void editMoodTest() {
-
-        solo2.clickOnButton("hh:mm"); //time button
-//        solo2.clickOnView(solo2.getView(R.id.edit_emotion_spinner, 0));//emotion --Picks alone
-//        solo2.clickOnView(solo2.getView(R.id.edit_reason_editText));
-//        solo2.clickOnView(solo2.getView(R.id.edit_emotion_spinner, 0));
-//        solo2.clickOnView(solo2.getView(R.id.edit_save_button)); //Select SAVE Button
-    }
+//    @Test
+//    public void editMoodTest() {
+//
+//        solo2.clickOnButton("hh:mm"); //time button
+////        solo2.clickOnView(solo2.getView(R.id.edit_emotion_spinner, 0));//emotion --Picks alone
+////        solo2.clickOnView(solo2.getView(R.id.edit_reason_editText));
+////        solo2.clickOnView(solo2.getView(R.id.edit_emotion_spinner, 0));
+////        solo2.clickOnView(solo2.getView(R.id.edit_save_button)); //Select SAVE Button
+//    }
 
 
 //    @Test
