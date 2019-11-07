@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
+android:layout_width="fill_parent"
 android:layout_height="wrap_content"
 android:orientation="vertical"
-android:padding="10dp">
+android:padding="5dp">
 
     <TextView
-    android:id="@+id/name"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:text="Marshmallow"
-    android:textAppearance="?android:attr/textAppearanceSmall"
-    android:textColor="@android:color/black" />
+        android:id="@+id/nameRequest"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Test"
+        android:textSize="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textColor="@android:color/black" />
 
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:orientation="horizontal"
+        android:layout_below="@+id/nameRequest">
 
-        <TextView
-            android:id="@+id/version_heading"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/accept_button"
+            android:layout_width="fill_parent"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="API: "
-            android:textColor="@android:color/black"
-            android:textStyle="bold" />
+            android:text="Accept"
+            android:textStyle="bold"
+            android:layout_marginRight="1dp"/>
 
-        <TextView
-            android:id="@+id/version_number"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/decline_button"
+            android:layout_marginLeft="1dp"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="23"
-            android:textAppearance="?android:attr/textAppearanceButton"
+            android:layout_weight="1"
+            android:text="Decline"
             android:textColor="@android:color/black"
             android:textStyle="bold" />
 
