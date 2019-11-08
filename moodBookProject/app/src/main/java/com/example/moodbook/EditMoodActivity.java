@@ -206,17 +206,16 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
                 finish();
             }
         });
-        // Gets users location
-        // create location manager and listener
-        final LocationManager locationManager = MoodEditor.getLocationManager(this);
-        final LocationListener locationListener = MoodEditor.getLocationListener(this);
 
         // set the button onClickListener to request location
         edit_location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.getLocationResult(EditMoodActivity.this,
-                        locationManager, locationListener);
+                // start activity to edit location
+                Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
+                startActivityForResult(intent, 1);
+
+
             }
         });
     }
@@ -234,6 +233,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         MoodEditor.getImageResult(requestCode, resultCode, data, image_view_photo, this);
+        MoodEditor.getLocationResult(requestCode, resultCode, data, this);
     }
 
     private void initializeReasonPhoto() {

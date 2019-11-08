@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.DBUpdate;
@@ -39,13 +43,24 @@ public class myMoodMapFragment extends PageFragment implements OnMapReadyCallbac
     private GoogleMap moodMap;
     private ArrayList<Mood> moodDataList;
     private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
     private String userID;
 
+
+    /**
+     * Required empty public constructor
+     */
     public myMoodMapFragment() {
         // Required empty public constructor
     }
 
 
+    /**
+     * This method is inherited by Fragment
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_mymoodmap);
@@ -55,6 +70,8 @@ public class myMoodMapFragment extends PageFragment implements OnMapReadyCallbac
 
         mapView.getMapAsync(this);
 
+        mapView.onResume();
+
         // connect to db
         db = FirebaseFirestore.getInstance();
 
@@ -62,12 +79,17 @@ public class myMoodMapFragment extends PageFragment implements OnMapReadyCallbac
         moodDataList = new ArrayList<>();
 
         // get current user
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getUid();
 
         return root;
     }
 
+    /**
+     * This method is inherited by OnMapReadyCallback
+     * @param googleMap
+     *  internal representation of the map itself
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // initialize map
@@ -77,75 +99,102 @@ public class myMoodMapFragment extends PageFragment implements OnMapReadyCallbac
         updateList(db);
     }
 
-
-
+    /**
+    * This method is inherited by OnMapReadyCallback
+     */
     @Override
     public void onResume() {
         mapView.onResume();
+        updateList(db);
         super.onResume();
     }
 
-
+    /**
+     * This method is inherited by OnMapReadyCallback
+     */
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
 
+    /**
+     * This method is inherited by OnMapReadyCallback
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
 
+    /**
+     * This method is inherited by OnMapReadyCallback
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
     }
 
-
+    /**
+     * This method is a helper method to set the Array List for moods
+     * @param moodDataList
+     *  ArrayList that stores Mood objects
+     */
     private void setMoodDataList(ArrayList<Mood> moodDataList){
         this.moodDataList = moodDataList;
 
     }
 
-    // update users mood list
+    /**
+     * This method is inherited by DBUpdate and queries FireBase
+     * for the all the Current users moods
+     * @param db
+     *  reference to the FireBaseFireStore instance
+     */
     @Override
     public void updateList(FirebaseFirestore db) {
-        db.collection("USERS")
-                .document(userID)
-                .collection("MOODS")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Location tempLoc;
+        try {
+            db.collection("USERS")
+                    .document(userID)
+                    .collection("MOODS")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                Location tempLoc;
 
-                            // iterate over each document and get fields for drawing mood markers
-                            for (QueryDocumentSnapshot doc : task.getResult()) {
-                                if (doc.exists() && doc.getDouble("location_lat") != null && doc.getDouble("location_lon") != null) {
-                                    try {
-                                        moodDataList.add(DBMoodSetter.getMoodFromData(doc.getData()));
+                                // iterate over each document and get fields for drawing mood markers
+                                for (QueryDocumentSnapshot doc : task.getResult()) {
+                                    if (doc.exists() && doc.getDouble("location_lat") != null && doc.getDouble("location_lon") != null) {
+                                        try {
+                                            moodDataList.add(DBMoodSetter.getMoodFromData(doc.getData()));
 
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
                                     }
 
                                 }
+                                // draw markers
+                                setMoodDataList(moodDataList);
+                                drawMoodMarkers(moodDataList);
 
                             }
-                            // draw markers
-                            setMoodDataList(moodDataList);
-                            drawMoodMarkers(moodDataList);
-
                         }
-                    }
-                });
-
+                    });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * This method draws all the Users moods on the map
+     * @param moodDataList
+     *  ArrayList of the users Mood objects
+     */
     private void drawMoodMarkers(ArrayList<Mood> moodDataList){
         int emotionResource;
         LatLng moodLatLng;
@@ -154,12 +203,13 @@ public class myMoodMapFragment extends PageFragment implements OnMapReadyCallbac
             // get image resource for the mood marker
             emotionResource = mood.getEmotionImageResource();
 
+            // get location of mood
             Location moodLocation = mood.getLocation();
             moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
 
             // use png image resource as marker icon
-            BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(emotionResource);
-            Bitmap b = bitmapdraw.getBitmap();
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
+            Bitmap b = bitmapDrawable.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
 
