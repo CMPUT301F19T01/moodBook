@@ -1,5 +1,11 @@
 package com.example.moodbook;
 
+import android.widget.EditText;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
+
+import com.example.moodbook.ui.login.LoginActivity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -21,6 +27,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertTrue;
 import androidx.core.app.ActivityCompat;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
@@ -28,6 +35,8 @@ import androidx.test.rule.ActivityTestRule;
 import static org.junit.Assert.assertEquals;
 
 /**
+ * Test class for CreateMoodActivity. All the UI tests are written here.
+ * Robotium test framework is used
  * Test class for CreateMoodActivity. All the UI tests are written here. Robotium test framework is
  used
  * todo:
@@ -36,6 +45,15 @@ import static org.junit.Assert.assertEquals;
 public class CreateMoodActivityTest {
 
     private Solo solo;
+
+    @Rule
+    public ActivityTestRule<LoginActivity> rule =
+            new ActivityTestRule<>(LoginActivity.class, true, true);
+
+
+    @Before
+    public void setUp() throws Exception{
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
     private Solo solo2;
     private Solo solo3;
 
@@ -56,6 +74,7 @@ public class CreateMoodActivityTest {
         solo2 = new Solo(InstrumentationRegistry.getInstrumentation(),rule2.getActivity());
         solo3 = new Solo(InstrumentationRegistry.getInstrumentation(), mActivityRule.getActivity());
 
+
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
@@ -66,6 +85,7 @@ public class CreateMoodActivityTest {
         if (solo.searchText("login")){
             login();
         }
+
     }
 
     public void login(){
@@ -75,9 +95,15 @@ public class CreateMoodActivityTest {
     }
 
     /**
-     * Gets the Activity
-     * @throws Exception
+     * used in tests to first login to the app
      */
+    public void login(){
+        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.password), "testing");
+        solo.clickOnButton("login");
+    }
+
+
     /*
     @Test
     public void start() throws Exception {
@@ -87,7 +113,13 @@ public class CreateMoodActivityTest {
     /**
      * Clicks on the Fab button for adding moods to go to createMood Activity
      */
-    @Test
+
+    public void CreateActivityTest(){
+        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
+        solo.sleep(5000); // wait for activity to change
+        assertTrue(solo.waitForActivity(CreateMoodActivity.class));
+    }
+
     public void clickAdd() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo.clickOnImageButton(0);
