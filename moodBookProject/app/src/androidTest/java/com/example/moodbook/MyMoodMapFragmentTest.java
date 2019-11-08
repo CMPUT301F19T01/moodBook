@@ -34,7 +34,8 @@ public class MyMoodMapFragmentTest {
     private Solo solo;
 
     @Rule
-    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
+    public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class,
+            true, true);
     @Rule
     public ActivityTestRule<MainActivity> rule2 = new ActivityTestRule<>(MainActivity.class, true, true);
 
@@ -108,7 +109,6 @@ public class MyMoodMapFragmentTest {
 
         // test if map view is shown
         assertEquals("Expected mapView.shown() is true",true, mapView.isShown());
-
     }
 
     /**

@@ -24,9 +24,9 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
     public static final int REQUEST_EDIT_LOCATION = 1;
     public static final int EDIT_LOCATION_OK = 1;
 
-    private GoogleMap mMap;
-    private Button confirmButton;
-    private LatLng pickedLocation;
+    private GoogleMap mMap; // Map Object
+    private Button confirmButton; // Button
+    private LatLng pickedLocation; // coordinates of picked location
 
     /**
      * This method was inherited from FragmentActivity.
@@ -46,6 +46,7 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 // send result back
                 Intent intent = new Intent();
                 intent.putExtra("location_lat", pickedLocation.latitude);
@@ -75,6 +76,7 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                // get current location and draw it on map as initial location
                 pickedLocation = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(pickedLocation));
             }

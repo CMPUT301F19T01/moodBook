@@ -19,8 +19,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class myFriendMoodMapFragment extends PageFragment implements OnMapReadyCallback, DBUpdate {
-    //private myFriendMoodMapViewModel MyFriendMoodMapViewModel;
+/**
+ * MyFriendMoodMapFragment.java
+ *
+ * @author Neilzon Viloria
+ * @since 07-11-2019
+
+ *  This activity is used to view a where a users friends' moods take place on a map
+ * @see DBUpdate
+ */
+public class MyFriendMoodMapFragment extends PageFragment implements OnMapReadyCallback, DBUpdate {
+    //private MyFriendMoodMapViewModel MyFriendMoodMapViewModel;
 
     ///// Member Variables /////
     private MapView mapView;
