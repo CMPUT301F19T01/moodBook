@@ -1,5 +1,7 @@
 package com.example.moodbook;
 
+import android.graphics.PointF;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -12,14 +14,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static com.google.firebase.firestore.util.Assert.fail;
 import static junit.framework.TestCase.assertTrue;
 
-/**
- * Test class for CreateMoodActivity. All the UI tests are written here.
- * Robotium test framework is used
- */
-public class CreateMoodActivityTest {
-
+public class DeleteMoodTest {
     private Solo solo;
 
     @Rule
@@ -51,15 +49,23 @@ public class CreateMoodActivityTest {
         solo.clickOnButton("login");
     }
 
-
-    /**
-     * Clicks on the Fab button for adding moods to go to createMood Activity
-     */
+// Reference: https://stackoverflow.com/questions/24664730/writing-a-robotium-test-to-swipe-open-an-item-on-a-swipeable-listview
     @Test
-    public void CreateActivityTest(){
-        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
-        solo.sleep(5000); // wait for activity to change
-        assertTrue(solo.waitForActivity(CreateMoodActivity.class));
-    }
+    public void testDelete(){
+        int fromX, toX, fromY, toY;
+        int[] location = new int[2];
 
+        View row = solo.getText("happy");
+        row.getLocationInWindow(location);
+        // fail if the view with text cannot be located in the window
+        if (location.length == 0) {
+            fail("Could not find text: " + "happy");
+        }
+        fromX = location[0] + 100;
+        fromY = location[1];
+        toX = location[0];
+        toY = fromY;
+        solo.drag(fromX, toX, fromY, toY, 10);
+        assertTrue(solo.waitForLogMessage("Deleted mood."));
+    }
 }

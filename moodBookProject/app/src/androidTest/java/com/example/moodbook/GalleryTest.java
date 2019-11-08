@@ -14,11 +14,8 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
 
-/**
- * Test class for CreateMoodActivity. All the UI tests are written here.
- * Robotium test framework is used
- */
-public class CreateMoodActivityTest {
+public class GalleryTest {
+
 
     private Solo solo;
 
@@ -49,17 +46,23 @@ public class CreateMoodActivityTest {
         solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.password), "testing");
         solo.clickOnButton("login");
+        solo.sleep(5000);
     }
-
 
     /**
-     * Clicks on the Fab button for adding moods to go to createMood Activity
+     * Test for Gallery intent
      */
-    @Test
-    public void CreateActivityTest(){
+    @Test 
+    public void GalleryTest(){
         solo.clickOnView(solo.getView(R.id.mood_history_add_button));
         solo.sleep(5000); // wait for activity to change
-        assertTrue(solo.waitForActivity(CreateMoodActivity.class));
-    }
+        solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
+        solo.clickOnView(solo.getView(R.id.create_time_button)); //time button
+        solo.clickOnView(solo.getView(R.id.create_emotion_spinner));//emotion --Picks alone
+        solo.pressSpinnerItem(0,1);
+        solo.clickOnView(solo.getView(R.id.create_reason_photo_button));
+        solo.clickOnText("Select photo from gallery");
+        assertTrue(solo.waitForLogMessage("Gallery intent successful"));
 
+    }
 }

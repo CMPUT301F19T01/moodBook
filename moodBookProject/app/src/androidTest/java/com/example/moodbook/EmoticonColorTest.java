@@ -1,25 +1,29 @@
 package com.example.moodbook;
 
+import android.graphics.PointF;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.EditText;
 
+import androidx.test.espresso.matcher.BoundedMatcher;
+import androidx.test.internal.util.Checks;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static com.google.firebase.firestore.util.Assert.fail;
 import static junit.framework.TestCase.assertTrue;
 
-/**
- * Test class for CreateMoodActivity. All the UI tests are written here.
- * Robotium test framework is used
- */
-public class CreateMoodActivityTest {
-
+public class EmoticonColorTest {
     private Solo solo;
 
     @Rule
@@ -46,20 +50,18 @@ public class CreateMoodActivityTest {
      * used in tests to first login to the app
      */
     public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testing");
+        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
+        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
         solo.clickOnButton("login");
     }
-
-
-    /**
-     * Clicks on the Fab button for adding moods to go to createMood Activity
-     */
-    @Test
-    public void CreateActivityTest(){
-        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
-        solo.sleep(5000); // wait for activity to change
-        assertTrue(solo.waitForActivity(CreateMoodActivity.class));
-    }
+//
+//    @Test
+//    public void testEmoticonColor(){
+//        View row = solo.getText("happy");
+//        Drawable rowBg = row.getBackground();
+//        ColorDrawable b_color = (ColorDrawable) row.getBackground();
+//
+//
+//    }
 
 }
