@@ -1,7 +1,9 @@
 package com.example.moodbook;
 
-import android.app.Activity;
 import android.widget.EditText;
+
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
@@ -10,14 +12,11 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
-
 import static junit.framework.TestCase.assertTrue;
 
 /**
- * Test class for CreateMoodActivity. All the UI tests are written here. Robotium test framework is
- used
+ * Test class for CreateMoodActivity. All the UI tests are written here.
+ * Robotium test framework is used
  */
 public class CreateMoodActivityTest {
 
