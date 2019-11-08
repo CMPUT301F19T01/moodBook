@@ -26,8 +26,8 @@ import com.example.moodbook.ui.Request.RequestFragment;
 import com.example.moodbook.ui.friendMood.friendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
-import com.example.moodbook.ui.myFriendMoodMap.myFriendMoodMapFragment;
-import com.example.moodbook.ui.myMoodMap.myMoodMapFragment;
+import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
+import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -119,11 +119,11 @@ public class MainActivity extends AppCompatActivity   {
                 toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_myMoodMap:
-                fragmentClass = myMoodMapFragment.class;
+                fragmentClass = MyMoodMapFragment.class;
                 toolbar.setTitle("Mood History Map");
                 break;
             case R.id.nav_myFriendMoodMap:
-                fragmentClass = myFriendMoodMapFragment.class;
+                fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
                 break;
             case R.id.nav_logout:
