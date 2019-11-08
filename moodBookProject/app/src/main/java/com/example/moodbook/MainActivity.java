@@ -1,3 +1,7 @@
+/**
+ * Reference:
+ * Linking navigation - https://guides.codepath.com/android/fragment-navigation-drawer
+ */
 package com.example.moodbook;
 
 
@@ -18,17 +22,17 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.moodbook.ui.home.HomeFragment;
-import com.example.moodbook.ui.friendMood.friendMoodFragment;
 import com.example.moodbook.ui.Request.RequestFragment;
-import com.example.moodbook.ui.myRequests.myRequestsFragment;
-import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
-import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
+import com.example.moodbook.ui.friendMood.friendMoodFragment;
+import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
+import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
+import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
+import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-//https://guides.codepath.com/android/fragment-navigation-drawer  - used for linking navigation
+
 public class MainActivity extends AppCompatActivity   {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -145,8 +149,6 @@ public class MainActivity extends AppCompatActivity   {
         }
 
     }
-
-
 
 
     private void logout(){

@@ -42,7 +42,7 @@ import java.util.ArrayList;
  * @see DBUpdate
  */
 public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, DBUpdate {
-    private com.example.moodbook.ui.myMoodMap.MyMoodMapViewModel MyMoodMapViewModel;
+    //private com.example.moodbook.ui.myMoodMap.MyMoodMapViewModel MyMoodMapViewModel;
 
     ///// Member Variables /////
     private MapView mapView; // view object
@@ -71,7 +71,7 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_mymoodmap, container, false);
-        MyMoodMapViewModel = ViewModelProviders.of(this).get(com.example.moodbook.ui.myMoodMap.MyMoodMapViewModel.class);
+        //MyMoodMapViewModel = ViewModelProviders.of(this).get(com.example.moodbook.ui.myMoodMap.MyMoodMapViewModel.class);
 
         mapView = root.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);

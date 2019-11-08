@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class MyMoodMapViewModel extends ViewModel {
+@Deprecated
+class myMoodMapViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public MyMoodMapViewModel() {
+    public myMoodMapViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is my Mood map fragment");
     }

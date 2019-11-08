@@ -2,12 +2,9 @@ package com.example.moodbook;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
-import android.media.Image;
-import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -15,27 +12,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -57,13 +49,10 @@ public class DBMoodSetter {
     private Context context;
     private String uid;
     private String TAG;         // optional: for log message
-    private String moodID;
     private Bitmap obtainedImg;
 
-    // used by CreateMoodActivity / EditMoodActivity
-
     /**
-     * This is a constructor used by the for the Create and Edit Mood Activity to get the current instance of a mood in the databse
+     * This is a constructor used by Create and Edit Mood Activity to get the current instance of a mood in the database
      * @param mAuth
      *   This is the FirebaseAuth instance for each logged in user
      * @param context
@@ -91,7 +80,6 @@ public class DBMoodSetter {
      * @param TAG
      *    This is an optional string used for printing log messages
      */
-
     public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG){
         this(mAuth, context);
         this.TAG = TAG;
@@ -138,8 +126,6 @@ public class DBMoodSetter {
         intRef.update("mood_Count", FieldValue.increment(1));
     }
 
-    // gets from database what int it last used, so it could start counting from there
-
     /**
      * This adds new moods to the database by getting the mood DocID and Calling addMoodAfterDocId
      * @param mood
@@ -159,12 +145,11 @@ public class DBMoodSetter {
                         if (documentSnapshot!=null){
                             // get mood docId from moodCount
                             Double m = documentSnapshot.getDouble("mood_Count");
-                            moodID = String.valueOf(m);
-                            addImg(mood);
+                            String moodID = String.valueOf(m);
+                            addImg(moodID, mood);
                             addMoodAfterDocId(moodID, mood); //puts the info to DB
-                            String moodDocID = String.valueOf(m);
                             // add new mood into db
-                            addMoodAfterDocId(moodDocID, mood);
+                            addMoodAfterDocId(moodID, mood);
                             // increment moodCount
                             setInt();
                             //moodID = Integer.valueOf(md.intValue());
@@ -208,9 +193,13 @@ public class DBMoodSetter {
             });
     }
 
-
-    // function to add the reason image to firebase storage
-    public void addImg(final Mood mood) {
+    /**
+     * This add the reason image to firebase storage
+     * @param mood
+     *   This is a mood Object
+     *   @see Mood
+     */
+    public void addImg(String moodID, final Mood mood) {
         String picID = moodID;
         StorageReference photoRef = photoReference.child(picID);
         Bitmap bitImage = mood.getReasonPhoto();
@@ -234,7 +223,11 @@ public class DBMoodSetter {
         }
     }
 
-    //update image in storage
+    /**
+     * This update the reason image in firebase storage
+     * @param moodID
+     *   This is the mood docID on the database
+     */
     public void updateImg(String moodID){
         StorageReference photoRef = photoReference.child(moodID);
         Bitmap bitImage = MoodEditor.getBitmap();
@@ -261,50 +254,50 @@ public class DBMoodSetter {
 
     /**
      * This removes a Mood object from the database using its docID
-     * @param moodDocID
+     * @param moodID
      *   This is a String object of mood docID on the database
      *
      */
-    public void removeMood(final String moodDocID) {
+    public void removeMood(final String moodID) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         // remove selected city
-        moodReference.document(moodDocID).delete()
+        moodReference.document(moodID).delete()
             .addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
-                    showStatusMessage("Deleted successfully: " + moodDocID);
+                    showStatusMessage("Deleted successfully: " + moodID);
                 }
             })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    showStatusMessage("Deleting failed for "+moodDocID+": " + e.toString());
+                    showStatusMessage("Deleting failed for "+moodID+": " + e.toString());
                 }
             });
     }
 
     /**
      * This edits  a specific mood in the database given the mood's docID and the parameters to edit
-     * @param moodDocID
+     * @param moodID
      *   This is a String object of mood docID on the database
      * @param data
      *   This is a HashMap containing all the fields that need to be updated in the database and their new values
      */
 
-    public void editMood(final String moodDocID, HashMap data) {
+    public void editMood(final String moodID, HashMap data) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
-        updateImg(moodDocID);
-        moodReference.document(moodDocID).update(data)
+        updateImg(moodID);
+        moodReference.document(moodID).update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        showStatusMessage("Updated successfully: " + moodDocID);
+                        showStatusMessage("Updated successfully: " + moodID);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        showStatusMessage("Updated failed for "+moodDocID+": " + e.toString());
+                        showStatusMessage("Updated failed for "+moodID+": " + e.toString());
                     }
                 });
     }

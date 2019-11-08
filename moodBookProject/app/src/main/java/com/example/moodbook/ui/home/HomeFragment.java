@@ -1,7 +1,9 @@
-// Reference:   Swipe to delete - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
-//              Item click to edit - https://antonioleiva.com/recyclerview-listener/
-//              Filterable - https://www.youtube.com/watch?v=sJ-Z9G0SDhc
-
+/**
+ * Reference:
+ * Swipe to delete - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
+ * Item click to edit - https://antonioleiva.com/recyclerview-listener/
+ * Filterable - https://www.youtube.com/watch?v=sJ-Z9G0SDhc
+ */
 package com.example.moodbook.ui.home;
 
 import android.content.Intent;
@@ -40,6 +42,14 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
+/**
+ * This fragment for Mood History allows user to view, add, edit and remove moods.
+ * @see Mood
+ * @see DBMoodSetter
+ * @see MoodListAdapter
+ * @see com.example.moodbook.PageFragment
+ * @see com.example.moodbook.RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
+ */
 public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     //private HomeViewModel homeViewModel;
@@ -55,8 +65,17 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
     private static final String TAG = HomeFragment.class.getSimpleName();
 
 
+    /**
+     * This is default Fragment onCreateView() which creates view when fragment is created
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     *  Return root view inherited from PageFragment
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        // get root view from PageFragment
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_home);
 
         // Set up recyclerView and adapter
@@ -93,16 +112,18 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
         // if you want both Right -> Left and Left -> Right
         // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(
+                0, ItemTouchHelper.LEFT,this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(moodListView);
 
         return root;
     }
 
     /**
-     * callback when recycler view is swiped
-     * item will be removed on swiped
-     * undo option will be provided in snackbar to restore the item
+     * This override RecyclerItemTouchHelper.RecyclerItemTouchHelperListener onSwiped(),
+     * and is callback when recycler view is swiped
+     * Mood item will be removed on swiped
+     * Undo option will be provided in snackbar to restore the mood item
      */
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
@@ -134,11 +155,12 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
     }
 
     /**
-     * Set up search action
-     * to filter emotional state
+     * This override PageFragment onCreateOptionsMenu() which creates menu options when fragment is created,
+     * and set up search action to filter emotional state
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // clean up unwanted menu options
         super.onCreateOptionsMenu(menu, inflater);
         // inflate new search action menu
         if (inflater == null) {
@@ -146,6 +168,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         }
         inflater.inflate(R.menu.mood_history_emotion_filter, menu);
 
+        // set up search action
         final MenuItem searchItem = menu.findItem(R.id.mood_history_action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);

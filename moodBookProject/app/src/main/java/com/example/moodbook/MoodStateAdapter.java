@@ -1,7 +1,6 @@
 package com.example.moodbook;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +12,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * This ArrayAdapter is used by CreateMoodActivity & EditMoodActivity for the spinner of mood emotional states
+ */
 public class MoodStateAdapter extends ArrayAdapter<String> {
     Context context;
     String[] states;
     int[] images;
 
-
+    /**
+     * This constructor is used by CreateMoodActivity & EditMoodActivity to create ArrayAdapter
+     * for mood emotional states
+     * @param context
+     * @param states
+     * @param images
+     */
     public MoodStateAdapter(@NonNull Context context, String[] states, int[] images) {
         super(context, R.layout.spinner_item,states);
         this.context = context;
