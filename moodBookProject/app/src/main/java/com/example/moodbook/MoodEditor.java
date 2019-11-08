@@ -48,10 +48,9 @@ import java.util.Date;
 public class MoodEditor {
 
     /**
-     * for accessing SetMoodSituation outside of activity
-     * for accessing SetMoodEmotion outside of activity
-     * for accessing SetMoodLocation outside of activity
-     * for accessing SetMoodReasonPhoto outside of activity
+     * This interface ensures CreateMoodActivity and EditMoodActivity implement setters to
+     * set mood attributes from MoodEditor
+     * Setters for emotion, situation, location, reason_photo
      */
     public interface MoodInterface {
         void setMoodEmotion(String emotion);
@@ -65,7 +64,6 @@ public class MoodEditor {
     private static final int GET_IMAGE = 102;
     private static final String TAG = "MyActivity";
     private static Bitmap imageBitmap;
-
 
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
             new String[]{"Pick mood state ..."}, Mood.Emotion.getNames(), String.class);
@@ -83,18 +81,11 @@ public class MoodEditor {
     };
 
     /**
-     * A method that returns a bitmap that was set in the imageView
-     * @return imageBitmap
-     */
-    public static Bitmap getBitmap(){
-        return imageBitmap;
-    }
-
-    /**
      * A method that acts as a Date editor
      * Used by users to set the current date
      * @param view
      */
+    @Deprecated
     public static void showCalendar(final Button view){
         Calendar c = Calendar.getInstance();
         String currentDateString = Mood.DATE_FORMATTER.format(c.getTime());
@@ -106,6 +97,7 @@ public class MoodEditor {
      * Used by users to set a current time
      * @param view
      */
+    @Deprecated
     public static void showTime(final Button view){
         Date d = new Date();
         String currentTimeString = Mood.TIME_FORMATTER.format(d);
@@ -139,8 +131,9 @@ public class MoodEditor {
             }
         });
     }
+
     /**
-     * A method that acts as a situation editor
+     * This return ArrayAdapter for setting up a situation editor
      * Used by users to selects their current situation
      * @param myActivity
      * @param spinnerLayoutId
@@ -167,7 +160,13 @@ public class MoodEditor {
         return situationAdapter;
     }
 
-
+    /**
+     * A method that acts as a situation editor
+     * Used by users to selects their current situation
+     * @param myActivity
+     * @param spinner_situation
+     * @param situationAdapter
+     */
     public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner spinner_situation,
                                            ArrayAdapter<String> situationAdapter) {
         spinner_situation.setAdapter(situationAdapter);
@@ -187,7 +186,19 @@ public class MoodEditor {
         });
     }
 
+    /**
+     * A method that returns a bitmap that was set in the imageView
+     * @return imageBitmap
+     */
+    public static Bitmap getBitmap(){
+        return imageBitmap;
+    }
 
+    /**
+     * A method that acts as a reason photo editor
+     * Used by users to select photo as reason
+     * @param myActivity
+     */
     public static void setImage(final AppCompatActivity myActivity){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(myActivity);
         pictureDialog.setTitle("Select Action");
@@ -219,7 +230,14 @@ public class MoodEditor {
         pictureDialog.show();
     }
 
-    // gets the photo that was taken and let the image be shown in the page
+    /**
+     * This get the photo that was taken / selected, and send it to the activity page to be displayed
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     * @param image_view_photo
+     * @param myActivity
+     */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
                                ImageView image_view_photo, final AppCompatActivity myActivity) {
         if (requestCode == REQUEST_IMAGE
@@ -258,17 +276,27 @@ public class MoodEditor {
         }
     }
 
-    // Location editor
+
+    /**
+     * This return LocationManager for location editor
+     * @param myActivity
+     * @return
+     */
     public static LocationManager getLocationManager(AppCompatActivity myActivity) {
         return (LocationManager) myActivity.getSystemService(Context.LOCATION_SERVICE);
     }
 
+    /**
+     * This return LocationListener for location editor, and set up listener to
+     * send location to the activity page
+     * @param myActivity
+     * @return
+     */
     public static LocationListener getLocationListener(final AppCompatActivity myActivity) {
         return new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 ((MoodInterface)myActivity).setMoodLocation(location);
-
 
                 //redundant
                 double mood_lat = location.getLatitude();
@@ -290,8 +318,13 @@ public class MoodEditor {
         };
     }
 
-
-
+    /**
+     * A method that acts as a location editor
+     * Used by users to get their current location
+     * @param myActivity
+     * @param locationManager
+     * @param locationListener
+     */
     public static void getLocationResult(AppCompatActivity myActivity, LocationManager locationManager,
                                          LocationListener locationListener) {
         // ask user for permission to get location
