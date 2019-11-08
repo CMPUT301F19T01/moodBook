@@ -1,3 +1,7 @@
+/**
+ * Reference:
+ * Linking navigation - https://guides.codepath.com/android/fragment-navigation-drawer
+ */
 package com.example.moodbook;
 
 
@@ -18,24 +22,24 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.moodbook.ui.home.HomeFragment;
-import com.example.moodbook.ui.friendMood.friendMoodFragment;
 import com.example.moodbook.ui.Request.RequestFragment;
-import com.example.moodbook.ui.myRequests.myRequestsFragment;
-import com.example.moodbook.ui.myMoodMap.myMoodMapFragment;
-import com.example.moodbook.ui.myFriendMoodMap.myFriendMoodMapFragment;
+import com.example.moodbook.ui.friendMood.friendMoodFragment;
+import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
+import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
+import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
+import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-import android.view.View;
-import android.widget.Toast;
+
 
 //https://guides.codepath.com/android/fragment-navigation-drawer  - used for linking navigation
 
 /**
  * The Main Activity is set to HomeFragment as default, which in turn lists the Mood History list
  */
+
 public class MainActivity extends AppCompatActivity   {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -99,8 +103,13 @@ public class MainActivity extends AppCompatActivity   {
                 || super.onSupportNavigateUp();
     }
 
+
     /**
      * This method is for switching between different intent activities
+
+
+    /**
+     * This method creates a new fragment based on the menu option selected
      * @param menuItem
      * @param drawer
      */
@@ -121,11 +130,11 @@ public class MainActivity extends AppCompatActivity   {
                 toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_myMoodMap:
-                fragmentClass = myMoodMapFragment.class;
+                fragmentClass = MyMoodMapFragment.class;
                 toolbar.setTitle("Mood History Map");
                 break;
             case R.id.nav_myFriendMoodMap:
-                fragmentClass = myFriendMoodMapFragment.class;
+                fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
                 break;
             case R.id.nav_logout:

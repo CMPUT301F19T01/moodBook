@@ -34,13 +34,11 @@ public class UsernameListTest {
 
     }
 
+    /**
+     * nothing to test as method is void and only interacts with db
+     */
     @Test
-    public void testupdateUsernameList(){
-
-    }
-
-    @Test
-    public void testIsUser(){
+    public void testUpdateUsernameList(){
 
     }
 

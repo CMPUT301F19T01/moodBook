@@ -21,7 +21,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * This fragment is shown to allow the user to send requests to other users
  */
 public class RequestFragment extends PageFragment {
-
     //private RequestViewModel requestViewModel;
 
     private FirebaseAuth mAuth;

@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class myFriendMoodMapViewModel extends ViewModel {
+@Deprecated
+class myFriendMoodMapViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
