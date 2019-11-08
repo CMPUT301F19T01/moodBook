@@ -5,77 +5,94 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.moodbook.Mood;
-import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.R;
-import com.example.moodbook.ui.myRequests.RequestUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.RequestHolder> {
+public class RequestsAdapter extends BaseAdapter {
+
     private Context context;
     private ArrayList<RequestUser> requestList;
-    private final OnItemClickListener listener;
 
-    public interface OnItemClickListener {
-        void onItemClick(RequestUser item);
-    }
-
-    public class RequestHolder extends RecyclerView.ViewHolder {
-
-
-        public RequestHolder(@NonNull View view) {
-            super(view);
-        }
-
-        public void bind(final RequestUser item, final RequestsAdapter.OnItemClickListener listener) {
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    listener.onItemClick(item);
-                }
-            });
-        }
-    }
-    public RequestsAdapter(Context context, ArrayList<RequestUser> requestList, OnItemClickListener listener){
+    public RequestsAdapter(Context context, ArrayList requestList) {
+        super();
         this.context = context;
-        this.listener = listener;
         this.requestList = requestList;
     }
 
-
-    @NonNull
-    @Override
-    public RequestsAdapter.RequestHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.custom_lv, parent, false);
-        return new RequestHolder(itemView);
+    public int getCount() {
+        int size = 0;
+        if (requestList!=null){
+            // return the number of records
+            size = requestList.size();
+        }
+        return size;
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull RequestsAdapter.RequestHolder holder, int position) {
-        final RequestUser requestee = requestList.get(position);
+    // getView method is called for each item of ListView
+    public View getView(int position, View view, ViewGroup parent) {
+        // inflate the layout for each item of listView
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        view = inflater.inflate(R.layout.custom_lv, parent, false);
 
-      //  holder.dateText.setText(mood.getDateText());
-        // show item background color
 
-        // bind item with onItemClick listener
-        //holder.bind(requestee, listener);
+        // get the reference of textView and button
+        TextView username = (TextView) view.findViewById(R.id.nameRequest);
+        Button acceptButton = (Button) view.findViewById(R.id.accept_button);
+        Button declineButton = (Button) view.findViewById(R.id.decline_button);
+
+        // Set the name on the list
+        RequestUser user =  requestList.get(position);
+        username.setText(user.getUsername());
+
+        // Click listener of button
+        acceptButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // accept
+            }
+        });
+
+        declineButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // decline
+            }
+        });
+
+        return view;
     }
 
-    @Override
-    public int getItemCount() {
-        return requestList.size();
+    public Object getItem(int position) {
+        // TODO Auto-generated method stub
+        return position;
     }
 
-    public RequestUser getItem(int position) {
-        return requestList.get(position);
+    public long getItemId(int position) {
+        // TODO Auto-generated method stub
+        return position;
+    }
+    // Remove all name items
+    public void clear() {
+        if (requestList!= null){
+
+            requestList.clear();
+        }
+        // notify list is cleared
+        notifyDataSetChanged();
+    }
+    // Add a request name
+    public void addItem(RequestUser item) {
+        if (requestList!= null){
+            requestList.add(item);
+        }
+        // notify item added
+        notifyDataSetChanged();
     }
 
 }

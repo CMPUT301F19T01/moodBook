@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,23 +28,22 @@ import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.RecyclerItemTouchHelper;
+import com.example.moodbook.ui.Request.RequestHandler;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class myRequestsFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener  {
+public class myRequestsFragment extends PageFragment {
 
-
-
-    // Mood History
-    private RecyclerView requestListView;
-    private RequestsAdapter requestAdapter;
-    private CoordinatorLayout requestLayout;
+    private ListView requestListView;
+    private ArrayList<String> requestDataList;
+    private RequestsAdapter rAdapter;
 
     // connect to DB
-    private DBMoodSetter moodDB;
+    private RequestHandler moodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = HomeFragment.class.getSimpleName();
 
@@ -55,19 +55,19 @@ public class myRequestsFragment extends PageFragment implements RecyclerItemTouc
                              ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_myrequests);
 
-        // Set up recyclerView and adapter
-        requestLayout = root.findViewById(R.id.request_layout);
-        requestListView = root.findViewById(R.id.request_listView);
-        setupAdapter(new RequestsAdapter.OnItemClickListener() {
-                         @Override
-                         public void onItemClick(RequestUser item) {
+        requestListView = (ListView) root.findViewById(R.id.request_listView);
 
-                         }
-                     });
+        // Set some data to array list
+       // requestDataList = new ArrayList<String>(Arrays.asList("111,222,333,444,555,666,777,888".split(",")));
 
-//        // initialize DB connector
-//        mAuth = FirebaseAuth.getInstance();
-//        moodDB = new DBMoodSetter(mAuth, getContext(), DBMoodSetter.getMoodHistoryListener(requestAdapter), TAG);
+//        // Initialize adapter and set adapter to list view
+         rAdapter = new RequestsAdapter(getContext(), requestDataList);
+//        requestListView.setAdapter(rAdapter);
+//        rAdapter.notifyDataSetChanged();
+
+        // initialize DB connector
+        mAuth = FirebaseAuth.getInstance();
+        moodDB = new RequestHandler(mAuth, getContext(), RequestHandler.getRequests(rAdapter), TAG);
 
 
 //
@@ -84,18 +84,5 @@ public class myRequestsFragment extends PageFragment implements RecyclerItemTouc
         return root;
     }
 
-    @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-
-    }
-
-    private void setupAdapter(RequestsAdapter.OnItemClickListener itemClickListener) {
-        requestAdapter = new RequestsAdapter(getContext(), new ArrayList<RequestUser>(), itemClickListener);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-        requestListView.setLayoutManager(mLayoutManager);
-        requestListView.setItemAnimator(new DefaultItemAnimator());
-        requestListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        requestListView.setAdapter(requestAdapter);
-    }
 
 }

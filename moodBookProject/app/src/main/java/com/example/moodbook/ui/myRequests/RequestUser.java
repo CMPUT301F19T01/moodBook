@@ -8,6 +8,7 @@ public class RequestUser {
     private String username;
 
     public RequestUser(String username) {
+
         setUsername(username);
     }
 

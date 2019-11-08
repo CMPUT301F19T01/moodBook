@@ -75,9 +75,7 @@ public class MainActivity extends AppCompatActivity   {
                     }
                 }
         );
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -144,18 +142,10 @@ public class MainActivity extends AppCompatActivity   {
 
     }
 
-
-
-
     private void logout(){
         mAuth.getInstance().signOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
-
-
-
-
-
 
 }
