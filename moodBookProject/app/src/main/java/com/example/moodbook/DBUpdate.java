@@ -4,6 +4,7 @@ import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
+ * Interface that updates the database
  * DBUpdate.java
  * Interface class that has the updateList method for interaction with Firebase
  * @author Neilzon Viloria

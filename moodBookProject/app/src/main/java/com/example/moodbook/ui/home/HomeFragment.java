@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +44,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 
 /**
+ * This class shows the mood history of the user, showing the date, time, and emotion state
+
  * This fragment for Mood History allows user to view, add, edit and remove moods.
  * @see Mood
  * @see DBMoodSetter
@@ -63,6 +66,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = HomeFragment.class.getSimpleName();
+    private String testDel;
 
 
     /**
@@ -104,6 +108,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
             @Override
             public void onClick(View view) {
                 Intent addIntent = new Intent(getActivity(), CreateMoodActivity.class);
+                Toast.makeText(getContext(), "Add a mood", Toast.LENGTH_LONG).show();
                 startActivity(addIntent);
             }
         });
@@ -149,6 +154,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                     moodDB.addMood(deletedMood);
                 }
             });
+            Log.i(testDel, "Deleted mood.");
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
         }
@@ -199,6 +205,10 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         });
     }
 
+    /**
+     * This method is for setting up the mood list adapter
+     * @param itemClickListener
+     */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
         moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -208,6 +218,11 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         moodListView.setAdapter(moodAdapter);
     }
 
+    /**
+     * This method takes in the Mood object from the clicked row
+     * @param intent
+     * @param mood
+     */
     private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
         Location location = mood.getLocation();
         intent.putExtra("moodID", mood.getDocId());

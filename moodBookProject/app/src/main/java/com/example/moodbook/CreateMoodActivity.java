@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -67,6 +68,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
 
     //image
     private Bitmap bitImage;
+    private final String TEST = "test";
 
     /**
      * This is a method inherited from the AppCompatActivity
@@ -104,6 +106,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                         Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
                                 mood_reason_text,bitImage,mood_situation,mood_location);
                         moodDB.addMood(newMood);
+                        Log.i(TEST, "Mood successfully added");
                         finish();
                     } catch (MoodInvalidInputException e) {
                         // shouldn't happen since inputs are already checked
@@ -190,7 +193,11 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
      * This override MoodEditor.MoodInterface setMoodReasonPhoto(),
      * and is setter for bitImage
      * @param bitImage
+
+     *  This is a bitmap image
+
      *  This is current reason photo of mood event
+
      */
     @Override
     public void setMoodReasonPhoto(Bitmap bitImage) {
