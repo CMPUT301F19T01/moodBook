@@ -37,6 +37,7 @@ public class CreateMoodActivityTest {
 
     private Solo solo;
     private Solo solo2;
+    private Solo solo3;
 
     // test location
     private LatLng pickedLocation;
@@ -45,11 +46,16 @@ public class CreateMoodActivityTest {
     public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
     @Rule
     public  ActivityTestRule<CreateMoodActivity> rule2 = new ActivityTestRule<>(CreateMoodActivity.class,true,true);
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityRule =
+            new ActivityTestRule(MainActivity.class);
 
     @Before
     public void setUp() throws Exception {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo2 = new Solo(InstrumentationRegistry.getInstrumentation(),rule2.getActivity());
+        solo3 = new Solo(InstrumentationRegistry.getInstrumentation(), mActivityRule.getActivity());
+
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
@@ -72,11 +78,12 @@ public class CreateMoodActivityTest {
      * Gets the Activity
      * @throws Exception
      */
+    /*
     @Test
     public void start() throws Exception {
 
     }
-
+*/
     /**
      * Clicks on the Fab button for adding moods to go to createMood Activity
      */
@@ -97,7 +104,7 @@ public class CreateMoodActivityTest {
         // go to create mood activity
 
 
-        LocationManager locationManager = (LocationManager) solo.getCurrentActivity().getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) solo3.getCurrentActivity().getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -131,41 +138,40 @@ public class CreateMoodActivityTest {
 
     /**
      * Tests the adding of location
-     * set
+     * NOTE: Set location to 0.0, -134.12 in the android emulator
      */
-
     @Test
     public void addLocationTest(){
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        solo.clickOnImageButton(0);
-        solo.clickOnText("My MoodBook");
-        solo.sleep(3000);
+        solo3 = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        solo3.clickOnImageButton(0);
+        solo3.clickOnText("My MoodBook");
+        solo3.sleep(3000);
 
         // create mood
-        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
+        solo3.clickOnView(solo3.getView(R.id.mood_history_add_button));
 
         // add location by clicking on button
-        solo.clickOnView(solo.getView(R.id.create_location_button));
+        solo3.clickOnView(solo3.getView(R.id.create_location_button));
 
         // wait for activity to launch
-        solo.sleep(3000);
+        solo3.sleep(3000);
 
         // check if we are on LocationPickerActivity
-        solo.assertCurrentActivity("Expected Maps Activity to launch", LocationPickerActivity.class);
+        solo3.assertCurrentActivity("Expected Maps Activity to launch", LocationPickerActivity.class);
 
         // add location
-        solo.clickOnView(solo.getView(R.id.confirmButton));
-        solo.sleep(70000);
+        solo3.clickOnView(solo3.getView(R.id.confirmButton));
+        solo3.sleep(70000);
 
         // check if we got back to CreateMoodActivity
-        solo.assertCurrentActivity("Expected create mood activity to launch", CreateMoodActivity.class);
+        solo3.assertCurrentActivity("Expected create mood activity to launch", CreateMoodActivity.class);
 
         // check the coordinates passed back and set into the pick location button text
-        Button pickLocationButton = (Button) solo.getView(R.id.create_location_button);
+        Button pickLocationButton = (Button) solo3.getView(R.id.create_location_button);
         String actual = pickLocationButton.getText().toString();
-        getLocation();
 
-        String expected = String.valueOf(pickedLocation.latitude) + " , " + String.valueOf(pickedLocation.longitude);
+
+        String expected = "0.0 , -134.12";
 
         assertEquals("Expected coords returned from LocationPickerActivity to match users location",
                 expected,
