@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 
+@Deprecated
 public class myMoodFragment extends PageFragment {
     // temporary, will be removed
     @Deprecated

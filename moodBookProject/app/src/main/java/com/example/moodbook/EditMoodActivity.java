@@ -100,7 +100,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         moodDB = new DBMoodSetter(mAuth,getApplicationContext(),
                 DBMoodSetter.getMoodHistoryListener(moodAdapter), TAG);
         final FragmentManager fm = getSupportFragmentManager();
-        final SelectMoodStateFragment s = new SelectMoodStateFragment();
+        //final SelectMoodStateFragment s = new SelectMoodStateFragment();
         edit_photo_button = findViewById(R.id.edit_reason_photo_button);
         image_view_photo = findViewById(R.id.edit_reason_photo_imageView);
         show_date_time = findViewById(R.id.show_date_time);
@@ -247,16 +247,29 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         });
     }
 
+    @Deprecated
     @Override
     public void setMoodEmotion(String emotion) {
         // do nothing
     }
 
+    /**
+     * This override MoodEditor.MoodInterface setMoodSituation(),
+     * and is setter for mood_situation
+     * @param situation
+     *  This is current social situation of mood event
+     */
     @Override
     public void setMoodSituation(String situation) {
         this.mood_situation = situation;
     }
 
+    /**
+     * This override MoodEditor.MoodInterface setMoodLocation(),
+     * and is setter for mood_location, as well as updating location button text with current location
+     * @param location
+     *  This is current location of mood event
+     */
     @Override
     public void setMoodLocation(Location location) {
         this.mood_location = location;
@@ -265,6 +278,12 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         edit_location_button.setText(edit_location_button_text);
     }
 
+    /**
+     * This override MoodEditor.MoodInterface setMoodReasonPhoto(),
+     * and is setter for bitImage
+     * @param bitImage
+     *  This is current reason photo of mood event
+     */
     @Override
     public void setMoodReasonPhoto(Bitmap bitImage) {
         this.bitImage = bitImage;

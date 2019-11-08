@@ -10,7 +10,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+/**
+ * This fragment is inherited by each page to ensure unwanted menu options are cleared.
+ * @see androidx.fragment.app.Fragment
+ */
 public class PageFragment extends Fragment {
+    /**
+     * This is default Fragment onCreateView() which creates view when fragment is created
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @param layoutId
+     *  This is resource id of layout for PageFragment
+     * @return
+     *  Return root view for PageFragment
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState,
                              int layoutId) {
@@ -21,6 +35,11 @@ public class PageFragment extends Fragment {
         return root;
     }
 
+    /**
+     * This override Fragment onCreateOptionsMenu() which creates menu options when fragment is created
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);

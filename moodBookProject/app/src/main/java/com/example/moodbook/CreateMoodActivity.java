@@ -1,5 +1,6 @@
 package com.example.moodbook;
 
+import android.annotation.SuppressLint;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -25,11 +26,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 
 /**
- * This activity is used to create a Mood Object by clicking on an add button
+ * This activity is used by Mood History to create a Mood Object when clicking an add button
  * @see com.example.moodbook.ui.home.HomeFragment
  * @see Mood
  * @see DBMoodSetter
- * @see MoodListAdapter
  * @see MoodEditor
  */
 public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.MoodInterface{
@@ -73,7 +73,6 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
      * @param savedInstanceState
      *  Bundle Object is used to stored the data of this activity
      */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -83,7 +82,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         moodDB = new DBMoodSetter(mAuth, getApplicationContext());
 
         final FragmentManager fm = getSupportFragmentManager();
-        final SelectMoodStateFragment s = new SelectMoodStateFragment();
+        //final SelectMoodStateFragment s = new SelectMoodStateFragment();
 
         initializeDate();
         initializeTime();
@@ -144,19 +143,18 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     }
 
     /**
-     * This method does shows the coordinates of a view
-     * @deprecated
+     * This method shows the coordinates of a view
      */
+    @Deprecated
     public void showCoords(View view){
     }
 
-    // set attributes in Activity
 
     /**
-     * This  is a method inherited from the MoodEditor Interface sets a value for a mood emotion
+     * This override MoodEditor.MoodInterface setMoodEmotion(),
+     * and is setter for mood_emotion
      * @param emotion
-     *   A Mood Object attribute of emotion
-     *   @see Mood
+     *  This is current social situation of mood event
      */
     @Override
     public void setMoodEmotion(String emotion) {
@@ -164,23 +162,21 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     }
 
     /**
-     * This is a method inherited the MoodEditor Interface sets a value for a mood situation
+     * This override MoodEditor.MoodInterface setMoodSituation(),
+     * and is setter for mood_situation
      * @param situation
-     *   A Mood Object attribute of situation
-     *   @see Mood
+     *  This is current social situation of mood event
      */
-
     @Override
     public void setMoodSituation(String situation) {
         this.mood_situation = situation;
     }
 
     /**
-     * This is a method inherited the MoodEditor Interface sets a value for a mood location
+     * This override MoodEditor.MoodInterface setMoodLocation(),
+     * and is setter for mood_location, as well as updating location button text with current location
      * @param location
-     *     A Mood Object attribute of situation
-     *     @see  Mood
-     *
+     *  This is current location of mood event
      */
     @Override
     public void setMoodLocation(Location location) {
@@ -190,6 +186,12 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         add_location_button.setText(add_location_button_text);
     }
 
+    /**
+     * This override MoodEditor.MoodInterface setMoodReasonPhoto(),
+     * and is setter for bitImage
+     * @param bitImage
+     *  This is current reason photo of mood event
+     */
     @Override
     public void setMoodReasonPhoto(Bitmap bitImage) {
         this.bitImage = bitImage;
