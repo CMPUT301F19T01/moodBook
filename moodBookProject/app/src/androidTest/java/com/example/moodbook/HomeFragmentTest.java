@@ -1,9 +1,9 @@
 package com.example.moodbook;
 
-import android.widget.Button;
+import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.SearchView;
 
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -15,7 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Test class for HomeFragment. All the UI tests are written here.
@@ -56,12 +55,13 @@ public class HomeFragmentTest {
     /**
      * Check if moods are sorted starting from most recent
      */
-    @Test
+    /*@Test
     public void checkSorting(){
-        solo.sleep(2000); // wait for activity to change
+        solo.sleep(5000); // wait for activity to change
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         // ensure current fragment is for Mood History
         assertTrue(solo.searchText("Mood History"));
+
         final RecyclerView moodListView = (RecyclerView) solo.getView(R.id.mood_history_listView);
         MoodListAdapter moodAdapter = (MoodListAdapter)moodListView.getAdapter();
         // check if moods in existing RecyclerView are sorted
@@ -82,6 +82,7 @@ public class HomeFragmentTest {
         String new_mood_time = ((Button)solo.getView(R.id.create_time_button)).getText().toString();
         solo.clickOnButton("ADD");
 
+        // back to Mood History
         solo.sleep(5000); // wait for activity to change
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         // ensure current fragment is for Mood History
@@ -89,5 +90,25 @@ public class HomeFragmentTest {
         Mood new_mood = moodAdapter.getItem(0);
         assertEquals(new_mood.getDateText(), new_mood_date);
         assertEquals(new_mood.getTimeText(), new_mood_time);
+    }*/
+
+    /**
+     * Check if filter filters out non-matching mood
+     * TODO: need to find menu
+     */
+    @Test
+    public void checkFiltering() {
+        solo.sleep(5000); // wait for activity to change
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        MainActivity activity = (MainActivity) solo.getCurrentActivity() ;
+        // ensure current fragment is for Mood History
+        assertTrue(solo.searchText("Mood History"));
+
+        solo.clickOnView(solo.getView(R.id.mood_history_action_search));
+
+        MenuItem searchItem = (MenuItem)solo.getView(R.id.mood_history_action_search);
+        //MenuItem searchItem = (MenuItem)solo.getView(R.id.mood_history_action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQuery("happy",false);
     }
 }
