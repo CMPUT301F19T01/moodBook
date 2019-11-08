@@ -1,6 +1,8 @@
-// Reference:   RecyclerView - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
-//              Filterable - https://www.youtube.com/watch?v=sJ-Z9G0SDhc
-
+/**
+ * Reference:
+ * RecyclerView - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
+ * Filterable - https://www.youtube.com/watch?v=sJ-Z9G0SDhc
+ */
 package com.example.moodbook;
 
 import android.content.Context;
@@ -21,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * This Adapter is used by Mood History and Friend Moods to view and manage moods in RecyclerView.
+ * This Adapter is used by Mood History to view and manage moods in RecyclerView.
  * @see com.example.moodbook.ui.home.HomeFragment
  * @see androidx.recyclerview.widget.RecyclerView.Adapter
  * @see android.widget.Filterable
@@ -32,6 +34,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     private Context context;
     private final OnItemClickListener listener;
 
+
     /**
      * This interface requires the fragment that is using MoodListAdapter to define onItemClick event.
      * @see MoodListAdapter
@@ -40,6 +43,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     public interface OnItemClickListener {
         void onItemClick(Mood item);
     }
+
 
     /**
      * This subclass ViewHolder is used by MoodListAdapter to manage fields and layouts in each RecyclerView item
@@ -90,6 +94,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
             });
         }
     }
+
 
     /**
      * This constructor is used by Mood History and Friend Moods to handle list of moods in RecyclerView
