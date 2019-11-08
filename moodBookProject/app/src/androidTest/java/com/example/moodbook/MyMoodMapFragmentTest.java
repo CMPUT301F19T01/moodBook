@@ -55,42 +55,10 @@ public class MyMoodMapFragmentTest {
     }
 
     public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "maptesting@maptesting.com");
+        solo.enterText((EditText) solo.getView(R.id.email), "hello@hello.com");
         solo.enterText((EditText) solo.getView(R.id.password), "password");
         solo.clickOnButton("login");
     }
-
-
-    public void addMood(){
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        solo.clickOnImageButton(0);
-        solo.clickOnText("My MoodBook");
-
-        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
-        solo.sleep(5000); // wait for activity to change
-
-        CreateMoodActivity createMoodActivity = (CreateMoodActivity) solo.getCurrentActivity();
-
-        // new mood
-        solo.clickOnView(solo.getView(R.id.create_emotion_spinner, 0));
-        solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
-        solo.clickOnView(solo.getView(R.id.create_time_button)); //time button
-        solo.clickOnView(solo.getView(R.id.create_location_button)); //time button
-
-        solo.clickOnView(solo.getView(R.id.create_add_button)); //Select CONFIRM Button
-
-    }
-
-    public void deleteMood(){
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule2.getActivity());
-        solo.clickOnImageButton(0);
-        solo.clickOnText("My MoodBook");
-
-
-        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
-        solo.sleep(5000); // wait for activity to change
-    }
-
 
     /**
      * Test if map is loaded and shown
@@ -98,10 +66,10 @@ public class MyMoodMapFragmentTest {
     @Test
     public void test(){
         // switch to mood map fragment
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule2.getActivity());
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo.clickOnImageButton(0);
         solo.clickOnText("My Mood Map");
-        solo.sleep(30000);
+        solo.sleep(3000);
 
         MapView mapView = (MapView) solo.getView(R.id.mapView);
         // test if map is ready to be used
@@ -109,14 +77,6 @@ public class MyMoodMapFragmentTest {
 
         // test if map view is shown
         assertEquals("Expected mapView.shown() is true",true, mapView.isShown());
-    }
-
-    /**
-     * Test for drawing marker
-     */
-    @Test
-    public void drawMarkerTest(){
-
     }
 
 }

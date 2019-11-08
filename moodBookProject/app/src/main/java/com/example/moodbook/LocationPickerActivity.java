@@ -20,6 +20,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * 
+ */
+
 public class LocationPickerActivity extends FragmentActivity implements OnMapReadyCallback {
     public static final int REQUEST_EDIT_LOCATION = 1;
     public static final int EDIT_LOCATION_OK = 1;
