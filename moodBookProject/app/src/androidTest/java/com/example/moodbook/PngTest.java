@@ -1,24 +1,23 @@
 package com.example.moodbook;
-import android.app.Activity;
-import android.widget.EditText;
 
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
+import android.widget.EditText;
 
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
-import com.example.moodbook.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
 
-/**
- * Test Class for EditMoodActivity. All UI tests are written here. Robotium test framework is used
- */
-public class EditMoodActivityTest {
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+
+public class PngTest {
     private Solo solo;
 
     @Rule
@@ -45,16 +44,15 @@ public class EditMoodActivityTest {
      * used in tests to first login to the app
      */
     public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testing");
+        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
+        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
         solo.clickOnButton("login");
     }
 
-    @Test
-    public void clickEdit(){
-        solo.clickInRecyclerView(0);
-        solo.sleep(5000); // wait for activity to change
-        assertTrue(solo.waitForActivity(EditMoodActivity.class));
-    }
 
+   @Test
+    public void PngTest() {
+//        solo.getCurrentActivity().getResources().getDrawable(R.drawable.action_drw).isShown();
+//       assertEquals(true, solo.getCurrentActivity().findViewById(R.id.getting_started_image_1).isShown());
+    }
 }

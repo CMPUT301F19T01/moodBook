@@ -1,6 +1,5 @@
 package com.example.moodbook;
 
-import android.util.Log;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -9,16 +8,11 @@ import androidx.test.rule.ActivityTestRule;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
 
-import junit.framework.AssertionFailedError;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 
 
 public class RequestFragmentTest {

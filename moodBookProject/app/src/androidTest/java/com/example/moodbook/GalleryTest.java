@@ -1,5 +1,5 @@
 package com.example.moodbook;
-import android.app.Activity;
+
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -7,7 +7,6 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
-import com.example.moodbook.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -15,10 +14,9 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
 
-/**
- * Test Class for EditMoodActivity. All UI tests are written here. Robotium test framework is used
- */
-public class EditMoodActivityTest {
+public class GalleryTest {
+
+
     private Solo solo;
 
     @Rule
@@ -48,13 +46,23 @@ public class EditMoodActivityTest {
         solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.password), "testing");
         solo.clickOnButton("login");
+        solo.sleep(5000);
     }
 
-    @Test
-    public void clickEdit(){
-        solo.clickInRecyclerView(0);
+    /**
+     * Test for Gallery intent
+     */
+    @Test 
+    public void GalleryTest(){
+        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
         solo.sleep(5000); // wait for activity to change
-        assertTrue(solo.waitForActivity(EditMoodActivity.class));
-    }
+        solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
+        solo.clickOnView(solo.getView(R.id.create_time_button)); //time button
+        solo.clickOnView(solo.getView(R.id.create_emotion_spinner));//emotion --Picks alone
+        solo.pressSpinnerItem(0,1);
+        solo.clickOnView(solo.getView(R.id.create_reason_photo_button));
+        solo.clickOnText("Select photo from gallery");
+        assertTrue(solo.waitForLogMessage("Gallery intent successful"));
 
+    }
 }

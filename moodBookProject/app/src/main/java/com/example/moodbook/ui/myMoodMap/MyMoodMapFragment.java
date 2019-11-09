@@ -4,21 +4,17 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.DBUpdate;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -31,29 +27,36 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 
-public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, DBUpdate {
-    private myMoodMapViewModel MyMoodMapViewModel;
+/**
+ * MyMoodMapFragment.java
+ *
+ * @author Neilzon Viloria
+ * @since 07-11-2019
+
+ *  This activity is used to view a where a users moods take place on a map
+ * @see DBUpdate
+ */
+public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, DBUpdate {
+    //private com.example.moodbook.ui.myMoodMap.MyMoodMapViewModel MyMoodMapViewModel;
 
     ///// Member Variables /////
-    private MapView mapView;
-    private GoogleMap moodMap;
-    private ArrayList<Mood> moodDataList;
-    private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
-    private String userID;
+    private MapView mapView; // view object
+    private GoogleMap moodMap; // map object
+    private ArrayList<Mood> moodDataList; // list of moods
+    private FirebaseFirestore db; // database
+    private FirebaseAuth mAuth; // auth
+    private String userID; // users id
 
 
     /**
      * Required empty public constructor
      */
-    public myMoodMapFragment() {
+    public MyMoodMapFragment() {
         // Required empty public constructor
     }
 
@@ -65,9 +68,10 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
      * @param savedInstanceState
      */
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_mymoodmap, container, false);
-        MyMoodMapViewModel = ViewModelProviders.of(this).get(myMoodMapViewModel.class);
+        //MyMoodMapViewModel = ViewModelProviders.of(this).get(com.example.moodbook.ui.myMoodMap.MyMoodMapViewModel.class);
 
         mapView = root.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -101,6 +105,9 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
 
         // update list of markers
         updateList(db);
+
+        // for testing purposes
+        mapView.setContentDescription("MAP READY");
     }
 
     /**
@@ -151,7 +158,7 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     }
 
     /**
-     * This method is inherited by DBUpdate and queries FireBase
+     * Inherited by DBUpdate and is implemented by querying FireBase
      * for the all the Current users moods
      * @param db
      *  reference to the FireBaseFireStore instance
@@ -171,7 +178,8 @@ public class myMoodMapFragment extends Fragment implements OnMapReadyCallback, D
 
                                 // iterate over each document and get fields for drawing mood markers
                                 for (QueryDocumentSnapshot doc : task.getResult()) {
-                                    if (doc.exists() && doc.getDouble("location_lat") != null && doc.getDouble("location_lon") != null) {
+                                    if (doc.exists() && doc.getDouble("location_lat") != null
+                                            && doc.getDouble("location_lon") != null) {
                                         try {
                                             moodDataList.add(DBMoodSetter.getMoodFromData(doc.getData()));
 

@@ -1,13 +1,16 @@
-// Reference:   Swipe to delete - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
-//              Item click to edit - https://antonioleiva.com/recyclerview-listener/
-//              Filterable - https://www.youtube.com/watch?v=sJ-Z9G0SDhc
-
+/**
+ * Reference:
+ * Swipe to delete - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
+ * Item click to edit - https://antonioleiva.com/recyclerview-listener/
+ * Filterable - https://www.youtube.com/watch?v=sJ-Z9G0SDhc
+ */
 package com.example.moodbook.ui.home;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +43,16 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
+/**
+ * This class shows the mood history of the user, showing the date, time, and emotion state
+
+ * This fragment for Mood History allows user to view, add, edit and remove moods.
+ * @see Mood
+ * @see DBMoodSetter
+ * @see MoodListAdapter
+ * @see com.example.moodbook.PageFragment
+ * @see com.example.moodbook.RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
+ */
 public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
     //private HomeViewModel homeViewModel;
@@ -53,10 +66,20 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = HomeFragment.class.getSimpleName();
+    private String testDel;
 
 
+    /**
+     * This is default Fragment onCreateView() which creates view when fragment is created
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     *  Return root view inherited from PageFragment
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        // get root view from PageFragment
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_home);
 
         // Set up recyclerView and adapter
@@ -85,6 +108,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
             @Override
             public void onClick(View view) {
                 Intent addIntent = new Intent(getActivity(), CreateMoodActivity.class);
+                Toast.makeText(getContext(), "Add a mood", Toast.LENGTH_LONG).show();
                 startActivity(addIntent);
             }
         });
@@ -93,16 +117,18 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         // only ItemTouchHelper.LEFT added to detect Right to Left swipe
         // if you want both Right -> Left and Left -> Right
         // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(0, ItemTouchHelper.LEFT,this);
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(
+                0, ItemTouchHelper.LEFT,this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(moodListView);
 
         return root;
     }
 
     /**
-     * callback when recycler view is swiped
-     * item will be removed on swiped
-     * undo option will be provided in snackbar to restore the item
+     * This override RecyclerItemTouchHelper.RecyclerItemTouchHelperListener onSwiped(),
+     * and is callback when recycler view is swiped
+     * Mood item will be removed on swiped
+     * Undo option will be provided in snackbar to restore the mood item
      */
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
@@ -128,17 +154,19 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                     moodDB.addMood(deletedMood);
                 }
             });
+            Log.i(testDel, "Deleted mood.");
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
         }
     }
 
     /**
-     * Set up search action
-     * to filter emotional state
+     * This override PageFragment onCreateOptionsMenu() which creates menu options when fragment is created,
+     * and set up search action to filter emotional state
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // clean up unwanted menu options
         super.onCreateOptionsMenu(menu, inflater);
         // inflate new search action menu
         if (inflater == null) {
@@ -146,6 +174,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         }
         inflater.inflate(R.menu.mood_history_emotion_filter, menu);
 
+        // set up search action
         final MenuItem searchItem = menu.findItem(R.id.mood_history_action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
@@ -176,6 +205,10 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         });
     }
 
+    /**
+     * This method is for setting up the mood list adapter
+     * @param itemClickListener
+     */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
         moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
@@ -185,6 +218,11 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         moodListView.setAdapter(moodAdapter);
     }
 
+    /**
+     * This method takes in the Mood object from the clicked row
+     * @param intent
+     * @param mood
+     */
     private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
         Location location = mood.getLocation();
         intent.putExtra("moodID", mood.getDocId());
