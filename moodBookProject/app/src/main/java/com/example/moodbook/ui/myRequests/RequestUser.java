@@ -20,6 +20,5 @@ public class RequestUser {
         return this.username;
     }
 
-
-
 }
+

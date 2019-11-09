@@ -118,7 +118,7 @@ public class RequestHandler {
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         // ignore null item
                         if (doc.getId() != "null") {
-                            // Adding mood from FireStore
+                            // Adding requestuser from FireStore
                             RequestUser requestUser = RequestHandler.getRequestFromData(doc.getData());
                             if (requestUser != null) {
                                 String un = doc.getId();
