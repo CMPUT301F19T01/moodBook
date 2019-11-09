@@ -121,8 +121,12 @@ public class RequestHandler {
                             // Adding mood from FireStore
                             RequestUser requestUser = RequestHandler.getRequestFromData(doc.getData());
                             if (requestUser != null) {
-                                requestUser.setUsername(doc.getId());
-                                requestsAdapter.addItem(requestUser);
+                                String un = doc.getId();
+                                if (!un.equals("null"))  //ignores null usernames
+                                {
+                                    requestUser.setUsername(doc.getId());
+                                    requestsAdapter.addItem(requestUser);
+                                }
                             }
                         }
                     }
@@ -132,11 +136,9 @@ public class RequestHandler {
     }
 
     /**
-     * This is used to convert HashMap data gotten from the database to a Mood Object
+     * This is used to convert HashMap data gotten from the database to a RequestUser Object
      * @param data
-     *   This is a hashmap with mood fields on the database and their corresponding values
      * @return
-     *   A mood object with fields and values from the data(the hashmap passed into the function)
      */
     public static RequestUser getRequestFromData(Map<String, Object> data) {
         RequestUser user = null;

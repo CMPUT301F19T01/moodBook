@@ -210,18 +210,6 @@ public class MoodEditor {
     }
 
     /**
-     * This is a method that allows the users to add an image to their mood
-     * Involves two options, Camera and Gallery, and will take the users to a new activity to choose/take a picture
-     * @param myActivity The class that calls in this method
-
-     * A method that returns a bitmap that was set in the imageView
-     * @return imageBitmap
-     */
-    public static Bitmap getBitmap(){
-        return imageBitmap;
-    }
-
-    /**
      * A method that acts as a reason photo editor
      * Used by users to select photo as reason
      * @param myActivity
@@ -365,7 +353,7 @@ public class MoodEditor {
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(myActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(myActivity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             return;
         } else { // permission granted
             // set criteria for accuracy of location provider
@@ -377,7 +365,9 @@ public class MoodEditor {
             final Looper looper = null;
 
             locationManager.requestSingleUpdate(criteria, locationListener, looper);
-  
+        }
+    }
+
     /**
      * A method that acts as a location editor
      * Used by users to get their current location
@@ -400,5 +390,5 @@ public class MoodEditor {
             }
         }
     }
-          
+
 }

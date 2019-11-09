@@ -77,12 +77,11 @@ public class RequestsAdapter extends BaseAdapter {
     }
 
     public RequestUser getItem(int position) {
-        // TODO Auto-generated method stub
         return requestList.get(position);
     }
 
+    //not used
     public long getItemId(int position) {
-        // TODO Auto-generated method stub
         return position;
     }
 
