@@ -1,6 +1,7 @@
 package com.example.moodbook.ui.myRequests;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,7 @@ public class RequestsAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<RequestUser> requestList;
 
-    public RequestsAdapter(Context context, ArrayList requestList) {
+    public RequestsAdapter(Context context, ArrayList<RequestUser> requestList) {
         super();
         this.context = context;
         this.requestList = requestList;
@@ -35,9 +36,11 @@ public class RequestsAdapter extends BaseAdapter {
     }
 
     // getView method is called for each item of ListView
+    @SuppressLint("ViewHolder")
     public View getView(int position, View view, ViewGroup parent) {
         // inflate the layout for each item of listView
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert inflater != null;
         view = inflater.inflate(R.layout.custom_lv, parent, false);
 
 
@@ -68,15 +71,16 @@ public class RequestsAdapter extends BaseAdapter {
         return view;
     }
 
-    public Object getItem(int position) {
+    public RequestUser getItem(int position) {
         // TODO Auto-generated method stub
-        return position;
+        return requestList.get(position);
     }
 
     public long getItemId(int position) {
         // TODO Auto-generated method stub
         return position;
     }
+
     // Remove all name items
     public void clear() {
         if (requestList!= null){
@@ -88,9 +92,7 @@ public class RequestsAdapter extends BaseAdapter {
     }
     // Add a request name
     public void addItem(RequestUser item) {
-        if (requestList!= null){
-            requestList.add(item);
-        }
+        requestList.add(item);
         // notify item added
         notifyDataSetChanged();
     }

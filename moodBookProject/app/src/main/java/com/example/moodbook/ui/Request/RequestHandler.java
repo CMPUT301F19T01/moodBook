@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.Mood;
@@ -41,12 +42,13 @@ import java.util.Map;
  */
 
 public class RequestHandler {
-    private static CollectionReference userReference;
-    private static String uid;
+    private CollectionReference userReference;
+    private String uid;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String TAG;
     private Context context;
+
 
     public RequestHandler(FirebaseAuth mAuth, Context context){
         this.mAuth = mAuth;
@@ -57,21 +59,15 @@ public class RequestHandler {
         this.context = context;
     }
 
-
     public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db){
         this.mAuth = mAuth;
-        this.db = db;
-        this.context = context;
+        this.db = FirebaseFirestore.getInstance();
     }
 
-    public RequestHandler(FirebaseAuth mAuth, Context context, @NonNull EventListener requestHistoryListener){
+    public RequestHandler(FirebaseAuth mAuth, Context context, @NonNull EventListener reqHistoryListener, String TAG){
         this(mAuth, context);
         userReference.document(uid).collection("REQUESTS")
-                .addSnapshotListener(requestHistoryListener);
-    }
-
-    public RequestHandler(FirebaseAuth mAuth, Context context, @NonNull EventListener requestHistoryListener, String TAG){
-        this(mAuth, context, requestHistoryListener);
+                .addSnapshotListener(reqHistoryListener);
         this.TAG = TAG;
     }
 
@@ -107,60 +103,54 @@ public class RequestHandler {
     }
 
 
-    public static void getRequests(final RequestsAdapter requestsAdapter, String uid, CollectionReference userReference){
-        userReference.document(uid).collection("REQUESTS").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+    /**
+     * This methods gets the requests from DB and shows it in the listview
+     * @param requestsAdapter
+     * @return
+     */
+    public static EventListener<QuerySnapshot> requestListener(final RequestsAdapter requestsAdapter) {
+        return new EventListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                List<RequestUser> ids = new ArrayList<>();
-                if (task!=null){
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            String id = document.getId();
-                            RequestUser user = getRequestFromData(id);
-                            requestsAdapter.addItem(user);
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
+                if(requestsAdapter != null) {
+                    // clear the old list
+                    requestsAdapter.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        // ignore null item
+                        if (doc.getId() != "null") {
+                            // Adding mood from FireStore
+                            RequestUser requestUser = RequestHandler.getRequestFromData(doc.getData());
+                            if (requestUser != null) {
+                                requestUser.setUsername(doc.getId());
+                                requestsAdapter.addItem(requestUser);
+                            }
                         }
                     }
                 }
             }
-        });
+        };
     }
-//
-//    /**
-//     * This methods gets the requests from DB and shows it in the listview
-//     * @param requestAdapter
-//     * @return
-//     */
-//    public static EventListener<QuerySnapshot> getRequestListener(final RequestsAdapter requestAdapter) {
-//        return new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-//                if(requestAdapter != null) {
-//                    // clear the old list
-//                    requestAdapter.clear();
-//                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-//                        // ignore null item
-//                        if (doc.getId() != "null") {
-//                            // Adding requestee from FireStore
-//                            RequestUser user = RequestHandler.getRequestFromData(doc.getData());
-//                            if (user != null) {
-//                                user.setUsername(doc.getId());
-//                                requestAdapter.addItem(user);
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        };
-//    }
 
-    public static RequestUser getRequestFromData(String data) {
-        RequestUser newRequestee = null;
-        newRequestee = new RequestUser(data);
-        return newRequestee;
+    /**
+     * This is used to convert HashMap data gotten from the database to a Mood Object
+     * @param data
+     *   This is a hashmap with mood fields on the database and their corresponding values
+     * @return
+     *   A mood object with fields and values from the data(the hashmap passed into the function)
+     */
+    public static RequestUser getRequestFromData(Map<String, Object> data) {
+        RequestUser user = null;
+        user = new RequestUser((String) data.get("uid"));
+        return user;
     }
-//
-//    private void showStatusMessage(String message) {
-//        Log.w(TAG, message);
-//        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-//    }
+
+    /**
+     * This is a helper method to show status messages
+     * @param message
+     *  This is a string that contains the status to be shown
+     */
+    private void showStatusMessage(String message) {
+        Log.w(TAG, message);
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
 }
