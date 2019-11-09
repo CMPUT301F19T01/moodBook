@@ -1,6 +1,7 @@
 package com.example.moodbook;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -258,59 +259,19 @@ public class MoodEditor {
         }
     }
 
-    // Location editor
-    public static LocationManager getLocationManager(AppCompatActivity myActivity) {
-        return (LocationManager) myActivity.getSystemService(Context.LOCATION_SERVICE);
-    }
+    public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data, final AppCompatActivity myActivity) {
+        if(requestCode == LocationPickerActivity.REQUEST_EDIT_LOCATION){
+            if(resultCode == LocationPickerActivity.EDIT_LOCATION_OK){
+                double lat = data.getDoubleExtra("location_lat", 0);
+                double lon = data.getDoubleExtra("location_lon", 0);
 
-    public static LocationListener getLocationListener(final AppCompatActivity myActivity) {
-        return new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
+                Location location = new Location("");
+                location.setLatitude(lat);
+                location.setLongitude(lon);
                 ((MoodInterface)myActivity).setMoodLocation(location);
 
-
-                //redundant
-                double mood_lat = location.getLatitude();
-                double mood_lon = location.getLongitude();
-
-                Toast.makeText(myActivity.getApplicationContext(),
-                        mood_lat + "   " + mood_lon, Toast.LENGTH_SHORT)
-                        .show();
             }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {} // not implemented
-
-            @Override
-            public void onProviderEnabled(String s) {} // not implemented
-
-            @Override
-            public void onProviderDisabled(String s) {} // not implemented
-        };
-    }
-
-
-
-    public static void getLocationResult(AppCompatActivity myActivity, LocationManager locationManager,
-                                         LocationListener locationListener) {
-        // ask user for permission to get location
-        if (ActivityCompat.checkSelfPermission(myActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(myActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(myActivity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-            return;
-        } else { // permission granted
-            // set criteria for accuracy of location provider
-            final Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-
-            // set to null because we are required to supply looper but not going to use it
-            final Looper looper = null;
-
-            locationManager.requestSingleUpdate(criteria, locationListener, looper);
         }
+
     }
 }

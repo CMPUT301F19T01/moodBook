@@ -79,8 +79,8 @@ public class RegisterActivityTest {
         solo.enterText((EditText) solo.getView(R.id.password), "testtest");
         solo.enterText((EditText) solo.getView(R.id.username), "unusedtestuser");
         solo.clickOnButton("register");
-
         assertTrue(solo.waitForText("Incorrect email format"));
+
     }
 
     /**

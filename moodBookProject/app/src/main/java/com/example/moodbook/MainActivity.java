@@ -94,6 +94,11 @@ public class MainActivity extends AppCompatActivity   {
     }
 
 
+    /**
+     * This method creates a new fragment based on the menu option selected
+     * @param menuItem
+     * @param drawer
+     */
     public void selectDrawerItem(MenuItem menuItem, DrawerLayout drawer){
         Fragment fragment;
         Class fragmentClass;
