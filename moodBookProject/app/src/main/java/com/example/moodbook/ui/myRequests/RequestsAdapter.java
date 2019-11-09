@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.moodbook.R;
 
@@ -57,14 +58,18 @@ public class RequestsAdapter extends BaseAdapter {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // accept
+                Toast.makeText(context,
+                        "Accept",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
         declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // decline
+                Toast.makeText(context,
+                        "Decline",
+                        Toast.LENGTH_LONG).show();
             }
         });
 
@@ -92,7 +97,9 @@ public class RequestsAdapter extends BaseAdapter {
     }
     // Add a request name
     public void addItem(RequestUser item) {
-        requestList.add(item);
+        if (item!=null){
+            requestList.add(item);
+        }
         // notify item added
         notifyDataSetChanged();
     }
