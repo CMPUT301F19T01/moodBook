@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -281,17 +279,11 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     }
 
     /**
-     * This is a method inherited from the MoodEditor Interface sets a value for a mood location
-     * @param location
-     *     A Mood Object attribute of situation
-     *     @see  Mood
-     *
-     */
-//    @Ov erride
      * This override MoodEditor.MoodInterface setMoodLocation(),
      * and is setter for mood_location, as well as updating location button text with current location
      * @param location
-     *  This is current location of mood event
+     *     This is current location of mood event
+     *     @see  Mood
      */
     @Override
     public void setMoodLocation(Location location) {

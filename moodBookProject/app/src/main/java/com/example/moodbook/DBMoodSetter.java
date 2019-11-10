@@ -133,7 +133,6 @@ public class DBMoodSetter {
      *  @see Mood
      * @see #addMoodAfterDocId(String, Mood)
      * @see #setInt()
-     *
      */
     public void addMood(final Mood mood) {
         DocumentReference intRef = db.collection("int").document("count");
@@ -194,12 +193,6 @@ public class DBMoodSetter {
     }
 
 
-    /**
-     * This adds an image object to the FireBase storage
-     * @param mood
-     *   This is a mood object
-     */
-    public void addImg(final Mood mood) {
     /**
      * This add the reason image to firebase storage
      * @param mood
