@@ -272,7 +272,7 @@ public class MoodEditor {
         }
     }
 
-  
+
     /**
      * A method that acts as a location editor
      * Used by users to get their current location
@@ -295,5 +295,4 @@ public class MoodEditor {
             }
         }
     }
-          
 }
