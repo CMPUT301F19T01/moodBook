@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,7 +32,8 @@ import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 //https://guides.codepath.com/android/fragment-navigation-drawer  - used for linking navigation
@@ -48,6 +50,9 @@ public class MainActivity extends AppCompatActivity   {
     private DrawerLayout drawer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
+    private FirebaseFirestore db;
+    private String name;
+    private String email;
 
 
     @Override
@@ -56,16 +61,29 @@ public class MainActivity extends AppCompatActivity   {
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        db = FirebaseFirestore.getInstance();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            name = user.getDisplayName();
+            email = user.getEmail();
+//            Uri photoUrl = user.getPhotoUrl();
+
+            boolean emailVerified = user.isEmailVerified();
+
+            String uid = user.getUid();
+        }
 
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         navigationView.bringToFront();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-
+                R.id.currentEmail, R.id.currentEmail,
                 R.id.nav_myMood,R.id.nav_FriendMood,
                 R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
                 .setDrawerLayout(drawer)
@@ -83,9 +101,11 @@ public class MainActivity extends AppCompatActivity   {
                     }
                 }
         );
-
+        TextView profileUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentUsername);
+        TextView profileEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
+        profileUserName.setText(name);
+        profileEmail.setText(email);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -158,13 +178,7 @@ public class MainActivity extends AppCompatActivity   {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-
-    /**
-     * This method allows the user to log out of the application.
-     */
 
     private void logout(){
         mAuth.getInstance().signOut();
