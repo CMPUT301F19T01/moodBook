@@ -281,7 +281,8 @@ public class MoodEditor {
      * @param data
      * @param myActivity
      */
-    public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data, final AppCompatActivity myActivity) {
+    public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data,
+            final AppCompatActivity myActivity) {
         if(requestCode == LocationPickerActivity.REQUEST_EDIT_LOCATION){
             if(resultCode == LocationPickerActivity.EDIT_LOCATION_OK){
                 double lat = data.getDoubleExtra("location_lat", 0);
@@ -291,7 +292,6 @@ public class MoodEditor {
                 location.setLatitude(lat);
                 location.setLongitude(lon);
                 ((MoodInterface)myActivity).setMoodLocation(location);
-
             }
         }
     }
