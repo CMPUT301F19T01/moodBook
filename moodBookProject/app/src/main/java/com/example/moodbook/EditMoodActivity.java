@@ -279,11 +279,11 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     }
 
     /**
-     * This is a method inherited from the MoodEditor Interface sets a value for a mood location
+     * This override MoodEditor.MoodInterface setMoodLocation(),
+     * and is setter for mood_location, as well as updating location button text with current location
      * @param location
-     *     A Mood Object attribute of situation
+     *     This is current location of mood event
      *     @see  Mood
-     *
      */
     @Override
     public void setMoodLocation(Location location) {

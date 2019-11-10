@@ -39,7 +39,6 @@ import java.util.Date;
  * @see CreateMoodActivity
  * @see EditMoodActivity
  */
-
 public class MoodEditor {
 
     /**
@@ -74,7 +73,6 @@ public class MoodEditor {
             "With two and more",
             "With a crowd"
     };
-
 
     /**
      * A method that acts as a Date editor
@@ -130,10 +128,11 @@ public class MoodEditor {
     }
 
     /**
-     * A method that shows the situation options
+     * This return ArrayAdapter for setting up a situation editor
+     * Used by users to selects their current situation
      * @param myActivity The class that calls in this method
      * @param spinnerLayoutId The view that contains the situation options
-     * @return Returns the adapter
+     * @return situationAdapter
      */
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
                                                            int spinnerLayoutId) {

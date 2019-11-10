@@ -133,7 +133,6 @@ public class DBMoodSetter {
      *  @see Mood
      * @see #addMoodAfterDocId(String, Mood)
      * @see #setInt()
-     *
      */
     public void addMood(final Mood mood) {
         DocumentReference intRef = db.collection("int").document("count");
