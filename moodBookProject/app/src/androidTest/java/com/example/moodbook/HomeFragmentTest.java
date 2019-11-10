@@ -1,9 +1,9 @@
 package com.example.moodbook;
 
-import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SearchView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -55,7 +56,7 @@ public class HomeFragmentTest {
     /**
      * Check if moods are sorted starting from most recent
      */
-    /*@Test
+    @Test
     public void checkSorting(){
         solo.sleep(5000); // wait for activity to change
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
@@ -90,7 +91,7 @@ public class HomeFragmentTest {
         Mood new_mood = moodAdapter.getItem(0);
         assertEquals(new_mood.getDateText(), new_mood_date);
         assertEquals(new_mood.getTimeText(), new_mood_time);
-    }*/
+    }
 
     /**
      * Check if filter filters out non-matching mood
@@ -106,9 +107,9 @@ public class HomeFragmentTest {
 
         solo.clickOnView(solo.getView(R.id.mood_history_action_search));
 
-        MenuItem searchItem = (MenuItem)solo.getView(R.id.mood_history_action_search);
+        /*MenuItem searchItem = (MenuItem)solo.getView(R.id.mood_history_action_search);
         //MenuItem searchItem = (MenuItem)solo.getView(R.id.mood_history_action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQuery("happy",false);
+        searchView.setQuery("happy",false);*/
     }
 }

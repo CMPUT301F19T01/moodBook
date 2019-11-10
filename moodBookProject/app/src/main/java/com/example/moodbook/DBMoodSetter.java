@@ -178,36 +178,36 @@ public class DBMoodSetter {
                 });
     }
 
-        /**
-         * This add the reason image to firebase storage
-         * @param mood
-         *   This is a mood Object
-         *   @see Mood
-         */
-        public void addImg (String moodID,final Mood mood){
-            String picID = moodID;
-            StorageReference photoRef = photoReference.child(picID);
-            Bitmap bitImage = mood.getReasonPhoto();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            if (bitImage != null) {
-                bitImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] data = baos.toByteArray();
 
-                UploadTask uploadTask = photoRef.putBytes(data);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        showStatusMessage("Failed to add mood photo.");
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        showStatusMessage("Succesfully added the mood photo");
-                    }
-                });
-            }
+    /**
+     * This add the reason image to firebase storage
+     * @param mood
+     *   This is a mood Object
+     *   @see Mood
+     */
+    public void addImg(String moodID, final Mood mood) {
+        String picID = moodID;
+        StorageReference photoRef = photoReference.child(picID);
+        Bitmap bitImage = mood.getReasonPhoto();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (bitImage != null) {
+            bitImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = photoRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    showStatusMessage("Failed to add mood photo.");
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    showStatusMessage("Successfully added the mood photo");
+                }
+            });
         }
-
+    }
         /**
          * This updates an image object to the FireBase storage
          * Instead of taking an a whole Mood object, it will only have to take in a moodID
