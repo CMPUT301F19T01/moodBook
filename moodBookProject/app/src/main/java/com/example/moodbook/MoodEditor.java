@@ -1,23 +1,14 @@
 package com.example.moodbook;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -29,14 +20,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
+
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.Calendar;
@@ -83,13 +75,6 @@ public class MoodEditor {
             "With a crowd"
     };
 
-    /**
-     * A method that returns a bitmap that was set in the imageView
-     * @return imageBitmap This is a Bitmap image
-     */
-    public static Bitmap getBitmap(){
-        return imageBitmap;
-    }
 
     /**
      * A method that acts as a Date editor
@@ -145,16 +130,10 @@ public class MoodEditor {
     }
 
     /**
-
      * A method that shows the situation options
      * @param myActivity The class that calls in this method
      * @param spinnerLayoutId The view that contains the situation options
      * @return Returns the adapter
-     * This return ArrayAdapter for setting up a situation editor
-     * Used by users to selects their current situation
-     * @param myActivity
-     * @param spinnerLayoutId
-     * @return situationAdapter
      */
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
                                                            int spinnerLayoutId) {
@@ -183,12 +162,6 @@ public class MoodEditor {
      * @param myActivity The class that calls in this method
      * @param spinner_situation The spinner view
      * @param situationAdapter The situation adapter
-    /**
-     * A method that acts as a situation editor
-     * Used by users to selects their current situation
-     * @param myActivity
-     * @param spinner_situation
-     * @param situationAdapter
      */
     public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner spinner_situation,
                                            ArrayAdapter<String> situationAdapter) {
@@ -210,10 +183,6 @@ public class MoodEditor {
     }
 
     /**
-     * This is a method that allows the users to add an image to their mood
-     * Involves two options, Camera and Gallery, and will take the users to a new activity to choose/take a picture
-     * @param myActivity The class that calls in this method
-
      * A method that returns a bitmap that was set in the imageView
      * @return imageBitmap
      */
@@ -222,9 +191,9 @@ public class MoodEditor {
     }
 
     /**
-     * A method that acts as a reason photo editor
-     * Used by users to select photo as reason
-     * @param myActivity
+     * This is a method that allows the users to add an image to their mood
+     * Involves two options, Camera and Gallery, and will take the users to a new activity to choose/take a picture
+     * @param myActivity The class that calls in this method
      */
     public static void setImage(final AppCompatActivity myActivity){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(myActivity);
@@ -265,12 +234,6 @@ public class MoodEditor {
      * @param data This is the data obtained from the Camera/Gallery intent
      * @param image_view_photo This is an ImageView
      * @param myActivity The class that calls in this method
-     * This get the photo that was taken / selected, and send it to the activity page to be displayed
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     * @param image_view_photo
-     * @param myActivity
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
                                ImageView image_view_photo, final AppCompatActivity myActivity) {
@@ -310,73 +273,6 @@ public class MoodEditor {
         }
     }
 
-    /**
-     * This method is the location editor
-     * @param myActivity The class that calls in this method
-     * @return
-     */
-    public static LocationManager getLocationManager(AppCompatActivity myActivity) {
-        return (LocationManager) myActivity.getSystemService(Context.LOCATION_SERVICE);
-    }
-
-    /**
-     * The method that sets the mood location
-     * @param myActivity The class that calls in this method
-     * @return
-     */
-    public static LocationListener getLocationListener(final AppCompatActivity myActivity) {
-        return new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                ((MoodInterface)myActivity).setMoodLocation(location);
-
-
-//                //redundant
-//                double mood_lat = location.getLatitude();
-//                double mood_lon = location.getLongitude();
-//
-//                Toast.makeText(myActivity.getApplicationContext(),
-//                        mood_lat + "   " + mood_lon, Toast.LENGTH_SHORT)
-//                        .show();
-            }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {} // not implemented
-
-            @Override
-            public void onProviderEnabled(String s) {} // not implemented
-
-            @Override
-            public void onProviderDisabled(String s) {} // not implemented
-        };
-    }
-
-
-    /**
-     * The method that gets the result for location
-     * @param myActivity The class that calls in this method
-     * @param locationManager
-     * @param locationListener
-     */
-    public static void getLocationResult(AppCompatActivity myActivity, LocationManager locationManager,
-                                         LocationListener locationListener) {
-        // ask user for permission to get location
-        if (ActivityCompat.checkSelfPermission(myActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(myActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(myActivity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-            return;
-        } else { // permission granted
-            // set criteria for accuracy of location provider
-            final Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-
-            // set to null because we are required to supply looper but not going to use it
-            final Looper looper = null;
-
-            locationManager.requestSingleUpdate(criteria, locationListener, looper);
   
     /**
      * A method that acts as a location editor
@@ -386,7 +282,8 @@ public class MoodEditor {
      * @param data
      * @param myActivity
      */
-    public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data, final AppCompatActivity myActivity) {
+    public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data,
+            final AppCompatActivity myActivity) {
         if(requestCode == LocationPickerActivity.REQUEST_EDIT_LOCATION){
             if(resultCode == LocationPickerActivity.EDIT_LOCATION_OK){
                 double lat = data.getDoubleExtra("location_lat", 0);
@@ -396,7 +293,6 @@ public class MoodEditor {
                 location.setLatitude(lat);
                 location.setLongitude(lon);
                 ((MoodInterface)myActivity).setMoodLocation(location);
-
             }
         }
     }

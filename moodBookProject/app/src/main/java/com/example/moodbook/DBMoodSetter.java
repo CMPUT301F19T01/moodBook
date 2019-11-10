@@ -195,12 +195,6 @@ public class DBMoodSetter {
 
 
     /**
-     * This adds an image object to the FireBase storage
-     * @param mood
-     *   This is a mood object
-     */
-    public void addImg(final Mood mood) {
-    /**
      * This add the reason image to firebase storage
      * @param mood
      *   This is a mood Object
@@ -224,22 +218,18 @@ public class DBMoodSetter {
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    showStatusMessage("Succesfully added the mood photo");
+                    showStatusMessage("Successfully added the mood photo");
                 }
             });
         }
     }
 
     /**
-
      * This updates an image object to the FireBase storage
      * Instead of taking an a whole Mood object, it will only have to take in a moodID
      * to update the image.
      * @param moodID
-     *  This is the moodID of the mood that a user wants to view/edit the image at.
-     * This update the reason image in firebase storage
-     * @param moodID
-     *   This is the mood docID on the database
+     *  This is the moodID of the mood that a user wants to view/edit the image at the database
      */
     public void updateImg(String moodID){
         StorageReference photoRef = photoReference.child(moodID);
@@ -269,7 +259,6 @@ public class DBMoodSetter {
      * This removes a Mood object from the database using its docID
      * @param moodID
      *   This is a String object of mood docID on the database
-     *
      */
     public void removeMood(final String moodID) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
