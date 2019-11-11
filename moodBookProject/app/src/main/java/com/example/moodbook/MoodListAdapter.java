@@ -6,6 +6,7 @@
 package com.example.moodbook;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,8 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     private ArrayList<Mood> moodListFull;   // contains all the mood events
     private Context context;
     private final OnItemClickListener listener;
+
+    private Filter mood_filter;
 
 
     /**
@@ -110,6 +113,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         this.context = context;
         this.listener = listener;
         this.moodListFull = new ArrayList<>(moodList);
+        this.mood_filter = getFilter();
     }
 
     /**
@@ -209,36 +213,40 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
      */
     @Override
     public Filter getFilter() {
-        Filter moodFilter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                ArrayList<Mood> filteredList = new ArrayList<>();
-                // if there is no constraint, return all mood events
-                if(constraint == null || constraint.length() == 0) {
-                    filteredList.addAll(moodListFull);
-                }
-                // otherwise, find all mood events whose emotional states match constraint
-                else {
-                    String filterPattern = constraint.toString().toLowerCase().trim();
-                    for(Mood item : moodListFull) {
-                        if(item.getEmotionText().toLowerCase().startsWith(filterPattern)) {
-                            filteredList.add(item);
+        if(this.mood_filter == null) {
+            this.mood_filter = new Filter() {
+                @Override
+                protected FilterResults performFiltering(CharSequence constraint) {
+                    ArrayList<Mood> filteredList = new ArrayList<>();
+                    // if there is no constraint, return all mood events
+                    if (constraint == null || constraint.length() == 0) {
+                        filteredList.addAll(moodListFull);
+                    }
+                    // otherwise, find all mood events whose emotional states match constraint
+                    else {
+                        String filterPattern = constraint.toString().toLowerCase().trim();
+                        for (Mood item : moodListFull) {
+                            if (item.getEmotionText().toLowerCase().startsWith(filterPattern)) {
+                                filteredList.add(item);
+                            }
                         }
                     }
+                    FilterResults results = new FilterResults();
+                    results.values = filteredList;
+                    return results;
                 }
-                FilterResults results = new FilterResults();
-                results.values = filteredList;
-                return results;
-            }
 
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults results) {
-                moodList.clear();
-                moodList.addAll((ArrayList)results.values);
-                notifyDataSetChanged();
-            }
-        };
-        return moodFilter;
+                @Override
+                protected void publishResults(CharSequence charSequence, FilterResults results) {
+                    moodList.clear();
+                    moodList.addAll((ArrayList) results.values);
+                    notifyDataSetChanged();
+                    Log.d(MoodListAdapter.this.getClass().getSimpleName(),
+                            "size:" + MoodListAdapter.this.getItemCount());
+                }
+            };
+        }
+        return this.mood_filter;
     }
 
     /**
