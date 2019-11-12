@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -12,113 +11,84 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.HashMap;
+import java.util.Arrays;
 
-/**
- * This activity is used to display a Mood Object's attribute values and allows the user to edit these values
- * It gets this Mood's fields from the HomeFragment class which passes the needed fields to this activity using an intent
- * @see com.example.moodbook.ui.home.HomeFragment
- * @see Mood
- * @see DBMoodSetter
- * @see MoodEditor
- */
-public class EditMoodActivity extends AppCompatActivity implements MoodEditor.MoodInterface {
+public abstract class MoodEditorActivity extends AppCompatActivity implements MoodEditor.MoodInterface {
 
-    private static final String TAG = EditMoodActivity.class.getSimpleName();
-
-    private String moodID;
+    private static final String[] SUBCLASSES_NAMES = {
+            CreateMoodActivity.class.getSimpleName(),
+            EditMoodActivity.class.getSimpleName()
+    };
+    protected String TAG;
 
     // moodSetter
-    private DBMoodSetter moodDB;
+    protected DBMoodSetter moodDB;
 
     // emotion
-    private Spinner emotion_spinner;
+    protected Spinner emotion_spinner;
     private MoodStateAdapter emotionAdapter;
-    private String mood_emotion;
+    protected String mood_emotion;
 
     // reason text
-    private EditText reason_editText;
-    private String mood_reason_text;
+    protected EditText reason_editText;
+    protected String mood_reason_text;
 
     // reason photo
-    private ImageView reason_photo_imageView;
-    private Bitmap reason_photo_bitmap;
+    protected Button reason_photo_button;
+    protected ImageView reason_photo_imageView;
+    protected Bitmap reason_photo_bitmap;
 
     // situation
-    private String mood_situation;
+    protected Spinner situation_spinner;
+    protected String mood_situation;
 
     // location
-    private Button edit_location_button;
-    private Location mood_location;
+    protected Button location_button;
+    protected Location mood_location;
 
+    // action buttons
+    protected Button do_button;
+    protected Button cancel_button;
 
     /**
      * This is a method inherited from the AppCompatActivity
      * @param savedInstanceState
-     *  Bundle Object is used to store the data of this activity
+     *  Bundle Object is used to stored the data of this activity
      */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState, String activityName) {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_mood);
 
+        if(!Arrays.asList(SUBCLASSES_NAMES).contains(activityName)){
+            return;
+        }
+        this.TAG = activityName;
+
+        // set layout view
+        int activityLayoutId = (this.TAG == SUBCLASSES_NAMES[0]) ?
+                R.layout.activity_create_mood : R.layout.activity_edit_mood;
+        setContentView(activityLayoutId);
+
+        // initialize DBMoodSetter
         initializeDBMoodSetter();
 
-        moodID = getIntent().getStringExtra("moodID");
+        // initialize all the views within the activity
+        initializeViews();
 
-        initializeDateTime();
-        initializeEmotion();
-        initializeReasonText();
-        initializeReasonPhoto();
-        initializeSituation();
-        initializeLocation();
-
-        final Button save_button = findViewById(R.id.edit_save_button);
-        final Button cancel_button = findViewById(R.id.edit_cancel_button);
-
-        save_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(validMoodInputs()){
-                    final HashMap<String, Object> moodMap = new HashMap<>();
-                    // update emotion if changed
-                    if(mood_emotion != null) {
-                        moodMap.put("emotion", mood_emotion);
-                    }
-                    // update reason_text
-                    moodMap.put("reason_text",reason_editText.getText().toString());
-                    // update situation if changed
-                    if(mood_situation != null) {
-                        moodMap.put("situation",mood_situation);
-                    }
-                    // update location if changed
-                    if(mood_location != null) {
-                        moodMap.put("location_lat",mood_location.getLatitude());
-                        moodMap.put("location_lon",mood_location.getLongitude());
-                    }
-                    moodDB.editMood(moodID,moodMap);
-                    Log.i(TAG, "Mood successfully updated");
-                    finish();
-                }
-            }
-        });
-
-        // When cancel button is pressed, return to main activity; do nothing
-        cancel_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setResult(AppCompatActivity.RESULT_CANCELED);
-                finish();
-            }
-        });
+        setupDateTime();
+        setupEmotion();
+        setupReasonText();
+        setupReasonPhoto();
+        setupSituation();
+        setupLocation();
+        setupDoButton();
+        setupCancelButton();
     }
 
     /**
@@ -136,6 +106,7 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView, this);
         MoodEditor.getLocationResult(requestCode, resultCode, data, this);
     }
+
 
     /**
      * This override MoodEditor.MoodInterface setMoodEmotion(),
@@ -168,9 +139,9 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
     @Override
     public void setMoodLocation(Location location) {
         this.mood_location = location;
-        String edit_location_button_text = ((Double)location.getLatitude()).toString() + " , "
+        String add_location_button_text = ((Double)location.getLatitude()).toString() + " , "
                 + ((Double)location.getLongitude()).toString();
-        edit_location_button.setText(edit_location_button_text);
+        location_button.setText(add_location_button_text);
     }
 
     /**
@@ -191,67 +162,58 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         moodDB = new DBMoodSetter(mAuth, getApplicationContext(), TAG);
     }
 
-    private void initializeDateTime() {
-        TextView show_date_time = findViewById(R.id.show_date_time);
+    /**
+     * Must initialize all the views in subclass
+     */
+    protected abstract void initializeViews();
 
-        String intent_date = getIntent().getStringExtra( "date");
-        String intent_time = getIntent().getStringExtra("time");
-        show_date_time.setText("Created: " + intent_date +" at " + intent_time );
-    }
+    protected abstract void setupDateTime();
 
-    private void initializeEmotion() {
-        emotion_spinner = findViewById(R.id.edit_emotion_spinner);
-
-        String intent_emotion = getIntent().getStringExtra("emotion");
+    protected void setupEmotion() {
         // Initializing a MoodStateAdapter for emotional state spinner
         emotionAdapter = new MoodStateAdapter(this,
                 MoodEditor.EMOTION_STATE_LIST, MoodEditor.EMOTION_IMAGE_LIST);
+        // intent data is null for CreateMoodActivity
+        String intent_emotion = getIntent().getStringExtra("emotion");
         MoodEditor.setEmotionSpinner(this, emotion_spinner, emotionAdapter, intent_emotion);
     }
 
-    private void initializeReasonText() {
-        reason_editText = findViewById(R.id.edit_reason_editText);
-
+    protected void setupReasonText() {
+        // intent data is null for CreateMoodActivity
         String intent_reason = getIntent().getStringExtra("reason_text");
-        reason_editText.setText(intent_reason);
+        if(intent_reason != null) {
+            reason_editText.setText(intent_reason);
+        }
     }
 
-    /**
-     * This allows a user to edit a mood image.
-     */
-    private void initializeReasonPhoto() {
-        Button edit_photo_button = findViewById(R.id.edit_reason_photo_button);
-        reason_photo_imageView = findViewById(R.id.edit_reason_photo_imageView);
-
-        moodDB.getImageFromDB(moodID, reason_photo_imageView);
-
-        edit_photo_button.setOnClickListener(new View.OnClickListener() {
+    protected void setupReasonPhoto() {
+        reason_photo_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MoodEditor.setImage(EditMoodActivity.this);
+                MoodEditor.setImage(MoodEditorActivity.this);
             }
         });
     }
 
-    private void initializeSituation() {
-        Spinner situation_spinner = findViewById(R.id.edit_situation_spinner);
-
-        String intent_situation = getIntent().getStringExtra("situation");
+    protected void setupSituation() {
         // Initializing an ArrayAdapter for situation spinner
-        final ArrayAdapter<String> spinnerArrayAdapter = MoodEditor.getSituationAdapter(
+        ArrayAdapter<String> spinnerArrayAdapter = MoodEditor.getSituationAdapter(
                 this, R.layout.spinner_situation);
+        // intent data is null for CreateMoodActivity
+        String intent_situation = getIntent().getStringExtra("situation");
         MoodEditor.setSituationSpinner(this, situation_spinner, spinnerArrayAdapter, intent_situation);
     }
 
-    private void initializeLocation() {
-        edit_location_button = findViewById(R.id.edit_location_button);
-
+    protected void setupLocation() {
+        // intent data is null for CreateMoodActivity
         String intent_lat = getIntent().getStringExtra("location_lat");
         String intent_lon = getIntent().getStringExtra("location_lon");
-        edit_location_button.setText(intent_lat + " , " + intent_lon);
+        if(intent_lat != null && intent_lon != null) {
+            location_button.setText(intent_lat + " , " + intent_lon);
+        }
 
         // set the button onClickListener to request location
-        edit_location_button.setOnClickListener(new View.OnClickListener() {
+        location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // start activity to edit location
@@ -261,12 +223,25 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         });
     }
 
+    protected abstract void setupDoButton();
+
+    protected void setupCancelButton() {
+        // When cancel button is pressed, return to main activity; do nothing
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setResult(AppCompatActivity.RESULT_CANCELED);
+                finish();
+            }
+        });
+    }
+
     /**
-     * Checks if mood inputs are valid
+     * Checks if mood inputs are valid: emotion & reason_text
      * @return
      *  A boolean with representing all inputs are valid or all inputs are not valid.
      */
-    private boolean validMoodInputs() {
+    protected boolean validMoodInputs() {
         boolean areInputsValid = true;
         // check mood_emotion if changed
         if(mood_emotion != null) {
@@ -287,5 +262,4 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
         }
         return areInputsValid;
     }
-
 }

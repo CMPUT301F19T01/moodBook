@@ -32,7 +32,6 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
 
     // moodSetter
     private DBMoodSetter moodDB;
-    private FirebaseAuth mAuth;
 
     // date
     private Button add_date_button;
@@ -74,9 +73,7 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_mood);
 
-        // initialize DB connector
-        mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getApplicationContext(), TAG);
+        initializeDBMoodSetter();
 
         initializeDateTime();
         initializeEmotion();
@@ -85,38 +82,8 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
         initializeSituation();
         initializeLocation();
 
-        final Button add_button = findViewById(R.id.create_add_button);
-        final Button cancel_button = findViewById(R.id.create_cancel_button);
-
-        // When this button is clicked, we want to return a result
-        add_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(validMoodInputs()){
-                    try {
-                        Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
-                                mood_reason_text,reason_photo_bitmap,mood_situation,mood_location);
-                        moodDB.addMood(newMood);
-                        Log.i(TAG, "Mood successfully added");
-                        finish();
-                    } catch (MoodInvalidInputException e) {
-                        // shouldn't happen since inputs are already checked
-                        Toast.makeText(getApplicationContext(),
-                                "Adding failed: " + e.getMessage(),
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        });
-
-        // When cancel button is pressed, return to main activity; do nothing
-        cancel_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setResult(AppCompatActivity.RESULT_CANCELED);
-                finish();
-            }
-        });
+        initializeDoButton();
+        initializeCancelButton();
     }
 
 
@@ -182,6 +149,13 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
     @Override
     public void setMoodReasonPhoto(Bitmap bitmap) {
         this.reason_photo_bitmap = bitmap;
+    }
+
+
+    private void initializeDBMoodSetter() {
+        // initialize DB connector
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        moodDB = new DBMoodSetter(mAuth, getApplicationContext(), TAG);
     }
 
 
@@ -272,6 +246,42 @@ public class CreateMoodActivity extends AppCompatActivity implements MoodEditor.
                 // start activity to edit location
                 Intent intent = new Intent(getApplicationContext(), LocationPickerActivity.class);
                 startActivityForResult(intent, LocationPickerActivity.REQUEST_EDIT_LOCATION);
+            }
+        });
+    }
+
+    private void initializeDoButton() {
+        Button add_button = findViewById(R.id.create_add_button);
+        // When this button is clicked, return a result
+        add_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(validMoodInputs()){
+                    try {
+                        Mood newMood = new Mood(mood_date+" "+mood_time,mood_emotion,
+                                mood_reason_text,reason_photo_bitmap,mood_situation,mood_location);
+                        moodDB.addMood(newMood);
+                        Log.i(TAG, "Mood successfully added");
+                        finish();
+                    } catch (MoodInvalidInputException e) {
+                        // shouldn't happen since inputs are already checked
+                        Toast.makeText(getApplicationContext(),
+                                "Adding failed: " + e.getMessage(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+    }
+
+    private void initializeCancelButton() {
+        Button cancel_button = findViewById(R.id.create_cancel_button);
+        // When cancel button is pressed, return to main activity; do nothing
+        cancel_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setResult(AppCompatActivity.RESULT_CANCELED);
+                finish();
             }
         });
     }
