@@ -56,31 +56,36 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
     protected Button do_button;
     protected Button cancel_button;
 
+
     /**
      * This is a method inherited from the AppCompatActivity
      * @param savedInstanceState
      *  Bundle Object is used to stored the data of this activity
      */
-    protected void onCreate(@Nullable Bundle savedInstanceState, String activityName) {
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         super.onCreate(savedInstanceState);
+    }
 
+    protected void createActivity(String activityName) {
         if(!Arrays.asList(SUBCLASSES_NAMES).contains(activityName)){
             return;
         }
         this.TAG = activityName;
 
         // set layout view
-        int activityLayoutId = (this.TAG == SUBCLASSES_NAMES[0]) ?
+        int activityLayoutId = (this.TAG.equals(SUBCLASSES_NAMES[0])) ?
                 R.layout.activity_create_mood : R.layout.activity_edit_mood;
         setContentView(activityLayoutId);
 
         // initialize DBMoodSetter
         initializeDBMoodSetter();
 
-        // initialize all the views within the activity
+        // initialize all the views (except date&time) within the activity
         initializeViews();
 
+        // setup editors all mood fields within the activity
         setupDateTime();
         setupEmotion();
         setupReasonText();
@@ -163,10 +168,14 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
     }
 
     /**
-     * Must initialize all the views in subclass
+     * Must initialize all the views except date&time in subclass
      */
     protected abstract void initializeViews();
 
+    /**
+     * Must setup date & time editors in subclass
+     * since data & time editors are different for each subclass activity
+     */
     protected abstract void setupDateTime();
 
     protected void setupEmotion() {
