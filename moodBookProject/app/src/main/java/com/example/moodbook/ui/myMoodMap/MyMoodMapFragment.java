@@ -174,7 +174,6 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-                                Location tempLoc;
 
                                 // iterate over each document and get fields for drawing mood markers
                                 for (QueryDocumentSnapshot doc : task.getResult()) {

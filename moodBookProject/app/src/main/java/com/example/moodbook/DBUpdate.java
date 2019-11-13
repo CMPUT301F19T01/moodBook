@@ -10,7 +10,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * @author Neilzon Viloria
  * @since 07-11-2019
 
- * This class contains generalized methods used by CreateMoodActivity and EditMoodActivity
+ * This class contains generalized methods used by MyMoodMapFragment and MyFriendMoodMapFragment
  * @see MyMoodMapFragment
  */
 public interface DBUpdate {
