@@ -1,18 +1,26 @@
 package com.example.moodbook.ui.myMoodMap;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.DBUpdate;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,12 +34,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 
@@ -127,7 +133,79 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
             @Override
             public boolean onMarkerClick(Marker marker) {
                 int pos = (int)marker.getTag();
-                Log.i("dsaf", marker.getTag().toString() + "   " + moodDataList.get(pos).getEmotionText());
+
+                Mood mood = moodDataList.get(pos);
+                final Dialog dialog = new Dialog(getContext());
+
+                // set dialog to custom layout
+                dialog.setContentView(R.layout.activity_view_mood);
+
+                // set mood emotion image
+                ImageView imageView = dialog.findViewById(R.id.view_mood_image);
+                imageView.setImageResource(mood.getEmotionImageResource());
+
+                // set mood text
+                TextView moodText = dialog.findViewById(R.id.view_emotion);
+                moodText.setText(mood.getEmotionText());
+
+                // set mood date time
+                TextView moodDate = dialog.findViewById(R.id.view_date_time);
+                moodDate.setText(mood.getDateText());
+
+                // set mood time
+                TextView moodTime = dialog.findViewById(R.id.view_time);
+                moodTime.setText(mood.getTimeText());
+
+                // set mood location
+                TextView moodLocation = dialog.findViewById(R.id.view_location);
+                Location loc = mood.getLocation();
+                moodLocation.setText(loc.getLatitude() + " " + loc.getLongitude());
+
+                // set mood situation
+                TextView moodSituation = dialog.findViewById(R.id.view_situation);
+                moodSituation.setText(mood.getSituation());
+
+                // set mood reason
+                TextView moodReason = dialog.findViewById(R.id.view_reason);
+                moodReason.setText(mood.getReasonText());
+
+                // close on click listener
+                Button button = dialog.findViewById(R.id.close_button);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                // background to transparent so we only see our custom layout
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                // set the background color based on the mood
+                RelativeLayout relativeLayout = dialog.findViewById(R.id.viewLayout);
+
+                if (mood.getEmotionText().equals("happy")){
+                    relativeLayout.setBackgroundResource(R.drawable.view_happy_bg);
+                }
+                else if (mood.getEmotionText().equals("angry")){
+                    relativeLayout.setBackgroundResource(R.drawable.view_angry_bg);
+                }
+                else if (mood.getEmotionText().equals("sad")){
+                    relativeLayout.setBackgroundResource(R.drawable.view_sad_bg);
+                }
+                else if (mood.getEmotionText().equals("afraid")){
+                    relativeLayout.setBackgroundResource(R.drawable.view_afraid_bg);
+                }
+
+                ImageView reasonPhoto = dialog.findViewById(R.id.view_reason_photo);
+
+
+                Bitmap reasonBitmap = mood.getReasonPhoto();
+                if (reasonBitmap != null){
+                    reasonPhoto.setImageBitmap(Bitmap.createScaledBitmap(reasonBitmap, 120, 120 , false));
+                }
+                
+                dialog.show();
                 return false;
             }
         });
@@ -220,7 +298,8 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
         int emotionResource;
         LatLng moodLatLng;
 
-        for(int i = 0; i < moodDataList.size(); i++){
+        int i;
+        for(i = 0; i < moodDataList.size(); i++){
             Mood mood = moodDataList.get(i);
             // get image resource for the mood marker
             emotionResource = mood.getEmotionImageResource();
@@ -238,8 +317,13 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
             // draw on map
             moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor)).setTag(i);
 
+            // zoom in and focus on the most recent mood, ie. the last mood in list
+            if(i+1 == moodDataList.size()){
+                moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 12.0f));
+            }
 
         }
+
     }
 
 }
