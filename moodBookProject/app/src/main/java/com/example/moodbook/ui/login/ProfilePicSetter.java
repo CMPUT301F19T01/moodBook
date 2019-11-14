@@ -24,6 +24,7 @@ import java.io.IOException;
 
 import androidx.annotation.NonNull;
 
+
 public class ProfilePicSetter {
     private FirebaseFirestore db;
     private static FirebaseStorage storage;
@@ -108,5 +109,7 @@ public class ProfilePicSetter {
         Log.w("Log", message);
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
+
+
 
 }

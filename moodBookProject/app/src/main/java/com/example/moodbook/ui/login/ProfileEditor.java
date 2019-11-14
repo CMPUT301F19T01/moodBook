@@ -1,5 +1,6 @@
 package com.example.moodbook.ui.login;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,12 +12,20 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.moodbook.MoodEditor;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -28,6 +37,12 @@ public class ProfileEditor {
     private static final int GET_IMAGE = 102;
     private static final String TAG = "MyActivity";
     private static Bitmap imageBitmap;
+
+    //Firebase
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
+    Uri uri;
+
 
     public interface ProfilePicInterface {
         void setProfilePic(Bitmap bitImage);
@@ -119,6 +134,44 @@ public class ProfileEditor {
             //does nothing if fails to deliver data
         }
     }
+
+//    public static void uploadImage(String PhotoID,final AppCompatActivity myActivity, @Nullable Intent data ) {
+//        Uri uri = data.getData();
+//        FirebaseStorage storage = FirebaseStorage.getInstance();
+//        StorageReference storageReference = storage.getReference();
+//        if(uri != null)
+//        {
+//            final ProgressDialog progressDialog = new ProgressDialog(myActivity);
+//            progressDialog.setTitle("Uploading...");
+//            progressDialog.show();
+//
+//            StorageReference ref = storageReference.child("images/"+ PhotoID);
+//            ref.putFile(uri)
+//                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                            progressDialog.dismiss();
+//                        }
+//                    })
+//                    .addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            progressDialog.dismiss();
+//                            Toast.makeText(myActivity, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    })
+//                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//                        @Override
+//                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+//                                    .getTotalByteCount());
+//                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+//                        }
+//                    });
+//        }
+//    }
+
+
 
 
 }

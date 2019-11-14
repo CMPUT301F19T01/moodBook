@@ -86,6 +86,7 @@ public class RegisterActivity extends AppCompatActivity implements ProfileEditor
         DBpic = new ProfilePicSetter(getApplicationContext());
         changeProfilePic();
 
+
         // Register is not not modularized because FireBase calls are asynchronous. Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows that the task is finished
         // REGISTER button
         registerButton = findViewById(R.id.register);
@@ -96,7 +97,8 @@ public class RegisterActivity extends AppCompatActivity implements ProfileEditor
                 final String emailS = email.getText().toString();
                 final String passwordS = password.getText().toString();
                 final String usernameS = username.getText().toString();
-                DBpic.updateImg(usernameS);
+
+
 
                 if (dbAuth.verifyEmail(emailS)){
                     if (dbAuth.verifyPass(passwordS)){
@@ -141,7 +143,9 @@ public class RegisterActivity extends AppCompatActivity implements ProfileEditor
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        username = findViewById(R.id.username);
         ProfileEditor.getImageResult(requestCode, resultCode, data, profile_pic, this);
+//        ProfileEditor.uploadImage(username.toString(),this,data);
     }
     /**
      * This allows a user to edit a mood image.
