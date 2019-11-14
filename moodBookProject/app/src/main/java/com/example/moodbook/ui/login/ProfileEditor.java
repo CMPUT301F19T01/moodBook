@@ -23,13 +23,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ProfileEditor {
-    public interface ProfilePicInterface {
-        void setProfilePic(Bitmap bitImage);
-    }
+
     private static final int REQUEST_IMAGE = 101;
     private static final int GET_IMAGE = 102;
     private static final String TAG = "MyActivity";
     private static Bitmap imageBitmap;
+
+    public interface ProfilePicInterface {
+        void setProfilePic(Bitmap bitImage);
+    }
 
     public static Bitmap getBitmap(){
         return imageBitmap;

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import com.example.moodbook.ui.Request.RequestFragment;
 import com.example.moodbook.ui.friendMood.friendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
+import com.example.moodbook.ui.login.ProfilePicSetter;
 import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity   {
     private FirebaseFirestore db;
     private String name;
     private String email;
+    private ProfilePicSetter DBpic;
 
 
     @Override
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity   {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db = FirebaseFirestore.getInstance();
+        DBpic = new ProfilePicSetter(getApplicationContext());
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -103,8 +107,11 @@ public class MainActivity extends AppCompatActivity   {
         );
         TextView profileUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentUsername);
         TextView profileEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
+        ImageView profile = (ImageView)findViewById(R.id.profile);
         profileUserName.setText(name);
         profileEmail.setText(email);
+        DBpic.getImageFromDB(name,profile);
+
     }
 
     @Override
