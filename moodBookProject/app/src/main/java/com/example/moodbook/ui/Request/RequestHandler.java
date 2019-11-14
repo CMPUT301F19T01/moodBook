@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.Request;
+package com.example.moodbook.ui.request;
 
 import android.content.Context;
 import android.location.Location;
@@ -154,5 +154,30 @@ public class RequestHandler {
     private void showStatusMessage(String message) {
         Log.w(TAG, message);
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+    public void addFriend(RequestUser acceptFriend, String uidp, String usernamep){
+        final String uid = uidp;
+        final String username = usernamep;
+        final CollectionReference collectionReference = db.collection("USERS");
+        DocumentReference docRef = db.collection("usernamelist").document(String.valueOf(acceptFriend.getUsername()));
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()){
+                        HashMap<String, Object> data = new HashMap<>();
+                        data.put("uid", uid);
+                        collectionReference.document(document.getString("uid")).collection("FRIENDS").document(username).set(data); // adding the request to the addUser's REQUEST collection
+                    } else {
+//                        Log.d("TESTINGG", "no such doc");
+                    }
+                } else {
+//                    Log.d("TESTING", "get failed with ", task.getException());
+                }
+            }
+        });
+
+
     }
 }

@@ -23,7 +23,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.moodbook.ui.Request.RequestFragment;
+import com.example.moodbook.ui.request.RequestFragment;
 import com.example.moodbook.ui.friendMood.friendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
