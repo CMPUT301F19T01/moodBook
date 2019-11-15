@@ -25,8 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class myRequestsFragment extends PageFragment {
-//    private RequestHandler requestHandler; //added this-Sheetal
-
     private RequestsAdapter requestsAdapter;
     private CoordinatorLayout requestListLayout;
     private ListView requestListView;

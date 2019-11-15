@@ -156,6 +156,7 @@ public class RequestHandler {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
     public void addFriend(RequestUser acceptFriend, String uidp, String usernamep){
+//        uid = mAuth.getUid();
         final String uid = uidp;
         final String username = usernamep;
         final CollectionReference collectionReference = db.collection("USERS");
@@ -168,7 +169,7 @@ public class RequestHandler {
                     if (document.exists()){
                         HashMap<String, Object> data = new HashMap<>();
                         data.put("uid", uid);
-                        collectionReference.document(document.getString("uid")).collection("FRIENDS").document(username).set(data); // adding the request to the addUser's REQUEST collection
+                        collectionReference.document(document.getString("uid")).collection("FRIENDS").document(username).set(data);
                     } else {
 //                        Log.d("TESTINGG", "no such doc");
                     }
