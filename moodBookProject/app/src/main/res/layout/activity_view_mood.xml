@@ -178,6 +178,7 @@
         android:layout_height="125dp"
         android:layout_below="@+id/view_reason"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_menu_gallery" />
+        android:src="@drawable/ic_menu_gallery"
+        android:visibility="visible" />
 
 </RelativeLayout>

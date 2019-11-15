@@ -298,26 +298,26 @@ public class DBMoodSetter {
          * @param docID
          * @param view
          */
-        public void getImageFromDB (String docID,final ImageView view){
-            StorageReference ref = photoReference.child(docID);
-            try {
-                final File localFile = File.createTempFile("Images", "jpeg");
-                ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        obtainedImg = BitmapFactory.decodeFile(localFile.getAbsolutePath());
-                        view.setImageBitmap(obtainedImg);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+        public void getImageFromDB (String docID, final ImageView view){
+        StorageReference ref = photoReference.child(docID);
+        try {
+            final File localFile = File.createTempFile("Images", "jpeg");
+            ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    obtainedImg = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    view.setImageBitmap(obtainedImg);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
 
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
         /**
          * This is used by MoodHistory to get all mood data in the database from user's mood collection

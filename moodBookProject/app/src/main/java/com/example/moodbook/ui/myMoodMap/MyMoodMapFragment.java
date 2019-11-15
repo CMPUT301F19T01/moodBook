@@ -2,12 +2,12 @@ package com.example.moodbook.ui.myMoodMap;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +51,6 @@ import java.util.ArrayList;
  * @see DBUpdate
  */
 public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, DBUpdate {
-    //private com.example.moodbook.ui.myMoodMap.MyMoodMapViewModel MyMoodMapViewModel;
 
     ///// Member Variables /////
     private MapView mapView; // view object
@@ -60,8 +59,7 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     private FirebaseFirestore db; // database
     private FirebaseAuth mAuth; // auth
     private String userID; // users id
-    private ArrayList<Marker> markerArrayList;
-
+    private DBMoodSetter dbMoodSetter;
 
     /**
      * Required empty public constructor
@@ -103,12 +101,12 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
         // create moodDataList
         moodDataList = new ArrayList<>();
 
-        // create markerArrayList
-        markerArrayList = new ArrayList<>();
 
         // get current user
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getUid();
+
+        dbMoodSetter = new DBMoodSetter(mAuth, getContext());
 
         return root;
     }
@@ -139,6 +137,10 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
 
                 // set dialog to custom layout
                 dialog.setContentView(R.layout.activity_view_mood);
+
+                // show the reason photo
+                ImageView reasonPhoto = dialog.findViewById(R.id.view_reason_photo);
+                dbMoodSetter.getImageFromDB(mood.getDocId(), reasonPhoto);
 
                 // set mood emotion image
                 ImageView imageView = dialog.findViewById(R.id.view_mood_image);
@@ -197,14 +199,8 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
                     relativeLayout.setBackgroundResource(R.drawable.view_afraid_bg);
                 }
 
-                ImageView reasonPhoto = dialog.findViewById(R.id.view_reason_photo);
 
 
-                Bitmap reasonBitmap = mood.getReasonPhoto();
-                if (reasonBitmap != null){
-                    reasonPhoto.setImageBitmap(Bitmap.createScaledBitmap(reasonBitmap, 120, 120 , false));
-                }
-                
                 dialog.show();
                 return false;
             }
@@ -217,7 +213,6 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     @Override
     public void onResume() {
         mapView.onResume();
-
         super.onResume();
     }
 
@@ -273,7 +268,9 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
                                     if (doc.exists() && doc.getDouble("location_lat") != null
                                             && doc.getDouble("location_lon") != null) {
                                         try {
-                                            moodDataList.add(DBMoodSetter.getMoodFromData(doc.getData()));
+                                            Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                                            mood.setDocId(doc.getId());
+                                            moodDataList.add(mood);
 
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -319,7 +316,7 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
 
             // zoom in and focus on the most recent mood, ie. the last mood in list
             if(i+1 == moodDataList.size()){
-                moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 12.0f));
+                moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
             }
 
         }
