@@ -16,6 +16,8 @@ import com.example.moodbook.Mood;
 import com.example.moodbook.ui.request.RequestHandler;
 import com.example.moodbook.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -32,6 +34,7 @@ import androidx.annotation.NonNull;
 public class RequestsAdapter extends BaseAdapter {
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
+    private String TAG;
 
 //    private CollectionReference userReference = db.collection("USERS");
 //    private String uid = mAuth.getCurrentUser().getUid();
@@ -78,7 +81,6 @@ public class RequestsAdapter extends BaseAdapter {
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
         final RequestHandler requestHandler = new RequestHandler(mAuth, db);
-//        acceptedText = view.findViewById(R.id.acceptedFriendText);
 
         // Click listener of button
         acceptButton.setOnClickListener(new View.OnClickListener() {
@@ -87,10 +89,7 @@ public class RequestsAdapter extends BaseAdapter {
                 Toast.makeText(context,
                         "Accept",
                         Toast.LENGTH_LONG).show();
-//                String usernamei = username.getText().toString();
                     requestHandler.addFriend(user,uid,mAuth.getCurrentUser().getDisplayName());
-//                acceptedText.setText(user.getUsername());
-
             }
         });
 
@@ -100,8 +99,7 @@ public class RequestsAdapter extends BaseAdapter {
                 Toast.makeText(context,
                         "Decline",
                         Toast.LENGTH_LONG).show();
-//                RequestsAdapter.remove
-                Decline(position);
+                requestHandler.removeRequest(mAuth.getCurrentUser().getDisplayName());
                 Toast.makeText(context,
                         "deleted",
                         Toast.LENGTH_LONG).show();
@@ -169,7 +167,28 @@ public class RequestsAdapter extends BaseAdapter {
         Toast.makeText(context,
                 "inside remove item",
                 Toast.LENGTH_LONG).show();
+        notifyDataSetChanged();
 //        requestList.notify();
     }
-
+//    public void removeFriend( final String username){
+//        final CollectionReference collectionReference = db.collection("FRIENDS");
+//
+//        collectionReference.document(username).delete()
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        showStatusMessage("Declined Friend Request: " + username);
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        showStatusMessage("Deleting failed for " + username + ": " + e.toString());
+//                    }
+//                });
+//    }
+    private void showStatusMessage (String message){
+        Log.w(TAG, message);
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
 }

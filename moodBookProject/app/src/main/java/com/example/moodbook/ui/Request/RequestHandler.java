@@ -20,6 +20,8 @@ import com.example.moodbook.R;
 import com.example.moodbook.ui.myRequests.RequestUser;
 import com.example.moodbook.ui.myRequests.RequestsAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -159,9 +161,9 @@ public class RequestHandler {
 //        uid = mAuth.getUid();
         final String uid = uidp;
         final String username = usernamep;
-        final CollectionReference collectionReference = db.collection("USERS");
-        DocumentReference docRef = db.collection("usernamelist").document(String.valueOf(acceptFriend.getUsername()));
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        final CollectionReference collectionReference = db.collection("REQUESTS");
+//        DocumentReference docRef = db.collection("usernamelist").document(String.valueOf(acceptFriend.getUsername()));
+        collectionReference.document(String.valueOf(acceptFriend.getUsername())).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()){
@@ -178,7 +180,22 @@ public class RequestHandler {
                 }
             }
         });
-
-
+    }
+    public void removeRequest( final String username){
+        final CollectionReference collectionReference = db.collection("REQUESTS");
+//        DocumentReference docRef = db.collection("usernamelist").document(username);
+        collectionReference.document(username).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+//                        showStatusMessage("Declined Friend Request: " + username);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Deleting failed for " + username + ": " + e.toString());
+                    }
+                });
     }
 }
