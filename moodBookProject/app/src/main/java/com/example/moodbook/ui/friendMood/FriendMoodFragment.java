@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 
-public class friendMoodFragment extends PageFragment {
+public class FriendMoodFragment extends PageFragment {
 
     //private friendMoodViewModel FriendMoodViewModel;
 

@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.example.moodbook.R;
 
@@ -35,11 +37,22 @@ public class FriendMoodListAdapter extends ArrayAdapter {
 
         FriendMood friendMood = friendMoods.get(position);
 
-        TextView usernameText;
+        // get views for username, date, time, and emotion
+        TextView usernameText = view.findViewById(R.id.friend_mood_item_username);
         TextView dateText = view.findViewById(R.id.friend_mood_item_date);
         TextView timeText = view.findViewById(R.id.friend_mood_item_time);
         TextView emotionText = view.findViewById(R.id.friend_mood_item_emotion_text);
         ImageView emotionImage = view.findViewById(R.id.friend_mood_item_emotion_image);
+        LinearLayout viewForeground = view.findViewById(R.id.friend_mood_item_foreground);
+
+        // show username, date, time, and emotion
+        usernameText.setText(friendMood.getUsername());
+        dateText.setText(friendMood.getMood().getDateText());
+        timeText.setText(friendMood.getMood().getTimeText());
+        emotionText.setText(friendMood.getMood().getEmotionText());
+        emotionImage.setImageResource(friendMood.getMood().getEmotionImageResource());
+        viewForeground.setBackgroundColor(
+                ContextCompat.getColor(context, friendMood.getMood().getEmotionColorResource()));
 
         return view;
     }
