@@ -40,8 +40,8 @@ public class friendMoodFragment extends PageFragment {
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        acceptedListView = root.findViewById(R.id.accepted_listView);
-        acceptedText = root.findViewById(R.id.acceptedFriendText);
+//        acceptedListView = root.findViewById(R.id.accepted_listView);
+//        acceptedText = root.findViewById(R.id.acceptedFriendText);
 //        final RequestUser user =  requestList.get(position);
 //        acceptedText.setText(user.getUsername());
 //        FriendMoodViewModel =

@@ -11,6 +11,8 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.moodbook.Mood;
 import com.example.moodbook.ui.request.RequestHandler;
 import com.example.moodbook.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -55,7 +57,7 @@ public class RequestsAdapter extends BaseAdapter {
 
     // getView method is called for each item of ListView
     @SuppressLint("ViewHolder")
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(final int position, View view, ViewGroup parent) {
 
         // inflate the layout for each item of listView
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -76,6 +78,7 @@ public class RequestsAdapter extends BaseAdapter {
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
         final RequestHandler requestHandler = new RequestHandler(mAuth, db);
+//        acceptedText = view.findViewById(R.id.acceptedFriendText);
 
         // Click listener of button
         acceptButton.setOnClickListener(new View.OnClickListener() {
@@ -86,6 +89,8 @@ public class RequestsAdapter extends BaseAdapter {
                         Toast.LENGTH_LONG).show();
 //                String usernamei = username.getText().toString();
                     requestHandler.addFriend(user,uid,mAuth.getCurrentUser().getDisplayName());
+//                acceptedText.setText(user.getUsername());
+
             }
         });
 
@@ -94,6 +99,11 @@ public class RequestsAdapter extends BaseAdapter {
             public void onClick(View view) {
                 Toast.makeText(context,
                         "Decline",
+                        Toast.LENGTH_LONG).show();
+//                RequestsAdapter.remove
+                Decline(position);
+                Toast.makeText(context,
+                        "deleted",
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -152,5 +162,14 @@ public class RequestsAdapter extends BaseAdapter {
 //
 //
 //    }
+    public void Decline(int position) {
+
+        requestList.remove(requestList.indexOf(requestList.get(position)));
+
+        Toast.makeText(context,
+                "inside remove item",
+                Toast.LENGTH_LONG).show();
+//        requestList.notify();
+    }
 
 }
