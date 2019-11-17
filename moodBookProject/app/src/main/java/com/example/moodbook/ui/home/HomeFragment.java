@@ -39,6 +39,7 @@ import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.RecyclerItemTouchHelper;
+import com.example.moodbook.ViewMoodActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -117,9 +118,9 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                     public void onClick(DialogInterface dialog, int which) {
                         //do your work here
                         dialog.dismiss();
-                        Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
-                        getIntentDataFromMood(editIntent, item);
-                        startActivity(editIntent);
+                        Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
+                        getIntentDataFromMood(viewIntent, item);
+                        startActivity(viewIntent);
 
 
                     }
