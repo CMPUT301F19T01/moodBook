@@ -44,8 +44,8 @@
 
             <ImageView
                 android:id="@+id/mood_item_emotion_image"
-                android:layout_width="@android:dimen/app_icon_size"
-                android:layout_height="@dimen/emoticon_size"
+                android:layout_width="@dimen/emoticon_size"
+                android:layout_height="@dimen/mood_item_height"
                 android:padding="5dp"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 

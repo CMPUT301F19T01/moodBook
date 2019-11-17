@@ -5,6 +5,9 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="emoticon_size">60dp</dimen>
+    <dimen name="emoticon_size">50dp</dimen>
+    <dimen name="mood_item_height">60dp</dimen>
+    <dimen name="friend_emoticon_size">60dp</dimen>
+    <dimen name="friend_mood_item_height">90dp</dimen>
     <dimen name="spinner_item_height">80dp</dimen>
 </resources>

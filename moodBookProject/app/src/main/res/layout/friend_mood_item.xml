@@ -12,22 +12,14 @@
         android:background="@color/colorWhite"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/friend_mood_item_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Username"
-            android:textSize="20sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/friend_mood_item_emotion_image"
-                android:layout_width="@android:dimen/app_icon_size"
-                android:layout_height="@dimen/emoticon_size"
+                android:layout_width="@dimen/friend_emoticon_size"
+                android:layout_height="@dimen/friend_mood_item_height"
                 android:padding="5dp"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
@@ -37,12 +29,22 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/friend_mood_item_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="2dp"
+                    android:paddingLeft="2dp"
+                    android:text="Username"
+                    android:textSize="20sp" />
+
+                <TextView
                     android:id="@+id/friend_mood_item_emotion_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
                     android:text="Emotion"
                     android:textSize="20sp" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

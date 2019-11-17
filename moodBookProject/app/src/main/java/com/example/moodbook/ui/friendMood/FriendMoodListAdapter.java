@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat;
 import com.example.moodbook.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FriendMoodListAdapter extends ArrayAdapter {
     private ArrayList<FriendMood> friendMoods;
@@ -55,5 +56,23 @@ public class FriendMoodListAdapter extends ArrayAdapter {
                 ContextCompat.getColor(context, friendMood.getMood().getEmotionColorResource()));
 
         return view;
+    }
+
+    @Override
+    public void add(@Nullable Object object) {
+        if(object == null || object instanceof FriendMood) {
+            FriendMood item = (FriendMood)object;
+            friendMoods.add(item);
+            Collections.sort(friendMoods, Collections.reverseOrder());
+            // notify item added
+            notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void clear() {
+        friendMoods.clear();
+        // notify list is cleared
+        notifyDataSetChanged();
     }
 }
