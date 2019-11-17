@@ -6,6 +6,8 @@
  */
 package com.example.moodbook.ui.home;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -68,6 +70,8 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
     private static final String TAG = HomeFragment.class.getSimpleName();
     private String testDel;
 
+    private Mood SelectedMood = null;
+
 
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
@@ -88,12 +92,47 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         setupAdapter(new MoodListAdapter.OnItemClickListener() {
             // Edit the selected mood: when a mood item is clicked, start edit activity
             @Override
-            public void onItemClick(Mood item) {
-                Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
-                Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
+            public void onItemClick(final Mood item) {
+//                Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
+//                Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
                 // put attributes of selected mood into editIntent
-                getIntentDataFromMood(editIntent, item);
-                startActivity(editIntent);
+                AlertDialog.Builder alert = new AlertDialog.Builder(
+                        getActivity());
+                alert.setMessage("Would you like to view or edit this mood");
+                alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do your work here
+                        dialog.dismiss();
+                        Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
+                        getIntentDataFromMood(editIntent, item);
+                        startActivity(editIntent);
+
+
+                    }
+                });
+                alert.setNegativeButton("View", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //do your work here
+                        dialog.dismiss();
+                        Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
+                        getIntentDataFromMood(editIntent, item);
+                        startActivity(editIntent);
+
+
+                    }
+                });
+                alert.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+
+                alert.show();
+                SelectedMood =item;
             }
         });
 
@@ -131,33 +170,60 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
      * Undo option will be provided in snackbar to restore the mood item
      */
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof MoodListAdapter.MyViewHolder) {
-            // backup of removed item for undo purpose
-            final int deletedIndex = viewHolder.getAdapterPosition();
-            final Mood deletedMood = moodAdapter.getItem(deletedIndex);
+    public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction, final int position) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(
+                getActivity());
+        alert.setMessage("Are you sure you want to delete this Mood ?");
+        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
-            // remove the item from recycler view
-            //moodAdapter.removeItem(deletedIndex);
-            moodDB.removeMood(deletedMood.getDocId());
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //do your work here
+                if (viewHolder instanceof MoodListAdapter.MyViewHolder) {
+                    // backup of removed item for undo purpose
+                    final int deletedIndex = viewHolder.getAdapterPosition();
+                    final Mood deletedMood = moodAdapter.getItem(deletedIndex);
 
-            // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(moodHistoryLayout,
-                            deletedMood.toString() + " removed from Mood History!",
-                            Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // undo is selected, restore the deleted item
-                    //moodAdapter.restoreItem(deletedItem, deletedIndex);
-                    moodDB.addMood(deletedMood);
+                    // remove the item from recycler view
+                    //moodAdapter.removeItem(deletedIndex);
+                    moodDB.removeMood(deletedMood.getDocId());
+
+                    // showing snack bar with Undo option
+                    Snackbar snackbar = Snackbar
+                            .make(moodHistoryLayout,
+                                    deletedMood.toString() + " removed from Mood History!",
+                                    Snackbar.LENGTH_LONG);
+                    snackbar.setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // undo is selected, restore the deleted item
+                            //moodAdapter.restoreItem(deletedItem, deletedIndex);
+                            moodDB.addMood(deletedMood);
+                        }
+                    });
+                    Log.i(testDel, "Deleted mood.");
+                    snackbar.setActionTextColor(Color.YELLOW);
+                    snackbar.show();
                 }
-            });
-            Log.i(testDel, "Deleted mood.");
-            snackbar.setActionTextColor(Color.YELLOW);
-            snackbar.show();
-        }
+
+            }
+        });
+
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if (direction == ItemTouchHelper.LEFT){
+                    Log.e(TAG,"left Swipe");
+                }else {
+                    Log.e(TAG,"Right Swipe");
+                }
+                moodAdapter.notifyItemChanged(position);
+
+                dialogInterface.dismiss();
+            }
+        });
+
+        alert.show();
     }
 
     /**
@@ -225,7 +291,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
      * @param intent
      * @param mood
      */
-    private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
+    public void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
         Location location = mood.getLocation();
         intent.putExtra("moodID", mood.getDocId());
         intent.putExtra("date",mood.getDateText());
@@ -237,4 +303,5 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
     }
+
 }

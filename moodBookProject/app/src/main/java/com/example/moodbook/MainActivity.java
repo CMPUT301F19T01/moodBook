@@ -44,7 +44,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
  * The Main Activity is set to HomeFragment as default, which in turn lists the Mood History list
  */
 
-public class MainActivity extends AppCompatActivity   {
+public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
@@ -192,5 +192,6 @@ public class MainActivity extends AppCompatActivity   {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
+
 
 }

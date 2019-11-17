@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewMoodActivity"
     android:orientation="vertical"
     android:background="@drawable/view_background">
 
@@ -62,7 +61,7 @@
         tools:ignore="MissingConstraints" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/view_emoji"
         android:layout_width="84dp"
         android:layout_height="56dp"
         android:layout_marginStart="40dp"
@@ -96,25 +95,12 @@
         android:text="@string/textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.818"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/view_emoji"
         tools:layout_editor_absoluteY="29dp"
         tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:id="@+id/view_time"
-        android:layout_width="374dp"
-        android:layout_height="49dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.567"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="196dp"
-        tools:ignore="MissingConstraints" />
-
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/view_uploaded_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
