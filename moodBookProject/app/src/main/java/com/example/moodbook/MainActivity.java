@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity  {
         ImageView profile = (ImageView)findViewById(R.id.profile);
         profileUserName.setText(name);
         profileEmail.setText(email);
-        DBpic.getImageFromDB(name,profile);
+        //DBpic.getImageFromDB(name,profile);
 
     }
 
