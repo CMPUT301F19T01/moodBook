@@ -408,6 +408,8 @@ public class DBMoodSetter {
          */
         private void showStatusMessage (String message){
             Log.w(TAG, message);
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            if(context != null) {
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            }
         }
     }
