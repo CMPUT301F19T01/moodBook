@@ -193,6 +193,8 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
                 moodDB.editMood(intent_moodID,moodMap);
                 Log.i(TEST, "Updated Successful");
                 finish();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -203,6 +205,8 @@ public class EditMoodActivity extends AppCompatActivity implements MoodEditor.Mo
             public void onClick(View view) {
                 setResult(AppCompatActivity.RESULT_CANCELED);
                 finish();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
 

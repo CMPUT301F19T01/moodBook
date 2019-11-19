@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +31,7 @@ public class ViewMoodActivity extends AppCompatActivity {
     private MoodListAdapter moodAdapter;
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
+    private LinearLayout linear_emotion;
     private static final String TAG = "DB";
 
     @Override
@@ -66,19 +68,24 @@ public class ViewMoodActivity extends AppCompatActivity {
         view_situation.setText("Situation:  " + intent_situation);
         final String intent_emotion =getIntent().getStringExtra("emotion");
         view_emotion.setText(intent_emotion);
+        linear_emotion = findViewById(R.id.linear_emotion);
         //Set emoji
         switch(intent_emotion){
             case "sad":
                 view_emoji.setImageResource(R.drawable.sad);
+                linear_emotion.setBackgroundColor(getResources().getColor(R.color.sadBlue));
                 break;
             case "happy":
                 view_emoji.setImageResource(R.drawable.happy);
+                linear_emotion.setBackgroundColor(getResources().getColor(R.color.happyYellow));
                 break;
             case "afraid":
                 view_emoji.setImageResource(R.drawable.afraid);
+                linear_emotion.setBackgroundColor(getResources().getColor(R.color.afraidBrown));
                 break;
             case "angry":
                 view_emoji.setImageResource(R.drawable.angry);
+                linear_emotion.setBackgroundColor(getResources().getColor(R.color.angryRed));
                 break;
         }
         moodDB.getImageFromDB(intent_moodID, view_uploaded_pic);
