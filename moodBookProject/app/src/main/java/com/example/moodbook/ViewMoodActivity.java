@@ -44,4 +44,5 @@ public class ViewMoodActivity extends Activity {
     public static void setMood(Mood mood){
         mMood = mood;
     }
+
 }
