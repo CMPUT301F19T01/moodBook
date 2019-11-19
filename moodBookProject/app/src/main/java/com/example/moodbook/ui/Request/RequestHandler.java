@@ -12,10 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.Mood;
-import com.example.moodbook.MoodInvalidInputException;
-import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.myRequests.RequestUser;
 import com.example.moodbook.ui.myRequests.RequestsAdapter;
@@ -58,12 +54,13 @@ public class RequestHandler {
         this.context = context;
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
-        this.context = context;
     }
 
     public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db){
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
+        this.uid = mAuth.getCurrentUser().getUid();
+        this.userReference = this.db.collection("USERS");
     }
 
     public RequestHandler(FirebaseAuth mAuth, Context context, @NonNull EventListener reqHistoryListener, String TAG){
@@ -119,16 +116,11 @@ public class RequestHandler {
                     requestsAdapter.clear();
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         // ignore null item
-                        if (doc.getId() != "null") {
+                        if (!doc.getId().equals("null")) {
                             // Adding requestuser from FireStore
-                            RequestUser requestUser = RequestHandler.getRequestFromData(doc.getData());
-                            if (requestUser != null) {
-                                String un = doc.getId();
-                                if (!un.equals("null"))  //ignores null usernames
-                                {
-                                    requestUser.setUsername(doc.getId());
-                                    requestsAdapter.addItem(requestUser);
-                                }
+                            if(doc.getData() != null && doc.getData().get("uid") != null) {
+                                RequestUser requestUser = new RequestUser(doc.getId(), (String) doc.getData().get("uid"));
+                                requestsAdapter.addItem(requestUser);
                             }
                         }
                     }
@@ -137,16 +129,6 @@ public class RequestHandler {
         };
     }
 
-    /**
-     * This is used to convert HashMap data gotten from the database to a RequestUser Object
-     * @param data
-     * @return
-     */
-    public static RequestUser getRequestFromData(Map<String, Object> data) {
-        RequestUser user = null;
-        user = new RequestUser((String) data.get("uid"));
-        return user;
-    }
 
     /**
      * This is a helper method to show status messages
@@ -157,38 +139,34 @@ public class RequestHandler {
         Log.w(TAG, message);
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
-    public void addFriend(RequestUser acceptFriend, String uidp, String usernamep){
-//        uid = mAuth.getUid();
-        final String uid = uidp;
-        final String username = usernamep;
-        final CollectionReference collectionReference = db.collection("REQUESTS");
-//        DocumentReference docRef = db.collection("usernamelist").document(String.valueOf(acceptFriend.getUsername()));
-        collectionReference.document(String.valueOf(acceptFriend.getUsername())).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()){
-                        HashMap<String, Object> data = new HashMap<>();
-                        data.put("uid", uid);
-                        collectionReference.document(document.getString("uid")).collection("FRIENDS").document(username).set(data);
-                    } else {
-//                        Log.d("TESTINGG", "no such doc");
+    public void addFriend(final RequestUser acceptFriend, final String myUsername){
+
+        final String username = myUsername;
+        final CollectionReference friendsReference = this.userReference.document(acceptFriend.getUid()).collection("FRIENDS");
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("uid", uid);
+        friendsReference.document(username).set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showStatusMessage("Added successfully: " + username);
                     }
-                } else {
-//                    Log.d("TESTING", "get failed with ", task.getException());
-                }
-            }
-        });
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Adding failed for " + username + ": " + e.toString());
+                    }
+                });
     }
+
     public void removeRequest( final String username){
-        final CollectionReference collectionReference = db.collection("REQUESTS");
-//        DocumentReference docRef = db.collection("usernamelist").document(username);
+        final CollectionReference collectionReference = this.userReference.document(this.uid).collection("REQUESTS");
         collectionReference.document(username).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-//                        showStatusMessage("Declined Friend Request: " + username);
+                        showStatusMessage("Declined Friend Request: " + username);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
