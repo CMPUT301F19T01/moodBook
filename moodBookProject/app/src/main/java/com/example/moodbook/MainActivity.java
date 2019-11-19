@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity  {
     private String name;
     private String email;
     private ProfilePicSetter DBpic;
+    private  ImageView profile;
 
 
     @Override
@@ -107,10 +108,11 @@ public class MainActivity extends AppCompatActivity  {
         );
         TextView profileUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentUsername);
         TextView profileEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
-        ImageView profile = (ImageView)findViewById(R.id.profile);
+
+        profile= (ImageView)findViewById(R.id.profile);
         profileUserName.setText(name);
         profileEmail.setText(email);
-        //DBpic.getImageFromDB(name,profile);
+//      DBpic.getImageFromDB(name,profile);
 
     }
 

@@ -80,9 +80,10 @@ public class ProfilePicSetter {
      * @param view
      */
     public void getImageFromDB (String docID,final ImageView view){
-        StorageReference ref = photoReference.child(docID);
+
+        StorageReference ref = photoReference.child("268.0");
         try {
-            final File localFile = File.createTempFile("Temp", "jpeg");
+            final File localFile = File.createTempFile("Images", "jpeg");
             ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
