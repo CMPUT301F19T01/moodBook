@@ -17,7 +17,7 @@ import com.example.moodbook.Mood;
 import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
-import com.example.moodbook.ui.Request.RequestHandler;
+import com.example.moodbook.ui.request.RequestHandler;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -25,7 +25,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class myRequestsFragment extends PageFragment {
-
     private RequestsAdapter requestsAdapter;
     private CoordinatorLayout requestListLayout;
     private ListView requestListView;
