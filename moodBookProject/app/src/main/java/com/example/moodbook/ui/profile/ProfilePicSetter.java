@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.login;
+package com.example.moodbook.ui.profile;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,12 +7,9 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.moodbook.Mood;
+import com.example.moodbook.ui.profile.ProfileEditor;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;

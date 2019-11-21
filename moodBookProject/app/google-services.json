@@ -44,6 +44,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "906490709018-njot35gj47i1ion7fnisi43kq5aft41c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.moodbook",
+            "certificate_hash": "bd2187828b46d8c203fe537c9f47aed2d785b832"
+          }
+        },
+        {
+          "client_id": "906490709018-2q8c0mllmqf21mfe40at4ldq7ln1iqr6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.moodbook",
+            "certificate_hash": "2252d8e8a8d8a93127342f0cc3f6ca364dfc6888"
+          }
+        },
+        {
           "client_id": "906490709018-jtitf8s7nepeg095erplh45tm46gouij.apps.googleusercontent.com",
           "client_type": 3
         }

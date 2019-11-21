@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.login;
+package com.example.moodbook.ui.profile;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,8 +11,6 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
-
-import com.example.moodbook.MoodEditor;
 
 import java.io.FileDescriptor;
 import java.io.IOException;

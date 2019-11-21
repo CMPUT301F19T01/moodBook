@@ -7,10 +7,12 @@ package com.example.moodbook;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -28,10 +30,11 @@ import com.example.moodbook.ui.Request.RequestFragment;
 import com.example.moodbook.ui.friendMood.friendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
-import com.example.moodbook.ui.login.ProfilePicSetter;
+import com.example.moodbook.ui.profile.ProfilePicSetter;
 import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
+import com.example.moodbook.ui.profile.ProfileActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -165,6 +168,17 @@ public class MainActivity extends AppCompatActivity  {
             case R.id.nav_myFriendMoodMap:
                 fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
+                break;
+            case R.id.nav_profile:
+                fragmentClass =null;
+                Intent intent = new Intent(this, ProfileActivity.class);
+                intent.putExtra("name",name);
+                intent.putExtra("email",email);
+                startActivity(intent);
+                Log.d("Activity:" , "My profile");
+                Toast.makeText(getApplicationContext(),
+                        "Clicked Profile Page " ,
+                        Toast.LENGTH_LONG).show();
                 break;
             case R.id.nav_logout:
                 fragmentClass = null;

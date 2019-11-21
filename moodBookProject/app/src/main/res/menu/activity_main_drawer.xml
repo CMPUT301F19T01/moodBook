@@ -9,6 +9,10 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_home" />-->
         <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/default_profile"
+            android:title="My profile" />
+        <item
             android:id="@+id/nav_myMood"
             android:icon="@drawable/ic_format_list_bulleted_black_24dp"
             android:title="My MoodBook" />
