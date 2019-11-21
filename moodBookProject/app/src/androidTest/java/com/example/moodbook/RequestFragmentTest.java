@@ -92,4 +92,18 @@ public class RequestFragmentTest {
         solo.clickOnButton("Send Request");
         assertTrue(solo.waitForText("User does not exist"));
     }
+
+    /**
+     * Test for adding self
+     */
+    @Test
+    public void sendRequestSelf(){
+        //login();
+        // navigate to request sending
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Add Friends");
+        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "test");
+        solo.clickOnButton("Send Request");
+        assertTrue(solo.waitForText("Cannot add yourself"));
+    }
 }

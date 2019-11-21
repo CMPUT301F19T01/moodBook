@@ -58,7 +58,7 @@ public class RequestFragment extends PageFragment {
                     requestText.setError("Cannot add yourself");
                 } else if (usernameList.isUser(addUser)){ // check if username exists in db
                     requestHandler.sendRequest(addUser, user.getUid(), user.getDisplayName());
-                    Toast.makeText(root.getContext(), "Sent request" + addUser + user.getDisplayName(),
+                    Toast.makeText(root.getContext(), "Sent request",
                             Toast.LENGTH_LONG).show();
                 } else {
                     requestText.setError("User does not exist");
