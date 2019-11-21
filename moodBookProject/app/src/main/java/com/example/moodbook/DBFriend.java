@@ -1,23 +1,20 @@
 package com.example.moodbook;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
+import com.example.moodbook.ui.myFriends.FriendListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 public class DBFriend {
     private FirebaseFirestore db;
@@ -65,7 +62,7 @@ public class DBFriend {
      * from the user's friend collection
      */
     public static EventListener<QuerySnapshot> getFriendListener (
-            final FriendMoodListAdapter friendAdapter){
+            final FriendListAdapter friendAdapter){
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
@@ -74,13 +71,12 @@ public class DBFriend {
                     friendAdapter.clear();
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         // ignore null item
-                        if (doc.getId() == "null") continue;
-                        // Adding mood from FireStore
-                        /*User friendUser = new User(...);
-                        if (friendUser != null) {
-                            mood.setDocId(doc.getId());
-                            friendAdapter.addItem(mood);
-                        }*/
+                        if (doc.getId().equals("null")) continue;
+                        // Adding friend from FireStore
+                        if (doc.getData() != null && doc.getData().get("uid") != null) {
+                            MoodbookUser friendUser = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
+                            friendAdapter.add(friendUser);
+                        }
                     }
                 }
             }

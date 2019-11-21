@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.moodbook.User;
+import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.ui.Request.RequestHandler;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,9 +23,9 @@ import java.util.ArrayList;
 public class RequestsAdapter extends BaseAdapter {
     private FirebaseFirestore db;
     private Context context;
-    private ArrayList<User> requestList;
+    private ArrayList<MoodbookUser> requestList;
 
-    public RequestsAdapter(Context context, ArrayList<User> requestList) {
+    public RequestsAdapter(Context context, ArrayList<MoodbookUser> requestList) {
         super();
         this.context = context;
         this.requestList = requestList;
@@ -56,7 +56,7 @@ public class RequestsAdapter extends BaseAdapter {
         Button declineButton = (Button) view.findViewById(R.id.decline_button);
 
         // Set the name on the list
-        final User frienduser =  requestList.get(position);
+        final MoodbookUser frienduser =  requestList.get(position);
         usernameTextView.setText(frienduser.getUsername());
         final FirebaseAuth mAuth;
 
@@ -95,7 +95,7 @@ public class RequestsAdapter extends BaseAdapter {
         return view;
     }
 
-    public User getItem(int position) {
+    public MoodbookUser getItem(int position) {
         return requestList.get(position);
     }
 
@@ -114,7 +114,7 @@ public class RequestsAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
     // Add a request name
-    public void addItem(User item) {
+    public void addItem(MoodbookUser item) {
         if (item!=null){
             requestList.add(item);
         }

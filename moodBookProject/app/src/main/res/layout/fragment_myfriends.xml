@@ -5,8 +5,7 @@
     android:id="@+id/request_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorWhite"
-    android:clickable="true">
+    android:background="@color/colorWhite">
 
 
     <LinearLayout
@@ -16,9 +15,9 @@
         android:scrollbars="vertical">
 
         <ListView
+            android:id="@+id/friend_listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/friend_listView"
             android:scrollbars="vertical" />
     </LinearLayout>
 

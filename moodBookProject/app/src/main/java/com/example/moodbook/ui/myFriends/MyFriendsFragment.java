@@ -4,35 +4,40 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.example.moodbook.DBFriend;
+import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
-import com.example.moodbook.ui.myMood.myMoodViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 public class MyFriendsFragment extends PageFragment {
-    // temporary, will be removed
-    @Deprecated
-    private myMoodViewModel MymoodViewModel;
+    private FriendListAdapter friendListAdapter;
+    private ListView friendListView;
+    private static final String TAG = MyFriendsFragment.class.getSimpleName();
+
+    // connect to DB
+    private DBFriend friendDB;
+    private FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_mymood);
+        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_myfriends);
 
-        MymoodViewModel =
-                ViewModelProviders.of(this).get(myMoodViewModel.class);
-        final TextView textView = root.findViewById(R.id.text_myMood);
-        MymoodViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+        friendListView = root.findViewById(R.id.friend_listView);
+        friendListAdapter=  new FriendListAdapter(getContext());
+        friendListView.setAdapter(friendListAdapter);
+
+        // initialize DB connector
+        mAuth = FirebaseAuth.getInstance();
+        friendDB = new DBFriend(mAuth, getContext(),
+                DBFriend.getFriendListener(friendListAdapter), TAG);
+
 
         return root;
     }

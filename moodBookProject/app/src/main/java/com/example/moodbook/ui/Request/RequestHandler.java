@@ -7,7 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.moodbook.User;
+import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.ui.myRequests.RequestsAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -109,7 +109,7 @@ public class RequestHandler {
                         if (!doc.getId().equals("null")) {
                             // Adding requestuser from FireStore
                             if(doc.getData() != null && doc.getData().get("uid") != null) {
-                                User user = new User(doc.getId(), (String) doc.getData().get("uid"));
+                                MoodbookUser user = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
                                 requestsAdapter.addItem(user);
                             }
                         }
@@ -132,7 +132,7 @@ public class RequestHandler {
         }
     }
 
-    public void addFriend(final User acceptFriend, final String myUsername){
+    public void addFriend(final MoodbookUser acceptFriend, final String myUsername){
 
         final String username = myUsername;
         final CollectionReference friendsReference = this.userReference.document(acceptFriend.getUid()).collection("FRIENDS");

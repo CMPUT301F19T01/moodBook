@@ -3,14 +3,14 @@ package com.example.moodbook.ui.friendMood;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.Mood;
-import com.example.moodbook.User;
+import com.example.moodbook.MoodbookUser;
 
 public class FriendMood implements Comparable<FriendMood> {
-    private User user;
+    private MoodbookUser user;
     private Mood mood;
 
     public FriendMood(String username, String uid, Mood mood) {
-        this.user = new User(username, uid);
+        this.user = new MoodbookUser(username, uid);
         this.mood = mood;
     }
 

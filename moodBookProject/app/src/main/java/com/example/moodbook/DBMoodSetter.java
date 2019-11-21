@@ -341,7 +341,7 @@ public class DBMoodSetter {
                         moodAdapter.clear();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             // ignore null item
-                            if (doc.getId() == "null") continue;
+                            if (doc.getId().equals("null")) continue;
                             // Adding mood from FireStore
                             Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
                             if (mood != null) {
@@ -374,7 +374,7 @@ public class DBMoodSetter {
                         friendMoodAdapter.clear();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             // ignore null item
-                            if (doc.getId() == "null") continue;
+                            if (doc.getId().equals("null")) continue;
                             // Adding mood from FireStore
                             Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
                             if (mood != null) {
