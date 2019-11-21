@@ -75,7 +75,7 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
 
     protected void createActivity(String activityName) {
         if(!Arrays.asList(SUBCLASSES_NAMES).contains(activityName)){
-            return;
+            throw new IllegalArgumentException(activityName+" is not a permitted subclass!");
         }
         this.TAG = activityName;
 

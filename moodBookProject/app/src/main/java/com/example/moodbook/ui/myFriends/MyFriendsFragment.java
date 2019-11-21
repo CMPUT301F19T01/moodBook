@@ -35,9 +35,8 @@ public class MyFriendsFragment extends PageFragment {
 
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
-        friendDB = new DBFriend(mAuth, getContext(),
-                DBFriend.getFriendListener(friendListAdapter), TAG);
-
+        friendDB = new DBFriend(mAuth, getContext(), TAG);
+        friendDB.setFriendListListener(friendListAdapter);
 
         return root;
     }

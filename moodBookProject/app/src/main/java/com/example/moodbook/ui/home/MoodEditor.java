@@ -109,6 +109,12 @@ public class MoodEditor {
      */
     public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner emotionSpinner,
                                          MoodStateAdapter emotionAdapter, String moodEmotion) {
+        // ensure myActivity implements MoodEditorInterface
+        if(!(myActivity instanceof MoodEditorInterface)){
+            throw new IllegalArgumentException(
+                    myActivity.getClass().getSimpleName()+" must implement MoodEditorInterface!");
+        }
+
         emotionSpinner.setAdapter(emotionAdapter);
         // initial selection for emotion
         if(moodEmotion != null) {
@@ -169,6 +175,12 @@ public class MoodEditor {
      */
     public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner situationSpinner,
                                            ArrayAdapter<String> situationAdapter, String moodSituation) {
+        // ensure myActivity implements MoodEditorInterface
+        if(!(myActivity instanceof MoodEditorInterface)){
+            throw new IllegalArgumentException(
+                    myActivity.getClass().getSimpleName()+" must implement MoodEditorInterface!");
+        }
+
         situationSpinner.setAdapter(situationAdapter);
         // initial selection for situation
         if(moodSituation != null) {
@@ -245,6 +257,12 @@ public class MoodEditor {
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
                                ImageView image_view_photo, final AppCompatActivity myActivity) {
+        // ensure myActivity implements MoodEditorInterface
+        if(!(myActivity instanceof MoodEditorInterface)){
+            throw new IllegalArgumentException(
+                    myActivity.getClass().getSimpleName()+" must implement MoodEditorInterface!");
+        }
+
         if (requestCode == REQUEST_IMAGE
                 && resultCode == AppCompatActivity.RESULT_OK){
             if (data != null) {
@@ -292,6 +310,12 @@ public class MoodEditor {
      */
     public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data,
             final AppCompatActivity myActivity) {
+        // ensure myActivity implements MoodEditorInterface
+        if(!(myActivity instanceof MoodEditorInterface)){
+            throw new IllegalArgumentException(
+                    myActivity.getClass().getSimpleName()+" must implement MoodEditorInterface!");
+        }
+
         if(requestCode == LocationPickerActivity.REQUEST_EDIT_LOCATION){
             if(resultCode == LocationPickerActivity.EDIT_LOCATION_OK){
                 double lat = data.getDoubleExtra("location_lat", 0);

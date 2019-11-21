@@ -7,8 +7,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.moodbook.ui.friendMood.FriendMood;
+import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
+import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.example.moodbook.ui.myFriends.FriendListAdapter;
+import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,8 +26,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
+
+/**
+ * Used by Friend related pages: MyFriends, FriendMood, FriendMoodMap
+ */
 public class DBFriend {
     private FirebaseFirestore db;
     private CollectionReference userReference;
@@ -36,17 +44,14 @@ public class DBFriend {
      *
      * @param mAuth
      * @param context
-     * @param friendListener
      * @param TAG
      */
-    public DBFriend(FirebaseAuth mAuth, Context context, @NonNull EventListener friendListener, String TAG) {
+    public DBFriend(FirebaseAuth mAuth, Context context, String TAG) {
         this.db = FirebaseFirestore.getInstance();
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
         this.context = context;
         this.TAG = TAG;
-        this.userReference.document(uid).collection("FRIENDS")
-                .addSnapshotListener(friendListener);
     }
 
     /**
@@ -54,17 +59,42 @@ public class DBFriend {
      * @param mAuth
      * @param context
      */
-    public DBFriend(FirebaseAuth mAuth, Context context, @NonNull EventListener friendListener) {
-        this(mAuth, context, friendListener, DBFriend.class.getSimpleName());
+    public DBFriend(FirebaseAuth mAuth, Context context) {
+        this(mAuth, context, DBFriend.class.getSimpleName());
+    }
+
+    /**
+     * This is used by MyFriends
+     * @param friendListAdapter
+     */
+    public void setFriendListListener(FriendListAdapter friendListAdapter) {
+        this.userReference.document(uid).collection("FRIENDS")
+                .addSnapshotListener(getFriendEventListener(friendListAdapter));
+    }
+
+    /**
+     * This is used by FriendMood and FriendMoodMap
+     * @param friendMoodListAdapter
+     */
+    public void setFriendRecentMoodListener(FriendMoodListAdapter friendMoodListAdapter) {
+        this.userReference.document(uid).collection("FRIENDS")
+                .addSnapshotListener(getFriendRecentMoodEventListener(friendMoodListAdapter));
+    }
+
+    /**
+     * This set recentMoodID in the database for a user
+     */
+    public static void setRecentMoodID(FirebaseFirestore db, String currentUid, String recentMoodID) {
+        DocumentReference currentUserDoc = db.collection("USERS").document(currentUid);
+        currentUserDoc.update("recent_moodID", recentMoodID);
     }
 
 
     /**
-     * This is used by FriendList to get all the user's friends (username, uid) in the database
+     * This is used by MyFriends to get all the user's friends (username, uid) in the database
      * from the user's friend collection
      */
-    public static EventListener<QuerySnapshot> getFriendListener (
-            final FriendListAdapter friendAdapter){
+    private EventListener<QuerySnapshot> getFriendEventListener (final FriendListAdapter friendAdapter){
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
@@ -90,8 +120,8 @@ public class DBFriend {
      * This is used by FriendMoods to get the most recent mood from all the user's friends in the database
      * starting from the user's friend collection
      */
-    public static EventListener<QuerySnapshot> getFriendRecentMoodListener (
-            final FirebaseFirestore db, final FriendMoodListAdapter friendMoodListAdapter){
+    private EventListener<QuerySnapshot> getFriendRecentMoodEventListener (
+            final FriendMoodListAdapter friendMoodListAdapter){
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
@@ -108,7 +138,7 @@ public class DBFriend {
                             String uid = (String) doc.getData().get("uid");
                             MoodbookUser friendUser = new MoodbookUser(username, uid);
                             // start getting most recent moodID
-                            getRecentMoodID(db, friendUser, friendMoodListAdapter);
+                            getRecentMoodID(friendUser, friendMoodListAdapter);
                         }
                     }
                 }
@@ -117,21 +147,14 @@ public class DBFriend {
     }
 
 
-    /**
-     * This set recentMoodID in the database for a user
-     */
-    public static void setRecentMoodID(FirebaseFirestore db, String currentUid, String recentMoodID) {
-        DocumentReference currentUserDoc = db.collection("USERS").document(currentUid);
-        currentUserDoc.update("recent_moodID", recentMoodID);
-    }
+
 
     /**
      * This get recentMoodID in the database for a user
      */
-    public static void getRecentMoodID(final FirebaseFirestore db, final MoodbookUser user,
-                                       final FriendMoodListAdapter friendMoodListAdapter) {
-        final DocumentReference currentUserDoc = db.collection("USERS")
-                .document(user.getUid());
+    private void getRecentMoodID(final MoodbookUser user,
+                                 final FriendMoodListAdapter friendMoodListAdapter) {
+        final DocumentReference currentUserDoc = this.userReference.document(user.getUid());
         currentUserDoc
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -141,25 +164,28 @@ public class DBFriend {
                             // get mood docId from moodCount
                             String recentMoodID = documentSnapshot.getString("recent_moodID");
                             if (recentMoodID != null) {
-                                getMoodFromMoodID(db, user, recentMoodID, friendMoodListAdapter);
+                                getMoodFromMoodID(user, recentMoodID, friendMoodListAdapter);
+                            }
+                            else {
+                                Log.d(TAG, "no recent moodID from "+user.getUsername());
                             }
                         } else {
-                            //Log.d(TAG, "no data from "+currentUid);
+                            Log.d(TAG, "no recent moodID from "+user.getUsername());
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //Log.d(TAG, e.toString());
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
 
-    public static void getMoodFromMoodID(final FirebaseFirestore db, final MoodbookUser user, final String moodID,
-                                         final FriendMoodListAdapter friendMoodListAdapter) {
-        DocumentReference currentMoodDoc =  db.collection("USERS")
-                .document(user.getUid()).collection("MOODS").document(moodID);
+    public void getMoodFromMoodID(final MoodbookUser user, final String moodID,
+                                  final FriendMoodListAdapter friendMoodListAdapter) {
+        DocumentReference currentMoodDoc =  this.userReference.document(user.getUid())
+                .collection("MOODS").document(moodID);
         currentMoodDoc
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -174,14 +200,14 @@ public class DBFriend {
                                 friendMoodListAdapter.add(friendMood);
                             }
                         } else {
-                            //Log.d(TAG, "no data from "+currentUid);
+                            Log.d(TAG, "no data from mood "+moodID);
                         }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        //Log.d(TAG, e.toString());
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
