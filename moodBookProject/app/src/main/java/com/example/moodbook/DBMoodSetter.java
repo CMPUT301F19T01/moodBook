@@ -132,7 +132,7 @@ public class DBMoodSetter {
                         if (documentSnapshot != null) {
                             // get mood docId from moodCount
                             Double m = documentSnapshot.getDouble("mood_Count");
-                            String moodID = String.valueOf(m);
+                            String moodID = String.valueOf(m) + MainActivity.getUsername(); //increment int + username as a moodID
                             addImg(moodID, mood);
                             // add new mood into db
                             addMoodAfterDocId(moodID, mood);
@@ -255,6 +255,8 @@ public class DBMoodSetter {
                         @Override
                         public void onSuccess(Void aVoid) {
                             showStatusMessage("Deleted successfully: " + moodID);
+                            removeImgFromDB(moodID);
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -264,6 +266,30 @@ public class DBMoodSetter {
                         }
                     });
         }
+
+
+        /**
+         *
+         * @param moodID
+         */
+
+        public void removeImgFromDB(final String moodID) {
+            StorageReference photoRef = photoReference.child(moodID);
+            photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // File deleted successfully
+                    Log.d(TAG, "Mood image deleted successfully.");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Uh-oh, an error occurred!
+                    Log.d(TAG, "Failed to delete mood image.");
+                }
+            });
+        }
+
 
         /**
          * This edits  a specific mood in the database given the mood's docID and the parameters to edit
