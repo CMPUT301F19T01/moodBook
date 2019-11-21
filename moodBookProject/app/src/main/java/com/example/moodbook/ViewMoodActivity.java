@@ -10,6 +10,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,7 +32,7 @@ public class ViewMoodActivity extends AppCompatActivity {
     private MoodListAdapter moodAdapter;
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
-    private LinearLayout linear_emotion;
+    private ScrollView linear_emotion;
     private static final String TAG = "DB";
 
     @Override
@@ -68,7 +69,7 @@ public class ViewMoodActivity extends AppCompatActivity {
         view_situation.setText("Situation:  " + intent_situation);
         final String intent_emotion =getIntent().getStringExtra("emotion");
         view_emotion.setText(intent_emotion);
-        linear_emotion = findViewById(R.id.linear_emotion);
+        linear_emotion = findViewById(R.id.viewPage);
         //Set emoji
         switch(intent_emotion){
             case "sad":

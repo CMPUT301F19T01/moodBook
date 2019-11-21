@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.moodbook.Mood;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,7 +58,8 @@ public class ProfilePicSetter {
             byte[] data = baos.toByteArray();
 
             UploadTask uploadTask = photoRef.putBytes(data);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
+            uploadTask.addOnFailureListener(
+                    new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception exception) {
                     // Handle unsuccessful uploads
@@ -72,6 +74,30 @@ public class ProfilePicSetter {
             });
         }
 
+    }
+
+    public void addImg(String moodID) {
+        String picID = moodID;
+        StorageReference photoRef = photoReference.child(picID);
+        Bitmap bitImage = ProfileEditor.getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (bitImage != null) {
+            bitImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = photoRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    showStatusMessage("Failed to add mood photo.");
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    showStatusMessage("Successfully added the mood photo");
+                }
+            });
+        }
     }
     /**
      * This gets the image stored from DB

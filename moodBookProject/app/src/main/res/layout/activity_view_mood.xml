@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lightpurple">
@@ -10,8 +11,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ViewMoodActivity"
-    android:background="@color/lightpurple">
+    tools:context=".ViewMoodActivity">
 
     <TextView
 
@@ -59,16 +59,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.82" />
 
-    <LinearLayout
-        android:id ="@+id/linear_emotion"
-        android:layout_width="367dp"
-        android:layout_height="97dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.409"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.154">
 
         <ImageView
             android:id="@+id/view_emoji"
@@ -100,7 +90,6 @@
             app:layout_constraintVertical_bias="0.105"
             tools:ignore="MissingConstraints" />
 
-    </LinearLayout>
 
     <TextView
         android:id="@+id/view_location"
@@ -117,36 +106,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.553"
         tools:ignore="MissingConstraints" />
-
-<!--    <ImageView-->
-<!--        android:id="@+id/view_emoji"-->
-<!--        android:layout_width="84dp"-->
-<!--        android:layout_height="56dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginLeft="20dp"-->
-<!--        android:contentDescription="@string/todo"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.137"-->
-<!--        app:srcCompat="@drawable/ic_menu_gallery"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/view_emotion"-->
-<!--        android:layout_width="199dp"-->
-<!--        android:layout_height="52dp"-->
-<!--        android:layout_marginTop="28dp"-->
-<!--        android:text="@string/textview"-->
-<!--        android:textColor="#000000"-->
-<!--        android:textSize="30dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.833"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/view_emoji"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.105"-->
-<!--        tools:ignore="MissingConstraints" />-->
 
     <ImageView
         android:id="@+id/view_uploaded_pic"
