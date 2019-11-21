@@ -132,7 +132,7 @@ public class DBMoodSetter {
                         if (documentSnapshot != null) {
                             // get mood docId from moodCount
                             Double m = documentSnapshot.getDouble("mood_Count");
-                            String moodID = String.valueOf(m);
+                            String moodID = String.valueOf(m) + MainActivity.getUsername(); //increment int + username as a moodID
                             addImg(moodID, mood);
                             // add new mood into db
                             addMoodAfterDocId(moodID, mood);
