@@ -9,8 +9,8 @@ public class FriendMood implements Comparable<FriendMood> {
     private MoodbookUser user;
     private Mood mood;
 
-    public FriendMood(String username, String uid, Mood mood) {
-        this.user = new MoodbookUser(username, uid);
+    public FriendMood(@NonNull MoodbookUser user, @NonNull Mood mood) {
+        this.user = user;
         this.mood = mood;
     }
 

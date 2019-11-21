@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBMoodSetter;
+import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodInvalidInputException;
@@ -107,7 +108,8 @@ public class FriendMoodFragment extends PageFragment {
             try {
                 Mood mood = new Mood("2019-11-1"+i+" 08:00", Mood.Emotion.getNames()[i%4], username[i],
                         null, null, null);
-                friendMoodAdapter.add(new FriendMood(username[i], username[i] + "@test.com", mood));
+                MoodbookUser user = new MoodbookUser(username[i], username[i] + "@test.com");
+                friendMoodAdapter.add(new FriendMood(user, mood));
             } catch (MoodInvalidInputException e) {
                 e.printStackTrace();
             }
