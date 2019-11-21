@@ -24,7 +24,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.moodbook.ui.Request.RequestFragment;
-import com.example.moodbook.ui.friendMood.friendMoodFragment;
+import com.example.moodbook.ui.friendMood.FriendMoodFragment;
+
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity   {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
     private FirebaseFirestore db;
-    private String name;
+    private static String name;
     private String email;
 
 
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity   {
         Class fragmentClass;
         switch(menuItem.getItemId()){
             case R.id.nav_FriendMood:
-                fragmentClass = friendMoodFragment.class;
+                fragmentClass = FriendMoodFragment.class;
                 toolbar.setTitle("Friend Mood History");
                 break;
             case R.id.nav_addFriends:
@@ -184,6 +185,10 @@ public class MainActivity extends AppCompatActivity   {
         mAuth.getInstance().signOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
+    }
+
+    public static String getUsername(){
+        return name;
     }
 
 }

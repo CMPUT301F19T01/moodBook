@@ -55,8 +55,6 @@ import java.util.ArrayList;
  */
 public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
-    //private HomeViewModel homeViewModel;
-
     // Mood History
     private RecyclerView moodListView;
     private MoodListAdapter moodAdapter;
@@ -66,7 +64,6 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = HomeFragment.class.getSimpleName();
-    private String testDel;
 
 
     /**
@@ -82,17 +79,19 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         // get root view from PageFragment
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_home);
 
-        // Set up recyclerView and adapter
+        // initialize layout
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
+
+        // Set up recyclerView and adapter
         moodListView = root.findViewById(R.id.mood_history_listView);
         setupAdapter(new MoodListAdapter.OnItemClickListener() {
             // Edit the selected mood: when a mood item is clicked, start edit activity
             @Override
-            public void onItemClick(Mood item) {
-                Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
+            public void onItemClick(Mood selectedMood) {
+                Toast.makeText(getContext(), "Clicked " + selectedMood.toString(), Toast.LENGTH_LONG).show();
                 Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
                 // put attributes of selected mood into editIntent
-                getIntentDataFromMood(editIntent, item);
+                getIntentDataFromMood(editIntent, selectedMood);
                 startActivity(editIntent);
             }
         });
@@ -154,7 +153,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                     moodDB.addMood(deletedMood);
                 }
             });
-            Log.i(testDel, "Deleted mood.");
+            Log.i(TAG, "Deleted mood.");
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
         }
