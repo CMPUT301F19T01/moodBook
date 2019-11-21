@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.moodbook.DBFriend;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.ui.home.EditMoodActivity;
@@ -30,7 +31,7 @@ public class FriendMoodFragment extends PageFragment {
     private FriendMoodListAdapter friendMoodAdapter;
 
     // connect to DB
-    private DBMoodSetter moodDB;
+    private DBFriend friendMoodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = FriendMoodFragment.class.getSimpleName();
 
@@ -66,9 +67,9 @@ public class FriendMoodFragment extends PageFragment {
         });
 
         // initialize DB connector
-        /*mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getContext(),
-                DBMoodSetter.getFriendMoodListener(friendMoodAdapter, mAuth), TAG);*/
+        mAuth = FirebaseAuth.getInstance();
+        friendMoodDB = new DBFriend(mAuth, getContext(), TAG);
+        friendMoodDB.setFriendRecentMoodListener(friendMoodAdapter);
 
         return root;
     }

@@ -146,9 +146,6 @@ public class DBFriend {
         };
     }
 
-
-
-
     /**
      * This get recentMoodID in the database for a user
      */
@@ -181,6 +178,7 @@ public class DBFriend {
                     }
                 });
     }
+
 
     public void getMoodFromMoodID(final MoodbookUser user, final String moodID,
                                   final FriendMoodListAdapter friendMoodListAdapter) {

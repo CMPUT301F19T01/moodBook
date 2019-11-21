@@ -173,6 +173,8 @@ public class DBMoodSetter {
                     @Override
                     public void onSuccess(Void aVoid) {
                         showStatusMessage("Added successfully: " + moodDocID);
+                        // update recent moodID if adding mood is successful
+                        DBFriend.setRecentMoodID(db,uid,moodDocID);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -254,7 +256,7 @@ public class DBMoodSetter {
      *   This is a String object of mood docID on the database
      *
      */
-    public void removeMood ( final String moodID){
+    public void removeMood (final String moodID){
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         // remove selected city
         moodReference.document(moodID).delete()
