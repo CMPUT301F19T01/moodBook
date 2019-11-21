@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 
 import com.example.moodbook.ui.friendMood.FriendMood;
 import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
+import com.example.moodbook.ui.home.MoodEditor;
+import com.example.moodbook.ui.home.MoodListAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -68,6 +70,7 @@ public class DBMoodSetter {
         this.context = context;
         this.intReference = db.collection("int");
         this.photoReference = storage.getReferenceFromUrl("gs://moodbook-60da3.appspot.com");
+        this.TAG = DBMoodSetter.class.getSimpleName();
     }
 
 
@@ -360,6 +363,7 @@ public class DBMoodSetter {
          * @return
          *  Returns a an EventListener that listens for changes in the mood database
          */
+        @Deprecated
         public static EventListener<QuerySnapshot> getFriendMoodListener (
                 final FriendMoodListAdapter friendMoodAdapter, final FirebaseAuth mAuth){
             return new EventListener<QuerySnapshot>() {
@@ -394,7 +398,6 @@ public class DBMoodSetter {
          *   @see Mood
          * @return
          *    Returns a hashmap with mood fields on the database and their corresponding values
-         * @see #getMoodFromData(Map)
          */
         public static Map<String, Object> getDataFromMood (Mood mood){
             Location location = mood.getLocation();

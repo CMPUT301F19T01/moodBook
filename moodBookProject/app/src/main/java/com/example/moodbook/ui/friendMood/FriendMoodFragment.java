@@ -13,7 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.EditMoodActivity;
+import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodInvalidInputException;
 import com.example.moodbook.PageFragment;

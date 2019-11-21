@@ -1,15 +1,14 @@
-package com.example.moodbook.ui.myRequests;
+package com.example.moodbook;
 
 /**
  * Class for showing the available requests for a user
  */
-public class RequestUser {
+public class User {
 
     private String username;
     private String uid;
 
-    public RequestUser(String username, String uid) {
-
+    public User(String username, String uid) {
         setUsername(username);
         setUid(uid);
     }

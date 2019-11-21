@@ -29,11 +29,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.moodbook.CreateMoodActivity;
 import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.EditMoodActivity;
 import com.example.moodbook.Mood;
-import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.RecyclerItemTouchHelper;

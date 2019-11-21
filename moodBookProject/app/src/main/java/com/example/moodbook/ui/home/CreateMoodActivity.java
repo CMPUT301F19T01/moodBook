@@ -1,4 +1,4 @@
-package com.example.moodbook;
+package com.example.moodbook.ui.home;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +7,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.moodbook.DBMoodSetter;
+import com.example.moodbook.Mood;
+import com.example.moodbook.MoodInvalidInputException;
+import com.example.moodbook.R;
 
 /**
  * This activity is used by Mood History to create a Mood Object when clicking an add button
