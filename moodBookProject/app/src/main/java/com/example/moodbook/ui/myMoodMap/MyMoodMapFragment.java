@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.DBUpdate;
+import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,7 +51,7 @@ import java.util.ArrayList;
  *  This activity is used to view a where a users moods take place on a map
  * @see DBUpdate
  */
-public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, DBUpdate {
+public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback {
 
     ///// Member Variables /////
     private MapView mapView; // view object
@@ -130,78 +131,16 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
         moodMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                // get mood from data list with by using tag
                 int pos = (int)marker.getTag();
-
                 Mood mood = moodDataList.get(pos);
-                final Dialog dialog = new Dialog(getContext());
 
-                // set dialog to custom layout
-                dialog.setContentView(R.layout.activity_view_mood);
+                // create dialog popup
+                Dialog dialog = new Dialog(getContext());
 
-                // show the reason photo
-                ImageView reasonPhoto = dialog.findViewById(R.id.view_reason_photo);
-                dbMoodSetter.getImageFromDB(mood.getDocId(), reasonPhoto);
+                // bind mood data to dialog layout
+                bindViews(mood, dialog, dbMoodSetter).show();
 
-                // set mood emotion image
-                ImageView imageView = dialog.findViewById(R.id.view_mood_image);
-                imageView.setImageResource(mood.getEmotionImageResource());
-
-                // set mood text
-                TextView moodText = dialog.findViewById(R.id.view_emotion);
-                moodText.setText(mood.getEmotionText());
-
-                // set mood date time
-                TextView moodDate = dialog.findViewById(R.id.view_date_time);
-                moodDate.setText(mood.getDateText());
-
-                // set mood time
-                TextView moodTime = dialog.findViewById(R.id.view_time);
-                moodTime.setText(mood.getTimeText());
-
-                // set mood location
-                TextView moodLocation = dialog.findViewById(R.id.view_location);
-                Location loc = mood.getLocation();
-                moodLocation.setText(loc.getLatitude() + " " + loc.getLongitude());
-
-                // set mood situation
-                TextView moodSituation = dialog.findViewById(R.id.view_situation);
-                moodSituation.setText(mood.getSituation());
-
-                // set mood reason
-                TextView moodReason = dialog.findViewById(R.id.view_reason);
-                moodReason.setText(mood.getReasonText());
-
-                // close on click listener
-                Button button = dialog.findViewById(R.id.close_button);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.dismiss();
-                    }
-                });
-
-                // background to transparent so we only see our custom layout
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                // set the background color based on the mood
-                RelativeLayout relativeLayout = dialog.findViewById(R.id.viewLayout);
-
-                if (mood.getEmotionText().equals("happy")){
-                    relativeLayout.setBackgroundResource(R.drawable.view_happy_bg);
-                }
-                else if (mood.getEmotionText().equals("angry")){
-                    relativeLayout.setBackgroundResource(R.drawable.view_angry_bg);
-                }
-                else if (mood.getEmotionText().equals("sad")){
-                    relativeLayout.setBackgroundResource(R.drawable.view_sad_bg);
-                }
-                else if (mood.getEmotionText().equals("afraid")){
-                    relativeLayout.setBackgroundResource(R.drawable.view_afraid_bg);
-                }
-
-
-
-                dialog.show();
                 return false;
             }
         });
@@ -244,10 +183,11 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     }
 
     /**
-     * Inherited by DBUpdate and is implemented by querying FireBase
+     * Inherited from MapViewFragment and is implemented by querying FireBase
      * for the all the Current users moods
      * @param db
      *  reference to the FireBaseFireStore instance
+     * @see MoodMapFragment
      */
     @Override
     public void updateList(FirebaseFirestore db) {
@@ -277,7 +217,7 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
                                         }
                                     }
                                 }
-                                drawMoodMarkers(moodDataList);
+                                drawMoodMarkers(moodDataList, moodMap);
                             }
                         }
                     });
@@ -286,41 +226,6 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
         }
     }
 
-    /**
-     * This method draws all the Users moods on the map
-     * @param moodDataList
-     *  ArrayList of the users Mood objects
-     */
-    private void drawMoodMarkers(ArrayList<Mood> moodDataList){
-        int emotionResource;
-        LatLng moodLatLng;
 
-        int i;
-        for(i = 0; i < moodDataList.size(); i++){
-            Mood mood = moodDataList.get(i);
-            // get image resource for the mood marker
-            emotionResource = mood.getEmotionImageResource();
-
-            // get location of mood
-            Location moodLocation = mood.getLocation();
-            moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
-
-            // use png image resource as marker icon
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
-            Bitmap b = bitmapDrawable.getBitmap();
-            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
-
-            // draw on map
-            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor)).setTag(i);
-
-            // zoom in and focus on the most recent mood, ie. the last mood in list
-            if(i+1 == moodDataList.size()){
-                moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
-            }
-
-        }
-
-    }
 
 }
