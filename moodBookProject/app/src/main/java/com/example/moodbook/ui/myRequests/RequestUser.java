@@ -6,10 +6,12 @@ package com.example.moodbook.ui.myRequests;
 public class RequestUser {
 
     private String username;
+    private String uid;
 
-    public RequestUser(String username) {
+    public RequestUser(String username, String uid) {
 
         setUsername(username);
+        setUid(uid);
     }
 
     public void setUsername(String username){
@@ -20,5 +22,12 @@ public class RequestUser {
         return this.username;
     }
 
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getUid() {
+        return this.uid;
+    }
 }
 

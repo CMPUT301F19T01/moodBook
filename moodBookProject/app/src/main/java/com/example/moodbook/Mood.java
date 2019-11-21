@@ -58,18 +58,6 @@ public class Mood implements Comparable<Mood> {
     }
 
     /**
-     * This constructor is used to represent a mood event with only mandatory fields
-     * @param date_time_text
-     *  This is the date and time when the mood event occurs
-     * @param emotion
-     *  This is the emotional state when the mood event occurs
-     * @throws MoodInvalidInputException
-     */
-    public Mood(String date_time_text, String emotion) throws MoodInvalidInputException {
-        this(date_time_text, emotion, null, null, null, null);
-    }
-
-    /**
      * This setter for date_time ensures text in date_time format and parses it into Date
      * @param date_time_text
      *  This is the date and time of the mood event in text
