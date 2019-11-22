@@ -78,7 +78,6 @@ public class DBMoodSetter {
 
     /**
      * This another instance of the DBMoodSetter Constructor that used to get updated mood data from user's mood collection in the database
-     *
      * @param mAuth   This is the FirebaseAuth instance for each logged in user
      * @param context This is a handle to get the data and resources that the app needs while it runs
      *
@@ -92,7 +91,7 @@ public class DBMoodSetter {
      * @param moodListAdapter
      */
     public void setMoodListListener(MoodListAdapter moodListAdapter) {
-        this.userReference.document(uid).collection("FRIENDS")
+        this.userReference.document(uid).collection("MOODS")
                 .addSnapshotListener(getMoodHistoryListener(moodListAdapter));
     }
 
@@ -332,20 +331,19 @@ public class DBMoodSetter {
 
     /**
      * This is used by MoodHistory to get all mood data in the database from user's mood collection
-     * @param moodAdapter
+     * @param moodListAdapter
      *   This is a MoodList Adapter Object
      *   @see MoodListAdapter
      * @return
      *  Returns a an EventListener that listens for changes in the mood database
      */
-    public static EventListener<QuerySnapshot> getMoodHistoryListener (
-    final MoodListAdapter moodAdapter){
+    private EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodListAdapter) {
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                if (moodAdapter != null) {
+                if (moodListAdapter != null) {
                     // clear the old list
-                    moodAdapter.clear();
+                    moodListAdapter.clear();
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         // ignore null item
                         if (doc.getId().equals("null")) continue;
@@ -353,7 +351,7 @@ public class DBMoodSetter {
                         Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
                         if (mood != null) {
                             mood.setDocId(doc.getId());
-                            moodAdapter.addItem(mood);
+                            moodListAdapter.addItem(mood);
                         }
                     }
                 }

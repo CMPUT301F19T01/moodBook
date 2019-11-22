@@ -97,20 +97,20 @@ public class DBFriend {
      * This EventListener is for MyFriends to get all the user's friends (username, uid) in the database
      * from the user's friend collection
      */
-    private EventListener<QuerySnapshot> getFriendEventListener (final FriendListAdapter friendAdapter){
+    private EventListener<QuerySnapshot> getFriendEventListener (final FriendListAdapter friendListAdapter){
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                if (friendAdapter != null) {
+                if (friendListAdapter != null) {
                     // clear the old list
-                    friendAdapter.clear();
+                    friendListAdapter.clear();
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         // ignore null item
                         if (doc.getId().equals("null")) continue;
                         // Adding friend from FireStore
                         if (doc.getData() != null && doc.getData().get("uid") != null) {
                             MoodbookUser friendUser = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
-                            friendAdapter.add(friendUser);
+                            friendListAdapter.add(friendUser);
                         }
                     }
                 }
