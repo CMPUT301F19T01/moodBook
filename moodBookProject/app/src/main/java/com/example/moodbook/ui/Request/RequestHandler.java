@@ -101,7 +101,6 @@ public class RequestHandler {
         });
     }
 
-
     /**
      * This methods gets the requests from DB and shows it in the listview
      * @param requestsAdapter
@@ -128,7 +127,6 @@ public class RequestHandler {
             }
         };
     }
-
 
     /**
      * This is a helper method to show status messages
