@@ -5,9 +5,9 @@ import android.widget.EditText;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.moodbook.ui.home.CreateMoodActivity;
 import com.example.moodbook.ui.login.LoginActivity;
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -15,12 +15,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 
-import com.example.moodbook.ui.login.LoginActivity;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.robotium.solo.Solo;
 
 import org.junit.Before;
@@ -29,8 +25,6 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
 import androidx.core.app.ActivityCompat;
-import androidx.test.platform.app.InstrumentationRegistry;
-import androidx.test.rule.ActivityTestRule;
 
 import static org.junit.Assert.assertEquals;
 

@@ -3,7 +3,7 @@
  * RecyclerView - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
  * Filterable - https://www.youtube.com/watch?v=sJ-Z9G0SDhc
  */
-package com.example.moodbook;
+package com.example.moodbook.ui.home;
 
 import android.content.Context;
 import android.util.Log;
@@ -19,6 +19,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.moodbook.Mood;
+import com.example.moodbook.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

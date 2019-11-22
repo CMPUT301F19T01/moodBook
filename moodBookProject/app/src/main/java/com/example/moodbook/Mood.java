@@ -3,6 +3,12 @@ package com.example.moodbook;
 import android.graphics.Bitmap;
 import android.location.Location;
 import androidx.annotation.NonNull;
+
+import com.example.moodbook.ui.home.CreateMoodActivity;
+import com.example.moodbook.ui.home.EditMoodActivity;
+import com.example.moodbook.ui.home.MoodEditor;
+import com.example.moodbook.ui.home.MoodListAdapter;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,18 +61,6 @@ public class Mood implements Comparable<Mood> {
         setReasonPhoto(reason_photo);
         setSituation(situation);
         setLocation(location);
-    }
-
-    /**
-     * This constructor is used to represent a mood event with only mandatory fields
-     * @param date_time_text
-     *  This is the date and time when the mood event occurs
-     * @param emotion
-     *  This is the emotional state when the mood event occurs
-     * @throws MoodInvalidInputException
-     */
-    public Mood(String date_time_text, String emotion) throws MoodInvalidInputException {
-        this(date_time_text, emotion, null, null, null, null);
     }
 
     /**

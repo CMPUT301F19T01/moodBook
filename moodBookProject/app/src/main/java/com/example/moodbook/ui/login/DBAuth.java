@@ -162,7 +162,7 @@ public class DBAuth {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("PROFILE", "User profile updated.");
+                    Log.d("PROFILE", "MoodbookUser profile updated.");
                 }
             }
         });

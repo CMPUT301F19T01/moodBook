@@ -25,11 +25,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+
 import com.example.moodbook.ui.Chat.ViewAdapter;
 import com.example.moodbook.ui.request.RequestFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
+import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity   {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.currentEmail, R.id.currentEmail,
+
                 R.id.nav_myMood, R.id.nav_chat, R.id.nav_FriendMood,
                 R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
                 .setDrawerLayout(drawer)
@@ -144,6 +147,8 @@ public class MainActivity extends AppCompatActivity   {
         Fragment fragment;
         Class fragmentClass;
         switch(menuItem.getItemId()){
+
+
 //            case R.id.nav_FriendMood:
 //                fragmentClass = friendMoodFragment.class;
 //                toolbar.setTitle("Friend Mood History");
@@ -159,6 +164,7 @@ public class MainActivity extends AppCompatActivity   {
             case R.id.nav_myRequests:
                 fragmentClass = myRequestsFragment.class;
                 toolbar.setTitle("Friend Requests");
+
                 break;
             case R.id.nav_myMoodMap:
                 fragmentClass = MyMoodMapFragment.class;
@@ -167,6 +173,18 @@ public class MainActivity extends AppCompatActivity   {
             case R.id.nav_myFriendMoodMap:
                 fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
+                break;
+            case R.id.nav_myFriends:
+                fragmentClass = MyFriendsFragment.class;
+                toolbar.setTitle("My Friends");
+                break;
+            case R.id.nav_request:
+                fragmentClass = RequestFragment.class;
+                toolbar.setTitle("Add Friends");
+                break;
+            case R.id.nav_myRequests:
+                fragmentClass = myRequestsFragment.class;
+                toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_logout:
                 fragmentClass = null;

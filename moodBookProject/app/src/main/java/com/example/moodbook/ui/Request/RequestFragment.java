@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.request;
+package com.example.moodbook.ui.Request;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.data.UsernameList;
-import com.example.moodbook.ui.request.RequestHandler;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;

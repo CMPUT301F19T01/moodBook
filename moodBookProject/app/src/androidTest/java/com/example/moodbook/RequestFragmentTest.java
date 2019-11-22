@@ -76,7 +76,7 @@ public class RequestFragmentTest {
 
         solo.enterText((EditText) solo.getView(R.id.usernameEditText), "2j2ieh2@@@dwed33");
         solo.clickOnButton("Send Request");
-        assertTrue(solo.waitForText("User does not exist"));
+        assertTrue(solo.waitForText("MoodbookUser does not exist"));
     }
 
     /**
@@ -90,6 +90,6 @@ public class RequestFragmentTest {
         solo.clickOnText("Add Friends");
 
         solo.clickOnButton("Send Request");
-        assertTrue(solo.waitForText("User does not exist"));
+        assertTrue(solo.waitForText("MoodbookUser does not exist"));
     }
 }
