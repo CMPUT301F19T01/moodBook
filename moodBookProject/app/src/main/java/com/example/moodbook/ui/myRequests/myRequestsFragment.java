@@ -1,38 +1,55 @@
 package com.example.moodbook.ui.myRequests;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
+import com.example.moodbook.DBMoodSetter;
+import com.example.moodbook.EditMoodActivity;
+import com.example.moodbook.Mood;
+import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
+import com.example.moodbook.ui.request.RequestHandler;
+import com.example.moodbook.ui.home.HomeFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 public class myRequestsFragment extends PageFragment {
-    // temporary, will be removed
-    @Deprecated
-    private myRequestsViewModel MyRequestsViewModel;
+    private RequestsAdapter requestsAdapter;
+    private CoordinatorLayout requestListLayout;
+    private ListView requestListView;
+    private static final String TAG = myRequestsFragment.class.getSimpleName();
+
+    // connect to DB
+    private RequestHandler requestDB;
+    private FirebaseFirestore db;
+    private FirebaseAuth mAuth;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_myrequests);
+        db = FirebaseFirestore.getInstance();
 
-        MyRequestsViewModel =
-                ViewModelProviders.of(this).get(myRequestsViewModel.class);
-        final TextView textView = root.findViewById(R.id.text_myrequests);
-        MyRequestsViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
-
+        requestListLayout = root.findViewById(R.id.request_layout);
+        requestListView = root.findViewById(R.id.request_listView);
+        // initialize DB connector
+        mAuth = FirebaseAuth.getInstance();
+        requestsAdapter=  new RequestsAdapter(getContext(), new ArrayList<RequestUser>());
+        requestDB = new RequestHandler(mAuth, getContext(),
+                RequestHandler.requestListener(requestsAdapter), TAG);
+        requestListView.setAdapter(requestsAdapter);
         return root;
     }
+
 }

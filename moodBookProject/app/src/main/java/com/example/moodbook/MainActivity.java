@@ -1,10 +1,17 @@
+/**
+ * Reference:
+ * Linking navigation - https://guides.codepath.com/android/fragment-navigation-drawer
+ */
 package com.example.moodbook;
 
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -18,24 +25,29 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.moodbook.ui.Chat.ViewAdapter;
+import com.example.moodbook.ui.request.RequestFragment;
 import com.example.moodbook.ui.home.HomeFragment;
-import com.example.moodbook.ui.friendMood.friendMoodFragment;
-import com.example.moodbook.ui.Request.RequestFragment;
-import com.example.moodbook.ui.myRequests.myRequestsFragment;
-import com.example.moodbook.ui.myMoodMap.myMoodMapFragment;
-import com.example.moodbook.ui.myFriendMoodMap.myFriendMoodMapFragment;
 import com.example.moodbook.ui.login.LoginActivity;
+import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
+import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
+import com.example.moodbook.ui.myRequests.myRequestsFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import android.view.View;
-import android.widget.Toast;
 
 //https://guides.codepath.com/android/fragment-navigation-drawer  - used for linking navigation
 
 /**
  * The Main Activity is set to HomeFragment as default, which in turn lists the Mood History list
  */
+
 public class MainActivity extends AppCompatActivity   {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -44,6 +56,9 @@ public class MainActivity extends AppCompatActivity   {
     private DrawerLayout drawer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
+    private FirebaseFirestore db;
+    private String name;
+    private String email;
 
 
     @Override
@@ -52,17 +67,30 @@ public class MainActivity extends AppCompatActivity   {
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        db = FirebaseFirestore.getInstance();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            name = user.getDisplayName();
+            email = user.getEmail();
+//            Uri photoUrl = user.getPhotoUrl();
+
+            boolean emailVerified = user.isEmailVerified();
+
+            String uid = user.getUid();
+        }
 
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         navigationView.bringToFront();
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-
-                R.id.nav_myMood,R.id.nav_FriendMood,
+                R.id.currentEmail, R.id.currentEmail,
+                R.id.nav_myMood, R.id.nav_chat, R.id.nav_FriendMood,
                 R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();
@@ -79,9 +107,12 @@ public class MainActivity extends AppCompatActivity   {
                     }
                 }
         );
+        TextView profileUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentUsername);
+        TextView profileEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
+        profileUserName.setText(name);
+        profileEmail.setText(email);
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,8 +130,13 @@ public class MainActivity extends AppCompatActivity   {
                 || super.onSupportNavigateUp();
     }
 
+
     /**
      * This method is for switching between different intent activities
+
+
+    /**
+     * This method creates a new fragment based on the menu option selected
      * @param menuItem
      * @param drawer
      */
@@ -108,9 +144,13 @@ public class MainActivity extends AppCompatActivity   {
         Fragment fragment;
         Class fragmentClass;
         switch(menuItem.getItemId()){
-            case R.id.nav_FriendMood:
-                fragmentClass = friendMoodFragment.class;
-                toolbar.setTitle("Friend Mood History");
+//            case R.id.nav_FriendMood:
+//                fragmentClass = friendMoodFragment.class;
+//                toolbar.setTitle("Friend Mood History");
+//                break;
+            case R.id.nav_chat:
+                fragmentClass = ViewAdapter.class;
+                toolbar.setTitle("username");
                 break;
             case R.id.nav_addFriends:
                 fragmentClass = RequestFragment.class;
@@ -121,11 +161,11 @@ public class MainActivity extends AppCompatActivity   {
                 toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_myMoodMap:
-                fragmentClass = myMoodMapFragment.class;
+                fragmentClass = MyMoodMapFragment.class;
                 toolbar.setTitle("Mood History Map");
                 break;
             case R.id.nav_myFriendMoodMap:
-                fragmentClass = myFriendMoodMapFragment.class;
+                fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
                 break;
             case R.id.nav_logout:
@@ -135,6 +175,7 @@ public class MainActivity extends AppCompatActivity   {
             default:
                 fragmentClass = HomeFragment.class;
                 toolbar.setTitle("Mood History");
+
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();
@@ -149,13 +190,7 @@ public class MainActivity extends AppCompatActivity   {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-
-    /**
-     * This method allows the user to log out of the application.
-     */
 
     private void logout(){
         mAuth.getInstance().signOut();
@@ -164,3 +199,15 @@ public class MainActivity extends AppCompatActivity   {
     }
 
 }
+//    OnCompleteListener<AuthResult> completeListener = new OnCompleteListener<AuthResult>() {
+//        @Override
+//        public void onComplete(@NonNull Task<AuthResult> task) {
+//            if (task.isSuccessful()) {
+//                boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+////                    Log.d("MyTAG", "onComplete: " + (isNew ? "new user" : "old user"));
+//                Toast.makeText(getApplicationContext(),
+//                        "new user",
+//                        Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    };

@@ -13,6 +13,11 @@
         android:label="Mood History"
         tools:layout="@layout/fragment_home" />
     <fragment
+        android:id="@+id/nav_chat"
+        android:name="com.example.moodbook.ui.Chat.chatFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
         android:id="@+id/nav_FriendMood"
         android:name="com.example.moodbook.ui.friendMood.friendMoodFragment"
         android:label="Friend Mood"
@@ -29,12 +34,12 @@
         tools:layout="@layout/fragment_request" />
     <fragment
         android:id="@+id/nav_myMoodMap"
-        android:name="com.example.moodbook.ui.myMoodMap.myMoodMapFragment"
+        android:name="com.example.moodbook.ui.myMoodMap.MyMoodMapFragment"
         android:label="My Mood Map"
         tools:layout="@layout/fragment_mymoodmap" />
     <fragment
         android:id="@+id/nav_myFriendMoodMap"
-        android:name="com.example.moodbook.ui.myFriendMoodMap.myFriendMoodMapFragment"
+        android:name="com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment"
         android:label="Friend Mood Map"
         tools:layout="@layout/fragment_friendmoodmap" />
     <fragment

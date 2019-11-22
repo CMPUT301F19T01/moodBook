@@ -1,16 +1,27 @@
-package com.example.moodbook.ui.Request;
+package com.example.moodbook.ui.request;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.example.moodbook.ui.myRequests.RequestUser;
+import com.example.moodbook.ui.myRequests.RequestsAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 
@@ -19,12 +30,34 @@ import java.util.HashMap;
  */
 
 public class RequestHandler {
+    private CollectionReference userReference;
+    private String uid;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private String TAG;
+    private Context context;
+
+
+    public RequestHandler(FirebaseAuth mAuth, Context context){
+        this.mAuth = mAuth;
+        this.db = FirebaseFirestore.getInstance();
+        this.context = context;
+        this.uid = mAuth.getCurrentUser().getUid();
+        this.userReference = db.collection("USERS");
+    }
 
     public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db){
         this.mAuth = mAuth;
-        this.db = db;
+        this.db = FirebaseFirestore.getInstance();
+        this.uid = mAuth.getCurrentUser().getUid();
+        this.userReference = this.db.collection("USERS");
+    }
+
+    public RequestHandler(FirebaseAuth mAuth, Context context, @NonNull EventListener reqHistoryListener, String TAG){
+        this(mAuth, context);
+        userReference.document(uid).collection("REQUESTS")
+                .addSnapshotListener(reqHistoryListener);
+        this.TAG = TAG;
     }
 
     /**
@@ -56,5 +89,82 @@ public class RequestHandler {
                 }
             }
         });
+    }
+
+    /**
+     * This methods gets the requests from DB and shows it in the listview
+     * @param requestsAdapter
+     * @return
+     */
+    public static EventListener<QuerySnapshot> requestListener(final RequestsAdapter requestsAdapter) {
+        return new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
+                if(requestsAdapter != null) {
+                    // clear the old list
+                    requestsAdapter.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        // ignore null item
+                        if (!doc.getId().equals("null")) {
+                            // Adding requestuser from FireStore
+                            if(doc.getData() != null && doc.getData().get("uid") != null) {
+                                RequestUser requestUser = new RequestUser(doc.getId(), (String) doc.getData().get("uid"));
+                                requestsAdapter.addItem(requestUser);
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    /**
+     * This is a helper method to show status messages
+     * @param message
+     *  This is a string that contains the status to be shown
+     */
+    private void showStatusMessage(String message) {
+        Log.w(TAG, message);
+        if(context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void addFriend(final RequestUser acceptFriend, final String myUsername){
+
+        final String username = myUsername;
+        final CollectionReference friendsReference = this.userReference.document(acceptFriend.getUid()).collection("FRIENDS");
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("uid", uid);
+        friendsReference.document(username).set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showStatusMessage("Added successfully: " + username);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Adding failed for " + username + ": " + e.toString());
+                    }
+                });
+    }
+
+    public void removeRequest( final String username){
+        final CollectionReference collectionReference = this.userReference.document(this.uid).collection("REQUESTS");
+        collectionReference.document(username).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showStatusMessage("Declined Friend Request: " + username);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Deleting failed for " + username + ": " + e.toString());
+                    }
+                });
     }
 }

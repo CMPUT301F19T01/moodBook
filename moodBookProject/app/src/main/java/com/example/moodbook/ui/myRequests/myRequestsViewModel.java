@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+@Deprecated
 public class myRequestsViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;

@@ -1,8 +1,11 @@
 package com.example.moodbook;
 import android.app.Activity;
+import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+
+import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
 import com.example.moodbook.MainActivity;
 
@@ -10,58 +13,48 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertTrue;
+
 /**
  * Test Class for EditMoodActivity. All UI tests are written here. Robotium test framework is used
  */
 public class EditMoodActivityTest {
     private Solo solo;
-    private Solo solo2;
 
     @Rule
-    public ActivityTestRule<MainActivity> rule =
-            new ActivityTestRule<>(MainActivity.class,true,true);
+    public ActivityTestRule<LoginActivity> rule =
+            new ActivityTestRule<>(LoginActivity.class, true, true);
 
-    @Rule
-    public ActivityTestRule<EditMoodActivity> rule2 =
-            new ActivityTestRule<>(EditMoodActivity.class,true,true);
 
-    /**
-     * Runs before all tests and creates solo instance.
-     * @throws Exception
-     */
     @Before
-    public void setUp() throws Exception  {
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(),rule.getActivity());
-        solo2 = new Solo(InstrumentationRegistry.getInstrumentation(),rule2.getActivity());
+    public void setUp() throws Exception{
+        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
+        // logout if logged in
+        if (solo.searchText("Mood History")){
+            solo.clickOnImageButton(0);
+            solo.clickOnText("Logout");
+            solo.sleep(3000);
+        }
+        // login with test account
+        if (solo.searchText("login")){
+            login();
+        }
     }
 
-    @Test
-    public void start() throws Exception{
-        Activity activity = rule.getActivity();
+    /**
+     * used in tests to first login to the app
+     */
+    public void login(){
+        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
+        solo.enterText((EditText) solo.getView(R.id.password), "testing");
+        solo.clickOnButton("login");
     }
 
     @Test
     public void clickEdit(){
-        solo.clickOnView(solo.getView(R.id.mood_history_listView));
+        solo.clickInRecyclerView(0);
         solo.sleep(5000); // wait for activity to change
+        assertTrue(solo.waitForActivity(EditMoodActivity.class));
     }
-
-    @Test
-    public void editMoodTest() {
-
-        solo2.clickOnButton("hh:mm"); //time button
-//        solo2.clickOnView(solo2.getView(R.id.edit_emotion_spinner, 0));//emotion --Picks alone
-//        solo2.clickOnView(solo2.getView(R.id.edit_reason_editText));
-//        solo2.clickOnView(solo2.getView(R.id.edit_emotion_spinner, 0));
-//        solo2.clickOnView(solo2.getView(R.id.edit_save_button)); //Select SAVE Button
-    }
-
-
-//    @Test
-//    public void clickItem(){
-//        solo.clickOnView(solo.getView(R.id.mood_history_listView));//Can't get it to click item on list makes sense since initially there is nothing on list.
-//        solo.sleep(5000); // wait for activity to change
-//    }
-
 
 }

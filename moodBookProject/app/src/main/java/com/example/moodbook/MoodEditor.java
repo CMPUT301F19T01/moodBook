@@ -1,23 +1,17 @@
 package com.example.moodbook;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -26,14 +20,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
+
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.util.Calendar;
@@ -44,14 +39,12 @@ import java.util.Date;
  * @see CreateMoodActivity
  * @see EditMoodActivity
  */
-
 public class MoodEditor {
 
     /**
-     * for accessing SetMoodSituation outside of activity
-     * for accessing SetMoodEmotion outside of activity
-     * for accessing SetMoodLocation outside of activity
-     * for accessing SetMoodReasonPhoto outside of activity
+     * This interface ensures CreateMoodActivity and EditMoodActivity implement setters to
+     * set mood attributes from MoodEditor
+     * Setters for emotion, situation, location, reason_photo
      */
     public interface MoodInterface {
         void setMoodEmotion(String emotion);
@@ -61,11 +54,10 @@ public class MoodEditor {
     }
 
 
+    private static final String TAG = MoodEditor.class.getSimpleName();
     private static final int REQUEST_IMAGE = 101;
     private static final int GET_IMAGE = 102;
-    private static final String TAG = "MyActivity";
     private static Bitmap imageBitmap;
-
 
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
             new String[]{"Pick mood state ..."}, Mood.Emotion.getNames(), String.class);
@@ -83,19 +75,11 @@ public class MoodEditor {
     };
 
     /**
-     * A method that returns a bitmap that was set in the imageView
-     * @return imageBitmap This is a Bitmap image
-     */
-    public static Bitmap getBitmap(){
-        return imageBitmap;
-    }
-
-    /**
      * A method that acts as a Date editor
      * Used by users to set the current date
      * @param view This is a view for a button
      */
-    public static void showCalendar(final Button view){
+    public static void showDate(final Button view){
         Calendar c = Calendar.getInstance();
         String currentDateString = Mood.DATE_FORMATTER.format(c.getTime());
         view.setText(currentDateString);
@@ -117,20 +101,24 @@ public class MoodEditor {
      * A method that acts as an emotion state editor
      * Used by users to select their current emotional state
      * @param myActivity This is the class that calls on this method
-     * @param spinner_emotion This is the spinner for choosing an emotion state
+     * @param emotionSpinner This is the spinner for choosing an emotion state
      * @param emotionAdapter This is the adapter for emotion states
      */
-    public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner spinner_emotion,
-                                         MoodStateAdapter emotionAdapter) {
-        spinner_emotion.setAdapter(emotionAdapter);
-        spinner_emotion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner emotionSpinner,
+                                         MoodStateAdapter emotionAdapter, String moodEmotion) {
+        emotionSpinner.setAdapter(emotionAdapter);
+        // initial selection for emotion
+        if(moodEmotion != null) {
+            emotionSpinner.setSelection(emotionAdapter.getPosition(moodEmotion));
+        }
+        emotionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
                 // first item disabled
                 if(i > 0) {
-                    String selectionEmotion = EMOTION_STATE_LIST[i];
-                    ((MoodInterface)myActivity).setMoodEmotion(selectionEmotion);
-                    spinner_emotion.setBackgroundColor(
+                    String selectedEmotion = EMOTION_STATE_LIST[i];
+                    ((MoodInterface)myActivity).setMoodEmotion(selectedEmotion);
+                    emotionSpinner.setBackgroundColor(
                             myActivity.getResources().getColor(EMOTION_COLOR_LIST[i]));
                 }
             }
@@ -142,10 +130,11 @@ public class MoodEditor {
     }
 
     /**
-     * A method that shows the situation options
+     * This return ArrayAdapter for setting up a situation editor
+     * Used by users to selects their current situation
      * @param myActivity The class that calls in this method
      * @param spinnerLayoutId The view that contains the situation options
-     * @return Returns the adapter
+     * @return situationAdapter
      */
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
                                                            int spinnerLayoutId) {
@@ -164,7 +153,7 @@ public class MoodEditor {
                 return view;
             }
         };
-        situationAdapter.setDropDownViewResource(R.layout.spinner_situation);
+        situationAdapter.setDropDownViewResource(spinnerLayoutId);
         return situationAdapter;
     }
 
@@ -172,13 +161,17 @@ public class MoodEditor {
     /**
      * This is a method that allows users to choose a situation from the adapter
      * @param myActivity The class that calls in this method
-     * @param spinner_situation The spinner view
+     * @param situationSpinner The spinner view
      * @param situationAdapter The situation adapter
      */
-    public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner spinner_situation,
-                                           ArrayAdapter<String> situationAdapter) {
-        spinner_situation.setAdapter(situationAdapter);
-        spinner_situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner situationSpinner,
+                                           ArrayAdapter<String> situationAdapter, String moodSituation) {
+        situationSpinner.setAdapter(situationAdapter);
+        // initial selection for situation
+        if(moodSituation != null) {
+            situationSpinner.setSelection(situationAdapter.getPosition(moodSituation));
+        }
+        situationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
                 // first item disabled
@@ -192,6 +185,14 @@ public class MoodEditor {
                 // Do nothing
             }
         });
+    }
+
+    /**
+     * A method that returns a bitmap that was set in the imageView
+     * @return imageBitmap
+     */
+    public static Bitmap getBitmap(){
+        return imageBitmap;
     }
 
     /**
@@ -214,7 +215,7 @@ public class MoodEditor {
                             case 0:
                                 Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
-
+                                    Log.i(TAG, "Camera intent successful");
                                     myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
                                 }
                                 break;
@@ -222,6 +223,7 @@ public class MoodEditor {
                                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                                 photoPickerIntent.setType("image/*");
                                 photoPickerIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*"});
+                                Log.i(TAG, "Gallery intent successful");
                                 myActivity.startActivityForResult(photoPickerIntent, GET_IMAGE);
                                 break;
                         }
@@ -276,73 +278,27 @@ public class MoodEditor {
         }
     }
 
-    /**
-     * This method is the location editor
-     * @param myActivity The class that calls in this method
-     * @return
-     */
-    public static LocationManager getLocationManager(AppCompatActivity myActivity) {
-        return (LocationManager) myActivity.getSystemService(Context.LOCATION_SERVICE);
-    }
 
     /**
-     * The method that sets the mood location
-     * @param myActivity The class that calls in this method
-     * @return
+     * A method that acts as a location editor
+     * Used by users to get their current location
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     * @param myActivity
      */
-    public static LocationListener getLocationListener(final AppCompatActivity myActivity) {
-        return new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
+    public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data,
+            final AppCompatActivity myActivity) {
+        if(requestCode == LocationPickerActivity.REQUEST_EDIT_LOCATION){
+            if(resultCode == LocationPickerActivity.EDIT_LOCATION_OK){
+                double lat = data.getDoubleExtra("location_lat", 0);
+                double lon = data.getDoubleExtra("location_lon", 0);
+
+                Location location = new Location("");
+                location.setLatitude(lat);
+                location.setLongitude(lon);
                 ((MoodInterface)myActivity).setMoodLocation(location);
-
-
-//                //redundant
-//                double mood_lat = location.getLatitude();
-//                double mood_lon = location.getLongitude();
-//
-//                Toast.makeText(myActivity.getApplicationContext(),
-//                        mood_lat + "   " + mood_lon, Toast.LENGTH_SHORT)
-//                        .show();
             }
-
-            @Override
-            public void onStatusChanged(String s, int i, Bundle bundle) {} // not implemented
-
-            @Override
-            public void onProviderEnabled(String s) {} // not implemented
-
-            @Override
-            public void onProviderDisabled(String s) {} // not implemented
-        };
-    }
-
-
-    /**
-     * The method that gets the result for location
-     * @param myActivity The class that calls in this method
-     * @param locationManager
-     * @param locationListener
-     */
-    public static void getLocationResult(AppCompatActivity myActivity, LocationManager locationManager,
-                                         LocationListener locationListener) {
-        // ask user for permission to get location
-        if (ActivityCompat.checkSelfPermission(myActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(myActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(myActivity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-            return;
-        } else { // permission granted
-            // set criteria for accuracy of location provider
-            final Criteria criteria = new Criteria();
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
-
-            // set to null because we are required to supply looper but not going to use it
-            final Looper looper = null;
-
-            locationManager.requestSingleUpdate(criteria, locationListener, looper);
         }
     }
 }
