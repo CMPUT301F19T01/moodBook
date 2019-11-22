@@ -24,11 +24,11 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
-public class FriendMoodFragment extends PageFragment {
+public class FriendMoodFragment extends PageFragment implements DBFriend.FriendRecentMoodListListener{
 
     // Friend Mood
     private ListView friendMoodListView;
-    private FriendMoodListAdapter friendMoodAdapter;
+    private FriendMoodListAdapter friendMoodListAdapter;
 
     // connect to DB
     private DBFriend friendMoodDB;
@@ -69,7 +69,7 @@ public class FriendMoodFragment extends PageFragment {
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
         friendMoodDB = new DBFriend(mAuth, getContext(), TAG);
-        friendMoodDB.setFriendRecentMoodListener(friendMoodAdapter);
+        friendMoodDB.setFriendRecentMoodListener(this);
 
         return root;
     }
@@ -79,10 +79,9 @@ public class FriendMoodFragment extends PageFragment {
      * @param itemClickListener
      */
     private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {
-        friendMoodAdapter = new FriendMoodListAdapter(getContext(), new ArrayList<FriendMood>());
-        friendMoodListView.setAdapter(friendMoodAdapter);
+        friendMoodListAdapter = new FriendMoodListAdapter(getContext(), new ArrayList<FriendMood>());
+        friendMoodListView.setAdapter(friendMoodListAdapter);
         friendMoodListView.setOnItemClickListener(itemClickListener);
-        testAdd();
     }
 
     /**
@@ -103,6 +102,7 @@ public class FriendMoodFragment extends PageFragment {
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
     }
 
+    @Deprecated
     private void testAdd() {
         String[] username = {"a", "b", "c", "d"};
         for(int i = 0; i < username.length; i++) {
@@ -110,10 +110,20 @@ public class FriendMoodFragment extends PageFragment {
                 Mood mood = new Mood("2019-11-1"+i+" 08:00", Mood.Emotion.getNames()[i%4], username[i],
                         null, null, null);
                 MoodbookUser user = new MoodbookUser(username[i], username[i] + "@test.com");
-                friendMoodAdapter.add(new FriendMood(user, mood));
+                friendMoodListAdapter.add(new FriendMood(user, mood));
             } catch (MoodInvalidInputException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void beforeGettingFriendMoodList() {
+        friendMoodListAdapter.clear();
+    }
+
+    @Override
+    public void onGettingFriendMood(FriendMood item) {
+        friendMoodListAdapter.add(item);
     }
 }
