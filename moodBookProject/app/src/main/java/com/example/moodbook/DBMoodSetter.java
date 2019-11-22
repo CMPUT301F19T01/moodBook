@@ -16,6 +16,7 @@ import com.example.moodbook.ui.friendMood.FriendMood;
 import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
 import com.example.moodbook.ui.home.MoodEditor;
 import com.example.moodbook.ui.home.MoodListAdapter;
+import com.example.moodbook.ui.myFriends.FriendListAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,8 +62,9 @@ public class DBMoodSetter {
      *
      * @param mAuth   This is the FirebaseAuth instance for each logged in user
      * @param context This is a handle to get the data and resources that the app needs while it runs
+     * @param TAG     This is an optional string used for printing log messages
      */
-    public DBMoodSetter(FirebaseAuth mAuth, Context context) {
+    public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG) {
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
         this.storage = FirebaseStorage.getInstance();
@@ -71,44 +73,27 @@ public class DBMoodSetter {
         this.context = context;
         this.intReference = db.collection("int");
         this.photoReference = storage.getReferenceFromUrl("gs://moodbook-60da3.appspot.com");
-        this.TAG = DBMoodSetter.class.getSimpleName();
+        this.TAG = TAG;
     }
-
 
     /**
      * This another instance of the DBMoodSetter Constructor that used to get updated mood data from user's mood collection in the database
      *
      * @param mAuth   This is the FirebaseAuth instance for each logged in user
      * @param context This is a handle to get the data and resources that the app needs while it runs
-     * @param TAG     This is an optional string used for printing log messages
-     */
-    public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG) {
-        this(mAuth, context);
-        this.TAG = TAG;
-    }
-
-    /**
-     * This is a constructor used by Mood History to get updated mood data from user's mood collection in the database
      *
-     * @param mAuth               This is the FirebaseAuth instance for each logged in user
-     * @param context             This is a handle to get the data and resources that the app needs while it runs
-     * @param moodHistoryListener This is a listener from Mood History
      */
-    public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener) {
-        this(mAuth, context);
-        userReference.document(uid).collection("MOODS")
-                .addSnapshotListener(moodHistoryListener);
+    public DBMoodSetter(FirebaseAuth mAuth, Context context) {
+        this(mAuth, context, DBMoodSetter.class.getSimpleName());
     }
 
     /**
-     * @param mAuth               This is the FirebaseAuth instance for each logged in user
-     * @param context             This is a handle to get the data and resources that the app needs while it runs
-     * @param moodHistoryListener This is a listener from Mood History
-     * @param TAG                 This is an optional string used for printing log messages
+     * This is used by Mood History
+     * @param moodListAdapter
      */
-    public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener, String TAG) {
-        this(mAuth, context, moodHistoryListener);
-        this.TAG = TAG;
+    public void setMoodListListener(MoodListAdapter moodListAdapter) {
+        this.userReference.document(uid).collection("FRIENDS")
+                .addSnapshotListener(getMoodHistoryListener(moodListAdapter));
     }
 
     /**
