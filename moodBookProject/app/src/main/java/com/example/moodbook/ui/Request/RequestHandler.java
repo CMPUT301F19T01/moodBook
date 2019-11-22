@@ -1,18 +1,12 @@
 package com.example.moodbook.ui.request;
 
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.moodbook.R;
 import com.example.moodbook.ui.myRequests.RequestUser;
 import com.example.moodbook.ui.myRequests.RequestsAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,12 +22,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class handles interaction with the db to send requests
@@ -135,8 +125,11 @@ public class RequestHandler {
      */
     private void showStatusMessage(String message) {
         Log.w(TAG, message);
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        if(context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        }
     }
+
     public void addFriend(final RequestUser acceptFriend, final String myUsername){
 
         final String username = myUsername;

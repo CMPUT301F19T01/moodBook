@@ -178,6 +178,8 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         final MenuItem searchItem = menu.findItem(R.id.mood_history_action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        searchView.setQueryHint("Search Emotions");
+        searchView.setIconifiedByDefault(false);    // expand searchView by default
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
