@@ -12,8 +12,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.moodbook.DBFriend;
 import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.EditMoodActivity;
+import com.example.moodbook.MoodbookUser;
+import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodInvalidInputException;
 import com.example.moodbook.PageFragment;
@@ -29,7 +31,7 @@ public class FriendMoodFragment extends PageFragment {
     private FriendMoodListAdapter friendMoodAdapter;
 
     // connect to DB
-    private DBMoodSetter moodDB;
+    private DBFriend friendMoodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = FriendMoodFragment.class.getSimpleName();
 
@@ -65,9 +67,9 @@ public class FriendMoodFragment extends PageFragment {
         });
 
         // initialize DB connector
-        /*mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getContext(),
-                DBMoodSetter.getFriendMoodListener(friendMoodAdapter, mAuth), TAG);*/
+        mAuth = FirebaseAuth.getInstance();
+        friendMoodDB = new DBFriend(mAuth, getContext(), TAG);
+        friendMoodDB.setFriendRecentMoodListener(friendMoodAdapter);
 
         return root;
     }
@@ -107,7 +109,8 @@ public class FriendMoodFragment extends PageFragment {
             try {
                 Mood mood = new Mood("2019-11-1"+i+" 08:00", Mood.Emotion.getNames()[i%4], username[i],
                         null, null, null);
-                friendMoodAdapter.add(new FriendMood(username[i], username[i] + "@test.com", mood));
+                MoodbookUser user = new MoodbookUser(username[i], username[i] + "@test.com");
+                friendMoodAdapter.add(new FriendMood(user, mood));
             } catch (MoodInvalidInputException e) {
                 e.printStackTrace();
             }

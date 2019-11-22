@@ -1,4 +1,4 @@
-package com.example.moodbook;
+package com.example.moodbook.ui.home;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.moodbook.R;
 
 /**
  * This ArrayAdapter is used by CreateMoodActivity & EditMoodActivity for the spinner of mood emotional states

@@ -1,9 +1,13 @@
-package com.example.moodbook;
+package com.example.moodbook.ui.home;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.moodbook.DBMoodSetter;
+import com.example.moodbook.Mood;
+import com.example.moodbook.R;
 
 import java.util.HashMap;
 

@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.example.moodbook.ui.home.CreateMoodActivity;
+
 @Deprecated
 public class SelectMoodStateFragment extends DialogFragment {
 
