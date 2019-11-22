@@ -81,9 +81,7 @@ public class DBFriend {
     public void setFriendRecentMoodListener(FriendRecentMoodListListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("FRIENDS")
-                .addSnapshotListener(
-                        getFriendRecentMoodEventListener()
-                );
+                .addSnapshotListener(getFriendRecentMoodEventListener());
     }
 
     /**

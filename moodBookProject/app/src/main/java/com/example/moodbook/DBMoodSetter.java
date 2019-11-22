@@ -254,9 +254,23 @@ public class DBMoodSetter {
      * This removes a Mood object from the database using its docID
      * @param moodID
      *   This is a String object of mood docID on the database
-     *
      */
-    public void removeMood (final String moodID){
+    public void removeMood (String moodID){
+        removeMood(moodID, false, null);
+    }
+
+    /**
+     * This removes a Mood object from the database using its docID
+     * and updates the most recent moodID for user
+     * @param moodID
+     *   This is a String object of mood docID on the database
+     */
+    public void removeMood (String moodID, String newRecentMoodID){
+        removeMood(moodID, true, newRecentMoodID);
+    }
+
+    private void removeMood(final String moodID, final boolean updateRecentMoodID,
+                            final String newRecentMoodID) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
         // remove selected city
         moodReference.document(moodID).delete()
@@ -264,6 +278,10 @@ public class DBMoodSetter {
                     @Override
                     public void onSuccess(Void aVoid) {
                         showStatusMessage("Deleted successfully: " + moodID);
+                        // update recent moodID if deleted mood was the most recent mood
+                        if(updateRecentMoodID){
+                            DBFriend.setRecentMoodID(db, uid, newRecentMoodID);
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

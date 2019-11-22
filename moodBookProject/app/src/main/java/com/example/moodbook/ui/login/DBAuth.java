@@ -118,7 +118,7 @@ public class DBAuth {
         HashMap<String, Object> data = new HashMap<>();
         data.put("email", email);
         data.put("username", username);
-        data.put("moodCount", 0);
+        data.put("recent_moodID", null);
         collectionReference
                 .document(uid)
                 .set(data)

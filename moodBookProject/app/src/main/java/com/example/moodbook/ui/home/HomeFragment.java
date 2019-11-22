@@ -134,8 +134,15 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
             final Mood deletedMood = moodAdapter.getItem(deletedIndex);
 
             // remove the item from recycler view
-            //moodAdapter.removeItem(deletedIndex);
-            moodDB.removeMood(deletedMood.getDocId());
+            // if removed item is the most recent, update the recent moodID
+            if(deletedIndex == 0){
+                String newRecentMoodID = (moodAdapter.getItemCount() > 1) ?
+                        moodAdapter.getItem(1).getDocId() : null;
+                moodDB.removeMood(deletedMood.getDocId(), newRecentMoodID);
+            }
+            else{
+                moodDB.removeMood(deletedMood.getDocId());
+            }
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
@@ -146,7 +153,6 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                 @Override
                 public void onClick(View view) {
                     // undo is selected, restore the deleted item
-                    //moodAdapter.restoreItem(deletedItem, deletedIndex);
                     moodDB.addMood(deletedMood);
                 }
             });
