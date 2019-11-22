@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.Chat;
+package com.example.moodbook.ui.chat;
 
 import android.os.Bundle;
 
@@ -13,7 +13,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
 
 public class userFragment extends PageFragment {
     private ViewAdapter viewAdapter;

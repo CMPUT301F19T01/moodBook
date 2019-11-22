@@ -7,11 +7,9 @@ package com.example.moodbook;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -26,21 +24,18 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 
-import com.example.moodbook.ui.Chat.ViewAdapter;
-import com.example.moodbook.ui.request.RequestFragment;
+import com.example.moodbook.ui.Request.RequestFragment;
+import com.example.moodbook.ui.chat.ChatFragment;
+import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -92,9 +87,9 @@ public class MainActivity extends AppCompatActivity   {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.currentEmail, R.id.currentEmail,
-
-                R.id.nav_myMood, R.id.nav_chat, R.id.nav_FriendMood,
-                R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
+                R.id.nav_myMood, R.id.nav_chat, R.id.nav_friendMood,
+                R.id.nav_request, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap,
+                R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -147,24 +142,9 @@ public class MainActivity extends AppCompatActivity   {
         Fragment fragment;
         Class fragmentClass;
         switch(menuItem.getItemId()){
-
-
-//            case R.id.nav_FriendMood:
-//                fragmentClass = friendMoodFragment.class;
-//                toolbar.setTitle("Friend Mood History");
-//                break;
-            case R.id.nav_chat:
-                fragmentClass = ViewAdapter.class;
-                toolbar.setTitle("username");
-                break;
-            case R.id.nav_addFriends:
-                fragmentClass = RequestFragment.class;
-                toolbar.setTitle("Add Friends");
-                break;
-            case R.id.nav_myRequests:
-                fragmentClass = myRequestsFragment.class;
-                toolbar.setTitle("Friend Requests");
-
+            case R.id.nav_friendMood:
+                fragmentClass = FriendMoodFragment.class;
+                toolbar.setTitle("Friend Moods");
                 break;
             case R.id.nav_myMoodMap:
                 fragmentClass = MyMoodMapFragment.class;
@@ -173,6 +153,10 @@ public class MainActivity extends AppCompatActivity   {
             case R.id.nav_myFriendMoodMap:
                 fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
+                break;
+            case R.id.nav_chat:
+                fragmentClass = ChatFragment.class;
+                toolbar.setTitle("Chat");
                 break;
             case R.id.nav_myFriends:
                 fragmentClass = MyFriendsFragment.class;
@@ -193,7 +177,6 @@ public class MainActivity extends AppCompatActivity   {
             default:
                 fragmentClass = HomeFragment.class;
                 toolbar.setTitle("Mood History");
-
         }
         try {
             fragment = (Fragment) fragmentClass.newInstance();

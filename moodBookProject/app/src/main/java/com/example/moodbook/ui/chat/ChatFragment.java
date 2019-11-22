@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.Chat;
+package com.example.moodbook.ui.chat;
 
 import android.os.Bundle;
 
@@ -13,9 +13,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
 
-public class chatFragment extends PageFragment {
+public class ChatFragment extends PageFragment {
     private ViewAdapter viewAdapter;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -24,9 +23,10 @@ public class chatFragment extends PageFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_chat, container, false);
+        // get root view from PageFragment
+        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_chat);
 
-
+        return root;
     }
 
 

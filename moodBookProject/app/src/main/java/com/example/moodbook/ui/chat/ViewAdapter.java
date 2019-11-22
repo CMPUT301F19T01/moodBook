@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.Chat;
+package com.example.moodbook.ui.chat;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,8 +15,6 @@ import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 public class ViewAdapter extends BaseAdapter {
