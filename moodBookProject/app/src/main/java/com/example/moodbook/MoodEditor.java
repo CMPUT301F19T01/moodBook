@@ -9,7 +9,9 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -29,8 +31,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
 
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -58,6 +65,7 @@ public class MoodEditor {
     private static final int REQUEST_IMAGE = 101;
     private static final int GET_IMAGE = 102;
     private static Bitmap imageBitmap;
+    private static Uri capturedImageUri;
 
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
             new String[]{"Pick mood state ..."}, Mood.Emotion.getNames(), String.class);
@@ -213,7 +221,12 @@ public class MoodEditor {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                                StrictMode.setVmPolicy(builder.build());
+                                File file = new File(Environment.getExternalStorageDirectory(), "img.jpg");
+                                capturedImageUri = Uri.fromFile(file);
+                                Intent imageIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
                                 if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
                                     Log.i(TAG, "Camera intent successful");
                                     myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
@@ -232,6 +245,7 @@ public class MoodEditor {
         pictureDialog.show();
     }
 
+
     /**
      * This is a method that gets the photo that was taken/chosen and let the image be shown on the screen
      * @param requestCode This is a result code
@@ -242,14 +256,27 @@ public class MoodEditor {
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
                                ImageView image_view_photo, final AppCompatActivity myActivity) {
+
+
         if (requestCode == REQUEST_IMAGE
                 && resultCode == AppCompatActivity.RESULT_OK){
+
+            Uri uri = null;
             if (data != null) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                if (imageBitmap!= null){
+                uri = data.getData();
+                try {
+                    ParcelFileDescriptor parcelFileDescriptor =
+                            myActivity.getContentResolver().openFileDescriptor(uri, "r");
+                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                    imageBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+                    parcelFileDescriptor.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //send to DBMoodSetter
+                if (imageBitmap!=null){
                     ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
-                    image_view_photo.setImageBitmap(imageBitmap); //after getting bitmap, set to imageView
+                    image_view_photo.setImageBitmap(imageBitmap);
                 }
             }
         }
