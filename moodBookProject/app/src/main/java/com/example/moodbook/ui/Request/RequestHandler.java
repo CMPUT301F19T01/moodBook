@@ -82,7 +82,7 @@ public class RequestHandler {
                         data.put("uid", uid);
                         collectionReference.document(document.getString("uid")).collection("REQUESTS").document(username).set(data); // adding the request to the addUser's REQUEST collection
                     } else {
-                        Log.d("TESTINGG", "no such doc");
+                        Log.d("TESTING", "no such doc");
                     }
                 } else {
                     Log.d("TESTING", "get failed with ", task.getException());
