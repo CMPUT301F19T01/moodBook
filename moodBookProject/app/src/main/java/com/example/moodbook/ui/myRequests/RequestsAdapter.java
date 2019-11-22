@@ -68,13 +68,14 @@ public class RequestsAdapter extends BaseAdapter {
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,
-                        "Accept",
-                        Toast.LENGTH_LONG).show();
+
                     // When Accepts a friend requests and username is added in requestee's friend mood list
                     requestHandler.addFriend(frienduser, username);
                     //remove request once accepted
                     requestHandler.removeRequest(frienduser.getUsername());
+                Toast.makeText(context,
+                        "Accepted Request",
+                        Toast.LENGTH_LONG).show();
 
             }
         });
@@ -82,12 +83,10 @@ public class RequestsAdapter extends BaseAdapter {
         declineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,
-                        "Decline",
-                        Toast.LENGTH_LONG).show();
+                //Decline Request
                 requestHandler.removeRequest(frienduser.getUsername());
                 Toast.makeText(context,
-                        "deleted",
+                        "Declined Reequest",
                         Toast.LENGTH_LONG).show();
             }
         });
