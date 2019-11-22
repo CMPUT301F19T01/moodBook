@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
@@ -34,6 +35,7 @@ import com.google.common.primitives.Ints;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -66,6 +68,7 @@ public class MoodEditor {
     private static final int GET_IMAGE = 102;
     private static Bitmap imageBitmap;
     private static Uri capturedImageUri;
+    private static File file;
 
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
             new String[]{"Pick mood state ..."}, Mood.Emotion.getNames(), String.class);
@@ -221,12 +224,13 @@ public class MoodEditor {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
-                                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                                StrictMode.setVmPolicy(builder.build());
-                                File file = new File(Environment.getExternalStorageDirectory(), "img.jpg");
-                                capturedImageUri = Uri.fromFile(file);
-                                Intent imageIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                                imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
+//                                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+//                                StrictMode.setVmPolicy(builder.build());
+
+                                Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
+                                Uri uri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", file);
+                                imageIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
                                 if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
                                     Log.i(TAG, "Camera intent successful");
                                     myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
@@ -245,6 +249,35 @@ public class MoodEditor {
         pictureDialog.show();
     }
 
+//    public static Bitmap decodeSampledBitmapFromFile(String path,
+//                                                     int reqWidth, int reqHeight) {
+//        // First decode with inJustDecodeBounds=true to check dimensions
+//        final BitmapFactory.Options options = new BitmapFactory.Options();
+//        //Query bitmap without allocating memory
+//        options.inJustDecodeBounds = true;
+//        //decode file from path
+//        BitmapFactory.decodeFile(path, options);
+//        // Calculate inSampleSize
+//        // Raw height and width of image
+//        final int height = options.outHeight;
+//        final int width = options.outWidth;
+//        //decode according to configuration or according best match
+//        options.inPreferredConfig = Bitmap.Config.RGB_565;
+//        int inSampleSize = 1;
+//        if (height > reqHeight) {
+//            inSampleSize = Math.round((float)height / (float)reqHeight);
+//        }
+//        int expectedWidth = width / inSampleSize;
+//        if (expectedWidth > reqWidth) {
+//            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
+//            inSampleSize = Math.round((float)width / (float)reqWidth);
+//        }
+//        //if value is greater than 1,sub sample the original image
+//        options.inSampleSize = inSampleSize;
+//        // Decode bitmap with inSampleSize set
+//        options.inJustDecodeBounds = false;
+//        return BitmapFactory.decodeFile(path, options);
+//    }
 
     /**
      * This is a method that gets the photo that was taken/chosen and let the image be shown on the screen
@@ -255,30 +288,53 @@ public class MoodEditor {
      * @param myActivity The class that calls in this method
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
-                               ImageView image_view_photo, final AppCompatActivity myActivity) {
+                                      ImageView image_view_photo, final AppCompatActivity myActivity) {
 
 
         if (requestCode == REQUEST_IMAGE
                 && resultCode == AppCompatActivity.RESULT_OK){
+            //File object of camera image
+            Log.i(TAG, "result code successful");
+            File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
 
-            Uri uri = null;
-            if (data != null) {
-                uri = data.getData();
-                try {
-                    ParcelFileDescriptor parcelFileDescriptor =
-                            myActivity.getContentResolver().openFileDescriptor(uri, "r");
-                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                    imageBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-                    parcelFileDescriptor.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //send to DBMoodSetter
-                if (imageBitmap!=null){
-                    ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
-                    image_view_photo.setImageBitmap(imageBitmap);
-                }
+            //Uri of camera image
+            Uri uri = FileProvider.getUriForFile(myActivity.getApplicationContext(), myActivity.getApplicationContext().getPackageName() + ".provider", file);
+            try {
+                InputStream imageStream = myActivity.getContentResolver().openInputStream(uri);
+                imageBitmap = BitmapFactory.decodeStream(imageStream);
+            }  catch (IOException e) {
+                   e.printStackTrace();
             }
+
+//            data.getExtras().get("data");
+//            File file = new File(Environment.getExternalStorageDirectory()+File.separator + "img.jpg");
+//            //get bitmap from path with size of
+//            image_view_photo.setImageBitmap(decodeSampledBitmapFromFile(file.getAbsolutePath(), 600, 450));
+            ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
+            image_view_photo.setImageBitmap(imageBitmap);
+
+
+//            Uri uri = null;
+//            if (data != null) {
+//                uri = data.getData();
+//                image_view_photo.setImageURI(uri);
+//                try {
+//                    InputStream imageStream = myActivity.getContentResolver().openInputStream(uri);
+//                    imageBitmap = BitmapFactory.decodeStream(imageStream);
+//                    assert imageStream != null;
+//                    imageStream.close();
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                //send to DBMoodSetter
+//                if (imageBitmap != null) {
+//                    ((MoodInterface) myActivity).setMoodReasonPhoto(imageBitmap);
+//                    image_view_photo.setImageBitmap(imageBitmap);
+//
+//                }
+//            }
         }
         else if (requestCode == GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK) {
             Uri uri = null;
