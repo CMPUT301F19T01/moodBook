@@ -27,7 +27,7 @@ import androidx.navigation.ui.NavigationUI;
 
 
 import com.example.moodbook.ui.Chat.ViewAdapter;
-import com.example.moodbook.ui.request.RequestFragment;
+import com.example.moodbook.ui.Request.RequestFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
@@ -181,10 +181,6 @@ public class MainActivity extends AppCompatActivity   {
             case R.id.nav_request:
                 fragmentClass = RequestFragment.class;
                 toolbar.setTitle("Add Friends");
-                break;
-            case R.id.nav_myRequests:
-                fragmentClass = myRequestsFragment.class;
-                toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_logout:
                 fragmentClass = null;

@@ -50,4 +50,9 @@
         android:name="com.example.moodbook.ui.login.LoginActivity"
         android:label="Log Out"
         tools:layout="@layout/fragment_logout" />
+    <fragment
+        android:id="@+id/nav_addFriends"
+        android:name="com.example.moodbook.ui.Request.RequestFragment"
+        android:label="Add Friends"
+        tools:layout="@layout/fragment_myrequests" />
 </navigation>
