@@ -3,7 +3,12 @@ package com.example.moodbook;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +29,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
     // time
     private Button add_time_button;
     private String mood_time;
+    private boolean isImageFitToScreen;
 
 
     /**
@@ -48,6 +54,25 @@ public class CreateMoodActivity extends MoodEditorActivity {
         // reason photo
         super.reason_photo_button = findViewById(R.id.create_reason_photo_button);
         super.reason_photo_imageView = findViewById(R.id.create_reason_photo_imageView);
+
+        reason_photo_imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isImageFitToScreen) {
+                    isImageFitToScreen=false;
+                    reason_photo_imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    reason_photo_imageView.setAdjustViewBounds(true);
+                }else{
+                    isImageFitToScreen=true;
+                    reason_photo_imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    reason_photo_imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+//                    reason_photo_imageView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+//                    reason_photo_imageView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    reason_photo_imageView.setAdjustViewBounds(false);
+                  //  reason_photo_imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                }
+            }
+        });
         // situation
         super.situation_spinner = findViewById(R.id.create_situation_spinner);
         // location

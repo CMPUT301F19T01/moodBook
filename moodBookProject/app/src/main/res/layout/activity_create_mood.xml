@@ -142,6 +142,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
+                android:adjustViewBounds="true"
                 android:text="@string/pick_mood_photo"></Button>
 
             <ImageView

@@ -1,5 +1,6 @@
 package com.example.moodbook;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -67,8 +68,6 @@ public class MoodEditor {
     private static final int REQUEST_IMAGE = 101;
     private static final int GET_IMAGE = 102;
     private static Bitmap imageBitmap;
-    private static Uri capturedImageUri;
-    private static File file;
 
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
             new String[]{"Pick mood state ..."}, Mood.Emotion.getNames(), String.class);
@@ -206,6 +205,7 @@ public class MoodEditor {
         return imageBitmap;
     }
 
+
     /**
      * This is a method that allows the users to add an image to their mood
      * Involves two options, Camera and Gallery, and will take the users to a new activity to choose/take a picture
@@ -226,15 +226,17 @@ public class MoodEditor {
                             case 0:
 //                                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
 //                                StrictMode.setVmPolicy(builder.build());
-
                                 Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
-                                Uri uri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", file);
+                                File dir = myActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                            //    File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
+                                Uri uri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", new File(dir, "MyPhoto.img"));
                                 imageIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-                                if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
-                                    Log.i(TAG, "Camera intent successful");
-                                    myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
-                                }
+                                imageIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//                                if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
+//                                    Log.i(TAG, "Camera intent successful");
+//                                    myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
+//                                }
+                                myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
                                 break;
                             case 1:
                                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
@@ -289,52 +291,30 @@ public class MoodEditor {
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
                                       ImageView image_view_photo, final AppCompatActivity myActivity) {
-
-
-        if (requestCode == REQUEST_IMAGE
-                && resultCode == AppCompatActivity.RESULT_OK){
-            //File object of camera image
+        if (requestCode == REQUEST_IMAGE && resultCode == AppCompatActivity.RESULT_OK){
             Log.i(TAG, "result code successful");
-            File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
+            //File object of camera image
+            File dir = myActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            //    File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
+            Uri photoUri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", new File(dir, "MyPhoto.img"));
+            if (photoUri != null) {
+                try {
+                    InputStream imageStream = myActivity.getContentResolver().openInputStream(photoUri);
+                    imageBitmap = BitmapFactory.decodeStream(imageStream);
+                    assert imageStream != null;
+                    imageStream.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //send to DBMoodSetter
+                if (imageBitmap != null) {
+                    ((MoodInterface) myActivity).setMoodReasonPhoto(imageBitmap);
+                    image_view_photo.setImageBitmap(imageBitmap);
 
-            //Uri of camera image
-            Uri uri = FileProvider.getUriForFile(myActivity.getApplicationContext(), myActivity.getApplicationContext().getPackageName() + ".provider", file);
-            try {
-                InputStream imageStream = myActivity.getContentResolver().openInputStream(uri);
-                imageBitmap = BitmapFactory.decodeStream(imageStream);
-            }  catch (IOException e) {
-                   e.printStackTrace();
+                }
             }
-
-//            data.getExtras().get("data");
-//            File file = new File(Environment.getExternalStorageDirectory()+File.separator + "img.jpg");
-//            //get bitmap from path with size of
-//            image_view_photo.setImageBitmap(decodeSampledBitmapFromFile(file.getAbsolutePath(), 600, 450));
-            ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
-            image_view_photo.setImageBitmap(imageBitmap);
-
-
-//            Uri uri = null;
-//            if (data != null) {
-//                uri = data.getData();
-//                image_view_photo.setImageURI(uri);
-//                try {
-//                    InputStream imageStream = myActivity.getContentResolver().openInputStream(uri);
-//                    imageBitmap = BitmapFactory.decodeStream(imageStream);
-//                    assert imageStream != null;
-//                    imageStream.close();
-//                } catch (FileNotFoundException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                //send to DBMoodSetter
-//                if (imageBitmap != null) {
-//                    ((MoodInterface) myActivity).setMoodReasonPhoto(imageBitmap);
-//                    image_view_photo.setImageBitmap(imageBitmap);
-//
-//                }
-//            }
         }
         else if (requestCode == GET_IMAGE && resultCode == AppCompatActivity.RESULT_OK) {
             Uri uri = null;
