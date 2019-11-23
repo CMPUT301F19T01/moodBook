@@ -28,6 +28,11 @@
         android:label="My Requests"
         tools:layout="@layout/fragment_request" />
     <fragment
+        android:id="@+id/nav_Followers"
+        android:name="com.example.moodbook.ui.home.HomeFragment"
+        android:label="My Followers"
+        tools:layout="@layout/fragment_followers" />
+    <fragment
         android:id="@+id/nav_myMoodMap"
         android:name="com.example.moodbook.ui.myMoodMap.MyMoodMapFragment"
         android:label="My Mood Map"

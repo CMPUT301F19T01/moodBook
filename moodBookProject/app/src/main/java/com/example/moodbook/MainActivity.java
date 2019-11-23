@@ -24,6 +24,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.moodbook.ui.Request.RequestFragment;
+import com.example.moodbook.ui.followers.followersFragment;
 import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 
 import com.example.moodbook.ui.home.HomeFragment;
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity   {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.currentEmail, R.id.currentEmail,
                 R.id.nav_myMood,R.id.nav_FriendMood,
-                R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
+                R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_Followers, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -150,6 +151,10 @@ public class MainActivity extends AppCompatActivity   {
                 break;
             case R.id.nav_myRequests:
                 fragmentClass = myRequestsFragment.class;
+                toolbar.setTitle("Friend Requests");
+                break;
+            case R.id.nav_Followers:
+                fragmentClass = followersFragment.class;
                 toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_myMoodMap:
