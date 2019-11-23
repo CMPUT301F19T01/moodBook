@@ -66,7 +66,9 @@ public class MainActivity extends AppCompatActivity   {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            name = user.getDisplayName();
+            while (name == null){
+                name = user.getDisplayName();
+            }
             email = user.getEmail();
 //            Uri photoUrl = user.getPhotoUrl();
 
