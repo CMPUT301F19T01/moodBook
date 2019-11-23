@@ -98,10 +98,10 @@ public class MainActivity extends AppCompatActivity  {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.currentEmail, R.id.currentEmail,
+                R.id.currentEmail, R.id.currentEmail,R.id.nav_profile,
                 R.id.nav_myMood,R.id.nav_friendMood,
                 R.id.nav_myRequests, R.id.nav_Followers, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap,
-                R.id.nav_myMood, R.id.nav_chat, R.id.nav_friendMood,
+                R.id.nav_chat,
                 R.id.nav_request, R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();
@@ -206,6 +206,7 @@ public class MainActivity extends AppCompatActivity  {
             case R.id.nav_myRequests:
                 fragmentClass = myRequestsFragment.class;
                 toolbar.setTitle("Friend Requests");
+                break;
             case R.id.nav_profile:
                 fragmentClass =null;
                 Intent intent = new Intent(this, ProfileActivity.class);
