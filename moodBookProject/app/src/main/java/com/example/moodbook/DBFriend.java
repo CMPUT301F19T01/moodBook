@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.moodbook.ui.followers.followersAdapter;
 import com.example.moodbook.ui.friendMood.FriendMood;
 import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
@@ -75,6 +76,15 @@ public class DBFriend {
     }
 
     /**
+     * This is used by followers fragment
+     * @param followersListAdapter
+     */
+    public void setFollowersListListener(followersAdapter followersListAdapter) {
+        this.userReference.document(uid).collection("FOLLOWERS")
+                .addSnapshotListener(getFollowerEventListener(followersListAdapter));
+    }
+
+    /**
      * This is used by FriendMood and FriendMoodMap
      * @param listListener
      */
@@ -92,6 +102,30 @@ public class DBFriend {
         currentUserDoc.update("recent_moodID", recentMoodID);
     }
 
+    /**
+     * This EventListener is for MyFriends to get all the user's friends (username, uid) in the database
+     * from the user's friend collection
+     */
+    private EventListener<QuerySnapshot> getFollowerEventListener (final followersAdapter followersListAdapter){
+        return new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
+                if (followersListAdapter != null) {
+                    // clear the old list
+                    followersListAdapter.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        // ignore null item
+                        if (doc.getId().equals("null")) continue;
+                        // Adding friend from FireStore
+                        if (doc.getData() != null && doc.getData().get("uid") != null) {
+                            MoodbookUser friendUser = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
+                            followersListAdapter.add(friendUser);
+                        }
+                    }
+                }
+            }
+        };
+    }
 
     /**
      * This EventListener is for MyFriends to get all the user's friends (username, uid) in the database

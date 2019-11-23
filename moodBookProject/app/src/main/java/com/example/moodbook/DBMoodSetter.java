@@ -233,22 +233,13 @@ public class DBMoodSetter {
         }
 
     }
-
-    /**
-     * This removes a Mood object from the database using its docID
-     * @param moodID
-     *   This is a String object of mood docID on the database
-     */
-    public void removeMood (String moodID){
-        removeMood(moodID, false, null);
-    }
         /**
          * This removes a Mood object from the database using its docID
          * @param moodID
          *   This is a String object of mood docID on the database
          *
          */
-        public void removeMood ( final String moodID){
+        public void removeMood (final String moodID){
             CollectionReference moodReference = userReference.document(uid).collection("MOODS");
             // remove selected city
             moodReference.document(moodID).delete()

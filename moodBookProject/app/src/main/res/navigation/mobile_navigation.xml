@@ -21,24 +21,16 @@
         android:label="Friend Mood"
         tools:layout="@layout/fragment_friendmood" />
     <fragment
-<<<<<<< HEAD
         android:id="@+id/nav_addFriends"
         android:name="com.example.moodbook.ui.Request.RequestFragment"
         android:label="Add Friends"
         tools:layout="@layout/fragment_myrequests" />
-    <fragment
-        android:id="@+id/nav_myRequests"
-        android:name="com.example.moodbook.ui.myRequests.myRequestsFragment"
-        android:label="My Requests"
-        tools:layout="@layout/fragment_request" />
     <fragment
         android:id="@+id/nav_Followers"
         android:name="com.example.moodbook.ui.home.HomeFragment"
         android:label="My Followers"
         tools:layout="@layout/fragment_followers" />
     <fragment
-=======
->>>>>>> c9b40d806a4bbf1ca3b0dbf0104fd9ecb600d3f7
         android:id="@+id/nav_myMoodMap"
         android:name="com.example.moodbook.ui.myMoodMap.MyMoodMapFragment"
         android:label="My Mood Map"

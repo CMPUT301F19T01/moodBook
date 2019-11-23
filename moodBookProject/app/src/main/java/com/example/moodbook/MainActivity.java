@@ -25,11 +25,8 @@ import androidx.navigation.ui.NavigationUI;
 
 
 import com.example.moodbook.ui.Request.RequestFragment;
-<<<<<<< HEAD
 import com.example.moodbook.ui.followers.followersFragment;
-=======
 import com.example.moodbook.ui.chat.ChatFragment;
->>>>>>> c9b40d806a4bbf1ca3b0dbf0104fd9ecb600d3f7
 import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
@@ -93,14 +90,11 @@ public class MainActivity extends AppCompatActivity   {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.currentEmail, R.id.currentEmail,
-<<<<<<< HEAD
-                R.id.nav_myMood,R.id.nav_FriendMood,
-                R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_Followers, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
-=======
+                R.id.nav_myMood,R.id.nav_friendMood,
+                R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_Followers, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout,
                 R.id.nav_myMood, R.id.nav_chat, R.id.nav_friendMood,
-                R.id.nav_request, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap,
+                R.id.nav_request, R.id.nav_myRequests, R.id.nav_myFriendMoodMap,
                 R.id.nav_logout)
->>>>>>> c9b40d806a4bbf1ca3b0dbf0104fd9ecb600d3f7
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

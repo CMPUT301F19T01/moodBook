@@ -152,7 +152,7 @@ public class RequestHandler {
                 });
     }
 
-    public void addToFollowerList(final RequestUser acceptFriend, final String myUsername){
+    public void addToFollowerList(final MoodbookUser acceptFriend, final String myUsername){
         final CollectionReference followersRef = this.userReference.document(uid).collection("FOLLOWERS");
         HashMap<String, Object> data = new HashMap<>();
         data.put("uid", acceptFriend.getUsername());
