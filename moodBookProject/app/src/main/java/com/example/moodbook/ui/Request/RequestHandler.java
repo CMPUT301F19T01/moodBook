@@ -158,7 +158,7 @@ public class RequestHandler {
     public void addToFollowerList(final MoodbookUser acceptFriend, final String myUsername){
         final CollectionReference followersRef = this.userReference.document(uid).collection("FOLLOWERS");
         HashMap<String, Object> data = new HashMap<>();
-        data.put("uid", acceptFriend.getUsername());
+        data.put("uid", acceptFriend.getUid());
         followersRef.document(acceptFriend.getUsername()).set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
