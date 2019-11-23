@@ -1,4 +1,4 @@
-package com.example.moodbook;
+package com.example.moodbook.ui.home;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,12 +15,17 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.moodbook.DBMoodSetter;
+import com.example.moodbook.LocationPickerActivity;
+import com.example.moodbook.Mood;
+import com.example.moodbook.MoodInvalidInputException;
+import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.io.IOException;
 import java.util.Arrays;
 
-public abstract class MoodEditorActivity extends AppCompatActivity implements MoodEditor.MoodInterface {
+public abstract class MoodEditorActivity extends AppCompatActivity implements MoodEditor.MoodEditorInterface {
 
     private static final String[] SUBCLASSES_NAMES = {
             CreateMoodActivity.class.getSimpleName(),
@@ -71,7 +76,7 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
 
     protected void createActivity(String activityName) {
         if(!Arrays.asList(SUBCLASSES_NAMES).contains(activityName)){
-            return;
+            throw new IllegalArgumentException(activityName+" is not a permitted subclass!");
         }
         this.TAG = activityName;
 

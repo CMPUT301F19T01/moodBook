@@ -31,11 +31,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.moodbook.CreateMoodActivity;
 import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.EditMoodActivity;
 import com.example.moodbook.Mood;
-import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.RecyclerItemTouchHelper;
@@ -139,8 +136,8 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
 
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getContext(),
-                DBMoodSetter.getMoodHistoryListener(moodAdapter), TAG);
+        moodDB = new DBMoodSetter(mAuth, getContext(), TAG);
+        moodDB.setMoodListListener(moodAdapter);
 
         // Add a mood: when floating add button is clicked, start add activity
         FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
@@ -164,13 +161,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         return root;
     }
 
-    /**
-     * This override RecyclerItemTouchHelper.RecyclerItemTouchHelperListener onSwiped(),
-     * and is callback when recycler view is swiped
-     * Mood item will be removed on swiped
-     * Undo option will be provided in snackbar to restore the mood item
-     */
-    @Override
+
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction, final int position) {
         AlertDialog.Builder alert = new AlertDialog.Builder(
                 getActivity());
