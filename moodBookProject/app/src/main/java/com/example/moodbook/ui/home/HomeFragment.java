@@ -71,6 +71,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
     private Mood SelectedMood = null;
 
 
+
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
      * @param inflater
@@ -201,11 +202,10 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                             moodDB.addMood(deletedMood);
                         }
                     });
-                    Log.i(testDel, "Deleted mood.");
+                    Log.i("testDel", "Deleted mood.");
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
                 }
-
             }
         });
 

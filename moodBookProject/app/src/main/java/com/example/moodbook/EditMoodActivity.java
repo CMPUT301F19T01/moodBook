@@ -1,5 +1,6 @@
 package com.example.moodbook;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,6 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * This activity is used to display a Mood Object's attribute values and allows the user to edit these values
@@ -45,6 +48,7 @@ public class EditMoodActivity extends MoodEditorActivity {
         // reason photo
         super.reason_photo_button = findViewById(R.id.edit_reason_photo_button);
         super.reason_photo_imageView = findViewById(R.id.edit_reason_photo_imageView);
+        final HashMap<String, Object> moodMap = new HashMap<>();
         reason_photo_imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,17 +66,17 @@ public class EditMoodActivity extends MoodEditorActivity {
                     moodMap.put("location_lat",mood_location.getLatitude());
                     moodMap.put("location_lon",mood_location.getLongitude());
                 }
-                moodDB.editMood(intent_moodID,moodMap);
-                Log.i(TEST, "Updated Successful");
+                moodDB.editMood(moodID,moodMap);
+                Log.i("TEST", "Updated Successful");
                 finish();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
 
             }
         });
-
+        super.cancel_button = findViewById(R.id.edit_cancel_button);
         // When cancel button is pressed, return to main activity; do nothing
-        cancel_edit_button.setOnClickListener(new View.OnClickListener() {
+        cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setResult(AppCompatActivity.RESULT_CANCELED);
@@ -88,7 +92,7 @@ public class EditMoodActivity extends MoodEditorActivity {
 
         // action buttons
         super.do_button = findViewById(R.id.edit_save_button);
-        super.cancel_button = findViewById(R.id.edit_cancel_button);
+
     }
 
     @Override
