@@ -86,11 +86,11 @@ public class ProfileEditor {
      * @param myActivity The class that calls in this method
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
-                                      ImageView image_view_photo, final AppCompatActivity myActivity)  {
+                                      ImageView image_view_photo, final AppCompatActivity myActivity) throws IOException {
         if (requestCode == REQUEST_IMAGE
                 && resultCode == AppCompatActivity.RESULT_OK){
-////            Uri uri = null;
-//               File newfile = createImageFile(myActivity);
+//            Uri uri = null;
+               File newfile = createImageFile(myActivity);
             if (data != null) {
                 Bundle extras = data.getExtras();
                imageBitmap = (Bitmap) extras.get("data");

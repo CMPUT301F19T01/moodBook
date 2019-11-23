@@ -6,6 +6,7 @@ package com.example.moodbook;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +27,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
 import com.example.moodbook.ui.Request.RequestFragment;
 import com.example.moodbook.ui.friendMood.friendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
@@ -34,10 +36,15 @@ import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.example.moodbook.ui.profile.ProfileActivity;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 //https://guides.codepath.com/android/fragment-navigation-drawer  - used for linking navigation
@@ -67,6 +74,7 @@ public class MainActivity extends AppCompatActivity  {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db = FirebaseFirestore.getInstance();
+        profile = findViewById(R.id.profile);
 //        DBpic = new ProfilePicSetter(getApplicationContext());
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -111,11 +119,29 @@ public class MainActivity extends AppCompatActivity  {
         );
         TextView profileUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentUsername);
         TextView profileEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
-
-        profile= (ImageView)findViewById(R.id.profile);
+        final ImageView profilePicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile);
         profileUserName.setText(name);
         profileEmail.setText(email);
-//      DBpic.getImageFromDB(name,profile);
+        if (name!=null) {
+            // Reference to an image file in Cloud Storage
+             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+             storageReference.child("profilepics/" + name + ".jpeg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Glide.with(getApplicationContext()/* context */)
+                                .load(uri)
+                                .centerCrop()
+                                .into(profilePicture);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                        profilePicture.setImageResource(R.drawable.purpleprofile);
+                    }
+                });
+        }
+
 
     }
 
@@ -208,6 +234,7 @@ public class MainActivity extends AppCompatActivity  {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
+
 
 
 }

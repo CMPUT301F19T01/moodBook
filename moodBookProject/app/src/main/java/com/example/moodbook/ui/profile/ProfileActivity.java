@@ -30,6 +30,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileEditor.ProfilePicInterface{
     ImageView dp;
@@ -100,7 +101,11 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        ProfileEditor.getImageResult(requestCode, resultCode, data, dp, this);
+        try {
+            ProfileEditor.getImageResult(requestCode, resultCode, data, dp, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         uriProfileImage = data.getData();
     }
 
@@ -111,6 +116,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     }
 
     public void addImg(String username) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         fireRef = mStorageRef.child("profilepics/" + username + ".jpeg" );
         Bitmap bitImage = ProfileEditor.getBitmap();
         Uri file = uriProfileImage;
@@ -118,6 +124,11 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
             UploadTask uploadTask = fireRef.putFile(file);
             Log.e("Fire Path", fireRef.toString());
 
+        }else if (bitImage != null) {
+            bitImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+            UploadTask uploadTask = fireRef.putBytes(data);
         }
     }
     public void showImg(String username){
