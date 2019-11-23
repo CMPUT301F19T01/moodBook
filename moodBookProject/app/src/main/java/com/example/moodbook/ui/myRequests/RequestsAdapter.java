@@ -74,6 +74,7 @@ public class RequestsAdapter extends BaseAdapter {
                         Toast.LENGTH_LONG).show();
                     // When Accepts a friend requests and username is added in requestee's friend mood list
                     requestHandler.addFriend(frienduser, username);
+                    requestHandler.addToFollowerList(frienduser, username);
                     //remove request once accepted
                     requestHandler.removeRequest(frienduser.getUsername());
 

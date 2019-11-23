@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -149,6 +150,25 @@ public class RequestHandler {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         showStatusMessage("Adding failed for " + username + ": " + e.toString());
+                    }
+                });
+    }
+
+    public void addToFollowerList(final RequestUser acceptFriend, final String myUsername){
+        final CollectionReference followersRef = this.userReference.document(uid).collection("FOLLOWERS");
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("uid", acceptFriend.getUsername());
+        followersRef.document(acceptFriend.getUsername()).set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showStatusMessage("Added successfully.");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Adding failed." + e.toString());
                     }
                 });
     }
