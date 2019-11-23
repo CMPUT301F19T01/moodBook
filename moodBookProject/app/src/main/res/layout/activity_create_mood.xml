@@ -143,19 +143,26 @@
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:adjustViewBounds="true"
+                android:layout_marginRight="10dp"
                 android:text="@string/pick_mood_photo"></Button>
-
-            <ImageView
-                android:id="@+id/create_reason_photo_imageView"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:maxHeight="100dp"
-                android:adjustViewBounds="true"
-                android:layout_weight="1"
-                android:layout_margin="8dp"
-                android:layout_marginRight="10dp"/>
-
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+        <ImageView
+            android:id="@+id/create_reason_photo_imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxHeight="100dp"
+            android:adjustViewBounds="true"
+            android:layout_margin="8dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+    </LinearLayout>
 
         <Button
             android:id="@+id/create_add_button"

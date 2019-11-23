@@ -1,6 +1,7 @@
 package com.example.moodbook;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
     protected void initializeViews() {
         // emotion
         super.mood_emotion = null;
+        isImageFitToScreen =true;
         super.emotion_spinner = findViewById(R.id.create_emotion_spinner);
         // reason text
         super.reason_editText = findViewById(R.id.create_reason_editText);
@@ -55,6 +57,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
         super.reason_photo_button = findViewById(R.id.create_reason_photo_button);
         super.reason_photo_imageView = findViewById(R.id.create_reason_photo_imageView);
 
+        // when imageview is clicked, then it would enlarge the image
         reason_photo_imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,12 +67,9 @@ public class CreateMoodActivity extends MoodEditorActivity {
                     reason_photo_imageView.setAdjustViewBounds(true);
                 }else{
                     isImageFitToScreen=true;
-                    reason_photo_imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                    reason_photo_imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
                     reason_photo_imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-//                    reason_photo_imageView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-//                    reason_photo_imageView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
                     reason_photo_imageView.setAdjustViewBounds(false);
-                  //  reason_photo_imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 }
             }
         });

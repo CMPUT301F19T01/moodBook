@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public abstract class MoodEditorActivity extends AppCompatActivity implements MoodEditor.MoodInterface {
@@ -108,7 +109,11 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView, this);
+        try {
+            MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         MoodEditor.getLocationResult(requestCode, resultCode, data, this);
     }
 

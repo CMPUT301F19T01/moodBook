@@ -1,12 +1,15 @@
 package com.example.moodbook;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.location.Location;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -232,11 +235,10 @@ public class MoodEditor {
                                 Uri uri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", new File(dir, "MyPhoto.img"));
                                 imageIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
                                 imageIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//                                if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
-//                                    Log.i(TAG, "Camera intent successful");
-//                                    myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
-//                                }
-                                myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
+                                if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
+                                    Log.i(TAG, "Camera intent successful");
+                                    myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
+                                }
                                 break;
                             case 1:
                                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
@@ -251,35 +253,117 @@ public class MoodEditor {
         pictureDialog.show();
     }
 
-//    public static Bitmap decodeSampledBitmapFromFile(String path,
-//                                                     int reqWidth, int reqHeight) {
-//        // First decode with inJustDecodeBounds=true to check dimensions
-//        final BitmapFactory.Options options = new BitmapFactory.Options();
-//        //Query bitmap without allocating memory
-//        options.inJustDecodeBounds = true;
-//        //decode file from path
-//        BitmapFactory.decodeFile(path, options);
-//        // Calculate inSampleSize
-//        // Raw height and width of image
-//        final int height = options.outHeight;
-//        final int width = options.outWidth;
-//        //decode according to configuration or according best match
-//        options.inPreferredConfig = Bitmap.Config.RGB_565;
-//        int inSampleSize = 1;
-//        if (height > reqHeight) {
-//            inSampleSize = Math.round((float)height / (float)reqHeight);
-//        }
-//        int expectedWidth = width / inSampleSize;
-//        if (expectedWidth > reqWidth) {
-//            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
-//            inSampleSize = Math.round((float)width / (float)reqWidth);
-//        }
-//        //if value is greater than 1,sub sample the original image
-//        options.inSampleSize = inSampleSize;
-//        // Decode bitmap with inSampleSize set
-//        options.inJustDecodeBounds = false;
-//        return BitmapFactory.decodeFile(path, options);
-//    }
+    /**
+     * Method that checks dimension, decodes bitmap, and decides on what rotation it should display on the imageView
+     * Attemps flexibility on the code, especially when taking a picture with different phones that takes in different orientation
+     * @param context
+     * @param selectedImage
+     * @return Bitmap image
+     * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+     * @throws IOException
+     */
+    public static Bitmap getRotatedBitmap(Context context, Uri selectedImage) throws IOException {
+        int MAX_HEIGHT = 1024;
+        int MAX_WIDTH = 1024;
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        InputStream imageStream = context.getContentResolver().openInputStream(selectedImage);
+        BitmapFactory.decodeStream(imageStream, null, options);
+        imageStream.close();
+
+        options.inSampleSize = calculateInSampleSize(options, MAX_WIDTH, MAX_HEIGHT); // Calculate inSampleSize
+
+        options.inJustDecodeBounds = false; // decode bitmap
+        imageStream = context.getContentResolver().openInputStream(selectedImage);
+        Bitmap image = BitmapFactory.decodeStream(imageStream, null, options);
+
+        image = rotateImageIfRequired(context, image, selectedImage);
+        return image;
+    }
+
+
+    /**
+     * Calculates inSampleSize
+     * @param options
+     * @param reqWidth
+     * @param reqHeight
+     * @return int inSampleSize
+     * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+     */
+    private static int calculateInSampleSize(BitmapFactory.Options options,
+                                             int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+            // Choose the smallest ratio as inSampleSize value
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+
+            final float totalPixels = width * height;
+
+            // Anything more than 2x the requested pixels has to be sampled down further
+            final float totalReqPixelsCap = reqWidth * reqHeight * 2;
+
+            while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
+                inSampleSize++;
+            }
+        }
+        return inSampleSize;
+    }
+
+    /**
+     * Method that rotates image to what is more appropriate to be shown on the page
+     * Avoid having to show a vertical oriented image as a horizontal one
+     * @param context
+     * @param img
+     * @param selectedImage
+     * @return Bitmap image
+     * @throws IOException
+     * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+     */
+    private static Bitmap rotateImageIfRequired(Context context, Bitmap img, Uri selectedImage) throws IOException {
+
+        InputStream input = context.getContentResolver().openInputStream(selectedImage);
+        ExifInterface ei;
+        if (Build.VERSION.SDK_INT > 23)
+            ei = new ExifInterface(input);
+        else
+            ei = new ExifInterface(selectedImage.getPath());
+
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+
+    /**
+     * Method that actually rotates the image
+     * @param img
+     * @param degree
+     * @return Bitmap rotatedImage
+     * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+     */
+    private static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        Bitmap rotatedImage = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+        return rotatedImage;
+    }
 
     /**
      * This is a method that gets the photo that was taken/chosen and let the image be shown on the screen
@@ -290,7 +374,7 @@ public class MoodEditor {
      * @param myActivity The class that calls in this method
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
-                                      ImageView image_view_photo, final AppCompatActivity myActivity) {
+                                      ImageView image_view_photo, final AppCompatActivity myActivity) throws IOException {
         if (requestCode == REQUEST_IMAGE && resultCode == AppCompatActivity.RESULT_OK){
             Log.i(TAG, "result code successful");
             //File object of camera image
@@ -298,17 +382,8 @@ public class MoodEditor {
             //    File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
             Uri photoUri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", new File(dir, "MyPhoto.img"));
             if (photoUri != null) {
-                try {
-                    InputStream imageStream = myActivity.getContentResolver().openInputStream(photoUri);
-                    imageBitmap = BitmapFactory.decodeStream(imageStream);
-                    assert imageStream != null;
-                    imageStream.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //send to DBMoodSetter
+
+                imageBitmap = getRotatedBitmap(myActivity, photoUri);
                 if (imageBitmap != null) {
                     ((MoodInterface) myActivity).setMoodReasonPhoto(imageBitmap);
                     image_view_photo.setImageBitmap(imageBitmap);
@@ -340,7 +415,6 @@ public class MoodEditor {
             //does nothing if fails to deliver data
         }
     }
-
 
     /**
      * A method that acts as a location editor
