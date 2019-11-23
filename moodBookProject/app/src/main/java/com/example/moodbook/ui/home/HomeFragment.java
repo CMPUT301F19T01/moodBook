@@ -58,8 +58,6 @@ import java.util.ArrayList;
  */
 public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
 
-    //private HomeViewModel homeViewModel;
-
     // Mood History
     private RecyclerView moodListView;
     private MoodListAdapter moodAdapter;
@@ -69,7 +67,6 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = HomeFragment.class.getSimpleName();
-    private String testDel;
 
     private Mood SelectedMood = null;
 
@@ -87,8 +84,10 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         // get root view from PageFragment
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_home);
 
-        // Set up recyclerView and adapter
+        // initialize layout
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
+
+        // Set up recyclerView and adapter
         moodListView = root.findViewById(R.id.mood_history_listView);
         setupAdapter(new MoodListAdapter.OnItemClickListener() {
             // Edit the selected mood: when a mood item is clicked, start edit activity

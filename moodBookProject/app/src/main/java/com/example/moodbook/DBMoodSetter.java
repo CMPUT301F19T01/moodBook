@@ -12,6 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.moodbook.ui.friendMood.FriendMood;
+import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -132,9 +134,8 @@ public class DBMoodSetter {
                         if (documentSnapshot != null) {
                             // get mood docId from moodCount
                             Double m = documentSnapshot.getDouble("mood_Count");
-                            String moodID = String.valueOf(m);
+                            String moodID = String.valueOf(m) + MainActivity.getUsername(); //increment int + username as a moodID
                             addImg(moodID, mood);
-                            addMoodAfterDocId(moodID, mood); //puts the info to DB
                             // add new mood into db
                             addMoodAfterDocId(moodID, mood);
                             // increment moodCount
@@ -256,6 +257,8 @@ public class DBMoodSetter {
                         @Override
                         public void onSuccess(Void aVoid) {
                             showStatusMessage("Deleted successfully: " + moodID);
+                            removeImgFromDB(moodID);
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -265,6 +268,30 @@ public class DBMoodSetter {
                         }
                     });
         }
+
+
+        /**
+         *
+         * @param moodID
+         */
+
+        public void removeImgFromDB(final String moodID) {
+            StorageReference photoRef = photoReference.child(moodID);
+            photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    // File deleted successfully
+                    Log.d(TAG, "Mood image deleted successfully.");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Uh-oh, an error occurred!
+                    Log.d(TAG, "Failed to delete mood image.");
+                }
+            });
+        }
+
 
         /**
          * This edits  a specific mood in the database given the mood's docID and the parameters to edit
@@ -338,13 +365,48 @@ public class DBMoodSetter {
                         moodAdapter.clear();
                         for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                             // ignore null item
-                            if (doc.getId() != "null") {
-                                // Adding mood from FireStore
-                                Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
-                                if (mood != null) {
-                                    mood.setDocId(doc.getId());
-                                    moodAdapter.addItem(mood);
-                                }
+                            if (doc.getId() == "null") continue;
+                            // Adding mood from FireStore
+                            Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                            if (mood != null) {
+                                mood.setDocId(doc.getId());
+                                moodAdapter.addItem(mood);
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        /**
+         * This is used by FriendMoodHistory to get recent mood data in the database from each user's friend mood collection
+         * TODO: use all mood data from user's mood collection for now, need to be changed later
+         * @param friendMoodAdapter
+         *   This is a FriendMoodList Adapter Object
+         *   @see FriendMoodListAdapter
+         * @return
+         *  Returns a an EventListener that listens for changes in the mood database
+         */
+        public static EventListener<QuerySnapshot> getFriendMoodListener (
+                final FriendMoodListAdapter friendMoodAdapter, final FirebaseAuth mAuth){
+            return new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
+                    if (friendMoodAdapter != null) {
+                        // clear the old list
+                        friendMoodAdapter.clear();
+                        for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                            // ignore null item
+                            if (doc.getId() == "null") continue;
+                            // Adding mood from FireStore
+                            Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                            if (mood != null) {
+                                mood.setDocId(doc.getId());
+                                FriendMood friendMood = new FriendMood(
+                                        mAuth.getCurrentUser().getUid(),
+                                        mAuth.getCurrentUser().getEmail(),
+                                        mood);
+                                friendMoodAdapter.add(friendMood);
                             }
                         }
                     }
@@ -409,6 +471,8 @@ public class DBMoodSetter {
          */
         private void showStatusMessage (String message){
             Log.w(TAG, message);
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            if(context != null) {
+                Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+            }
         }
     }
