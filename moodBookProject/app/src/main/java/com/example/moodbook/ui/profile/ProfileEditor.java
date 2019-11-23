@@ -94,21 +94,6 @@ public class ProfileEditor {
             if (data != null) {
                 Bundle extras = data.getExtras();
                imageBitmap = (Bitmap) extras.get("data");
-//               Bitmap photo = (Bitmap)extras.get("data");
-//                Uri uri = getImageUri(myActivity, photo);
-
-                // CALL THIS METHOD TO GET THE ACTUAL PATH
-
-//               Uri uri = data.getData();
-//                try {
-//                    ParcelFileDescriptor parcelFileDescriptor =
-//                            myActivity.getContentResolver().openFileDescriptor(uri, "r");
-//                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-//                    imageBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-//                    parcelFileDescriptor.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
 
                 if (imageBitmap!= null){
                     ((ProfileEditor.ProfilePicInterface)myActivity).setProfilePic(imageBitmap);
@@ -139,12 +124,6 @@ public class ProfileEditor {
             //does nothing if fails to deliver data
         }
     }
-    public static Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
-    }
     private static File createImageFile(Context inContext) throws IOException {
         File storageDir = inContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -153,8 +132,7 @@ public class ProfileEditor {
                 storageDir      /* directory */
         );
 
-        String imageFilePath = image.getAbsolutePath();
-        return image;
+       return image;
     }
 
 

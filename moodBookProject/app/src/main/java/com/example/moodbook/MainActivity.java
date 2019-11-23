@@ -75,16 +75,12 @@ public class MainActivity extends AppCompatActivity  {
         setSupportActionBar(toolbar);
         db = FirebaseFirestore.getInstance();
         profile = findViewById(R.id.profile);
-//        DBpic = new ProfilePicSetter(getApplicationContext());
-
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             while(name==null) {
                 name = user.getDisplayName();
             }
             email = user.getEmail();
-//            Uri photoUrl = user.getPhotoUrl();
-
             boolean emailVerified = user.isEmailVerified();
 
             String uid = user.getUid();
