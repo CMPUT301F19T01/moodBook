@@ -1,19 +1,24 @@
 package com.example.moodbook;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -22,7 +27,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Activity to allow user to set their mood location manually used by the CreateMoodActivity
- * @see CreateMoodActivity
  */
 public class LocationPickerActivity extends FragmentActivity implements OnMapReadyCallback {
     // for intent passing
@@ -32,6 +36,8 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
     private GoogleMap mMap; // Map Object
     private Button confirmButton; // Button
     private LatLng pickedLocation; // coordinates of picked location
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     /**
      * This method was inherited from FragmentActivity.
@@ -45,6 +51,7 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
         // set confirm button
         confirmButton = findViewById(R.id.confirmButton);
@@ -60,6 +67,8 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
                 finish();
             }
         });
+
+
     }
 
     /**
@@ -77,13 +86,15 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
 
         // Gets users location
         // create location manager and listener
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new LocationListener() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 // get current location and draw it on map as initial location
                 pickedLocation = new LatLng(location.getLatitude(), location.getLongitude());
                 mMap.addMarker(new MarkerOptions().position(pickedLocation));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pickedLocation, 11.0f));
+                Log.i("location", String.valueOf(location.getLatitude()));
             }
 
             @Override
@@ -102,12 +113,19 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-            return;
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        } else {
+            // get the users current location
+            try {
+                locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, locationListener, null);
+
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+
         }
 
-        // get the users current location
-        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER,  locationListener, null);
 
         // functionality for placing marker with on clicks
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -119,4 +137,5 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
             }
         });
     }
+
 }

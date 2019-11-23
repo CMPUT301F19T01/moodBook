@@ -225,7 +225,4 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
             e.printStackTrace();
         }
     }
-
-
-
 }

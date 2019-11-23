@@ -5,21 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
+import com.example.moodbook.DBFriend;
 import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.DBUpdate;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
-import com.example.moodbook.MoodMapFragment;
-import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
+import com.example.moodbook.ui.friendMood.FriendMood;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -29,13 +26,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -47,7 +39,7 @@ import java.util.ArrayList;
 
  *  This activity is used to view a where a users friends' moods take place on a map
  */
-public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback {
+public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBFriend.FriendRecentMoodListListener {
     //private MyFriendMoodMapViewModel MyFriendMoodMapViewModel;
 
     ///// Member Variables /////
@@ -58,6 +50,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     private FirebaseAuth mAuth;
     private String userID;
     private DBMoodSetter dbMoodSetter;
+    private DBFriend friendMoodDB;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +70,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         // get current user
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getUid();
+        friendMoodDB = new DBFriend(mAuth, getContext(), MyFriendMoodMapFragment.class.getSimpleName());
+        friendMoodDB.setFriendRecentMoodListener(this);
 
         dbMoodSetter = new DBMoodSetter(mAuth, getContext());
 
@@ -109,6 +104,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
                 return false;
             }
         });
+
+
     }
 
     @Override
@@ -134,9 +131,9 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         super.onLowMemory();
         mapView.onLowMemory();
     }
-
     @Override
     public void updateList(final FirebaseFirestore db) {
+    /*
         try {
             db.collection("USERS")
                     .document(userID)
@@ -151,7 +148,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
                                     if (doc.exists() && !(doc.getId().equals("null"))){
                                         Log.i("DOCID", "id: " + doc.getId() + "  |  " + doc.get("uid"));
-                                        getFriendMood(db, (String) doc.get("uid"));
+
 
                                     }
                                 }
@@ -161,21 +158,19 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         } catch (Exception e){
             e.printStackTrace();
         }
+    */
     }
 
-    private void drawMoodMarkers(ArrayList<Mood> moodDataList){
-        int emotionResource;
-        LatLng moodLatLng;
 
-        int i;
-        for(i = 0; i < moodDataList.size(); i++){
-            Mood mood = moodDataList.get(i);
+    private void drawMood(Mood mood, int i ){
+        //todo: check if location exists in mood
+        if (mood.getLocation() != null){
             // get image resource for the mood marker
-            emotionResource = mood.getEmotionImageResource();
+            int emotionResource = mood.getEmotionImageResource();
 
             // get location of mood
             Location moodLocation = mood.getLocation();
-            moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
+            LatLng moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
 
             // use png image resource as marker icon
             BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
@@ -185,40 +180,21 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
             // draw on map
             moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor)).setTag(i);
-
-            // zoom in and focus on the most recent mood, ie. the last mood in list
-            if(i+1 == moodDataList.size()){
-                moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
-            }
-
-        }
-    }
-
-    private void getFriendMood(FirebaseFirestore db, String id) {
-        try {
-
-
-        db.collection("USERS")
-                .document(id)
-                .collection("MOODS")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot doc = task.getResult().getDocuments().get(task.getResult().size() - 1);
-                            if (doc.exists() && !(doc.getId().equals("null"))) {
-                                Log.i("mood ID", "id: " + doc.getId());
-
-                            }
-                        }
-                    }
-                });
-
-        } catch (Exception e){
-            e.printStackTrace();
         }
 
     }
 
+    @Override
+    public void beforeGettingFriendMoodList() {
+        moodDataList.clear();
+        moodMap.clear();
+    }
+
+    @Override
+    public void onGettingFriendMood(FriendMood item) {
+        if (item.getMood().getLocation() != null){
+            moodDataList.add(item.getMood());
+            drawMood(item.getMood(), moodDataList.size()-1);
+        }
+    }
 }
