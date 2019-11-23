@@ -180,13 +180,13 @@ public class RequestHandler {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        showStatusMessage("Declined Friend Request: " + username);
+                        showStatusMessage("Accepted Friend Request: " + username);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        showStatusMessage("Deleting failed for " + username + ": " + e.toString());
+                        showStatusMessage("Deleting failed for  " + username + ": " + e.toString());
                     }
                 });
     }
