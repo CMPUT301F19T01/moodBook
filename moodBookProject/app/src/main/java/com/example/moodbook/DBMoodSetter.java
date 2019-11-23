@@ -315,6 +315,7 @@ public class DBMoodSetter {
                 });
     }
 
+<<<<<<< HEAD
     /**
      * This edits  a specific mood in the database given the mood's docID and the parameters to edit
      * @param moodID
@@ -328,6 +329,20 @@ public class DBMoodSetter {
         updateImg(moodID);
         moodReference.document(moodID).update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
+=======
+        /**
+         * This gets the image stored from DB
+         * Useful when a user wants to view the image that they have previously added for this mood.
+         * @param docID
+         * @param view
+         */
+        public void getImageFromDB (String docID,final ImageView view){
+            StorageReference ref = photoReference.child(docID);
+            Log.d("DOCID",docID);
+            try {
+                final File localFile = File.createTempFile("Images", "jpeg");
+                ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+>>>>>>> prod
                     @Override
                     public void onSuccess(Void aVoid) {
                         showStatusMessage("Updated successfully: " + moodID);

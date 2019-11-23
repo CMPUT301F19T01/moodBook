@@ -1,15 +1,21 @@
 package com.example.moodbook.ui.home;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.location.Location;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +31,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.example.moodbook.LocationPickerActivity;
 import com.example.moodbook.Mood;
@@ -32,8 +39,14 @@ import com.example.moodbook.R;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
 
+import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -210,6 +223,7 @@ public class MoodEditor {
         return imageBitmap;
     }
 
+
     /**
      * This is a method that allows the users to add an image to their mood
      * Involves two options, Camera and Gallery, and will take the users to a new activity to choose/take a picture
@@ -228,7 +242,14 @@ public class MoodEditor {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
+//                                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+//                                StrictMode.setVmPolicy(builder.build());
                                 Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                File dir = myActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                            //    File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
+                                Uri uri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", new File(dir, "MyPhoto.img"));
+                                imageIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
+                                imageIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                                 if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
                                     Log.i(TAG, "Camera intent successful");
                                     myActivity.startActivityForResult(imageIntent, REQUEST_IMAGE);
@@ -248,6 +269,118 @@ public class MoodEditor {
     }
 
     /**
+     * Method that checks dimension, decodes bitmap, and decides on what rotation it should display on the imageView
+     * Attemps flexibility on the code, especially when taking a picture with different phones that takes in different orientation
+     * @param context
+     * @param selectedImage
+     * @return Bitmap image
+     * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+     * @throws IOException
+     */
+    public static Bitmap getRotatedBitmap(Context context, Uri selectedImage) throws IOException {
+        int MAX_HEIGHT = 1024;
+        int MAX_WIDTH = 1024;
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        InputStream imageStream = context.getContentResolver().openInputStream(selectedImage);
+        BitmapFactory.decodeStream(imageStream, null, options);
+        imageStream.close();
+
+        options.inSampleSize = calculateInSampleSize(options, MAX_WIDTH, MAX_HEIGHT); // Calculate inSampleSize
+
+        options.inJustDecodeBounds = false; // decode bitmap
+        imageStream = context.getContentResolver().openInputStream(selectedImage);
+        Bitmap image = BitmapFactory.decodeStream(imageStream, null, options);
+
+        image = rotateImageIfRequired(context, image, selectedImage);
+        return image;
+    }
+
+
+    /**
+     * Calculates inSampleSize
+     * @param options
+     * @param reqWidth
+     * @param reqHeight
+     * @return int inSampleSize
+     * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+     */
+    private static int calculateInSampleSize(BitmapFactory.Options options,
+                                             int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int heightRatio = Math.round((float) height / (float) reqHeight);
+            final int widthRatio = Math.round((float) width / (float) reqWidth);
+
+            // Choose the smallest ratio as inSampleSize value
+            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+
+            final float totalPixels = width * height;
+
+            // Anything more than 2x the requested pixels has to be sampled down further
+            final float totalReqPixelsCap = reqWidth * reqHeight * 2;
+
+            while (totalPixels / (inSampleSize * inSampleSize) > totalReqPixelsCap) {
+                inSampleSize++;
+            }
+        }
+        return inSampleSize;
+    }
+
+    /**
+     * Method that rotates image to what is more appropriate to be shown on the page
+     * Avoid having to show a vertical oriented image as a horizontal one
+     * @param context
+     * @param img
+     * @param selectedImage
+     * @return Bitmap image
+     * @throws IOException
+     * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+     */
+    private static Bitmap rotateImageIfRequired(Context context, Bitmap img, Uri selectedImage) throws IOException {
+
+        InputStream input = context.getContentResolver().openInputStream(selectedImage);
+        ExifInterface ei;
+        if (Build.VERSION.SDK_INT > 23)
+            ei = new ExifInterface(input);
+        else
+            ei = new ExifInterface(selectedImage.getPath());
+
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+
+    /**
+     * Method that actually rotates the image
+     * @param img
+     * @param degree
+     * @return Bitmap rotatedImage
+     * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
+     */
+    private static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        Bitmap rotatedImage = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+        return rotatedImage;
+    }
+
+    /**
      * This is a method that gets the photo that was taken/chosen and let the image be shown on the screen
      * @param requestCode This is a result code
      * @param resultCode This is a result code
@@ -256,6 +389,7 @@ public class MoodEditor {
      * @param myActivity The class that calls in this method
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
+<<<<<<< HEAD:moodBookProject/app/src/main/java/com/example/moodbook/ui/home/MoodEditor.java
                                ImageView image_view_photo, final AppCompatActivity myActivity) {
         // ensure myActivity implements MoodEditorInterface
         if(!(myActivity instanceof MoodEditorInterface)){
@@ -271,6 +405,22 @@ public class MoodEditor {
                 if (imageBitmap!= null){
                     ((MoodEditorInterface)myActivity).setMoodReasonPhoto(imageBitmap);
                     image_view_photo.setImageBitmap(imageBitmap); //after getting bitmap, set to imageView
+=======
+                                      ImageView image_view_photo, final AppCompatActivity myActivity) throws IOException {
+        if (requestCode == REQUEST_IMAGE && resultCode == AppCompatActivity.RESULT_OK){
+            Log.i(TAG, "result code successful");
+            //File object of camera image
+            File dir = myActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+            //    File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
+            Uri photoUri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", new File(dir, "MyPhoto.img"));
+            if (photoUri != null) {
+
+                imageBitmap = getRotatedBitmap(myActivity, photoUri);
+                if (imageBitmap != null) {
+                    ((MoodInterface) myActivity).setMoodReasonPhoto(imageBitmap);
+                    image_view_photo.setImageBitmap(imageBitmap);
+
+>>>>>>> prod:moodBookProject/app/src/main/java/com/example/moodbook/MoodEditor.java
                 }
             }
         }
@@ -298,6 +448,7 @@ public class MoodEditor {
             //does nothing if fails to deliver data
         }
     }
+
 
 
     /**
