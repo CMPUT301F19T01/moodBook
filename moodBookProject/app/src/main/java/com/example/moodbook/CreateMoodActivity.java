@@ -47,6 +47,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
 
     @Override
     protected void initializeViews() {
+        isImageFitToScreen = true;
         // emotion
         super.mood_emotion = null;
         super.emotion_spinner = findViewById(R.id.create_emotion_spinner);
