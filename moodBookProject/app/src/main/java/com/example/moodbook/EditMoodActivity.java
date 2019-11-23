@@ -3,6 +3,8 @@ package com.example.moodbook;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -18,7 +20,7 @@ import java.util.HashMap;
 public class EditMoodActivity extends MoodEditorActivity {
 
     private String moodID;
-
+    private Boolean isImageFitToScreen;
 
     /**
      * This is a method inherited from the AppCompatActivity
@@ -35,6 +37,7 @@ public class EditMoodActivity extends MoodEditorActivity {
 
     @Override
     protected void initializeViews() {
+        isImageFitToScreen = true;
         // emotion
         super.emotion_spinner = findViewById(R.id.edit_emotion_spinner);
         // reason text
@@ -42,6 +45,21 @@ public class EditMoodActivity extends MoodEditorActivity {
         // reason photo
         super.reason_photo_button = findViewById(R.id.edit_reason_photo_button);
         super.reason_photo_imageView = findViewById(R.id.edit_reason_photo_imageView);
+        reason_photo_imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isImageFitToScreen) {
+                    isImageFitToScreen=false;
+                    reason_photo_imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    reason_photo_imageView.setAdjustViewBounds(true);
+                }else{
+                    isImageFitToScreen=true;
+                    reason_photo_imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.FILL_PARENT));
+                    reason_photo_imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    reason_photo_imageView.setAdjustViewBounds(false);
+                }
+            }
+        });
         // situation
         super.situation_spinner = findViewById(R.id.edit_situation_spinner);
         // location
