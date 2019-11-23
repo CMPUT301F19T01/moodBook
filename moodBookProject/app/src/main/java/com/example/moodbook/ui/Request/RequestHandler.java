@@ -142,6 +142,9 @@ public class RequestHandler {
                     @Override
                     public void onSuccess(Void aVoid) {
                         showStatusMessage("Added successfully: " + username);
+                        Log.d(TAG, acceptFriend.getUid());
+                        Log.d(TAG, username);
+                        Log.d(TAG, "Added Friend.");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

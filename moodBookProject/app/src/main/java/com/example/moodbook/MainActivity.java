@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity   {
         );
         TextView profileUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentUsername);
         TextView profileEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
-        profileUserName.setText(name);
+        profileUserName.setText(uid);
         profileEmail.setText(email);
 
     }

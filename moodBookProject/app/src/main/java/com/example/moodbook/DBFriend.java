@@ -142,7 +142,7 @@ public class DBFriend {
      * This method is for removing a follower that was previously accepted by a user
      * @param username
      */
-    public void removeFollower(final String username, final String removedUserUid){
+    public void removeFollower(final MoodbookUser removedUserUid, final String un, final String username ){
 
         final CollectionReference collectionReference = this.userReference.document(this.uid).collection("FOLLOWERS");
         collectionReference.document(username).delete()
@@ -150,7 +150,7 @@ public class DBFriend {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Remove Follower.");
-                        removeFriend(removedUserUid);
+                        removeFriend(removedUserUid, un);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -165,20 +165,20 @@ public class DBFriend {
      * This method is for removing a user from friends list from DB
      * @param removedUserUid - user that was removed by current user
      */
-    public void removeFriend(final String removedUserUid){
+    public void removeFriend(final MoodbookUser removedUserUid, final String un){
+        final String username = un;
     // go to the user collection that was removed by current user
         // then go to their friends list
         // remove the current user name
         //friends in DB basically mean the users that they are following
-        final CollectionReference collectionReference = this.userReference.document(removedUserUid).collection("FRIENDS");
-        final String currUser = user.getDisplayName();
-        if (currUser != null) {
-            collectionReference.document(currUser).delete()
+        final CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("USERS").document(removedUserUid.getUid()).collection("FRIENDS");
+        if (username != null) {
+            collectionReference.document(username).delete()
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Log.d(TAG, removedUserUid);
-                            Log.d(TAG, currUser);
+                            Log.d(TAG, removedUserUid.getUid());
+                            Log.d(TAG, username);
                             Log.d(TAG, "Remove friend.");
                         }
                     })
@@ -191,8 +191,6 @@ public class DBFriend {
         }
 
     }
-
-
 
     /**
      * This EventListener is for MyFriends to get all the user's friends (username, uid) in the database

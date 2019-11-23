@@ -40,6 +40,7 @@ public class followersFragment extends PageFragment {
         mAuth = FirebaseAuth.getInstance();
         followersDB = new DBFriend(mAuth, getContext(), TAG);
         followersDB.setFollowersListListener(followersListAdapter);
+        final String username = mAuth.getCurrentUser().getDisplayName();
 
         followersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -52,8 +53,8 @@ public class followersFragment extends PageFragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 MoodbookUser selectedUser = (MoodbookUser) followersListView.getItemAtPosition(pos);
-                                followersDB.removeFollower(selectedUser.getUsername(), selectedUser.getUid());
-                               // followersDB.removeFriend(selectedUser.getUid());
+                                followersDB.removeFollower(selectedUser, username, selectedUser.getUsername());
+                                //followersDB.removeFriend(selectedUser, username);
                             }
                         })
                         .setNegativeButton("No", null)
