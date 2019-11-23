@@ -60,7 +60,6 @@ public class followersFragment extends PageFragment {
                         .show();
             }
         });
-
         return root;
     }
 }
