@@ -43,9 +43,11 @@ public class followersAdapter extends ArrayAdapter {
 
         // get views for username
         TextView usernameText = view.findViewById(R.id.followers_item_username);
+        TextView uidText = view.findViewById(R.id.followers_item_uid);
 
         // show username
         usernameText.setText(followerUser.getUsername());
+       // uidText.setText(followerUser.getUid());
 
         return view;
     }

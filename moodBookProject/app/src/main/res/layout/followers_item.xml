@@ -14,4 +14,14 @@
         android:text="Username"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/followers_item_uid"
+        android:visibility="invisible"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:padding="10dp"
+        android:text="Username"
+        android:textSize="20sp" />
+
 </FrameLayout>

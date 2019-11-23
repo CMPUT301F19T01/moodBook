@@ -25,7 +25,7 @@ public class followersFragment extends PageFragment {
     private static final String TAG = followersFragment.class.getSimpleName();
 
     // connect to DB
-    private DBFriend friendDB;
+    private DBFriend followersDB;
     private FirebaseAuth mAuth;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -38,8 +38,8 @@ public class followersFragment extends PageFragment {
 
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
-        friendDB = new DBFriend(mAuth, getContext(), TAG);
-        friendDB.setFollowersListListener(followersListAdapter);
+        followersDB = new DBFriend(mAuth, getContext(), TAG);
+        followersDB.setFollowersListListener(followersListAdapter);
 
         followersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -52,8 +52,8 @@ public class followersFragment extends PageFragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 MoodbookUser selectedUser = (MoodbookUser) followersListView.getItemAtPosition(pos);
-                                String followerUser = selectedUser.getUsername();
-                                Toast.makeText(getContext(), followerUser, Toast.LENGTH_SHORT).show();
+                                followersDB.removeFollower(selectedUser.getUsername(), selectedUser.getUid());
+                               // followersDB.removeFriend(selectedUser.getUid());
                             }
                         })
                         .setNegativeButton("No", null)
