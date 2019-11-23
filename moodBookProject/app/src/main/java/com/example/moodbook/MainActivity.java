@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity   {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        name = null;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity   {
         );
         TextView profileUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentUsername);
         TextView profileEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
-        profileUserName.setText(uid);
+        profileUserName.setText(name);
         profileEmail.setText(email);
 
     }
