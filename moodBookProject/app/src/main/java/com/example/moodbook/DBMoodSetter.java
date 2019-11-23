@@ -87,6 +87,30 @@ public class DBMoodSetter {
     }
 
     /**
+     * This is a constructor used by Mood History to get updated mood data from user's mood collection in the database
+     *
+     * @param mAuth               This is the FirebaseAuth instance for each logged in user
+     * @param context             This is a handle to get the data and resources that the app needs while it runs
+     * @param moodHistoryListener This is a listener from Mood History
+     */
+    public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener) {
+        this(mAuth, context);
+        userReference.document(uid).collection("MOODS")
+                .addSnapshotListener(moodHistoryListener);
+    }
+
+    /**
+     * @param mAuth               This is the FirebaseAuth instance for each logged in user
+     * @param context             This is a handle to get the data and resources that the app needs while it runs
+     * @param moodHistoryListener This is a listener from Mood History
+     * @param TAG                 This is an optional string used for printing log messages
+     */
+    public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener, String TAG) {
+        this(mAuth, context, moodHistoryListener);
+        this.TAG = TAG;
+    }
+
+    /**
      * This is used by Mood History
      * @param moodListAdapter
      */
@@ -315,7 +339,6 @@ public class DBMoodSetter {
                 });
     }
 
-<<<<<<< HEAD
     /**
      * This edits  a specific mood in the database given the mood's docID and the parameters to edit
      * @param moodID
@@ -329,20 +352,6 @@ public class DBMoodSetter {
         updateImg(moodID);
         moodReference.document(moodID).update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-=======
-        /**
-         * This gets the image stored from DB
-         * Useful when a user wants to view the image that they have previously added for this mood.
-         * @param docID
-         * @param view
-         */
-        public void getImageFromDB (String docID,final ImageView view){
-            StorageReference ref = photoReference.child(docID);
-            Log.d("DOCID",docID);
-            try {
-                final File localFile = File.createTempFile("Images", "jpeg");
-                ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
->>>>>>> prod
                     @Override
                     public void onSuccess(Void aVoid) {
                         showStatusMessage("Updated successfully: " + moodID);
@@ -385,27 +394,28 @@ public class DBMoodSetter {
 
     /**
      * This is used by MoodHistory to get all mood data in the database from user's mood collection
-     * @param moodListAdapter
+     * @param moodAdapter
      *   This is a MoodList Adapter Object
      *   @see MoodListAdapter
      * @return
      *  Returns a an EventListener that listens for changes in the mood database
      */
-    private EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodListAdapter) {
+    public static EventListener<QuerySnapshot> getMoodHistoryListener (
+            final MoodListAdapter moodAdapter){
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                if (moodListAdapter != null) {
+                if (moodAdapter != null) {
                     // clear the old list
-                    moodListAdapter.clear();
+                    moodAdapter.clear();
                     for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                         // ignore null item
-                        if (doc.getId().equals("null")) continue;
+                        if (doc.getId() == "null") continue;
                         // Adding mood from FireStore
                         Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
                         if (mood != null) {
                             mood.setDocId(doc.getId());
-                            moodListAdapter.addItem(mood);
+                            moodAdapter.addItem(mood);
                         }
                     }
                 }

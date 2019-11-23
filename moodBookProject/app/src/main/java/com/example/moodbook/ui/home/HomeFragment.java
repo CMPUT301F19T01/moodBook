@@ -57,7 +57,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
 
     // Mood History
     private RecyclerView moodListView;
-    private MoodListAdapter moodListAdapter;
+    private MoodListAdapter moodAdapter;
     private CoordinatorLayout moodHistoryLayout;
 
     // connect to DB
@@ -137,7 +137,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
         moodDB = new DBMoodSetter(mAuth, getContext(), TAG);
-        moodDB.setMoodListListener(moodListAdapter);
+        moodDB.setMoodListListener(moodAdapter);
 
         // Add a mood: when floating add button is clicked, start add activity
         FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
@@ -161,42 +161,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         return root;
     }
 
-    /**
-     * This override RecyclerItemTouchHelper.RecyclerItemTouchHelperListener onSwiped(),
-     * and is callback when recycler view is swiped
-     * Mood item will be removed on swiped
-     * Undo option will be provided in snackbar to restore the mood item
-     */
-    @Override
-<<<<<<< HEAD
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
-        if (viewHolder instanceof MoodListAdapter.MyViewHolder) {
-            // backup of removed item for undo purpose
-            final int deletedIndex = viewHolder.getAdapterPosition();
-            final Mood deletedMood = moodListAdapter.getItem(deletedIndex);
 
-            // remove the item from recycler view
-            // if removed item is the most recent, update the recent moodID
-            if(deletedIndex == 0){
-                String newRecentMoodID = (moodListAdapter.getItemCount() > 1) ?
-                        moodListAdapter.getItem(1).getDocId() : null;
-                moodDB.removeMood(deletedMood.getDocId(), newRecentMoodID);
-            }
-            else{
-                moodDB.removeMood(deletedMood.getDocId());
-            }
-
-            // showing snack bar with Undo option
-            Snackbar snackbar = Snackbar
-                    .make(moodHistoryLayout,
-                            deletedMood.toString() + " removed from Mood History!",
-                            Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // undo is selected, restore the deleted item
-                    moodDB.addMood(deletedMood);
-=======
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction, final int position) {
         AlertDialog.Builder alert = new AlertDialog.Builder(
                 getActivity());
@@ -231,7 +196,6 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                     Log.i("testDel", "Deleted mood.");
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
->>>>>>> prod
                 }
             }
         });
@@ -281,7 +245,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
 
             @Override
             public boolean onQueryTextChange(String s) {
-                moodListAdapter.getFilter().filter(s);
+                moodAdapter.getFilter().filter(s);
                 return false;
             }
         });
@@ -294,7 +258,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
             @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
                 searchView.setQuery("",false);
-                moodListAdapter.getFilter().filter("");
+                moodAdapter.getFilter().filter("");
                 return true;
             }
         });
@@ -305,12 +269,12 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
      * @param itemClickListener
      */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
-        moodListAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
+        moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         moodListView.setLayoutManager(mLayoutManager);
         moodListView.setItemAnimator(new DefaultItemAnimator());
         moodListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        moodListView.setAdapter(moodListAdapter);
+        moodListView.setAdapter(moodAdapter);
     }
 
     /**

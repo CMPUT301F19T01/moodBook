@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.moodbook.ui.home.EditMoodActivity;
+import com.example.moodbook.ui.home.MoodListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**

@@ -22,12 +22,9 @@ android {
 
 dependencies {
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-<<<<<<< HEAD
     implementation 'com.android.support:support-v4:29.+'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
-=======
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
->>>>>>> prod
     androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.5.3'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.0.1'
     testImplementation 'junit:junit:4.12'

@@ -26,12 +26,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-<<<<<<< HEAD
-
-=======
 import com.bumptech.glide.Glide;
->>>>>>> prod
 import com.example.moodbook.ui.Request.RequestFragment;
 import com.example.moodbook.ui.followers.followersFragment;
 import com.example.moodbook.ui.chat.ChatFragment;
@@ -128,8 +123,6 @@ public class MainActivity extends AppCompatActivity  {
         final ImageView profilePicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile);
         profileUserName.setText(name);
         profileEmail.setText(email);
-<<<<<<< HEAD
-=======
         if (name!=null) {
             // Reference to an image file in Cloud Storage
              StorageReference storageReference = FirebaseStorage.getInstance().getReference();
@@ -150,7 +143,6 @@ public class MainActivity extends AppCompatActivity  {
                 });
         }
 
->>>>>>> prod
 
     }
 
@@ -161,7 +153,6 @@ public class MainActivity extends AppCompatActivity  {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -200,7 +191,6 @@ public class MainActivity extends AppCompatActivity  {
                 fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
                 break;
-<<<<<<< HEAD
             case R.id.nav_chat:
                 fragmentClass = ChatFragment.class;
                 toolbar.setTitle("Chat");
@@ -216,7 +206,6 @@ public class MainActivity extends AppCompatActivity  {
             case R.id.nav_myRequests:
                 fragmentClass = myRequestsFragment.class;
                 toolbar.setTitle("Friend Requests");
-=======
             case R.id.nav_profile:
                 fragmentClass =null;
                 Intent intent = new Intent(this, ProfileActivity.class);
@@ -227,7 +216,6 @@ public class MainActivity extends AppCompatActivity  {
                 Toast.makeText(getApplicationContext(),
                         "Clicked Profile Page " ,
                         Toast.LENGTH_LONG).show();
->>>>>>> prod
                 break;
             case R.id.nav_logout:
                 fragmentClass = null;

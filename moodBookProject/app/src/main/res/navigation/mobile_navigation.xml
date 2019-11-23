@@ -41,25 +41,16 @@
         android:label="Friend Mood Map"
         tools:layout="@layout/fragment_friendmoodmap" />
     <fragment
-<<<<<<< HEAD
         android:id="@+id/nav_myFriends"
         android:name="com.example.moodbook.ui.myFriends.MyFriendsFragment"
         android:label="My Friends"
         tools:layout="@layout/fragment_myfriends" />
-=======
-        android:id="@+id/nav_logout"
-        android:name="com.example.moodbook.ui.login.LoginActivity"
-        android:label="Log Out"
-        tools:layout="@layout/activity_login" />
 
-
->>>>>>> prod
     <fragment
         android:id="@+id/nav_request"
         android:name="com.example.moodbook.ui.Request.RequestFragment"
         android:label="Follow a user"
         tools:layout="@layout/fragment_request" />
-<<<<<<< HEAD
     <fragment
         android:id="@+id/nav_myRequests"
         android:name="com.example.moodbook.ui.myRequests.myRequestsFragment"
@@ -70,9 +61,4 @@
         android:name="com.example.moodbook.ui.login.LoginActivity"
         android:label="Log Out"
         tools:layout="@layout/fragment_logout" />
-=======
-
-
-
->>>>>>> prod
 </navigation>

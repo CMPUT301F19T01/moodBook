@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.moodbook.DBMoodSetter;
+import com.example.moodbook.MainActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
 

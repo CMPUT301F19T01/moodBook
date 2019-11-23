@@ -389,24 +389,7 @@ public class MoodEditor {
      * @param myActivity The class that calls in this method
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
-<<<<<<< HEAD:moodBookProject/app/src/main/java/com/example/moodbook/ui/home/MoodEditor.java
-                               ImageView image_view_photo, final AppCompatActivity myActivity) {
-        // ensure myActivity implements MoodEditorInterface
-        if(!(myActivity instanceof MoodEditorInterface)){
-            throw new IllegalArgumentException(
-                    myActivity.getClass().getSimpleName()+" must implement MoodEditorInterface!");
-        }
-
-        if (requestCode == REQUEST_IMAGE
-                && resultCode == AppCompatActivity.RESULT_OK){
-            if (data != null) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                if (imageBitmap!= null){
-                    ((MoodEditorInterface)myActivity).setMoodReasonPhoto(imageBitmap);
-                    image_view_photo.setImageBitmap(imageBitmap); //after getting bitmap, set to imageView
-=======
-                                      ImageView image_view_photo, final AppCompatActivity myActivity) throws IOException {
+                               ImageView image_view_photo, final AppCompatActivity myActivity) throws IOException {
         if (requestCode == REQUEST_IMAGE && resultCode == AppCompatActivity.RESULT_OK){
             Log.i(TAG, "result code successful");
             //File object of camera image
@@ -417,10 +400,8 @@ public class MoodEditor {
 
                 imageBitmap = getRotatedBitmap(myActivity, photoUri);
                 if (imageBitmap != null) {
-                    ((MoodInterface) myActivity).setMoodReasonPhoto(imageBitmap);
+                    ((MoodEditorInterface) myActivity).setMoodReasonPhoto(imageBitmap);
                     image_view_photo.setImageBitmap(imageBitmap);
-
->>>>>>> prod:moodBookProject/app/src/main/java/com/example/moodbook/MoodEditor.java
                 }
             }
         }
