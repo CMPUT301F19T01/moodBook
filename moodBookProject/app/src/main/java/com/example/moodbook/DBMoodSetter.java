@@ -327,6 +327,7 @@ public class DBMoodSetter {
          */
         public void getImageFromDB (String docID,final ImageView view){
             StorageReference ref = photoReference.child(docID);
+            Log.d("DOCID",docID);
             try {
                 final File localFile = File.createTempFile("Images", "jpeg");
                 ref.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {

@@ -47,4 +47,10 @@
     <string name="textview">TextView</string>
     <string name="title_activity_mood_map">Map</string>
     <string name="title_activity_location_picker">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="view_this_mood">View this Mood</string>
+    <string name="edit_this_mood">Edit this Mood</string>
+    <string name="delete_this_mood">Delete this Mood</string>
 </resources>
