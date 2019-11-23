@@ -5,13 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-import com.example.moodbook.ui.profile.ProfilePicSetter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfilePage extends AppCompatActivity {
-    private ProfilePicSetter DBpic;
+//    private ProfilePicSetter DBpic;
     private FirebaseFirestore db;
     private String name;
     private String email;
@@ -21,7 +20,7 @@ public class ProfilePage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_page);
-        DBpic = new ProfilePicSetter(getApplicationContext());
+//        DBpic = new ProfilePicSetter(getApplicationContext());
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             name = user.getDisplayName();
@@ -33,7 +32,7 @@ public class ProfilePage extends AppCompatActivity {
             String uid = user.getUid();
         }
         dp= findViewById(R.id.dp);
-        DBpic.getImageFromDB(name,dp);
+//        DBpic.getImageFromDB(name,dp);
 
     }
 }

@@ -1,5 +1,6 @@
 package com.example.moodbook.ui.profile;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -7,11 +8,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
 
@@ -30,6 +34,7 @@ public class ProfileEditor {
     public interface ProfilePicInterface {
         void setProfilePic(Bitmap bitImage);
     }
+
 
     public static Bitmap getBitmap(){
         return imageBitmap;
@@ -81,12 +86,30 @@ public class ProfileEditor {
      * @param myActivity The class that calls in this method
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
-                                      ImageView image_view_photo, final AppCompatActivity myActivity) {
+                                      ImageView image_view_photo, final AppCompatActivity myActivity)  {
         if (requestCode == REQUEST_IMAGE
                 && resultCode == AppCompatActivity.RESULT_OK){
+////            Uri uri = null;
+//               File newfile = createImageFile(myActivity);
             if (data != null) {
                 Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
+               imageBitmap = (Bitmap) extras.get("data");
+//               Bitmap photo = (Bitmap)extras.get("data");
+//                Uri uri = getImageUri(myActivity, photo);
+
+                // CALL THIS METHOD TO GET THE ACTUAL PATH
+
+//               Uri uri = data.getData();
+//                try {
+//                    ParcelFileDescriptor parcelFileDescriptor =
+//                            myActivity.getContentResolver().openFileDescriptor(uri, "r");
+//                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+//                    imageBitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+//                    parcelFileDescriptor.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
                 if (imageBitmap!= null){
                     ((ProfileEditor.ProfilePicInterface)myActivity).setProfilePic(imageBitmap);
                     image_view_photo.setImageBitmap(imageBitmap); //after getting bitmap, set to imageView
@@ -106,7 +129,6 @@ public class ProfileEditor {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                //send to DBMoodSetter
                 if (imageBitmap!=null){
                     ((ProfileEditor.ProfilePicInterface)myActivity).setProfilePic(imageBitmap);
                     image_view_photo.setImageBitmap(imageBitmap);
@@ -116,6 +138,23 @@ public class ProfileEditor {
         else {
             //does nothing if fails to deliver data
         }
+    }
+    public static Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+    private static File createImageFile(Context inContext) throws IOException {
+        File storageDir = inContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                "temp",  /* prefix */
+                ".jpeg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        String imageFilePath = image.getAbsolutePath();
+        return image;
     }
 
 

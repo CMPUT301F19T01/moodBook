@@ -9,13 +9,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.bumptech.glide.Glide;
 
+import com.example.moodbook.MainActivity;
 import com.example.moodbook.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -25,6 +28,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileEditor.ProfilePicInterface{
     ImageView dp;
@@ -42,6 +47,10 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     String profileImageUrl;
     FirebaseAuth mAuth;
 
+    StorageReference fireRef;
+    StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,72 +65,21 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
         email.setText("Email: " + intent_email);
         image_progress = (ProgressBar) findViewById(R.id.image_progress);
         save_profile =(Button) findViewById(R.id.save_profile);
-//        edit_image.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showImageChooser();
-//
-//            }
-//        });
-
+        showImg(intent_name);
+        changeProfilePic();
         save_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                saveUserInformation();
+                  addImg(intent_name);
+                  finishActivity(1);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
             }
         });
-        changeProfilePic();
+
 
     }
-
-    private void saveUserInformation() {
-    }
-//    @SuppressLint("MissingSuperCall")
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == CHOOSE_IMAGE && requestCode == RESULT_OK && data != null && data.getData()!=null){
-//            uriProfileImage = data.getData();
-//            try {
-//                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uriProfileImage);
-//                dp.setImageBitmap(bitmap);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            ProfileEditor.getImageResult(requestCode, resultCode, data, dp, this);
-//
-//        }
-//    }
-    private void uploadImageToFirebaseStorage(){
-        StorageReference profileImageRef =
-                FirebaseStorage.getInstance().getReference("profilepics/"+ intent_name+".jpg");
-        if(uriProfileImage != null){
-            image_progress.setVisibility(View.VISIBLE);
-            profileImageRef.putFile(uriProfileImage)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            image_progress.setVisibility(View.GONE);
-                            Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                            while(!urlTask.isSuccessful());
-                            Uri downloadUrl =urlTask.getResult();
-                            profileImageUrl = urlTask.getResult().toString();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            image_progress.setVisibility(View.GONE);
-                            Toast.makeText(ProfileActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-
-        }
-    }
-
-
-
     /**
      * This allows a user to edit a mood image.
      */
@@ -133,6 +91,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
             public void onClick(View view) {
 
                 ProfileEditor.setImage(ProfileActivity.this);
+
             }
         });
     }
@@ -142,16 +101,43 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         ProfileEditor.getImageResult(requestCode, resultCode, data, dp, this);
+        uriProfileImage = data.getData();
     }
-    private void showImageChooser(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Profile Image"),CHOOSE_IMAGE);
-    }
+
 
     @Override
     public void setProfilePic(Bitmap bitImage) {
         this.bitImage = bitImage;
     }
+
+    public void addImg(String username) {
+        fireRef = mStorageRef.child("profilepics/" + username + ".jpeg" );
+        Bitmap bitImage = ProfileEditor.getBitmap();
+        Uri file = uriProfileImage;
+        if (file != null){
+            UploadTask uploadTask = fireRef.putFile(file);
+            Log.e("Fire Path", fireRef.toString());
+
+        }
+    }
+    public void showImg(String username){
+        // Reference to an image file in Cloud Storage
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        storageReference.child("profilepics/" + username + ".jpeg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getApplicationContext()/* context */)
+                        .load(uri)
+                        .centerCrop()
+                        .into(dp);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                dp.setImageResource(R.drawable.purpleprofile);
+            }
+        });
+    }
+
 }

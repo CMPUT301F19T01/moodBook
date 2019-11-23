@@ -30,7 +30,6 @@ import com.example.moodbook.ui.Request.RequestFragment;
 import com.example.moodbook.ui.friendMood.friendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
-import com.example.moodbook.ui.profile.ProfilePicSetter;
 import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
@@ -58,7 +57,6 @@ public class MainActivity extends AppCompatActivity  {
     private FirebaseFirestore db;
     private String name;
     private String email;
-    private ProfilePicSetter DBpic;
     private  ImageView profile;
 
 
@@ -69,11 +67,13 @@ public class MainActivity extends AppCompatActivity  {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db = FirebaseFirestore.getInstance();
-        DBpic = new ProfilePicSetter(getApplicationContext());
+//        DBpic = new ProfilePicSetter(getApplicationContext());
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            name = user.getDisplayName();
+            while(name==null) {
+                name = user.getDisplayName();
+            }
             email = user.getEmail();
 //            Uri photoUrl = user.getPhotoUrl();
 
