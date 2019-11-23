@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity   {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
     private FirebaseFirestore db;
-    private String name;
+    private static String name;
     private String email;
 
 
@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity   {
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            name = user.getDisplayName();
+            while (name == null){
+                name = user.getDisplayName();
+            }
             email = user.getEmail();
 //            Uri photoUrl = user.getPhotoUrl();
 
@@ -197,6 +199,10 @@ public class MainActivity extends AppCompatActivity   {
         mAuth.getInstance().signOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
+    }
+
+    public static String getUsername(){
+        return name;
     }
 
 }
