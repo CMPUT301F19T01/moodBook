@@ -23,13 +23,18 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.moodbook.ui.Request.RequestFragment;
-import com.example.moodbook.ui.followers.followersFragment;
-import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 
+import com.example.moodbook.ui.Request.RequestFragment;
+<<<<<<< HEAD
+import com.example.moodbook.ui.followers.followersFragment;
+=======
+import com.example.moodbook.ui.chat.ChatFragment;
+>>>>>>> c9b40d806a4bbf1ca3b0dbf0104fd9ecb600d3f7
+import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
+import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -88,8 +93,14 @@ public class MainActivity extends AppCompatActivity   {
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.currentEmail, R.id.currentEmail,
+<<<<<<< HEAD
                 R.id.nav_myMood,R.id.nav_FriendMood,
                 R.id.nav_addFriends, R.id.nav_myRequests, R.id.nav_Followers, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap, R.id.nav_logout)
+=======
+                R.id.nav_myMood, R.id.nav_chat, R.id.nav_friendMood,
+                R.id.nav_request, R.id.nav_myRequests, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap,
+                R.id.nav_logout)
+>>>>>>> c9b40d806a4bbf1ca3b0dbf0104fd9ecb600d3f7
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -109,6 +120,7 @@ public class MainActivity extends AppCompatActivity   {
         TextView profileEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
         profileUserName.setText(name);
         profileEmail.setText(email);
+
     }
 
     @Override
@@ -141,17 +153,9 @@ public class MainActivity extends AppCompatActivity   {
         Fragment fragment;
         Class fragmentClass;
         switch(menuItem.getItemId()){
-            case R.id.nav_FriendMood:
+            case R.id.nav_friendMood:
                 fragmentClass = FriendMoodFragment.class;
-                toolbar.setTitle("Friend Mood History");
-                break;
-            case R.id.nav_addFriends:
-                fragmentClass = RequestFragment.class;
-                toolbar.setTitle("Add Friends");
-                break;
-            case R.id.nav_myRequests:
-                fragmentClass = myRequestsFragment.class;
-                toolbar.setTitle("Friend Requests");
+                toolbar.setTitle("Friend Moods");
                 break;
             case R.id.nav_Followers:
                 fragmentClass = followersFragment.class;
@@ -164,6 +168,22 @@ public class MainActivity extends AppCompatActivity   {
             case R.id.nav_myFriendMoodMap:
                 fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
+                break;
+            case R.id.nav_chat:
+                fragmentClass = ChatFragment.class;
+                toolbar.setTitle("Chat");
+                break;
+            case R.id.nav_myFriends:
+                fragmentClass = MyFriendsFragment.class;
+                toolbar.setTitle("My Friends");
+                break;
+            case R.id.nav_request:
+                fragmentClass = RequestFragment.class;
+                toolbar.setTitle("Add Friends");
+                break;
+            case R.id.nav_myRequests:
+                fragmentClass = myRequestsFragment.class;
+                toolbar.setTitle("Friend Requests");
                 break;
             case R.id.nav_logout:
                 fragmentClass = null;
@@ -199,3 +219,15 @@ public class MainActivity extends AppCompatActivity   {
     }
 
 }
+//    OnCompleteListener<AuthResult> completeListener = new OnCompleteListener<AuthResult>() {
+//        @Override
+//        public void onComplete(@NonNull Task<AuthResult> task) {
+//            if (task.isSuccessful()) {
+//                boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+////                    Log.d("MyTAG", "onComplete: " + (isNew ? "new user" : "old user"));
+//                Toast.makeText(getApplicationContext(),
+//                        "new user",
+//                        Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    };

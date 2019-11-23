@@ -7,7 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.moodbook.ui.myRequests.RequestUser;
+import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.ui.myRequests.RequestsAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -83,7 +83,7 @@ public class RequestHandler {
                         data.put("uid", uid);
                         collectionReference.document(document.getString("uid")).collection("REQUESTS").document(username).set(data); // adding the request to the addUser's REQUEST collection
                     } else {
-                        Log.d("TESTINGG", "no such doc");
+                        Log.d("TESTING", "no such doc");
                     }
                 } else {
                     Log.d("TESTING", "get failed with ", task.getException());
@@ -91,7 +91,6 @@ public class RequestHandler {
             }
         });
     }
-
 
     /**
      * This methods gets the requests from DB and shows it in the listview
@@ -110,8 +109,8 @@ public class RequestHandler {
                         if (!doc.getId().equals("null")) {
                             // Adding requestuser from FireStore
                             if(doc.getData() != null && doc.getData().get("uid") != null) {
-                                RequestUser requestUser = new RequestUser(doc.getId(), (String) doc.getData().get("uid"));
-                                requestsAdapter.addItem(requestUser);
+                                MoodbookUser user = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
+                                requestsAdapter.addItem(user);
                             }
                         }
                     }
@@ -119,7 +118,6 @@ public class RequestHandler {
             }
         };
     }
-
 
     /**
      * This is a helper method to show status messages
@@ -133,7 +131,7 @@ public class RequestHandler {
         }
     }
 
-    public void addFriend(final RequestUser acceptFriend, final String myUsername){
+    public void addFriend(final MoodbookUser acceptFriend, final String myUsername){
 
         final String username = myUsername;
         final CollectionReference friendsReference = this.userReference.document(acceptFriend.getUid()).collection("FRIENDS");
