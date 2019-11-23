@@ -37,7 +37,6 @@ public class EditMoodActivity extends MoodEditorActivity {
 
     @Override
     protected void initializeViews() {
-        isImageFitToScreen =true;
         // emotion
         super.emotion_spinner = findViewById(R.id.edit_emotion_spinner);
         // reason text

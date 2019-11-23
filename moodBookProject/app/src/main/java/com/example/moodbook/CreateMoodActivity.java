@@ -49,7 +49,6 @@ public class CreateMoodActivity extends MoodEditorActivity {
     protected void initializeViews() {
         // emotion
         super.mood_emotion = null;
-        isImageFitToScreen =true;
         super.emotion_spinner = findViewById(R.id.create_emotion_spinner);
         // reason text
         super.reason_editText = findViewById(R.id.create_reason_editText);
