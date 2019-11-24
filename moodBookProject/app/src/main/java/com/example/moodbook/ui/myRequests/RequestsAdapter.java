@@ -77,7 +77,6 @@ public class RequestsAdapter extends BaseAdapter {
                 Toast.makeText(context,
                         "Accepted Request",
                         Toast.LENGTH_LONG).show();
-
             }
         });
 

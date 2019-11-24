@@ -44,6 +44,7 @@ public class RequestHandler {
         this.context = context;
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
+        this.TAG = TAG;
     }
 
     public RequestHandler(FirebaseAuth mAuth, Context context){
@@ -122,6 +123,9 @@ public class RequestHandler {
                     @Override
                     public void onSuccess(Void aVoid) {
                         showStatusMessage("Added successfully: " + username);
+                        Log.d(TAG, acceptFriend.getUid());
+                        Log.d(TAG, username);
+                        Log.d(TAG, "Added Friend.");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -135,7 +139,7 @@ public class RequestHandler {
     public void addToFollowerList(final MoodbookUser acceptFriend, final String myUsername){
         final CollectionReference followersRef = this.userReference.document(uid).collection("FOLLOWERS");
         HashMap<String, Object> data = new HashMap<>();
-        data.put("uid", acceptFriend.getUsername());
+        data.put("uid", acceptFriend.getUid());
         followersRef.document(acceptFriend.getUsername()).set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -157,13 +161,13 @@ public class RequestHandler {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        showStatusMessage("Declined Friend Request: " + username);
+                        showStatusMessage("Accepted Friend Request: " + username);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        showStatusMessage("Deleting failed for " + username + ": " + e.toString());
+                        showStatusMessage("Deleting failed for  " + username + ": " + e.toString());
                     }
                 });
     }

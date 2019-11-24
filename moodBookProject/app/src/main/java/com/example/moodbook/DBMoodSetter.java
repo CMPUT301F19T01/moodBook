@@ -95,12 +95,27 @@ public class DBMoodSetter {
     }
 
     /**
-     * This is used by Mood History
-     * @param moodListAdapter
+     * This is a constructor used by Mood History to get updated mood data from user's mood collection in the database
+     *
+     * @param mAuth               This is the FirebaseAuth instance for each logged in user
+     * @param context             This is a handle to get the data and resources that the app needs while it runs
+     * @param moodHistoryListener This is a listener from Mood History
      */
-    public void setMoodListListener(@NonNull MoodListAdapter moodListAdapter) {
-        this.userReference.document(uid).collection("MOODS")
-                .addSnapshotListener(getMoodHistoryListener(moodListAdapter));
+    public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener) {
+        this(mAuth, context);
+        userReference.document(uid).collection("MOODS")
+                .addSnapshotListener(moodHistoryListener);
+    }
+
+    /**
+     * @param mAuth               This is the FirebaseAuth instance for each logged in user
+     * @param context             This is a handle to get the data and resources that the app needs while it runs
+     * @param moodHistoryListener This is a listener from Mood History
+     * @param TAG                 This is an optional string used for printing log messages
+     */
+    public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener, String TAG) {
+        this(mAuth, context, moodHistoryListener);
+        this.TAG = TAG;
     }
 
     public void setMoodListListener(@NonNull MoodListListener listListener) {
@@ -233,6 +248,7 @@ public class DBMoodSetter {
         removeMood(moodID, true, newRecentMoodID);
     }
 
+
     private void removeMood(final String moodID, final boolean updateRecentMoodID,
                             final String newRecentMoodID) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
@@ -311,8 +327,6 @@ public class DBMoodSetter {
      * @param moodID
      *  This is the moodID of the mood that a user wants to view/edit the image at.
      * This update the reason image in firebase storage
-     * @param moodID
-     *   This is the mood docID on the database
      */
     private void updateImg (String moodID){
         StorageReference photoRef = photoReference.child(moodID);
@@ -368,32 +382,9 @@ public class DBMoodSetter {
 
     /**
      * This is used by MoodHistory to get all mood data in the database from user's mood collection
-     * @param moodListAdapter
-     *   This is a MoodList Adapter Object
-     *   @see MoodListAdapter
      * @return
      *  Returns a an EventListener that listens for changes in the mood database
      */
-    private EventListener<QuerySnapshot> getMoodHistoryListener(@NonNull final MoodListAdapter moodListAdapter) {
-        return new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                // clear the old list
-                moodListAdapter.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // ignore null item
-                    if (doc.getId().equals("null")) continue;
-                    // Adding mood from FireStore
-                    Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
-                    if (mood != null) {
-                        mood.setDocId(doc.getId());
-                        moodListAdapter.addItem(mood);
-                    }
-                }
-            }
-        };
-    }
-
     private EventListener<QuerySnapshot> getMoodEventListener() {
         return new EventListener<QuerySnapshot>() {
             @Override

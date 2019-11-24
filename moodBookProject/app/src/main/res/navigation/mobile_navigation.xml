@@ -10,6 +10,11 @@
         android:name="com.example.moodbook.ui.home.HomeFragment"
         android:label="Mood History"
         tools:layout="@layout/fragment_home" />
+    <activity
+        android:id="@+id/nav_profile"
+        android:name="com.example.moodbook.ui.profile.ProfileActivity"
+        android:label="View your profile"
+        tools:layout="@layout/activity_profile" />
     <fragment
         android:id="@+id/nav_chat"
         android:name="com.example.moodbook.ui.chat.ChatFragment"
@@ -20,6 +25,11 @@
         android:name="com.example.moodbook.ui.friendMood.FriendMoodFragment"
         android:label="Friend Mood"
         tools:layout="@layout/fragment_friendmood" />
+    <fragment
+        android:id="@+id/nav_Followers"
+        android:name="com.example.moodbook.ui.followers.followersFragment"
+        android:label="My Followers"
+        tools:layout="@layout/fragment_followers" />
     <fragment
         android:id="@+id/nav_myMoodMap"
         android:name="com.example.moodbook.ui.myMoodMap.MyMoodMapFragment"
@@ -35,6 +45,7 @@
         android:name="com.example.moodbook.ui.myFriends.MyFriendsFragment"
         android:label="My Friends"
         tools:layout="@layout/fragment_myfriends" />
+
     <fragment
         android:id="@+id/nav_request"
         android:name="com.example.moodbook.ui.request.RequestFragment"
@@ -44,7 +55,7 @@
         android:id="@+id/nav_myRequests"
         android:name="com.example.moodbook.ui.myRequests.myRequestsFragment"
         android:label="My Requests"
-        tools:layout="@layout/fragment_request" />
+        tools:layout="@layout/fragment_myrequests" />
     <fragment
         android:id="@+id/nav_logout"
         android:name="com.example.moodbook.ui.login.LoginActivity"
