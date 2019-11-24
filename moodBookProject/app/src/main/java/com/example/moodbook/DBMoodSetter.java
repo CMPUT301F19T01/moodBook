@@ -169,14 +169,13 @@ public class DBMoodSetter {
                 });
     }
 
-
     /**
      * This add the reason image to firebase storage
      * @param mood
      *   This is a mood Object
      *   @see Mood
      */
-    public void addImg(String moodID, final Mood mood) {
+    private void addImg(String moodID, final Mood mood) {
         String picID = moodID;
         StorageReference photoRef = photoReference.child(picID);
         Bitmap bitImage = mood.getReasonPhoto();
@@ -200,6 +199,97 @@ public class DBMoodSetter {
         }
     }
 
+
+    /**
+     * This removes a Mood object from the database using its docID
+     * @param moodID
+     *   This is a String object of mood docID on the database
+     */
+    public void removeMood (String moodID){
+        removeMood(moodID, false, null);
+    }
+
+    /**
+     * This removes a Mood object from the database using its docID
+     * and updates the most recent moodID for user
+     * @param moodID
+     *   This is a String object of mood docID on the database
+     */
+    public void removeMood (String moodID, String newRecentMoodID){
+        removeMood(moodID, true, newRecentMoodID);
+    }
+
+    private void removeMood(final String moodID, final boolean updateRecentMoodID,
+                            final String newRecentMoodID) {
+        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
+        // remove selected city
+        moodReference.document(moodID).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showStatusMessage("Deleted successfully: " + moodID);
+                        removeImgFromDB(moodID);
+                        // update recent moodID if deleted mood was the most recent mood
+                        if(updateRecentMoodID){
+                            DBFriend.setRecentMoodID(db, uid, newRecentMoodID);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Deleting failed for " + moodID + ": " + e.toString());
+                    }
+                });
+    }
+
+    /**
+     *
+     * @param moodID
+     */
+    private void removeImgFromDB(final String moodID) {
+        StorageReference photoRef = photoReference.child(moodID);
+        photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                // File deleted successfully
+                Log.d(TAG, "Mood image deleted successfully.");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Uh-oh, an error occurred!
+                Log.d(TAG, "Failed to delete mood image.");
+            }
+        });
+    }
+
+
+    /**
+     * This edits  a specific mood in the database given the mood's docID and the parameters to edit
+     * @param moodID
+     *   This is a String object of mood docID on the database
+     * @param data
+     *   This is a HashMap containing all the fields that need to be updated in the database and their new values
+     */
+    public void editMood ( final String moodID, HashMap data){
+        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
+        updateImg(moodID);
+        moodReference.document(moodID).update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showStatusMessage("Updated successfully: " + moodID);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Updated failed for " + moodID + ": " + e.toString());
+                    }
+                });
+    }
+
     /**
      * This updates an image object to the FireBase storage
      * Instead of taking an a whole Mood object, it will only have to take in a moodID
@@ -210,7 +300,7 @@ public class DBMoodSetter {
      * @param moodID
      *   This is the mood docID on the database
      */
-    public void updateImg (String moodID){
+    private void updateImg (String moodID){
         StorageReference photoRef = photoReference.child(moodID);
         Bitmap bitImage = MoodEditor.getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -234,121 +324,6 @@ public class DBMoodSetter {
 
     }
 
-    /**
-     * This removes a Mood object from the database using its docID
-     * @param moodID
-     *   This is a String object of mood docID on the database
-     */
-    public void removeMood (String moodID){
-        removeMood(moodID, false, null);
-    }
-        /**
-         * This removes a Mood object from the database using its docID
-         * @param moodID
-         *   This is a String object of mood docID on the database
-         *
-         */
-        public void removeMood ( final String moodID){
-            CollectionReference moodReference = userReference.document(uid).collection("MOODS");
-            // remove selected city
-            moodReference.document(moodID).delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            showStatusMessage("Deleted successfully: " + moodID);
-                            removeImgFromDB(moodID);
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            showStatusMessage("Deleting failed for " + moodID + ": " + e.toString());
-                        }
-                    });
-        }
-
-
-        /**
-         *
-         * @param moodID
-         */
-
-        public void removeImgFromDB(final String moodID) {
-            StorageReference photoRef = photoReference.child(moodID);
-            photoRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    // File deleted successfully
-                    Log.d(TAG, "Mood image deleted successfully.");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Uh-oh, an error occurred!
-                    Log.d(TAG, "Failed to delete mood image.");
-                }
-            });
-        }
-
-    /**
-     * This removes a Mood object from the database using its docID
-     * and updates the most recent moodID for user
-     * @param moodID
-     *   This is a String object of mood docID on the database
-     */
-    public void removeMood (String moodID, String newRecentMoodID){
-        removeMood(moodID, true, newRecentMoodID);
-    }
-
-    private void removeMood(final String moodID, final boolean updateRecentMoodID,
-                            final String newRecentMoodID) {
-        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
-        // remove selected city
-        moodReference.document(moodID).delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        showStatusMessage("Deleted successfully: " + moodID);
-                        // update recent moodID if deleted mood was the most recent mood
-                        if(updateRecentMoodID){
-                            DBFriend.setRecentMoodID(db, uid, newRecentMoodID);
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        showStatusMessage("Deleting failed for " + moodID + ": " + e.toString());
-                    }
-                });
-    }
-
-    /**
-     * This edits  a specific mood in the database given the mood's docID and the parameters to edit
-     * @param moodID
-     *   This is a String object of mood docID on the database
-     * @param data
-     *   This is a HashMap containing all the fields that need to be updated in the database and their new values
-     */
-
-    public void editMood ( final String moodID, HashMap data){
-        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
-        updateImg(moodID);
-        moodReference.document(moodID).update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        showStatusMessage("Updated successfully: " + moodID);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        showStatusMessage("Updated failed for " + moodID + ": " + e.toString());
-                    }
-                });
-    }
 
     /**
      * This gets the image stored from DB

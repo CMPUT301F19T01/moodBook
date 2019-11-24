@@ -12,7 +12,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.MoodbookUser;
-import com.example.moodbook.ui.Request.RequestHandler;
+import com.example.moodbook.ui.request.RequestHandler;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -40,8 +40,8 @@ public class myRequestsFragment extends PageFragment {
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
         requestsAdapter=  new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
-        requestDB = new RequestHandler(mAuth, getContext(),
-                RequestHandler.requestListener(requestsAdapter), TAG);
+        requestDB = new RequestHandler(mAuth, getContext(), TAG);
+        requestDB.setRequestListListener(requestsAdapter);
         requestListView.setAdapter(requestsAdapter);
         return root;
     }
