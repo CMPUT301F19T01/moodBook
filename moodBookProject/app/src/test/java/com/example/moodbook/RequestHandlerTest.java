@@ -1,6 +1,6 @@
 package com.example.moodbook;
 
-import com.example.moodbook.ui.Request.RequestHandler;
+import com.example.moodbook.ui.request.RequestHandler;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -21,7 +21,7 @@ public class RequestHandlerTest {
     @Mock
     FirebaseFirestore mockdb;
 
-    private final RequestHandler requestHandler = new RequestHandler(mockmAuth, mockdb);
+    private RequestHandler requestHandler;
 
 
     /**

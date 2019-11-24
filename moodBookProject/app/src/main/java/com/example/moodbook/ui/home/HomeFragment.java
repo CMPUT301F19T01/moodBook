@@ -53,11 +53,12 @@ import java.util.ArrayList;
  * @see com.example.moodbook.PageFragment
  * @see com.example.moodbook.RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
  */
-public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class HomeFragment extends PageFragment
+        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBMoodSetter.MoodListListener{
 
     // Mood History
     private RecyclerView moodListView;
-    private MoodListAdapter moodAdapter;
+    private MoodListAdapter moodListAdapter;
     private CoordinatorLayout moodHistoryLayout;
 
     // connect to DB
@@ -116,7 +117,10 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                         //do your work here
                         dialog.dismiss();
                         Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
+                        // put attributes of selected mood into editIntent
                         getIntentDataFromMood(viewIntent, item);
+                        // add current class name to disable edit button
+                        viewIntent.putExtra("page",HomeFragment.class.getSimpleName());
                         startActivity(viewIntent);
 
 
@@ -137,7 +141,8 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
         moodDB = new DBMoodSetter(mAuth, getContext(), TAG);
-        moodDB.setMoodListListener(moodAdapter);
+        //moodDB.setMoodListListener(moodListAdapter);
+        moodDB.setMoodListListener(this);
 
         // Add a mood: when floating add button is clicked, start add activity
         FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
@@ -174,10 +179,10 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                 if (viewHolder instanceof MoodListAdapter.MyViewHolder) {
                     // backup of removed item for undo purpose
                     final int deletedIndex = viewHolder.getAdapterPosition();
-                    final Mood deletedMood = moodAdapter.getItem(deletedIndex);
+                    final Mood deletedMood = moodListAdapter.getItem(deletedIndex);
 
                     // remove the item from recycler view
-                    //moodAdapter.removeItem(deletedIndex);
+                    //moodListAdapter.removeItem(deletedIndex);
                     moodDB.removeMood(deletedMood.getDocId());
 
                     // showing snack bar with Undo option
@@ -189,7 +194,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                         @Override
                         public void onClick(View view) {
                             // undo is selected, restore the deleted item
-                            //moodAdapter.restoreItem(deletedItem, deletedIndex);
+                            //moodListAdapter.restoreItem(deletedItem, deletedIndex);
                             moodDB.addMood(deletedMood);
                         }
                     });
@@ -208,7 +213,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                 }else {
                     Log.e(TAG,"Right Swipe");
                 }
-                moodAdapter.notifyItemChanged(position);
+                moodListAdapter.notifyItemChanged(position);
 
                 dialogInterface.dismiss();
             }
@@ -245,7 +250,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
 
             @Override
             public boolean onQueryTextChange(String s) {
-                moodAdapter.getFilter().filter(s);
+                moodListAdapter.getFilter().filter(s);
                 return false;
             }
         });
@@ -258,10 +263,25 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
             @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
                 searchView.setQuery("",false);
-                moodAdapter.getFilter().filter("");
+                moodListAdapter.getFilter().filter("");
                 return true;
             }
         });
+    }
+
+    @Override
+    public void beforeGettingMoodList() {
+        moodListAdapter.clear();
+    }
+
+    @Override
+    public void onGettingMood(Mood item) {
+        moodListAdapter.addItem(item);
+    }
+
+    @Override
+    public void afterGettingMoodList() {
+        // do nothing
     }
 
     /**
@@ -269,12 +289,12 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
      * @param itemClickListener
      */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
-        moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
+        moodListAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         moodListView.setLayoutManager(mLayoutManager);
         moodListView.setItemAnimator(new DefaultItemAnimator());
         moodListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        moodListView.setAdapter(moodAdapter);
+        moodListView.setAdapter(moodListAdapter);
     }
 
     /**
@@ -289,7 +309,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         intent.putExtra("time",mood.getTimeText());
         intent.putExtra("emotion",mood.getEmotionText());
         intent.putExtra("reason_text",mood.getReasonText());
-        intent.putExtra("reason_photo", mood.getReasonPhoto());
+        //intent.putExtra("reason_photo", mood.getReasonPhoto());
         intent.putExtra("situation",mood.getSituation());
         intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());

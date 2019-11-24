@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.Request;
+package com.example.moodbook.ui.request;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,7 +14,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,26 +38,22 @@ public class RequestHandler {
     private Context context;
 
 
-    public RequestHandler(FirebaseAuth mAuth, Context context){
+    public RequestHandler(FirebaseAuth mAuth, Context context, String TAG){
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
         this.context = context;
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
-    }
-
-    public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db){
-        this.mAuth = mAuth;
-        this.db = FirebaseFirestore.getInstance();
-        this.uid = mAuth.getCurrentUser().getUid();
-        this.userReference = this.db.collection("USERS");
-    }
-
-    public RequestHandler(FirebaseAuth mAuth, Context context, @NonNull EventListener reqHistoryListener, String TAG){
-        this(mAuth, context);
-        userReference.document(uid).collection("REQUESTS")
-                .addSnapshotListener(reqHistoryListener);
         this.TAG = TAG;
+    }
+
+    public RequestHandler(FirebaseAuth mAuth, Context context){
+        this(mAuth, context, RequestHandler.class.getSimpleName());
+    }
+
+    public void setRequestListListener(@NonNull RequestsAdapter requestsAdapter) {
+        this.userReference.document(uid).collection("REQUESTS")
+                .addSnapshotListener(getRequestListener(requestsAdapter));
     }
 
     /**
@@ -97,38 +92,24 @@ public class RequestHandler {
      * @param requestsAdapter
      * @return
      */
-    public static EventListener<QuerySnapshot> requestListener(final RequestsAdapter requestsAdapter) {
+    private EventListener<QuerySnapshot> getRequestListener(@NonNull final RequestsAdapter requestsAdapter) {
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                if(requestsAdapter != null) {
-                    // clear the old list
-                    requestsAdapter.clear();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        // ignore null item
-                        if (!doc.getId().equals("null")) {
-                            // Adding requestuser from FireStore
-                            if(doc.getData() != null && doc.getData().get("uid") != null) {
-                                MoodbookUser user = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
-                                requestsAdapter.addItem(user);
-                            }
+                // clear the old list
+                requestsAdapter.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    // ignore null item
+                    if (!doc.getId().equals("null")) {
+                        // Adding requestuser from FireStore
+                        if(doc.getData() != null && doc.getData().get("uid") != null) {
+                            MoodbookUser user = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
+                            requestsAdapter.addItem(user);
                         }
                     }
                 }
             }
         };
-    }
-
-    /**
-     * This is a helper method to show status messages
-     * @param message
-     *  This is a string that contains the status to be shown
-     */
-    private void showStatusMessage(String message) {
-        Log.w(TAG, message);
-        if(context != null) {
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-        }
     }
 
     public void addFriend(final MoodbookUser acceptFriend, final String myUsername){
@@ -189,5 +170,17 @@ public class RequestHandler {
                         showStatusMessage("Deleting failed for  " + username + ": " + e.toString());
                     }
                 });
+    }
+
+    /**
+     * This is a helper method to show status messages
+     * @param message
+     *  This is a string that contains the status to be shown
+     */
+    private void showStatusMessage(String message) {
+        Log.w(TAG, message);
+        if(context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        }
     }
 }
