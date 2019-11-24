@@ -2,9 +2,7 @@ package com.example.moodbook.ui.myMoodMap;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -183,13 +181,49 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-     * Inherited from MapViewFragment and is implemented by querying FireBase
-     * for the all the Current users moods
+     * This method draws all the Users moods on the map
+     * @param moodDataList
+     *  ArrayList of the users Mood objects
+     */
+    protected void drawMoodMarkers(ArrayList<Mood> moodDataList, GoogleMap moodMap){
+        int emotionResource;
+        LatLng moodLatLng;
+
+        int i;
+        for(i = 0; i < moodDataList.size(); i++){
+            Mood mood = moodDataList.get(i);
+            // get image resource for the mood marker
+            emotionResource = mood.getEmotionImageResource();
+
+            // get location of mood
+            Location moodLocation = mood.getLocation();
+            moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
+
+            // use png image resource as marker icon
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
+            Bitmap b = bitmapDrawable.getBitmap();
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
+
+            // draw on map
+            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor)).setTag(i);
+
+            // zoom in and focus on the most recent mood, ie. the last mood in list
+            if(i+1 == moodDataList.size()){
+                moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
+            }
+
+        }
+
+    }
+
+
+    /**
+     * Queries FireBase for the all the Current users moods
      * @param db
      *  reference to the FireBaseFireStore instance
      * @see MoodMapFragment
      */
-    @Override
     public void updateList(FirebaseFirestore db) {
         try {
             db.collection("USERS")

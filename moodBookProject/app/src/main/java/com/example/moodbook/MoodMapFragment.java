@@ -34,54 +34,7 @@ import java.util.ArrayList;
 /**
  *
  */
-abstract public class MoodMapFragment extends PageFragment{
-
-
-    /**
-     * query firestore for Mood objects
-     * @param db
-     *  reference to the FirebaseFirestore instance
-     */
-    abstract protected void updateList(FirebaseFirestore db);
-
-
-    /**
-     * This method draws all the Users moods on the map
-     * @param moodDataList
-     *  ArrayList of the users Mood objects
-     */
-    protected void drawMoodMarkers(ArrayList<Mood> moodDataList, GoogleMap moodMap){
-        int emotionResource;
-        LatLng moodLatLng;
-
-        int i;
-        for(i = 0; i < moodDataList.size(); i++){
-            Mood mood = moodDataList.get(i);
-            // get image resource for the mood marker
-            emotionResource = mood.getEmotionImageResource();
-
-            // get location of mood
-            Location moodLocation = mood.getLocation();
-            moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
-
-            // use png image resource as marker icon
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
-            Bitmap b = bitmapDrawable.getBitmap();
-            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
-
-            // draw on map
-            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor)).setTag(i);
-
-            // zoom in and focus on the most recent mood, ie. the last mood in list
-            if(i+1 == moodDataList.size()){
-                moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
-            }
-
-        }
-
-    }
-
+public class MoodMapFragment extends PageFragment{
 
     /**
      * Binds the mood data to a dialog for viewing on map view
