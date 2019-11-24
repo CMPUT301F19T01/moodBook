@@ -224,7 +224,9 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
         // intent data is null for CreateMoodActivity
         String intent_lat = getIntent().getStringExtra("location_lat");
         String intent_lon = getIntent().getStringExtra("location_lon");
+        String intent_address = getIntent().getStringExtra("location_address");
         if(intent_lat != null && intent_lon != null) {
+
             location_button.setText(intent_lat + " , " + intent_lon);
         }
 
