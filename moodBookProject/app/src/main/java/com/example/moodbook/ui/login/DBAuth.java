@@ -107,7 +107,7 @@ public class DBAuth {
     /**
      * This method creates containers for a new user in the database
      */
-    public void createUser(FirebaseUser user, String email, String username){
+    public void createUser(FirebaseUser user, String email, String username , String phone, String bio){
 
         CollectionReference collectionReference = db.collection("USERS");
 
@@ -118,7 +118,8 @@ public class DBAuth {
         HashMap<String, Object> data = new HashMap<>();
         data.put("email", email);
         data.put("username", username);
-        data.put("moodCount", 0);
+        data.put("phone",phone);
+        data.put("bio", bio);
         collectionReference
                 .document(uid)
                 .set(data)

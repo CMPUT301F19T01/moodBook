@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity  {
         setSupportActionBar(toolbar);
         db = FirebaseFirestore.getInstance();
         profile = findViewById(R.id.profile);
+        name = null;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             while (name == null){

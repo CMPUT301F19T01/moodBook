@@ -40,7 +40,6 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     private static final int CHOOSE_IMAGE =101;
     String intent_name;
     String intent_email;
-    ProgressBar image_progress;
     Button save_profile;
     private Bitmap bitImage;
 
@@ -56,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        name = (TextView) findViewById(R.id.name);
+        name = (TextView) findViewById(R.id.username);
         email = (TextView) findViewById(R.id.email);
         intent_name = getIntent().getStringExtra("name");
         intent_email = getIntent().getStringExtra("email");
@@ -64,7 +63,6 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
         edit_image = (FloatingActionButton) findViewById(R.id.edit_profile_pic_button);
         name.setText("Username: " + intent_name);
         email.setText("Email: " + intent_email);
-        image_progress = (ProgressBar) findViewById(R.id.image_progress);
         save_profile =(Button) findViewById(R.id.save_profile);
         showImg(intent_name);
         changeProfilePic();

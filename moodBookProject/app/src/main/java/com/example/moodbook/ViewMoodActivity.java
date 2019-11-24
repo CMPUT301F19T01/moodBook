@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * This activity is used to  enable a user to be to view detials for a specific mood
- * @deprecated  Activity not implement yet : Waiting for user's feedback
  */
 public class ViewMoodActivity extends AppCompatActivity {
     private TextView view_date_time;

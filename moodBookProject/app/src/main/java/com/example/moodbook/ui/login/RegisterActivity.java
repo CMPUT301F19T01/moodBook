@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,10 @@ public class RegisterActivity extends AppCompatActivity {
     protected EditText email;
     private EditText username;
     protected EditText password;
+    private EditText phone;
+    private  EditText bio;
+
+
 
     private static final String TAG = "EmailPassword";
 
@@ -56,6 +61,9 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
+        phone = findViewById(R.id.phone);
+        bio = findViewById(R.id.bio);
+
 
         // Register is not not modularized because FireBase calls are asynchronous. Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows that the task is finished
         // REGISTER button
@@ -67,6 +75,8 @@ public class RegisterActivity extends AppCompatActivity {
                 final String emailS = email.getText().toString();
                 final String passwordS = password.getText().toString();
                 final String usernameS = username.getText().toString();
+                final String phoneS = phone.getText().toString();
+                final String bioS = bio.getText().toString();
 
                 if (dbAuth.verifyEmail(emailS)){
                     if (dbAuth.verifyPass(passwordS)){
@@ -80,7 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                                             if (task.isSuccessful()) {
                                                 Log.d(TAG, "createUserWithEmail:success");
                                                 FirebaseUser user = mAuth.getCurrentUser();
-                                                dbAuth.createUser(user, emailS, usernameS);
+                                                dbAuth.createUser(user, emailS, usernameS,phoneS, bioS);
                                                 dbAuth.updateUsername(user, usernameS);
                                                 Intent intent = new Intent();
                                                 setResult(Activity.RESULT_OK, intent);
