@@ -1,35 +1,17 @@
 package com.example.moodbook;
 
 import android.app.Dialog;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 /**
  *
@@ -49,11 +31,11 @@ public class MoodMapFragment extends PageFragment{
         dialog.setContentView(R.layout.activity_view_mood);
 
         // show the reason photo
-        ImageView reasonPhoto = dialog.findViewById(R.id.view_reason_photo);
+        ImageView reasonPhoto = dialog.findViewById(R.id.view_uploaded_pic);
         dbMoodSetter.getImageFromDB(mood.getDocId(), reasonPhoto);
 
         // set mood emotion image
-        ImageView imageView = dialog.findViewById(R.id.view_mood_image);
+        ImageView imageView = dialog.findViewById(R.id.view_emoji);
         imageView.setImageResource(mood.getEmotionImageResource());
 
         // set mood text
@@ -62,11 +44,7 @@ public class MoodMapFragment extends PageFragment{
 
         // set mood date time
         TextView moodDate = dialog.findViewById(R.id.view_date_time);
-        moodDate.setText(mood.getDateText());
-
-        // set mood time
-        TextView moodTime = dialog.findViewById(R.id.view_time);
-        moodTime.setText(mood.getTimeText());
+        moodDate.setText(mood.getDateText() + " " + mood.getTimeText());
 
         // set mood location
         TextView moodLocation = dialog.findViewById(R.id.view_location);
@@ -82,7 +60,7 @@ public class MoodMapFragment extends PageFragment{
         moodReason.setText(mood.getReasonText());
 
         // close on click listener
-        Button button = dialog.findViewById(R.id.close_button);
+        Button button = dialog.findViewById(R.id.cancel_view);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,20 +71,23 @@ public class MoodMapFragment extends PageFragment{
         // background to transparent so we only see our custom layout
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+        ScrollView scrollView = dialog.findViewById(R.id.viewPage);
+        scrollView.setBackgroundColor(Color.TRANSPARENT);
+
         // set the background color based on the mood
-        RelativeLayout relativeLayout = dialog.findViewById(R.id.viewLayout);
+        ConstraintLayout constraintLayout = dialog.findViewById(R.id.constraint_layout);
 
         if (mood.getEmotionText().equals("happy")){
-            relativeLayout.setBackgroundResource(R.drawable.view_happy_bg);
+            constraintLayout.setBackgroundResource(R.drawable.view_happy_bg);
         }
         else if (mood.getEmotionText().equals("angry")){
-            relativeLayout.setBackgroundResource(R.drawable.view_angry_bg);
+            constraintLayout.setBackgroundResource(R.drawable.view_angry_bg);
         }
         else if (mood.getEmotionText().equals("sad")){
-            relativeLayout.setBackgroundResource(R.drawable.view_sad_bg);
+            constraintLayout.setBackgroundResource(R.drawable.view_sad_bg);
         }
         else if (mood.getEmotionText().equals("afraid")){
-            relativeLayout.setBackgroundResource(R.drawable.view_afraid_bg);
+            constraintLayout.setBackgroundResource(R.drawable.view_afraid_bg);
         }
 
         return dialog;

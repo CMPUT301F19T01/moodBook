@@ -118,7 +118,7 @@ public class DBAuth {
         HashMap<String, Object> data = new HashMap<>();
         data.put("email", email);
         data.put("username", username);
-        data.put("moodCount", 0);
+        data.put("recent_moodID", null);
         collectionReference
                 .document(uid)
                 .set(data)
@@ -141,9 +141,9 @@ public class DBAuth {
         nullData.put("null", null);
 
         collectionReference.document(uid).collection("MOODS").document("null").set(nullData);
-        collectionReference.document(uid).collection("FRIENDS").document("null").set(nullData);
+        collectionReference.document(uid).collection("FRIENDS").document("null").set(nullData); //followings
+        collectionReference.document(uid).collection("FOLLOWERS").document("null").set(nullData);
         collectionReference.document(uid).collection("REQUESTS").document("null").set(nullData);
-
         nullData.put("uid", user.getUid());
         db.collection("usernamelist").document(username).set(nullData); // add username to usernamelist
 

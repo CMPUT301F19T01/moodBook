@@ -13,11 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
-import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
-import com.example.moodbook.MoodInvalidInputException;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -100,21 +97,6 @@ public class FriendMoodFragment extends PageFragment implements DBFriend.FriendR
         intent.putExtra("situation",mood.getSituation());
         intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
-    }
-
-    @Deprecated
-    private void testAdd() {
-        String[] username = {"a", "b", "c", "d"};
-        for(int i = 0; i < username.length; i++) {
-            try {
-                Mood mood = new Mood("2019-11-1"+i+" 08:00", Mood.Emotion.getNames()[i%4], username[i],
-                        null, null, null);
-                MoodbookUser user = new MoodbookUser(username[i], username[i] + "@test.com");
-                friendMoodListAdapter.add(new FriendMood(user, mood));
-            } catch (MoodInvalidInputException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override

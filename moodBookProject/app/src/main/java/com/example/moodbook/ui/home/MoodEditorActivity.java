@@ -22,6 +22,7 @@ import com.example.moodbook.MoodInvalidInputException;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public abstract class MoodEditorActivity extends AppCompatActivity implements MoodEditor.MoodEditorInterface {
@@ -64,8 +65,7 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
 
     /**
      * This is a method inherited from the AppCompatActivity
-     * @param savedInstanceState
-     *  Bundle Object is used to stored the data of this activity
+     * @param savedInstanceState Bundle Object is used to stored the data of this activity
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,17 +103,19 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
 
     /**
      * This gets the photo that was taken and let the image be shown in the page
-     * @param requestCode
-     *   An int for requestCode
-     * @param resultCode
-     *   An int for the result Code
+     * @param requestCode An int for requestCode
+     * @param resultCode An int for the result Code
      * @param data
      *
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView, this);
+        try {
+            MoodEditor.getImageResult(requestCode, resultCode, data, reason_photo_imageView, this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         MoodEditor.getLocationResult(requestCode, resultCode, data, this);
     }
 

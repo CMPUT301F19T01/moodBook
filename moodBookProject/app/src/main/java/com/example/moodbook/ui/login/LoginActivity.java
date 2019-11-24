@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.moodbook.MainActivity;
@@ -43,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button registerButton;
     protected EditText email;
     protected EditText password;
+    private ImageView profile;
 
     private static final String TAG = "EmailPassword";
 
@@ -61,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
+        profile = findViewById(R.id.profile);
 
 
         // Login is not not modularized because FireBase calls are asynchronous. Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows that the task is finished
