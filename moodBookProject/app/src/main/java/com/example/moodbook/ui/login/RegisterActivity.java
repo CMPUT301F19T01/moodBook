@@ -11,6 +11,7 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.moodbook.MainActivity;
 import com.example.moodbook.R;
 import com.example.moodbook.data.UsernameList;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -84,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
                                                 Intent intent = new Intent();
                                                 setResult(Activity.RESULT_OK, intent);
                                                 finish();
+
 
                                             } else {
                                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());

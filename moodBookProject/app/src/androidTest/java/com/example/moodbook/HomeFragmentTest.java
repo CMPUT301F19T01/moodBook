@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.moodbook.ui.home.CreateMoodActivity;
+import com.example.moodbook.ui.home.MoodListAdapter;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
 

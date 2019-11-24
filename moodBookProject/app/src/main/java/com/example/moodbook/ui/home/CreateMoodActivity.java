@@ -1,12 +1,23 @@
-package com.example.moodbook;
+package com.example.moodbook.ui.home;
 
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.moodbook.DBMoodSetter;
+import com.example.moodbook.Mood;
+import com.example.moodbook.MoodInvalidInputException;
+import com.example.moodbook.R;
 
 /**
  * This activity is used by Mood History to create a Mood Object when clicking an add button
@@ -24,6 +35,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
     // time
     private Button add_time_button;
     private String mood_time;
+    private boolean isImageFitToScreen;
 
 
     /**
@@ -40,6 +52,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
 
     @Override
     protected void initializeViews() {
+        isImageFitToScreen = true;
         // emotion
         super.mood_emotion = null;
         super.emotion_spinner = findViewById(R.id.create_emotion_spinner);
@@ -48,6 +61,23 @@ public class CreateMoodActivity extends MoodEditorActivity {
         // reason photo
         super.reason_photo_button = findViewById(R.id.create_reason_photo_button);
         super.reason_photo_imageView = findViewById(R.id.create_reason_photo_imageView);
+
+        // when imageview is clicked, then it would enlarge the image
+        reason_photo_imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isImageFitToScreen) {
+                    isImageFitToScreen=false;
+                    reason_photo_imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    reason_photo_imageView.setAdjustViewBounds(true);
+                }else{
+                    isImageFitToScreen=true;
+                    reason_photo_imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                    reason_photo_imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    reason_photo_imageView.setAdjustViewBounds(false);
+                }
+            }
+        });
         // situation
         super.situation_spinner = findViewById(R.id.create_situation_spinner);
         // location
