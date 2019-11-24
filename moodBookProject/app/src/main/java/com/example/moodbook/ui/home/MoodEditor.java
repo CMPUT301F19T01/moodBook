@@ -1,4 +1,4 @@
-package com.example.moodbook;
+package com.example.moodbook.ui.home;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +26,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.moodbook.LocationPickerActivity;
+import com.example.moodbook.Mood;
+import com.example.moodbook.R;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
 
@@ -46,7 +49,7 @@ public class MoodEditor {
      * set mood attributes from MoodEditor
      * Setters for emotion, situation, location, reason_photo
      */
-    public interface MoodInterface {
+    public interface MoodEditorInterface {
         void setMoodEmotion(String emotion);
         void setMoodSituation(String situation);
         void setMoodLocation(Location location);
@@ -54,9 +57,9 @@ public class MoodEditor {
     }
 
 
+    private static final String TAG = MoodEditor.class.getSimpleName();
     private static final int REQUEST_IMAGE = 101;
     private static final int GET_IMAGE = 102;
-    private static final String TAG = "MyActivity";
     private static Bitmap imageBitmap;
 
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
@@ -79,8 +82,7 @@ public class MoodEditor {
      * Used by users to set the current date
      * @param view This is a view for a button
      */
-    @Deprecated
-    public static void showCalendar(final Button view){
+    public static void showDate(final Button view){
         Calendar c = Calendar.getInstance();
         String currentDateString = Mood.DATE_FORMATTER.format(c.getTime());
         view.setText(currentDateString);
@@ -92,7 +94,6 @@ public class MoodEditor {
      * @param view
      *  This is a view for a button
      */
-    @Deprecated
     public static void showTime(final Button view){
         Date d = new Date();
         String currentTimeString = Mood.TIME_FORMATTER.format(d);
@@ -103,20 +104,30 @@ public class MoodEditor {
      * A method that acts as an emotion state editor
      * Used by users to select their current emotional state
      * @param myActivity This is the class that calls on this method
-     * @param spinner_emotion This is the spinner for choosing an emotion state
+     * @param emotionSpinner This is the spinner for choosing an emotion state
      * @param emotionAdapter This is the adapter for emotion states
      */
-    public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner spinner_emotion,
-                                         MoodStateAdapter emotionAdapter) {
-        spinner_emotion.setAdapter(emotionAdapter);
-        spinner_emotion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner emotionSpinner,
+                                         MoodStateAdapter emotionAdapter, String moodEmotion) {
+        // ensure myActivity implements MoodEditorInterface
+        if(!(myActivity instanceof MoodEditorInterface)){
+            throw new IllegalArgumentException(
+                    myActivity.getClass().getSimpleName()+" must implement MoodEditorInterface!");
+        }
+
+        emotionSpinner.setAdapter(emotionAdapter);
+        // initial selection for emotion
+        if(moodEmotion != null) {
+            emotionSpinner.setSelection(emotionAdapter.getPosition(moodEmotion));
+        }
+        emotionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
                 // first item disabled
                 if(i > 0) {
-                    String selectionEmotion = EMOTION_STATE_LIST[i];
-                    ((MoodInterface)myActivity).setMoodEmotion(selectionEmotion);
-                    spinner_emotion.setBackgroundColor(
+                    String selectedEmotion = EMOTION_STATE_LIST[i];
+                    ((MoodEditorInterface)myActivity).setMoodEmotion(selectedEmotion);
+                    emotionSpinner.setBackgroundColor(
                             myActivity.getResources().getColor(EMOTION_COLOR_LIST[i]));
                 }
             }
@@ -151,7 +162,7 @@ public class MoodEditor {
                 return view;
             }
         };
-        situationAdapter.setDropDownViewResource(R.layout.spinner_situation);
+        situationAdapter.setDropDownViewResource(spinnerLayoutId);
         return situationAdapter;
     }
 
@@ -159,19 +170,29 @@ public class MoodEditor {
     /**
      * This is a method that allows users to choose a situation from the adapter
      * @param myActivity The class that calls in this method
-     * @param spinner_situation The spinner view
+     * @param situationSpinner The spinner view
      * @param situationAdapter The situation adapter
      */
-    public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner spinner_situation,
-                                           ArrayAdapter<String> situationAdapter) {
-        spinner_situation.setAdapter(situationAdapter);
-        spinner_situation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner situationSpinner,
+                                           ArrayAdapter<String> situationAdapter, String moodSituation) {
+        // ensure myActivity implements MoodEditorInterface
+        if(!(myActivity instanceof MoodEditorInterface)){
+            throw new IllegalArgumentException(
+                    myActivity.getClass().getSimpleName()+" must implement MoodEditorInterface!");
+        }
+
+        situationSpinner.setAdapter(situationAdapter);
+        // initial selection for situation
+        if(moodSituation != null) {
+            situationSpinner.setSelection(situationAdapter.getPosition(moodSituation));
+        }
+        situationSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
                 // first item disabled
                 if(i > 0){
                     String selectedSituation = (String) parent.getItemAtPosition(i);
-                    ((MoodInterface)myActivity).setMoodSituation(selectedSituation);
+                    ((MoodEditorInterface)myActivity).setMoodSituation(selectedSituation);
                 }
             }
             @Override
@@ -236,13 +257,19 @@ public class MoodEditor {
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
                                ImageView image_view_photo, final AppCompatActivity myActivity) {
+        // ensure myActivity implements MoodEditorInterface
+        if(!(myActivity instanceof MoodEditorInterface)){
+            throw new IllegalArgumentException(
+                    myActivity.getClass().getSimpleName()+" must implement MoodEditorInterface!");
+        }
+
         if (requestCode == REQUEST_IMAGE
                 && resultCode == AppCompatActivity.RESULT_OK){
             if (data != null) {
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
                 if (imageBitmap!= null){
-                    ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
+                    ((MoodEditorInterface)myActivity).setMoodReasonPhoto(imageBitmap);
                     image_view_photo.setImageBitmap(imageBitmap); //after getting bitmap, set to imageView
                 }
             }
@@ -262,7 +289,7 @@ public class MoodEditor {
                 }
                 //send to DBMoodSetter
                 if (imageBitmap!=null){
-                    ((MoodInterface)myActivity).setMoodReasonPhoto(imageBitmap);
+                    ((MoodEditorInterface)myActivity).setMoodReasonPhoto(imageBitmap);
                     image_view_photo.setImageBitmap(imageBitmap);
                 }
             }
@@ -283,6 +310,12 @@ public class MoodEditor {
      */
     public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data,
             final AppCompatActivity myActivity) {
+        // ensure myActivity implements MoodEditorInterface
+        if(!(myActivity instanceof MoodEditorInterface)){
+            throw new IllegalArgumentException(
+                    myActivity.getClass().getSimpleName()+" must implement MoodEditorInterface!");
+        }
+
         if(requestCode == LocationPickerActivity.REQUEST_EDIT_LOCATION){
             if(resultCode == LocationPickerActivity.EDIT_LOCATION_OK){
                 double lat = data.getDoubleExtra("location_lat", 0);
@@ -291,7 +324,7 @@ public class MoodEditor {
                 Location location = new Location("");
                 location.setLatitude(lat);
                 location.setLongitude(lon);
-                ((MoodInterface)myActivity).setMoodLocation(location);
+                ((MoodEditorInterface)myActivity).setMoodLocation(location);
             }
         }
     }

@@ -29,11 +29,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.moodbook.CreateMoodActivity;
 import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.EditMoodActivity;
 import com.example.moodbook.Mood;
-import com.example.moodbook.MoodListAdapter;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.RecyclerItemTouchHelper;
@@ -53,20 +50,18 @@ import java.util.ArrayList;
  * @see com.example.moodbook.PageFragment
  * @see com.example.moodbook.RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
  */
-public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
-
-    //private HomeViewModel homeViewModel;
+public class HomeFragment extends PageFragment
+        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBMoodSetter.MoodListListener{
 
     // Mood History
     private RecyclerView moodListView;
-    private MoodListAdapter moodAdapter;
+    private MoodListAdapter moodListAdapter;
     private CoordinatorLayout moodHistoryLayout;
 
     // connect to DB
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = HomeFragment.class.getSimpleName();
-    private String testDel;
 
 
     /**
@@ -82,25 +77,28 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         // get root view from PageFragment
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_home);
 
-        // Set up recyclerView and adapter
+        // initialize layout
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
+
+        // Set up recyclerView and adapter
         moodListView = root.findViewById(R.id.mood_history_listView);
         setupAdapter(new MoodListAdapter.OnItemClickListener() {
             // Edit the selected mood: when a mood item is clicked, start edit activity
             @Override
-            public void onItemClick(Mood item) {
-                Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
+            public void onItemClick(Mood selectedMood) {
+                Toast.makeText(getContext(), "Clicked " + selectedMood.toString(), Toast.LENGTH_LONG).show();
                 Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
                 // put attributes of selected mood into editIntent
-                getIntentDataFromMood(editIntent, item);
+                getIntentDataFromMood(editIntent, selectedMood);
                 startActivity(editIntent);
             }
         });
 
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getContext(),
-                DBMoodSetter.getMoodHistoryListener(moodAdapter), TAG);
+        moodDB = new DBMoodSetter(mAuth, getContext(), TAG);
+        //moodDB.setMoodListListener(moodListAdapter);
+        moodDB.setMoodListListener(this);
 
         // Add a mood: when floating add button is clicked, start add activity
         FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
@@ -135,11 +133,18 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         if (viewHolder instanceof MoodListAdapter.MyViewHolder) {
             // backup of removed item for undo purpose
             final int deletedIndex = viewHolder.getAdapterPosition();
-            final Mood deletedMood = moodAdapter.getItem(deletedIndex);
+            final Mood deletedMood = moodListAdapter.getItem(deletedIndex);
 
             // remove the item from recycler view
-            //moodAdapter.removeItem(deletedIndex);
-            moodDB.removeMood(deletedMood.getDocId());
+            // if removed item is the most recent, update the recent moodID
+            if(deletedIndex == 0){
+                String newRecentMoodID = (moodListAdapter.getItemCount() > 1) ?
+                        moodListAdapter.getItem(1).getDocId() : null;
+                moodDB.removeMood(deletedMood.getDocId(), newRecentMoodID);
+            }
+            else{
+                moodDB.removeMood(deletedMood.getDocId());
+            }
 
             // showing snack bar with Undo option
             Snackbar snackbar = Snackbar
@@ -150,11 +155,10 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                 @Override
                 public void onClick(View view) {
                     // undo is selected, restore the deleted item
-                    //moodAdapter.restoreItem(deletedItem, deletedIndex);
                     moodDB.addMood(deletedMood);
                 }
             });
-            Log.i(testDel, "Deleted mood.");
+            Log.i(TAG, "Deleted mood.");
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
         }
@@ -188,7 +192,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
 
             @Override
             public boolean onQueryTextChange(String s) {
-                moodAdapter.getFilter().filter(s);
+                moodListAdapter.getFilter().filter(s);
                 return false;
             }
         });
@@ -201,10 +205,25 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
             @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
                 searchView.setQuery("",false);
-                moodAdapter.getFilter().filter("");
+                moodListAdapter.getFilter().filter("");
                 return true;
             }
         });
+    }
+
+    @Override
+    public void beforeGettingMoodList() {
+        moodListAdapter.clear();
+    }
+
+    @Override
+    public void onGettingMood(Mood item) {
+        moodListAdapter.addItem(item);
+    }
+
+    @Override
+    public void afterGettingMoodList() {
+        // do nothing
     }
 
     /**
@@ -212,12 +231,12 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
      * @param itemClickListener
      */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
-        moodAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
+        moodListAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         moodListView.setLayoutManager(mLayoutManager);
         moodListView.setItemAnimator(new DefaultItemAnimator());
         moodListView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        moodListView.setAdapter(moodAdapter);
+        moodListView.setAdapter(moodListAdapter);
     }
 
     /**

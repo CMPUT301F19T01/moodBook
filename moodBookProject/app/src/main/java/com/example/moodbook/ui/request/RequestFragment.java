@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.Request;
+package com.example.moodbook.ui.request;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -47,7 +47,7 @@ public class RequestFragment extends PageFragment {
         requestText = root.findViewById(R.id.usernameEditText);
         requestButton = root.findViewById(R.id.requestButton);
 
-        requestHandler = new RequestHandler(mAuth, db);
+        requestHandler = new RequestHandler(mAuth, getContext());
 
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -139,12 +139,12 @@ public class LoginActivity extends AppCompatActivity {
      */
     protected void updateUI(FirebaseUser currentUser){
         if (currentUser != null){
-            Log.d(TAG, "User logged in:starting mainactivity");
+            Log.d(TAG, "MoodbookUser logged in:starting mainactivity");
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
             // update text views, show error messages
-            Log.d(TAG, "User not logged in");
+            Log.d(TAG, "MoodbookUser not logged in");
         }
     }
 
