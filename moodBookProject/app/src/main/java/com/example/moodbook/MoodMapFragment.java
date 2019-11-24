@@ -30,6 +30,9 @@ public class MoodMapFragment extends PageFragment{
         // set dialog to custom layout
         dialog.setContentView(R.layout.activity_view_mood);
 
+        Button editButton = dialog.findViewById(R.id.edit);
+        editButton.setVisibility(View.INVISIBLE);
+
         // show the reason photo
         ImageView reasonPhoto = dialog.findViewById(R.id.view_uploaded_pic);
         dbMoodSetter.getImageFromDB(mood.getDocId(), reasonPhoto);
@@ -49,7 +52,7 @@ public class MoodMapFragment extends PageFragment{
         // set mood location
         TextView moodLocation = dialog.findViewById(R.id.view_location);
         Location loc = mood.getLocation();
-        moodLocation.setText(loc.getLatitude() + " " + loc.getLongitude());
+        moodLocation.setText(mood.getLocation().getAddress());
 
         // set mood situation
         TextView moodSituation = dialog.findViewById(R.id.view_situation);

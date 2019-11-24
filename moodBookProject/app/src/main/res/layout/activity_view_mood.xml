@@ -31,6 +31,7 @@
             app:layout_constraintVertical_bias="0.023"
             tools:ignore="MissingConstraints" />
 
+
         <TextView
             android:id="@+id/view_reason"
             android:layout_width="374dp"
@@ -44,7 +45,7 @@
             app:layout_constraintHorizontal_bias="0.486"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.291"
+            app:layout_constraintVertical_bias="0.0"
             tools:ignore="MissingConstraints" />
 
         <TextView
@@ -59,8 +60,7 @@
             app:layout_constraintHorizontal_bias="0.567"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.82" />
-
+            app:layout_constraintVertical_bias="0.829" />
 
         <ImageView
             android:id="@+id/view_emoji"

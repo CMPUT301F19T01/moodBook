@@ -97,6 +97,7 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
             public void onLocationChanged(Location location) {
                 // get current location and draw it on map as initial location
                 pickedLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                locationAddress = convertToAddress(pickedLocation.latitude, pickedLocation.longitude);
                 mMap.addMarker(new MarkerOptions().position(pickedLocation));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(pickedLocation, 11.0f));
                 Log.i("location", String.valueOf(location.getLatitude()));
@@ -139,23 +140,32 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
                 mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(latLng));
                 pickedLocation = latLng;
-                Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+                locationAddress = convertToAddress(latLng.latitude, latLng.longitude);
+                Toast.makeText(getApplicationContext(), locationAddress, Toast.LENGTH_SHORT).show();
 
-                try {
-                    List<Address> listAddresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-
-                    if (listAddresses != null && listAddresses.size() >0 ){
-                        locationAddress = listAddresses.get(0).getAddressLine(0);
-                        Toast.makeText(getApplicationContext(), locationAddress, Toast.LENGTH_SHORT).show();
-
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
 
             }
         });
+    }
+
+    private String convertToAddress(double lat, double lon){
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+
+        try {
+            List<Address> listAddresses = geocoder.getFromLocation(lat, lon, 1);
+
+            if (listAddresses != null && listAddresses.size() >0 ){
+
+                return listAddresses.get(0).getAddressLine(0);
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
     }
 
 }

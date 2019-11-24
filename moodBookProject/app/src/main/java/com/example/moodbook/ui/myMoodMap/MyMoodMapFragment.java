@@ -40,7 +40,6 @@ import java.util.ArrayList;
  * @since 07-11-2019
 
  *  This activity is used to view a where a users moods take place on a map
- * @see DBUpdate
  */
 public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback {
 

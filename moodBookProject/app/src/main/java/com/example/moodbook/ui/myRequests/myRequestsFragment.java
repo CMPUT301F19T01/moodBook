@@ -40,8 +40,8 @@ public class myRequestsFragment extends PageFragment {
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
         requestsAdapter=  new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
-        requestDB = new RequestHandler(mAuth, getContext(),
-                RequestHandler.requestListener(requestsAdapter), TAG);
+        requestDB = new RequestHandler(mAuth, getContext(), TAG);
+        requestDB.setRequestListListener(requestsAdapter);
         requestListView.setAdapter(requestsAdapter);
         return root;
     }

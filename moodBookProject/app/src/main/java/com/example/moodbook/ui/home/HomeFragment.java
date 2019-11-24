@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.Mood;
+import com.example.moodbook.MoodLocation;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.RecyclerItemTouchHelper;
@@ -283,7 +284,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
      * @param mood
      */
     public void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
-        Location location = mood.getLocation();
+        MoodLocation location = mood.getLocation();
         intent.putExtra("moodID", mood.getDocId());
         intent.putExtra("date",mood.getDateText());
         intent.putExtra("time",mood.getTimeText());
@@ -293,6 +294,7 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         intent.putExtra("situation",mood.getSituation());
         intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
+        intent.putExtra("location_address", location.getAddress());
     }
 
 }

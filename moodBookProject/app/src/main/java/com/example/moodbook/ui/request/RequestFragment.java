@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.data.UsernameList;
+import com.example.moodbook.ui.Request.RequestHandler;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,7 +31,7 @@ public class RequestFragment extends PageFragment {
     private EditText requestText;
     private Button requestButton;
 
-    private RequestHandler requestHandler;
+    private com.example.moodbook.ui.Request.RequestHandler requestHandler;
     private UsernameList usernameList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,7 +48,7 @@ public class RequestFragment extends PageFragment {
         requestText = root.findViewById(R.id.usernameEditText);
         requestButton = root.findViewById(R.id.requestButton);
 
-        requestHandler = new RequestHandler(mAuth, db);
+        requestHandler = new RequestHandler(mAuth, getContext());
 
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
