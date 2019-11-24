@@ -13,8 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.ui.home.MoodListAdapter;
+import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -93,21 +95,29 @@ public class ViewMoodActivity extends AppCompatActivity {
         }
         moodDB.getImageFromDB(intent_moodID, view_uploaded_pic);
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), EditMoodActivity.class);
-                intent.putExtra("moodID", intent_moodID);
-                intent.putExtra("date",intent_date);
-                intent.putExtra("time",intent_time);
-                intent.putExtra("emotion",intent_emotion);
-                intent.putExtra("reason_text",intent_reason);
-                intent.putExtra("situation",intent_situation);
-                intent.putExtra("location_lat",intent_lat);
-                intent.putExtra("location_lon", intent_lon);
-                startActivity(intent);
-            }
-        });
+        String page = getIntent().getStringExtra("page");
+        // for FriendMood and FriendMoodMap
+        if(page.equals(FriendMoodFragment.class.getSimpleName())
+                || page.equals(MyFriendMoodMapFragment.class.getSimpleName())){
+            edit.setVisibility(View.GONE);
+        }
+        else{
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), EditMoodActivity.class);
+                    intent.putExtra("moodID", intent_moodID);
+                    intent.putExtra("date",intent_date);
+                    intent.putExtra("time",intent_time);
+                    intent.putExtra("emotion",intent_emotion);
+                    intent.putExtra("reason_text",intent_reason);
+                    intent.putExtra("situation",intent_situation);
+                    intent.putExtra("location_lat",intent_lat);
+                    intent.putExtra("location_lon", intent_lon);
+                    startActivity(intent);
+                }
+            });
+        }
 
         cancel_view.setOnClickListener(new View.OnClickListener() {
             @Override

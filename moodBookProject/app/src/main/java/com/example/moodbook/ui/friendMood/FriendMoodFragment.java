@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
+import com.example.moodbook.ViewMoodActivity;
 import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.PageFragment;
@@ -55,11 +56,11 @@ public class FriendMoodFragment extends PageFragment implements DBFriend.FriendR
                 // get the selected friendMood
                 FriendMood selectedFriendMood = (FriendMood)adapterView.getItemAtPosition(i);
                 Toast.makeText(getContext(), "Clicked " + selectedFriendMood.toString(), Toast.LENGTH_LONG).show();
-                // TODO: go to ViewMoodActivity
-                Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
+                Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
                 // put attributes of selected mood into editIntent
-                getIntentDataFromMood(editIntent, selectedFriendMood.getMood());
-                //startActivity(editIntent); // not working
+                getIntentDataFromMood(viewIntent, selectedFriendMood.getMood());
+                viewIntent.putExtra("page",FriendMoodFragment.class.getSimpleName());
+                startActivity(viewIntent);
             }
         });
 
@@ -93,7 +94,7 @@ public class FriendMoodFragment extends PageFragment implements DBFriend.FriendR
         intent.putExtra("time",mood.getTimeText());
         intent.putExtra("emotion",mood.getEmotionText());
         intent.putExtra("reason_text",mood.getReasonText());
-        intent.putExtra("reason_photo", mood.getReasonPhoto());
+        //intent.putExtra("reason_photo", mood.getReasonPhoto());
         intent.putExtra("situation",mood.getSituation());
         intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
