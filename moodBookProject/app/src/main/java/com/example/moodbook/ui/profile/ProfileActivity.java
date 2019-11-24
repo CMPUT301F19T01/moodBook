@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,6 +26,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -36,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     ImageView dp;
     TextView name;
     TextView email;
+    TextView phone;
     FloatingActionButton edit_image;
     private static final int CHOOSE_IMAGE =101;
     String intent_name;
@@ -57,12 +63,13 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
         setContentView(R.layout.activity_profile);
         name = (TextView) findViewById(R.id.username);
         email = (TextView) findViewById(R.id.email);
+        phone = findViewById(R.id.phone);
         intent_name = getIntent().getStringExtra("name");
         intent_email = getIntent().getStringExtra("email");
         dp = (ImageView) findViewById(R.id.profile_pic);
         edit_image = (FloatingActionButton) findViewById(R.id.edit_profile_pic_button);
-        name.setText("Username: " + intent_name);
-        email.setText("Email: " + intent_email);
+        name.setText(intent_name);
+        email.setText(intent_email);
         save_profile =(Button) findViewById(R.id.save_profile);
         showImg(intent_name);
         changeProfilePic();
@@ -71,14 +78,23 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
             public void onClick(View view) {
 //                saveUserInformation();
                   addImg(intent_name);
-                  finishActivity(1);
+                  finishActivity(0);
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
+                finish();
+                Intent intent2 = new Intent(getApplicationContext(),ProfileActivity.class);
+                startActivity(intent2);
+                startActivity(getIntent());
+                finish();
+                Intent intent3 = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent3);
             }
         });
 
 
     }
+
     /**
      * This allows a user to edit a mood image.
      */
@@ -148,5 +164,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
             }
         });
     }
+
+
 
 }
