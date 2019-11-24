@@ -51,7 +51,7 @@ public class FriendListAdapter extends ArrayAdapter {
 
         // show username
         usernameText.setText(friendUser.getUsername());
-        friendListView = view.findViewById(R.id.friend_listView);
+//        friendListView = view.findViewById(R.id.friend_listView);
 
         return view;
     }

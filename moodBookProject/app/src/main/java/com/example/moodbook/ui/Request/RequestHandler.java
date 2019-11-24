@@ -190,4 +190,15 @@ public class RequestHandler {
                     }
                 });
     }
+    public void sendMessage(String myUsername, String FriendId_receiver, String message){
+        final String username = myUsername;
+        final CollectionReference friendsReference = this.userReference.document(FriendId_receiver).collection("CHAT");
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("sender",myUsername);
+        data.put("receiver",FriendId_receiver);
+        data.put("message",message);
+        friendsReference.document(username).set(data);
+
+    }
+
 }
