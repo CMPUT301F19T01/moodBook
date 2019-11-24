@@ -14,8 +14,10 @@ import com.example.moodbook.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -46,6 +48,16 @@ public class MyFriendMoodMapFragment extends PageFragment implements OnMapReadyC
         mapView.onCreate(savedInstanceState);
 
         mapView.getMapAsync(this);
+
+        // connect to db
+        db = FirebaseFirestore.getInstance();
+
+        // create moodDataList
+        moodDataList = new ArrayList<>();
+
+        // get current user
+        mAuth = FirebaseAuth.getInstance();
+        userID = mAuth.getUid();
 
         return root;
     }
@@ -86,6 +98,20 @@ public class MyFriendMoodMapFragment extends PageFragment implements OnMapReadyC
     @Override
     public void updateList(FirebaseFirestore db) {
         // todo: implement this
+        try {
+            db.collection("USERS")
+                    .document(userID)
+                    .collection("FRIENDS")
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        }
+                    });
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void drawMoodMarkers(ArrayList<Mood> moodDataList){

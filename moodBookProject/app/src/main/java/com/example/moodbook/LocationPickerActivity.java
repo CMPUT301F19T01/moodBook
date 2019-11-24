@@ -21,7 +21,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
- * Activity to allow user to set their mood location manually
+ * Activity to allow user to set their mood location manually used by the CreateMoodActivity
+ * @see CreateMoodActivity
  */
 public class LocationPickerActivity extends FragmentActivity implements OnMapReadyCallback {
     // for intent passing
