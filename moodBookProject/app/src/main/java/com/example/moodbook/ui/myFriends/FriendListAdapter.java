@@ -4,8 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +23,8 @@ import java.util.Collections;
 public class FriendListAdapter extends ArrayAdapter {
     private ArrayList<MoodbookUser> friends;
     private Context context;
+    private ListView friendListView;
+
 
     public FriendListAdapter(Context context, ArrayList<MoodbookUser> friends) {
         super(context, 0, friends);
@@ -46,6 +51,7 @@ public class FriendListAdapter extends ArrayAdapter {
 
         // show username
         usernameText.setText(friendUser.getUsername());
+        friendListView = view.findViewById(R.id.friend_listView);
 
         return view;
     }
@@ -67,4 +73,14 @@ public class FriendListAdapter extends ArrayAdapter {
         // notify list is cleared
         notifyDataSetChanged();
     }
+//    public void clickToMessage(){
+//        friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                adapterView.getItemAtPosition(i);
+//                Toast.makeText(getContext(), "Clicked " , Toast.LENGTH_LONG).show();
+//            }
+//        });
+//
+//    }
 }
