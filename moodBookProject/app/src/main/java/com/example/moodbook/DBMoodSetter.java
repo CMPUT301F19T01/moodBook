@@ -45,6 +45,13 @@ import java.util.Map;
  * This class gets the most current instance of a mood in the Database
  */
 public class DBMoodSetter {
+
+    public interface MoodListListener {
+        void beforeGettingMoodList();
+        void onGettingMood(Mood item);
+        void afterGettingMoodList();
+    }
+
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private static FirebaseStorage storage;
@@ -56,6 +63,7 @@ public class DBMoodSetter {
     private String uid;
     private String TAG;         // optional: for log message
     private Bitmap obtainedImg;
+    private MoodListListener listListener;
 
     /**
      * This is a constructor used by Create and Edit Mood Activity to get the current instance of a mood in the database
@@ -90,9 +98,15 @@ public class DBMoodSetter {
      * This is used by Mood History
      * @param moodListAdapter
      */
-    public void setMoodListListener(MoodListAdapter moodListAdapter) {
+    public void setMoodListListener(@NonNull MoodListAdapter moodListAdapter) {
         this.userReference.document(uid).collection("MOODS")
                 .addSnapshotListener(getMoodHistoryListener(moodListAdapter));
+    }
+
+    public void setMoodListListener(@NonNull MoodListListener listListener) {
+        this.listListener = listListener;
+        this.userReference.document(uid).collection("MOODS")
+                .addSnapshotListener(getMoodEventListener());
     }
 
     /**
@@ -360,24 +374,45 @@ public class DBMoodSetter {
      * @return
      *  Returns a an EventListener that listens for changes in the mood database
      */
-    private EventListener<QuerySnapshot> getMoodHistoryListener(final MoodListAdapter moodListAdapter) {
+    private EventListener<QuerySnapshot> getMoodHistoryListener(@NonNull final MoodListAdapter moodListAdapter) {
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                if (moodListAdapter != null) {
-                    // clear the old list
-                    moodListAdapter.clear();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        // ignore null item
-                        if (doc.getId().equals("null")) continue;
-                        // Adding mood from FireStore
-                        Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
-                        if (mood != null) {
-                            mood.setDocId(doc.getId());
-                            moodListAdapter.addItem(mood);
-                        }
+                // clear the old list
+                moodListAdapter.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    // ignore null item
+                    if (doc.getId().equals("null")) continue;
+                    // Adding mood from FireStore
+                    Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                    if (mood != null) {
+                        mood.setDocId(doc.getId());
+                        moodListAdapter.addItem(mood);
                     }
                 }
+            }
+        };
+    }
+
+    private EventListener<QuerySnapshot> getMoodEventListener() {
+        return new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
+                /*// clear the old list
+                moodListAdapter.clear();*/
+                listListener.beforeGettingMoodList();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    // ignore null item
+                    if (doc.getId().equals("null")) continue;
+                    // Adding mood from FireStore
+                    Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                    if (mood != null) {
+                        mood.setDocId(doc.getId());
+                        //moodListAdapter.addItem(mood);
+                        listListener.onGettingMood(mood);
+                    }
+                }
+                listListener.afterGettingMoodList();
             }
         };
     }

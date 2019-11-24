@@ -50,7 +50,8 @@ import java.util.ArrayList;
  * @see com.example.moodbook.PageFragment
  * @see com.example.moodbook.RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
  */
-public class HomeFragment extends PageFragment implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener {
+public class HomeFragment extends PageFragment
+        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBMoodSetter.MoodListListener{
 
     // Mood History
     private RecyclerView moodListView;
@@ -96,7 +97,8 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
         moodDB = new DBMoodSetter(mAuth, getContext(), TAG);
-        moodDB.setMoodListListener(moodListAdapter);
+        //moodDB.setMoodListListener(moodListAdapter);
+        moodDB.setMoodListListener(this);
 
         // Add a mood: when floating add button is clicked, start add activity
         FloatingActionButton add_mood_button = root.findViewById(R.id.mood_history_add_button);
@@ -207,6 +209,21 @@ public class HomeFragment extends PageFragment implements RecyclerItemTouchHelpe
                 return true;
             }
         });
+    }
+
+    @Override
+    public void beforeGettingMoodList() {
+        moodListAdapter.clear();
+    }
+
+    @Override
+    public void onGettingMood(Mood item) {
+        moodListAdapter.addItem(item);
+    }
+
+    @Override
+    public void afterGettingMoodList() {
+        // do nothing
     }
 
     /**
