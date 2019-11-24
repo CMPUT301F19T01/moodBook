@@ -20,8 +20,7 @@ import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * This activity is used to  enable a user to be to view detials for a specific mood
- * @deprecated  Activity not implement yet : Waiting for user's feedback
+ * This activity is used to enable a user to be to view details for a specific mood
  */
 public class ViewMoodActivity extends AppCompatActivity {
     private TextView view_date_time;
@@ -95,12 +94,13 @@ public class ViewMoodActivity extends AppCompatActivity {
         }
         moodDB.getImageFromDB(intent_moodID, view_uploaded_pic);
 
+        // for FriendMood and FriendMoodMap: disable edit button
         String page = getIntent().getStringExtra("page");
-        // for FriendMood and FriendMoodMap
         if(page.equals(FriendMoodFragment.class.getSimpleName())
                 || page.equals(MyFriendMoodMapFragment.class.getSimpleName())){
             edit.setVisibility(View.GONE);
         }
+        // for Mood History: enable edit button
         else{
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override

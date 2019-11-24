@@ -59,6 +59,7 @@ public class FriendMoodFragment extends PageFragment implements DBFriend.FriendR
                 Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
                 // put attributes of selected mood into editIntent
                 getIntentDataFromMood(viewIntent, selectedFriendMood.getMood());
+                // add current class name to disable edit button
                 viewIntent.putExtra("page",FriendMoodFragment.class.getSimpleName());
                 startActivity(viewIntent);
             }
