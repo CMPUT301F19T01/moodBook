@@ -7,13 +7,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.moodbook.MainActivity;
@@ -25,8 +23,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
 
 
 /**
@@ -45,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     protected EditText email;
     protected EditText password;
     private ImageView profile;
+    private TextView forgotPasswordLink;
 
     private static final String TAG = "EmailPassword";
 
@@ -64,6 +61,8 @@ public class LoginActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         profile = findViewById(R.id.profile);
+
+        forgotPasswordLink = findViewById(R.id.forgot_password);
 
 
         // Login is not not modularized because FireBase calls are asynchronous. Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows that the task is finished
@@ -118,6 +117,13 @@ public class LoginActivity extends AppCompatActivity {
                 updateUI(user);
             }
         };
+
+        forgotPasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+            }
+    });
 
     }
 
