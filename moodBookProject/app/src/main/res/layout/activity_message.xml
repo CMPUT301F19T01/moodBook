@@ -17,7 +17,8 @@
         android:hint="Type a message"
         android:layout_toLeftOf="@+id/sendBtn"
         android:layout_centerVertical="true"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:backgroung="white" />
 
     <ImageButton
         android:id="@+id/sendBtn"
