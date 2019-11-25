@@ -199,7 +199,6 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
                     .center(new LatLng(moodLatLng.latitude, moodLatLng.longitude))
                     .radius(50)
                     .strokeWidth(0)
-                    .strokeColor(mood.getEmotionColorResource())
                     .fillColor(mood.getEmotionColorResource()));
 
             // use png image resource as marker icon
