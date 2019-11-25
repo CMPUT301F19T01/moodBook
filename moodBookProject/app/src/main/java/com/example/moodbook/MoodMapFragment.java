@@ -7,7 +7,6 @@ import android.location.Location;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -32,7 +31,7 @@ public class MoodMapFragment extends PageFragment{
 
         // check if we are drawing a friend mood or own users mood
         if(username != null){
-            TextView name = dialog.findViewById(R.id.friend_name);
+            TextView name = dialog.findViewById(R.id.view_friend_name);
             name.setText(username);
             name.setVisibility(View.VISIBLE);
 
@@ -88,7 +87,7 @@ public class MoodMapFragment extends PageFragment{
         scrollView.setBackgroundColor(Color.TRANSPARENT);
 
         // set the background color based on the mood
-        ConstraintLayout constraintLayout = dialog.findViewById(R.id.constraint_layout);
+        ConstraintLayout constraintLayout = dialog.findViewById(R.id.view_layout);
 
         if (mood.getEmotionText().equals("happy")){
             constraintLayout.setBackgroundResource(R.drawable.view_happy_bg);

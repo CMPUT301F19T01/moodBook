@@ -13,31 +13,24 @@
         tools:context=".ui.home.EditMoodActivity"
         android:isScrollContainer="true" >
 
-
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/show_date_time"
             android:layout_width="match_parent"
-            android:layout_height="71dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/show_date_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:textColor="#F908F9"
-                android:text="" />
-
-
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="6dp"
+            android:text="Date_time"
+            android:textSize="20dp"
+            android:textColor="#F908F9" />
 
         <TextView
             android:id="@+id/edit_emotion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
             android:text="Emotional State: " />
 
         <Spinner
@@ -55,16 +48,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
             android:text="Location (optional): " />
 
         <Button
             android:id="@+id/edit_location_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:hint="@string/pick_mood_location" />
+            android:text="@string/pick_mood_location" />
+
 
         <TextView
             android:id="@+id/edit_situation"
@@ -72,6 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="4dp"
             android:text="Situation (optional): " />
 
         <Spinner
@@ -89,6 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
             android:text="Reason (optional): " />
 
         <EditText
@@ -99,34 +96,28 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:hint="Enter up to 20 characters"
+            android:textSize="20dp"
             android:maxLength="20"/>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <Button
+            android:id="@+id/edit_reason_photo_button"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/edit_reason_photo_button"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:adjustViewBounds="true"
-                android:layout_marginRight="10dp"
-                android:text="@string/pick_mood_photo"></Button>
-        </LinearLayout>
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:adjustViewBounds="true"
+            android:text="@string/pick_mood_photo"></Button>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center">
+
             <ImageView
                 android:id="@+id/edit_reason_photo_imageView"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxHeight="100dp"
                 android:adjustViewBounds="true"
@@ -140,7 +131,7 @@
             android:id="@+id/edit_save_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="8dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:text="SAVE"
@@ -151,12 +142,12 @@
             android:id="@+id/edit_cancel_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CANCEL"
-            android:textStyle="bold"
-            android:textSize="15dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="10dp"
+            android:text="CANCEL"
+            android:textStyle="bold"
+            android:textSize="15dp" />
 
     </LinearLayout>
 
