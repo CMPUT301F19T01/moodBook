@@ -36,18 +36,16 @@ public class followersAdapter extends ArrayAdapter {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
         if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.followers_item, parent, false);
+            view = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false);
         }
 
         MoodbookUser followerUser = followers.get(position);
 
         // get views for username
-        TextView usernameText = view.findViewById(R.id.followers_item_username);
-        TextView uidText = view.findViewById(R.id.followers_item_uid);
+        TextView usernameText = view.findViewById(R.id.user_item_username);
 
         // show username
         usernameText.setText(followerUser.getUsername());
-       // uidText.setText(followerUser.getUid());
 
         return view;
     }
@@ -68,5 +66,11 @@ public class followersAdapter extends ArrayAdapter {
         followers.clear();
         // notify list is cleared
         notifyDataSetChanged();
+    }
+
+    @Nullable
+    @Override
+    public Object getItem(int position) {
+        return followers.get(position);
     }
 }
