@@ -13,6 +13,7 @@ import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.ui.Request.RequestHandler;
+import com.example.moodbook.ui.Request.RequestsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 

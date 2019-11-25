@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.myRequests;
+package com.example.moodbook.ui.Request;
 
 
 import android.annotation.SuppressLint;

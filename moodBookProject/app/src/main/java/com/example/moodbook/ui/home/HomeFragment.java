@@ -89,11 +89,11 @@ public class HomeFragment extends PageFragment
         // Set up recyclerView and adapter
         moodListView = root.findViewById(R.id.mood_history_listView);
         setupAdapter(new MoodListAdapter.OnItemClickListener() {
-            // Edit the selected mood: when a mood item is clicked, start edit activity
+            // View the selected mood: when a mood item is clicked, start View activity
             @Override
             public void onItemClick(final Mood item) {
-                // put attributes of selected mood into editIntent
-                /*AlertDialog.Builder alert = new AlertDialog.Builder(
+                /*// put attributes of selected mood into editIntent
+                AlertDialog.Builder alert = new AlertDialog.Builder(
                         getActivity());
                 alert.setMessage("Would you like to view or edit this mood");
                 alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
@@ -294,8 +294,7 @@ public class HomeFragment extends PageFragment
 
     /**
      * This method is for setting up the mood list adapter
-     *
-     * @param itemClickListener
+     * @param itemClickListener - click listener that defines what happens when adapter item is clicked
      */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
         moodListAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
