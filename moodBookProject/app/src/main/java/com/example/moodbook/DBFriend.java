@@ -33,13 +33,6 @@ import com.google.firebase.firestore.QuerySnapshot;
  * Used by Friend related pages: MyFriends, FriendMood, FriendMoodMap
  */
 public class DBFriend {
-
-    public interface FriendRecentMoodListListener {
-        void beforeGettingFriendMoodList();
-        void onGettingFriendMood(FriendMood item);
-    }
-
-
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private CollectionReference userReference;
@@ -48,7 +41,7 @@ public class DBFriend {
     private FirebaseUser user;
     private String uid;
     private static String TAG;         // optional: for log message
-    private FriendRecentMoodListListener listListener;
+    private DBListListener listListener;
 
     /**
      *
@@ -79,18 +72,19 @@ public class DBFriend {
 
     /**
      * This is used by MyFriends
-     * @param friendListAdapter
+     * @param listListener
      */
-    public void setFriendListListener(@NonNull FriendListAdapter friendListAdapter) {
+    public void setFriendListListener(@NonNull DBListListener listListener) {
+        this.listListener = listListener;
         this.userReference.document(uid).collection("FRIENDS")
-                .addSnapshotListener(getFriendEventListener(friendListAdapter));
+                .addSnapshotListener(getFriendEventListener());
     }
 
     /**
      * This is used by followers fragment
      * @param followersListAdapter
      */
-    public void setFollowersListListener(followersAdapter followersListAdapter) {
+    public void setFollowersListListener(@NonNull followersAdapter followersListAdapter) {
         this.userReference.document(uid).collection("FOLLOWERS")
                 .addSnapshotListener(getFollowerEventListener(followersListAdapter));
     }
@@ -99,7 +93,7 @@ public class DBFriend {
      * This is used by FriendMood and FriendMoodMap
      * @param listListener
      */
-    public void setFriendRecentMoodListener(@NonNull FriendRecentMoodListListener listListener) {
+    public void setFriendRecentMoodListener(@NonNull DBListListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("FRIENDS")
                 .addSnapshotListener(getFriendRecentMoodEventListener());
@@ -117,21 +111,19 @@ public class DBFriend {
      * This EventListener is for MyFollowers to get all the user's followers (username, uid) in the database
      * from the user's followers collection
      */
-    private EventListener<QuerySnapshot> getFollowerEventListener (final followersAdapter followersListAdapter){
+    private EventListener<QuerySnapshot> getFollowerEventListener (@NonNull final followersAdapter followersListAdapter){
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                if (followersListAdapter != null) {
-                    // clear the old list
-                    followersListAdapter.clear();
-                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                        // ignore null item
-                        if (doc.getId().equals("null")) continue;
-                        // Adding friend from FireStore
-                        if (doc.getData() != null && doc.getData().get("uid") != null) {
-                            MoodbookUser followerUser = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
-                            followersListAdapter.add(followerUser);
-                        }
+                // clear the old list
+                followersListAdapter.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    // ignore null item
+                    if (doc.getId().equals("null")) continue;
+                    // Adding friend from FireStore
+                    if (doc.getData() != null && doc.getData().get("uid") != null) {
+                        MoodbookUser followerUser = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
+                        followersListAdapter.add(followerUser);
                     }
                 }
             }
@@ -197,25 +189,27 @@ public class DBFriend {
      * This EventListener is for MyFriends to get all the user's friends (username, uid) in the database
      * from the user's friend collection
      */
-    private EventListener<QuerySnapshot> getFriendEventListener (@NonNull final FriendListAdapter friendListAdapter){
+    private EventListener<QuerySnapshot> getFriendEventListener (){
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
                 // clear the old list
-                friendListAdapter.clear();
+                //friendListAdapter.clear();
+                listListener.beforeGettingList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;
                     // Adding friend from FireStore
                     if (doc.getData() != null && doc.getData().get("uid") != null) {
                         MoodbookUser friendUser = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
-                        friendListAdapter.add(friendUser);
+                        //friendListAdapter.add(friendUser);
+                        listListener.onGettingItem(friendUser);
                     }
                 }
+                listListener.afterGettingList();
             }
         };
     }
-
 
 
     /**
@@ -228,7 +222,7 @@ public class DBFriend {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
                 /*// clear the old list
                 friendMoodListAdapter.clear();*/
-                listListener.beforeGettingFriendMoodList();
+                listListener.beforeGettingList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;
@@ -299,7 +293,7 @@ public class DBFriend {
                             if (mood != null) {
                                 mood.setDocId(moodID);
                                 FriendMood friendMood = new FriendMood(user, mood);
-                                listListener.onGettingFriendMood(friendMood);
+                                listListener.onGettingItem(friendMood);
                             }
                         } else {
                             Log.d(TAG, "no data from mood "+moodID);
