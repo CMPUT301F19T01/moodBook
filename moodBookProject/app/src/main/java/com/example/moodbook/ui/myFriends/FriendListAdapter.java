@@ -73,7 +73,14 @@ public class FriendListAdapter extends ArrayAdapter {
         // notify list is cleared
         notifyDataSetChanged();
     }
-//    public void clickToMessage(){
+
+    @Nullable
+    @Override
+    public Object getItem(int position) {
+        return friends.get(position);
+    }
+
+    //    public void clickToMessage(){
 //        friendListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //            @Override
 //            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

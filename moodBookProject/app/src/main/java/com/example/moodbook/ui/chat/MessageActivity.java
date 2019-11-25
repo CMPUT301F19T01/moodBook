@@ -17,17 +17,15 @@ import com.example.moodbook.ui.myFriends.FriendListAdapter;
 import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MessageActivity extends AppCompatActivity {
     private static final String TAG = MyFriendsFragment.class.getSimpleName();
     Intent intent;
     private FriendListAdapter friendListAdapter;
     private ArrayList<MoodbookUser> friends;
-    TextView sendText;
+    TextView sendText, usernameTextView;
     ImageButton sendBtn;
 
     // connect to DB
@@ -46,20 +44,24 @@ public class MessageActivity extends AppCompatActivity {
         friendDB = new DBFriend(mAuth, getBaseContext(), TAG);
         friendDB.setFriendListListener(friendListAdapter);
 
-        sendText= findViewById(R.id.sendText);
-        sendBtn= findViewById(R.id.sendBtn);
+        usernameTextView = findViewById(R.id.message_username);
+        sendText= findViewById(R.id.message_text);
+        sendBtn= findViewById(R.id.message_button);
         intent = getIntent();
 
         final RequestHandler requestHandler = new RequestHandler(mAuth,getBaseContext());
         final FirebaseUser username = mAuth.getCurrentUser();
 //        MoodbookUser friendUser = friends.get(username);
-//        final String friendId = intent.getStringExtra(MoodbookUser.friendUser.getUid());
+        final String friendUid = intent.getStringExtra("friend_uid");
+        String friendUsername = intent.getStringExtra("friend_username");
+        usernameTextView.setText(friendUsername);
+
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                String message = sendText.getText().toString();
                 if (!message.equals("")){
-//                    requestHandler.sendMessage(username.getUid(), friendId, message);
+                    requestHandler.sendMessage(username.getUid(), friendUid, message);
                 }
                 else {
                     Toast.makeText(MessageActivity.this,

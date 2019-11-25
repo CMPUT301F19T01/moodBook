@@ -1,13 +1,11 @@
 package com.example.moodbook;
 
-import android.content.Intent;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.moodbook.ui.login.LoginActivity;
-import com.example.moodbook.ui.login.RegisterActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.Before;
@@ -61,7 +59,7 @@ public class RegisterActivityTest {
         String unique = getSaltString();
         String email = unique + "@test.com";
         solo.enterText((EditText) solo.getView(R.id.email), email);
-        solo.enterText((EditText) solo.getView(R.id.username), unique);
+        solo.enterText((EditText) solo.getView(R.id.message_username), unique);
         solo.enterText((EditText) solo.getView(R.id.password), "testtest");
         solo.clickOnButton("register");
         solo.sleep(5000); // wait for activity to change
@@ -77,7 +75,7 @@ public class RegisterActivityTest {
         // invalid email
         solo.enterText((EditText) solo.getView(R.id.email), "fail");
         solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.enterText((EditText) solo.getView(R.id.username), "unusedtestuser");
+        solo.enterText((EditText) solo.getView(R.id.message_username), "unusedtestuser");
         solo.clickOnButton("register");
         assertTrue(solo.waitForText("Incorrect email format"));
 
@@ -91,7 +89,7 @@ public class RegisterActivityTest {
         // invalid email
         solo.enterText((EditText) solo.getView(R.id.email), "test@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.password), "fail");
-        solo.enterText((EditText) solo.getView(R.id.username), "unusedtestuser");
+        solo.enterText((EditText) solo.getView(R.id.message_username), "unusedtestuser");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Password must be"));
@@ -105,7 +103,7 @@ public class RegisterActivityTest {
         // invalid email
         solo.enterText((EditText) solo.getView(R.id.email), "test@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.enterText((EditText) solo.getView(R.id.username), "test");
+        solo.enterText((EditText) solo.getView(R.id.message_username), "test");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Username in use"));
@@ -119,7 +117,7 @@ public class RegisterActivityTest {
         // invalid email
         solo.enterText((EditText) solo.getView(R.id.email), "");
         solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.enterText((EditText) solo.getView(R.id.username), "unusedtestuser");
+        solo.enterText((EditText) solo.getView(R.id.message_username), "unusedtestuser");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Incorrect email format"));
@@ -133,7 +131,7 @@ public class RegisterActivityTest {
         // invalid email
         solo.enterText((EditText) solo.getView(R.id.email), "test@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.enterText((EditText) solo.getView(R.id.username), "");
+        solo.enterText((EditText) solo.getView(R.id.message_username), "");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Username in use"));
@@ -147,7 +145,7 @@ public class RegisterActivityTest {
         // invalid email
         solo.enterText((EditText) solo.getView(R.id.email), "test@gmail.com");
         solo.enterText((EditText) solo.getView(R.id.password), "");
-        solo.enterText((EditText) solo.getView(R.id.username), "unusedtestuser");
+        solo.enterText((EditText) solo.getView(R.id.message_username), "unusedtestuser");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Password must be"));

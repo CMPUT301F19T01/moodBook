@@ -11,7 +11,6 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.moodbook.MainActivity;
 import com.example.moodbook.R;
 import com.example.moodbook.data.UsernameList;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -54,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
         usernameList.updateUsernameList(); // fetch the usernamelist now so it is ready by the time the user clicks register
 
         email = findViewById(R.id.email);
-        username = findViewById(R.id.username);
+        username = findViewById(R.id.message_username);
         password = findViewById(R.id.password);
 
         // Register is not not modularized because FireBase calls are asynchronous. Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows that the task is finished
