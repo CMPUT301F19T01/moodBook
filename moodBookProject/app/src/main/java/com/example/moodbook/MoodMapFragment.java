@@ -88,7 +88,7 @@ public class MoodMapFragment extends PageFragment{
 
         // background to transparent so we only see our custom layout
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        
+
 
         return dialog;
 
