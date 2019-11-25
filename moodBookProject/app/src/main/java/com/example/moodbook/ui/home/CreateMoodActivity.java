@@ -1,12 +1,8 @@
 package com.example.moodbook.ui.home;
 
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -84,7 +80,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
         super.location_button = findViewById(R.id.create_location_button);
 
         // action buttons
-        super.do_button = findViewById(R.id.create_add_button);
+        super.save_button = findViewById(R.id.create_add_button);
         super.cancel_button = findViewById(R.id.create_cancel_button);
     }
 
@@ -115,9 +111,9 @@ public class CreateMoodActivity extends MoodEditorActivity {
     }
 
     @Override
-    protected void setupDoButton() {
+    protected void setupSaveButton() {
         // When this button is clicked, return a result
-        super.do_button.setOnClickListener(new View.OnClickListener() {
+        super.save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(validMoodInputs()){
