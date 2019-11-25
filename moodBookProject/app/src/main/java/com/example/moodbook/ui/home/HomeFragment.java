@@ -69,7 +69,6 @@ public class HomeFragment extends PageFragment
     private Mood SelectedMood = null;
 
 
-
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
      * @param inflater
@@ -92,10 +91,8 @@ public class HomeFragment extends PageFragment
             // Edit the selected mood: when a mood item is clicked, start edit activity
             @Override
             public void onItemClick(final Mood item) {
-//                Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
-//                Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
                 // put attributes of selected mood into editIntent
-                AlertDialog.Builder alert = new AlertDialog.Builder(
+                /*AlertDialog.Builder alert = new AlertDialog.Builder(
                         getActivity());
                 alert.setMessage("Would you like to view or edit this mood");
                 alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
@@ -134,7 +131,14 @@ public class HomeFragment extends PageFragment
                 });
 
                 alert.show();
-                SelectedMood =item;
+                 */
+                Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
+                // put attributes of selected mood into Intent
+                getIntentDataFromMood(viewIntent, item);
+                // add current class name to allow edit button
+                viewIntent.putExtra("page",HomeFragment.class.getSimpleName());
+                startActivity(viewIntent);
+                SelectedMood = item;
             }
         });
 
