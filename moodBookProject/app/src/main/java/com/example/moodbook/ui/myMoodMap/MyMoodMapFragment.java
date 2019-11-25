@@ -2,7 +2,6 @@ package com.example.moodbook.ui.myMoodMap;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -132,7 +131,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
                 Dialog dialog = new Dialog(getContext());
 
                 // bind mood data to dialog layout
-                bindViews(mood, dialog, dbMoodSetter).show();
+                bindViews(mood, dialog, dbMoodSetter, null).show();
 
                 return false;
             }
@@ -195,11 +194,11 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
             moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
 
             // testing for circle drawing
-            Circle mCircle = moodMap.addCircle(new CircleOptions()
-                    .center(new LatLng(moodLatLng.latitude, moodLatLng.longitude))
-                    .radius(50)
-                    .strokeWidth(0)
-                    .fillColor(mood.getEmotionColorResource()));
+            //Circle mCircle = moodMap.addCircle(new CircleOptions()
+                    //.center(new LatLng(moodLatLng.latitude, moodLatLng.longitude))
+                    //.radius(50)
+                    //.strokeWidth(0)
+                    //.fillColor(mood.getEmotionColorResource()));
 
             // use png image resource as marker icon
             BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);

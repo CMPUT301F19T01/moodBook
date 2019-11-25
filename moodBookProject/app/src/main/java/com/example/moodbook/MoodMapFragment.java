@@ -26,12 +26,22 @@ public class MoodMapFragment extends PageFragment{
      * @param dbMoodSetter uses a "getImageFromDB" method from this object to get image
      * @return the dialog with all the mood data binded to the views
      */
-    protected Dialog bindViews(Mood mood, final Dialog dialog, DBMoodSetter dbMoodSetter){
+    protected Dialog bindViews(Mood mood, final Dialog dialog, DBMoodSetter dbMoodSetter, String username){
         // set dialog to custom layout
         dialog.setContentView(R.layout.activity_view_mood);
 
+        // check if we are drawing a friend mood or own users mood
+        if(username != null){
+            TextView name = dialog.findViewById(R.id.friend_name);
+            name.setText(username);
+            name.setVisibility(View.VISIBLE);
+
+        }
+
+
+
         Button editButton = dialog.findViewById(R.id.edit);
-        editButton.setVisibility(View.INVISIBLE);
+        editButton.setVisibility(View.GONE);
 
         // show the reason photo
         ImageView reasonPhoto = dialog.findViewById(R.id.view_uploaded_pic);
