@@ -321,6 +321,4 @@ public class HomeFragment extends PageFragment
         intent.putExtra("situation",mood.getSituation());
         intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
-        intent.putExtra("location_address", location==null ? null : location.getAddress());
-    }
-}
+        intent.putExtra("location_address", location==null ? null : location.getAddres
