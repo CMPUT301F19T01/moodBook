@@ -21,7 +21,7 @@ import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * This activity is used to enable a user to be to view details for a specific mood
+ * This activity is used to  enable a user to be to view detials for a specific mood
  */
 public class ViewMoodActivity extends AppCompatActivity {
     private TextView view_date_time;
