@@ -29,7 +29,8 @@ public class RequestFragmentTest {
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
-            solo.clickOnText("Logout");
+            //solo.clickOnText("Logout");
+            solo.clickOnMenuItem("Logout", true);
             solo.sleep(3000);
         }
         // login with test account
@@ -101,6 +102,9 @@ public class RequestFragmentTest {
         //login();
         // navigate to request sending
         solo.clickOnImageButton(0);
+        for (int i = 0; i < 20; i++){
+            solo.sendKey(Solo.DOWN);
+        }
         solo.clickOnText("Add Friends");
         solo.enterText((EditText) solo.getView(R.id.usernameEditText), "test");
         solo.clickOnButton("Send Request");

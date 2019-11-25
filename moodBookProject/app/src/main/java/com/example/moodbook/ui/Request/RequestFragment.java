@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.moodbook.DBFriend;
+import com.example.moodbook.DBListListener;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 /**
  * This fragment is shown to allow the user to send requests to other users
  */
-public class RequestFragment extends PageFragment {
+public class RequestFragment extends PageFragment implements DBListListener{
     //private RequestViewModel requestViewModel;
 
     private FirebaseAuth mAuth;
@@ -34,9 +36,12 @@ public class RequestFragment extends PageFragment {
     private EditText requestText;
     private Button requestButton;
 
-    private com.example.moodbook.ui.Request.RequestHandler requestHandler;
+    private RequestHandler requestHandler;
     private RequestsAdapter requestsAdapter;
     private UsernameList usernameList;
+    private ArrayList<String> friends;
+    private DBFriend friendDB;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +50,11 @@ public class RequestFragment extends PageFragment {
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+
+        friendDB = new DBFriend(mAuth, getContext());
+        friendDB.setFriendListListener(this);
+
+        friends = new ArrayList<>();
 
         usernameList = new UsernameList(FirebaseFirestore.getInstance());
         usernameList.updateUsernameList();
@@ -59,10 +69,13 @@ public class RequestFragment extends PageFragment {
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 String addUser = requestText.getText().toString();
 
                 if(addUser.equals(user.getDisplayName())){ // check if adding self
                     requestText.setError("Cannot add yourself");
+                } else if (friends.contains(addUser)) { // check if user already added
+                    requestText.setError("User already added");
                 } else if (usernameList.isUser(addUser)){ // check if username exists in db
                     requestHandler.sendRequest(addUser, user.getUid(), user.getDisplayName());
                     Toast.makeText(root.getContext(), "Sent request",
@@ -74,5 +87,23 @@ public class RequestFragment extends PageFragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void beforeGettingList(){
+        friends.clear();
+    }
+
+    @Override
+    public void onGettingItem(Object item){
+        if(item instanceof MoodbookUser) {
+            friends.add((((MoodbookUser) item).getUsername()));
+        }
+    }
+
+    @Deprecated
+    @Override
+    public void afterGettingList(){
+
     }
 }
