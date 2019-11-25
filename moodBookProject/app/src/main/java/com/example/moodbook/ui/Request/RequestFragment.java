@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.moodbook.DBFriend;
 import com.example.moodbook.DBListListener;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
@@ -39,8 +40,8 @@ public class RequestFragment extends PageFragment implements DBListListener{
     private com.example.moodbook.ui.Request.RequestHandler requestHandler;
     private RequestsAdapter requestsAdapter;
     private UsernameList usernameList;
-    private FriendListAdapter friendListAdapter;
     private ArrayList<MoodbookUser> friends;
+    private DBFriend friendDB;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -48,10 +49,15 @@ public class RequestFragment extends PageFragment implements DBListListener{
         final View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_request);
         db = FirebaseFirestore.getInstance();
 
-        friendListAdapter =  new FriendListAdapter(getContext());
+
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
+
+        friendDB = new DBFriend(mAuth, getContext());
+        friendDB.setFriendListListener(this);
+
+        friends = new ArrayList<>();
 
         usernameList = new UsernameList(FirebaseFirestore.getInstance());
         usernameList.updateUsernameList();
@@ -68,7 +74,6 @@ public class RequestFragment extends PageFragment implements DBListListener{
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                friends = friendListAdapter.getFriendList(); // get friendslist
 
                 String addUser = requestText.getText().toString();
 
@@ -91,13 +96,13 @@ public class RequestFragment extends PageFragment implements DBListListener{
 
     @Override
     public void beforeGettingList(){
-        friendListAdapter.clear();
+        friends.clear();
     }
 
     @Override
     public void onGettingItem(Object item){
         if(item instanceof MoodbookUser) {
-            friendListAdapter.add((MoodbookUser)item);
+            friends.add((MoodbookUser)item);
         }
     }
 
