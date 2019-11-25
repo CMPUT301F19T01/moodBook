@@ -39,12 +39,16 @@ import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.example.moodbook.ui.profile.ProfileActivity;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -88,7 +92,6 @@ public class MainActivity extends AppCompatActivity  {
 
             String uid = user.getUid();
         }
-
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -142,6 +145,7 @@ public class MainActivity extends AppCompatActivity  {
                     }
                 });
         }
+
 
 
     }

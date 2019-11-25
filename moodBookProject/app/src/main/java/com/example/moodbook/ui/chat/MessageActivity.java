@@ -91,23 +91,20 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
+        messageAdapter = new MessageAdapter(MessageActivity.this, chat);
+        message_recyclerView.setAdapter(messageAdapter);
 
-        public void readMessages(final String myUid, final String friendUid){
-//            String myUid = mAuth.getCurrentUser().getUid();
-            chat = new ArrayList<>();
-            final CollectionReference friendsReference = this.userReference
-                    .document(friendUid).collection("CHAT");
-            friendsReference.
-
-        }
+//
+//        public void readMessages(final String myUid, final String friendUid){
+////            String myUid = mAuth.getCurrentUser().getUid();
+//            chat = new ArrayList<>();
+//            final CollectionReference friendsReference = this.userReference
+//                    .document(friendUid).collection("CHAT");
+//            friendsReference.
+//
+//        }
 
 
     }
-//    private void sendMessage(String sender, String receiver, String message){
-//        String uid = mAuth.getCurrentUser().getUid();
-//        final CollectionReference collectionReference = ;
-//        HashMap<String, Object> data = new HashMap<>();
-//        data.put("sender",sender);
-//        data.put("receiver",receiver);
-//        data.put("message",message);
+
 }
