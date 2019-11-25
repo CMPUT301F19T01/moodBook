@@ -420,7 +420,7 @@ public class DBMoodSetter {
         data.put("situation", mood.getSituation());
         data.put("location_lat", location == null ? null : location.getLatitude());
         data.put("location_lon", location == null ? null : location.getLongitude());
-        data.put("location_address", location.getAddress());
+        data.put("location_address", location == null ? null :location.getAddress());
         return data;
     }
 
