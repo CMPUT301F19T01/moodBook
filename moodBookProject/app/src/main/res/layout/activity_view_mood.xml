@@ -19,8 +19,8 @@
         <TextView
 
             android:id="@+id/view_date_time"
-            android:layout_width="173dp"
-            android:layout_height="32dp"
+            android:layout_width="382dp"
+            android:layout_height="46dp"
             android:text="TextView"
             android:textColor="#000000"
             android:textSize="20dp"
@@ -57,41 +57,40 @@
             android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@+id/view_reason"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.567"
+            app:layout_constraintHorizontal_bias="0.432"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.829" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <ImageView
             android:id="@+id/view_emoji"
             android:layout_width="106dp"
             android:layout_height="78dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:contentDescription="@string/todo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.137"
+            app:layout_constraintVertical_bias="0.242"
             app:srcCompat="@drawable/ic_menu_gallery"
             tools:ignore="MissingConstraints" />
+
 
         <TextView
             android:id="@+id/view_emotion"
             android:layout_width="228dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
             android:text="@string/textview"
             android:textColor="#000000"
             android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.833"
+            app:layout_constraintHorizontal_bias="0.573"
             app:layout_constraintStart_toEndOf="@+id/view_emoji"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.105"
+            app:layout_constraintTop_toBottomOf="@+id/friend_name"
+            app:layout_constraintVertical_bias="0.083"
             tools:ignore="MissingConstraints" />
-
 
         <TextView
             android:id="@+id/view_location"
@@ -150,17 +149,17 @@
 
         <TextView
             android:id="@+id/friend_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_width="395dp"
+            android:layout_height="28dp"
             android:text="TextView"
             android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:textSize="20dp"
             android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/view_emoji"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.667"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/view_date_time" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
