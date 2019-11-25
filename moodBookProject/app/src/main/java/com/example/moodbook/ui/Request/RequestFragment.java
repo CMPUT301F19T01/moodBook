@@ -16,7 +16,6 @@ import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.data.UsernameList;
-import com.example.moodbook.ui.myFriends.FriendListAdapter;
 import com.example.moodbook.ui.myRequests.RequestsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,10 +36,10 @@ public class RequestFragment extends PageFragment implements DBListListener{
     private EditText requestText;
     private Button requestButton;
 
-    private com.example.moodbook.ui.Request.RequestHandler requestHandler;
+    private RequestHandler requestHandler;
     private RequestsAdapter requestsAdapter;
     private UsernameList usernameList;
-    private ArrayList<MoodbookUser> friends;
+    private ArrayList<String> friends;
     private DBFriend friendDB;
 
 
@@ -48,8 +47,6 @@ public class RequestFragment extends PageFragment implements DBListListener{
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_request);
         db = FirebaseFirestore.getInstance();
-
-
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -69,8 +66,6 @@ public class RequestFragment extends PageFragment implements DBListListener{
         requestsAdapter = new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
         requestHandler.setRequestListListener(requestsAdapter);
 
-
-
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +76,7 @@ public class RequestFragment extends PageFragment implements DBListListener{
                     requestText.setError("Cannot add yourself");
                 } else if (friends.contains(addUser)) { // check if user already added
                     requestText.setError("User already added");
-                }else if (usernameList.isUser(addUser)){ // check if username exists in db
+                } else if (usernameList.isUser(addUser)){ // check if username exists in db
                     requestHandler.sendRequest(addUser, user.getUid(), user.getDisplayName());
                     Toast.makeText(root.getContext(), "Sent request",
                             Toast.LENGTH_LONG).show();
@@ -102,7 +97,8 @@ public class RequestFragment extends PageFragment implements DBListListener{
     @Override
     public void onGettingItem(Object item){
         if(item instanceof MoodbookUser) {
-            friends.add((MoodbookUser)item);
+            //friends.add((MoodbookUser)item);
+            friends.add((((MoodbookUser) item).getUsername()));
         }
     }
 
