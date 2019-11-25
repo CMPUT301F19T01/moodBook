@@ -3,9 +3,6 @@ package com.example.moodbook;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import androidx.annotation.NonNull;
-
-import com.example.moodbook.ui.Request.RequestHandler;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;

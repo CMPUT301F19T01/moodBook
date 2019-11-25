@@ -120,6 +120,8 @@ public class DBAuth {
         data.put("username", username);
         data.put("phone",phone);
         data.put("bio", bio);
+        data.put("recent_moodID", null);
+
         collectionReference
                 .document(uid)
                 .set(data)
@@ -142,9 +144,9 @@ public class DBAuth {
         nullData.put("null", null);
 
         collectionReference.document(uid).collection("MOODS").document("null").set(nullData);
-        collectionReference.document(uid).collection("FRIENDS").document("null").set(nullData);
+        collectionReference.document(uid).collection("FRIENDS").document("null").set(nullData); //followings
+        collectionReference.document(uid).collection("FOLLOWERS").document("null").set(nullData);
         collectionReference.document(uid).collection("REQUESTS").document("null").set(nullData);
-
         nullData.put("uid", user.getUid());
         db.collection("usernamelist").document(username).set(nullData); // add username to usernamelist
 
@@ -163,7 +165,7 @@ public class DBAuth {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Log.d("PROFILE", "User profile updated.");
+                    Log.d("PROFILE", "MoodbookUser profile updated.");
                 }
             }
         });

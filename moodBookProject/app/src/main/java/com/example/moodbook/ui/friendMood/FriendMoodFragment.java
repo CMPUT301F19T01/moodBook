@@ -12,24 +12,24 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.EditMoodActivity;
+import com.example.moodbook.DBFriend;
+import com.example.moodbook.ViewMoodActivity;
+import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
-import com.example.moodbook.MoodInvalidInputException;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
-public class FriendMoodFragment extends PageFragment {
+public class FriendMoodFragment extends PageFragment implements DBFriend.FriendRecentMoodListListener{
 
     // Friend Mood
     private ListView friendMoodListView;
-    private FriendMoodListAdapter friendMoodAdapter;
+    private FriendMoodListAdapter friendMoodListAdapter;
 
     // connect to DB
-    private DBMoodSetter moodDB;
+    private DBFriend friendMoodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = FriendMoodFragment.class.getSimpleName();
 
@@ -56,18 +56,19 @@ public class FriendMoodFragment extends PageFragment {
                 // get the selected friendMood
                 FriendMood selectedFriendMood = (FriendMood)adapterView.getItemAtPosition(i);
                 Toast.makeText(getContext(), "Clicked " + selectedFriendMood.toString(), Toast.LENGTH_LONG).show();
-                // TODO: go to ViewMoodActivity
-                Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
+                Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
                 // put attributes of selected mood into editIntent
-                getIntentDataFromMood(editIntent, selectedFriendMood.getMood());
-                //startActivity(editIntent); // not working
+                getIntentDataFromMood(viewIntent, selectedFriendMood.getMood());
+                // add current class name to disable edit button
+                viewIntent.putExtra("page",FriendMoodFragment.class.getSimpleName());
+                startActivity(viewIntent);
             }
         });
 
         // initialize DB connector
-        /*mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getContext(),
-                DBMoodSetter.getFriendMoodListener(friendMoodAdapter, mAuth), TAG);*/
+        mAuth = FirebaseAuth.getInstance();
+        friendMoodDB = new DBFriend(mAuth, getContext(), TAG);
+        friendMoodDB.setFriendRecentMoodListener(this);
 
         return root;
     }
@@ -77,10 +78,9 @@ public class FriendMoodFragment extends PageFragment {
      * @param itemClickListener
      */
     private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {
-        friendMoodAdapter = new FriendMoodListAdapter(getContext(), new ArrayList<FriendMood>());
-        friendMoodListView.setAdapter(friendMoodAdapter);
+        friendMoodListAdapter = new FriendMoodListAdapter(getContext(), new ArrayList<FriendMood>());
+        friendMoodListView.setAdapter(friendMoodListAdapter);
         friendMoodListView.setOnItemClickListener(itemClickListener);
-        testAdd();
     }
 
     /**
@@ -95,22 +95,19 @@ public class FriendMoodFragment extends PageFragment {
         intent.putExtra("time",mood.getTimeText());
         intent.putExtra("emotion",mood.getEmotionText());
         intent.putExtra("reason_text",mood.getReasonText());
-        intent.putExtra("reason_photo", mood.getReasonPhoto());
+        //intent.putExtra("reason_photo", mood.getReasonPhoto());
         intent.putExtra("situation",mood.getSituation());
         intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
     }
 
-    private void testAdd() {
-        String[] username = {"a", "b", "c", "d"};
-        for(int i = 0; i < username.length; i++) {
-            try {
-                Mood mood = new Mood("2019-11-1"+i+" 08:00", Mood.Emotion.getNames()[i%4], username[i],
-                        null, null, null);
-                friendMoodAdapter.add(new FriendMood(username[i], username[i] + "@test.com", mood));
-            } catch (MoodInvalidInputException e) {
-                e.printStackTrace();
-            }
-        }
+    @Override
+    public void beforeGettingFriendMoodList() {
+        friendMoodListAdapter.clear();
+    }
+
+    @Override
+    public void onGettingFriendMood(FriendMood item) {
+        friendMoodListAdapter.add(item);
     }
 }

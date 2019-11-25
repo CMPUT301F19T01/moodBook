@@ -13,6 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.moodbook.ui.friendMood.FriendMoodFragment;
+import com.example.moodbook.ui.home.EditMoodActivity;
+import com.example.moodbook.ui.home.MoodListAdapter;
+import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
@@ -40,8 +44,7 @@ public class ViewMoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_mood);
         mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getApplicationContext(),
-                DBMoodSetter.getMoodHistoryListener(moodAdapter), TAG);
+        moodDB = new DBMoodSetter(mAuth, getApplicationContext(), TAG);
         final FragmentManager fm = getSupportFragmentManager();
         view_date_time = findViewById(R.id.view_date_time);
         view_reason = findViewById(R.id.view_reason);
@@ -90,21 +93,30 @@ public class ViewMoodActivity extends AppCompatActivity {
         }
         moodDB.getImageFromDB(intent_moodID, view_uploaded_pic);
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), EditMoodActivity.class);
-                intent.putExtra("moodID", intent_moodID);
-                intent.putExtra("date",intent_date);
-                intent.putExtra("time",intent_time);
-                intent.putExtra("emotion",intent_emotion);
-                intent.putExtra("reason_text",intent_reason);
-                intent.putExtra("situation",intent_situation);
-                intent.putExtra("location_lat",intent_lat);
-                intent.putExtra("location_lon", intent_lon);
-                startActivity(intent);
-            }
-        });
+        // for FriendMood and FriendMoodMap: disable edit button
+        String page = getIntent().getStringExtra("page");
+        if( page != null & (page.equals(FriendMoodFragment.class.getSimpleName())
+                || page.equals(MyFriendMoodMapFragment.class.getSimpleName())) ){
+            edit.setVisibility(View.GONE);
+        }
+        // for Mood History: enable edit button
+        else{
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), EditMoodActivity.class);
+                    intent.putExtra("moodID", intent_moodID);
+                    intent.putExtra("date",intent_date);
+                    intent.putExtra("time",intent_time);
+                    intent.putExtra("emotion",intent_emotion);
+                    intent.putExtra("reason_text",intent_reason);
+                    intent.putExtra("situation",intent_situation);
+                    intent.putExtra("location_lat",intent_lat);
+                    intent.putExtra("location_lon", intent_lon);
+                    startActivity(intent);
+                }
+            });
+        }
 
         cancel_view.setOnClickListener(new View.OnClickListener() {
             @Override

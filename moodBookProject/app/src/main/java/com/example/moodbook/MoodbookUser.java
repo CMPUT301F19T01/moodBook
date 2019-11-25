@@ -1,15 +1,16 @@
-package com.example.moodbook.ui.myRequests;
+package com.example.moodbook;
+
+import androidx.annotation.NonNull;
 
 /**
  * Class for showing the available requests for a user
  */
-public class RequestUser {
+public class MoodbookUser implements Comparable<MoodbookUser> {
 
     private String username;
     private String uid;
 
-    public RequestUser(String username, String uid) {
-
+    public MoodbookUser(String username, String uid) {
         setUsername(username);
         setUid(uid);
     }
@@ -28,6 +29,11 @@ public class RequestUser {
 
     public String getUid() {
         return this.uid;
+    }
+
+    @Override
+    public int compareTo(@NonNull MoodbookUser other) {
+        return this.username.compareTo(other.getUsername());
     }
 }
 
