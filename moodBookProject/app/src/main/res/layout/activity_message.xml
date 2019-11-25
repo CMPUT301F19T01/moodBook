@@ -18,7 +18,7 @@
         android:layout_toLeftOf="@+id/message_button"
         android:layout_centerVertical="true"
         android:layout_alignParentBottom="true"
-        android:backgroung="white" />
+         />
 
     <ImageButton
         android:id="@+id/message_button"

@@ -24,6 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -203,5 +204,6 @@ public class RequestHandler {
         friendsReference.document(myUid).set(data);
 
     }
+
 
 }

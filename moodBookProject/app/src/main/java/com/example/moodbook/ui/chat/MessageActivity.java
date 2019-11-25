@@ -1,6 +1,8 @@
 package com.example.moodbook.ui.chat;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,15 +29,16 @@ public class MessageActivity extends AppCompatActivity {
     private ArrayList<MoodbookUser> friends;
     TextView sendText, usernameTextView;
     ImageButton sendBtn;
-    TextView friend_username;
+//    TextView friend_username;
 
     MessageAdapter messageAdapter;
     ArrayList<Chat> chat;
+    RecyclerView message_recyclerView;
 
     // connect to DB
     private DBFriend friendDB;
     private FirebaseAuth mAuth;
-//    FirebaseUser firebaseUser;
+    FirebaseUser firebaseUser;
 
 
     @Override
@@ -48,24 +51,22 @@ public class MessageActivity extends AppCompatActivity {
         friendDB = new DBFriend(mAuth, getBaseContext(), TAG);
         friendDB.setFriendListListener(friendListAdapter);
 
-//        sendText = findViewById(R.id.sendText);
-//        sendBtn = findViewById(R.id.sendBtn);
-        friend_username = findViewById(R.id.friend_username);
-
         usernameTextView = findViewById(R.id.message_username);
         sendText= findViewById(R.id.message_text);
         sendBtn= findViewById(R.id.message_button);
         intent = getIntent();
 
-
         final RequestHandler requestHandler = new RequestHandler(mAuth,getBaseContext());
         final FirebaseUser username = mAuth.getCurrentUser();
-//        friend_username.setText(friendId);
 
-//        MoodbookUser friendUser = friends.get(username);
+        message_recyclerView = findViewById(R.id.message_recyclerView);
+        message_recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setStackFromEnd(true);
+        message_recyclerView.setLayoutManager(linearLayoutManager);
+
         final String friendUid = intent.getStringExtra("friend_uid");
         String friendUsername = intent.getStringExtra("friend_username");
-        usernameTextView.setText(friendUsername);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override

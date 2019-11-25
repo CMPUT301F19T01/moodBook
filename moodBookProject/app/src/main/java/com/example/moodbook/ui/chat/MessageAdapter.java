@@ -51,15 +51,15 @@ public class MessageAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
-//        if(view == MSG_RIGHT){
-//            view = LayoutInflater.from(context).inflate(R.layout.chat_right, parent, false);
-//        }
-//        else {
-//            view = LayoutInflater.from(context).inflate(R.layout.chat_left, parent, false);
-//
-//        }
+        if(getItemViewType(position) == MSG_RIGHT){
+            view = LayoutInflater.from(context).inflate(R.layout.chat_right, parent, false);
+        }
+        else {
+            view = LayoutInflater.from(context).inflate(R.layout.chat_left, parent, false);
+
+        }
         Chat _chat = chat.get(position);
-//        messageShow.setText(Chat.getMessage());
+        messageShow.setText(_chat.getMessage());
 
         return view;
     }
