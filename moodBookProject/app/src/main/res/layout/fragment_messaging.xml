@@ -11,16 +11,16 @@
         android:layout_height="wrap_content"/>
 
     <EditText
-        android:id="@+id/sendText"
+        android:id="@+id/message_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Type a message"
-        android:layout_toLeftOf="@+id/sendBtn"
+        android:layout_toLeftOf="@+id/message_button"
         android:layout_centerVertical="true"
         android:layout_alignParentBottom="true"/>
 
     <ImageButton
-        android:id="@+id/sendBtn"
+        android:id="@+id/message_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/ic_send_black_24dp"

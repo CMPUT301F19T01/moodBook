@@ -50,7 +50,9 @@ public class MyFriendsFragment extends PageFragment {
                 MoodbookUser friendId = (MoodbookUser)friendListAdapter.getItem(i);
 
                 Intent intent = new Intent(getContext(),MessageActivity.class);
-                intent.putExtra("uid", String.valueOf(friendId));
+                MoodbookUser friendUser = (MoodbookUser)friendListAdapter.getItem(i);
+                intent.putExtra("friend_uid", friendUser.getUid());
+                intent.putExtra("friend_username", friendUser.getUsername());
                 getContext().startActivity(intent);
             }
         });
