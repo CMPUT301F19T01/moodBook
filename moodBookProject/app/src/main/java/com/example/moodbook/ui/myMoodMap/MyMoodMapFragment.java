@@ -1,6 +1,8 @@
 package com.example.moodbook.ui.myMoodMap;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -9,26 +11,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.DBUpdate;
+import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import java.util.ArrayList;
 
@@ -39,10 +43,8 @@ import java.util.ArrayList;
  * @since 07-11-2019
 
  *  This activity is used to view a where a users moods take place on a map
- * @see DBUpdate
  */
-public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, DBUpdate {
-    //private com.example.moodbook.ui.myMoodMap.MyMoodMapViewModel MyMoodMapViewModel;
+public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback {
 
     ///// Member Variables /////
     private MapView mapView; // view object
@@ -51,7 +53,7 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     private FirebaseFirestore db; // database
     private FirebaseAuth mAuth; // auth
     private String userID; // users id
-
+    private DBMoodSetter dbMoodSetter;
 
     /**
      * Required empty public constructor
@@ -64,8 +66,15 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     /**
      * This method is inherited by Fragment
      * @param inflater
+     *  Object that can be used to inflate any views in the fragment
      * @param container
+     *  If non-null, this is the parent view that the fragment's UI
+     *  should be attached to. The fragment should not add the view
+     *  itself, but this can be used to generate the LayoutParams
+     *  of the view. This value may be null.
      * @param savedInstanceState
+     * If non-null, this fragment is being re-constructed from a
+     * previous saved state as given here.
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -86,9 +95,12 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
         // create moodDataList
         moodDataList = new ArrayList<>();
 
+
         // get current user
         mAuth = FirebaseAuth.getInstance();
         userID = mAuth.getUid();
+
+        dbMoodSetter = new DBMoodSetter(mAuth, getContext());
 
         return root;
     }
@@ -108,6 +120,23 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
 
         // for testing purposes
         mapView.setContentDescription("MAP READY");
+
+        moodMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                // get mood from data list with by using tag
+                int pos = (int)marker.getTag();
+                Mood mood = moodDataList.get(pos);
+
+                // create dialog popup
+                Dialog dialog = new Dialog(getContext());
+
+                // bind mood data to dialog layout
+                bindViews(mood, dialog, dbMoodSetter).show();
+
+                return false;
+            }
+        });
     }
 
     /**
@@ -116,7 +145,6 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     @Override
     public void onResume() {
         mapView.onResume();
-        updateList(db);
         super.onResume();
     }
 
@@ -148,22 +176,56 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
     }
 
     /**
-     * This method is a helper method to set the Array List for moods
+     * This method draws all the Users moods on the map
      * @param moodDataList
-     *  ArrayList that stores Mood objects
+     *  ArrayList of the users Mood objects
      */
-    private void setMoodDataList(ArrayList<Mood> moodDataList){
-        this.moodDataList = moodDataList;
+    protected void drawMoodMarkers(ArrayList<Mood> moodDataList, GoogleMap moodMap){
+        int emotionResource;
+        LatLng moodLatLng;
+
+        int i;
+        for(i = 0; i < moodDataList.size(); i++){
+            Mood mood = moodDataList.get(i);
+            // get image resource for the mood marker
+            emotionResource = mood.getEmotionImageResource();
+
+            // get location of mood
+            Location moodLocation = mood.getLocation();
+            moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
+
+            // testing for circle drawing
+            Circle mCircle = moodMap.addCircle(new CircleOptions()
+                    .center(new LatLng(moodLatLng.latitude, moodLatLng.longitude))
+                    .radius(50)
+                    .strokeWidth(0)
+                    .fillColor(mood.getEmotionColorResource()));
+
+            // use png image resource as marker icon
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
+            Bitmap b = bitmapDrawable.getBitmap();
+            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
+
+            // draw on map
+            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor).anchor(0.5f,0.5f)).setTag(i);
+
+            // zoom in and focus on the most recent mood, ie. the last mood in list
+            if(i+1 == moodDataList.size()){
+                moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
+            }
+
+        }
 
     }
 
+
     /**
-     * Inherited by DBUpdate and is implemented by querying FireBase
-     * for the all the Current users moods
+     * Queries FireBase for the all the Current users moods
      * @param db
      *  reference to the FireBaseFireStore instance
+     * @see MoodMapFragment
      */
-    @Override
     public void updateList(FirebaseFirestore db) {
         try {
             db.collection("USERS")
@@ -174,26 +236,24 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             if (task.isSuccessful()) {
-                                Location tempLoc;
 
                                 // iterate over each document and get fields for drawing mood markers
-                                for (QueryDocumentSnapshot doc : task.getResult()) {
+                                task.getResult();
+                                for (int i = 0; i <  task.getResult().size(); i++) {
+                                    DocumentSnapshot doc = task.getResult().getDocuments().get(i);
                                     if (doc.exists() && doc.getDouble("location_lat") != null
                                             && doc.getDouble("location_lon") != null) {
                                         try {
-                                            moodDataList.add(DBMoodSetter.getMoodFromData(doc.getData()));
+                                            Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
+                                            mood.setDocId(doc.getId());
+                                            moodDataList.add(mood);
 
                                         } catch (Exception e) {
                                             e.printStackTrace();
                                         }
-
                                     }
-
                                 }
-                                // draw markers
-                                setMoodDataList(moodDataList);
-                                drawMoodMarkers(moodDataList);
-
+                                drawMoodMarkers(moodDataList, moodMap);
                             }
                         }
                     });
@@ -201,33 +261,4 @@ public class MyMoodMapFragment extends Fragment implements OnMapReadyCallback, D
             e.printStackTrace();
         }
     }
-
-    /**
-     * This method draws all the Users moods on the map
-     * @param moodDataList
-     *  ArrayList of the users Mood objects
-     */
-    private void drawMoodMarkers(ArrayList<Mood> moodDataList){
-        int emotionResource;
-        LatLng moodLatLng;
-
-        for(Mood mood: moodDataList){
-            // get image resource for the mood marker
-            emotionResource = mood.getEmotionImageResource();
-
-            // get location of mood
-            Location moodLocation = mood.getLocation();
-            moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
-
-            // use png image resource as marker icon
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
-            Bitmap b = bitmapDrawable.getBitmap();
-            Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
-
-            // draw on map
-            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor));
-        }
-    }
-
 }

@@ -28,7 +28,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
-import com.example.moodbook.ui.request.RequestFragment;
+import com.example.moodbook.ui.Request.RequestFragment;
 import com.example.moodbook.ui.followers.followersFragment;
 import com.example.moodbook.ui.chat.ChatFragment;
 import com.example.moodbook.ui.friendMood.FriendMoodFragment;
@@ -72,12 +72,15 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         name = null;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db = FirebaseFirestore.getInstance();
         profile = findViewById(R.id.profile);
+
+        name = null;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             while (name == null){

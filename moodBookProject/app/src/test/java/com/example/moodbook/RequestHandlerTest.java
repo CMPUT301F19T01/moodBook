@@ -1,6 +1,6 @@
 package com.example.moodbook;
 
-import com.example.moodbook.ui.request.RequestHandler;
+import com.example.moodbook.ui.Request.RequestHandler;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 

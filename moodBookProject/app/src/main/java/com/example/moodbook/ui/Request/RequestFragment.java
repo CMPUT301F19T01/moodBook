@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.request;
+package com.example.moodbook.ui.Request;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,7 +34,7 @@ public class RequestFragment extends PageFragment {
     private EditText requestText;
     private Button requestButton;
 
-    private com.example.moodbook.ui.request.RequestHandler requestHandler;
+    private com.example.moodbook.ui.Request.RequestHandler requestHandler;
     private RequestsAdapter requestsAdapter;
     private UsernameList usernameList;
 
@@ -52,7 +52,7 @@ public class RequestFragment extends PageFragment {
         requestText = root.findViewById(R.id.usernameEditText);
         requestButton = root.findViewById(R.id.requestButton);
 
-        requestHandler = new com.example.moodbook.ui.request.RequestHandler(mAuth, getContext());
+        requestHandler = new com.example.moodbook.ui.Request.RequestHandler(mAuth, getContext());
         requestsAdapter = new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
         requestHandler.setRequestListListener(requestsAdapter);
 

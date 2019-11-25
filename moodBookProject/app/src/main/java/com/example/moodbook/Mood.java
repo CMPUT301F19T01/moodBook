@@ -27,7 +27,7 @@ public class Mood implements Comparable<Mood> {
     private String reason_text;     // optional
     private Bitmap reason_photo;    // optional
     private String situation;       // optional
-    private Location location;      // optional
+    private MoodLocation location;      // optional
     private String doc_id;          // document id in db for editing/deleting the mood
 
     // date time formatter
@@ -53,7 +53,7 @@ public class Mood implements Comparable<Mood> {
      */
     public Mood(String date_time_text, String emotion,
                 String reason_text, Bitmap reason_photo,
-                String situation, Location location) throws MoodInvalidInputException {
+                String situation, MoodLocation location) throws MoodInvalidInputException {
         // Initialize all the fields for the mood event
         setDateTime(date_time_text);
         setEmotion(emotion);
@@ -214,7 +214,7 @@ public class Mood implements Comparable<Mood> {
      * @param location
      *  This is the location of the mood event in Location
      */
-    public void setLocation(Location location) {
+    public void setLocation(MoodLocation location) {
         this.location = location;
     }
 
@@ -223,7 +223,7 @@ public class Mood implements Comparable<Mood> {
      * @return
      *  Returns location as Location
      */
-    public Location getLocation() {
+    public MoodLocation getLocation() {
         return this.location;
     }
 
@@ -282,7 +282,7 @@ public class Mood implements Comparable<Mood> {
     }
 
 
-    public static String locationToText(Location location) {
+    public static String locationToText(MoodLocation location) {
         String location_text = null;
         if(location != null) {
             location_text = location.getLatitude() + " , " + location.getLongitude();

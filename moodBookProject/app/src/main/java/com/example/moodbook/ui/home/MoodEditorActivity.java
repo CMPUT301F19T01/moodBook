@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.LocationPickerActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodInvalidInputException;
+import com.example.moodbook.MoodLocation;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -56,7 +58,7 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
 
     // location
     protected Button location_button;
-    protected Location mood_location;
+    protected MoodLocation mood_location;
 
     // action buttons
     protected Button do_button;
@@ -65,8 +67,7 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
 
     /**
      * This is a method inherited from the AppCompatActivity
-     * @param savedInstanceState
-     *  Bundle Object is used to stored the data of this activity
+     * @param savedInstanceState Bundle Object is used to stored the data of this activity
      */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -104,10 +105,8 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
 
     /**
      * This gets the photo that was taken and let the image be shown in the page
-     * @param requestCode
-     *   An int for requestCode
-     * @param resultCode
-     *   An int for the result Code
+     * @param requestCode An int for requestCode
+     * @param resultCode An int for the result Code
      * @param data
      *
      */
@@ -152,10 +151,9 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
      *  This is current location of mood event
      */
     @Override
-    public void setMoodLocation(Location location) {
+    public void setMoodLocation(MoodLocation location) {
         this.mood_location = location;
-        String add_location_button_text = ((Double)location.getLatitude()).toString() + " , "
-                + ((Double)location.getLongitude()).toString();
+        String add_location_button_text = location.getAddress();
         location_button.setText(add_location_button_text);
     }
 
@@ -227,8 +225,9 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
         // intent data is null for CreateMoodActivity
         String intent_lat = getIntent().getStringExtra("location_lat");
         String intent_lon = getIntent().getStringExtra("location_lon");
+        String intent_address = getIntent().getStringExtra("location_address");
         if(intent_lat != null && intent_lon != null) {
-            location_button.setText(intent_lat + " , " + intent_lon);
+            location_button.setText(intent_address);
         }
 
         // set the button onClickListener to request location
