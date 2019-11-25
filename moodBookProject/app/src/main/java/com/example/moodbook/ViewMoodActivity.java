@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.home.EditMoodActivity;
+import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.home.MoodListAdapter;
 import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
@@ -94,14 +95,9 @@ public class ViewMoodActivity extends AppCompatActivity {
         }
         moodDB.getImageFromDB(intent_moodID, view_uploaded_pic);
 
-        // for FriendMood and FriendMoodMap: disable edit button
-        String page = getIntent().getStringExtra("page");
-        if( page != null & (page.equals(FriendMoodFragment.class.getSimpleName())
-                || page.equals(MyFriendMoodMapFragment.class.getSimpleName())) ){
-            edit.setVisibility(View.GONE);
-        }
         // for Mood History: enable edit button
-        else{
+        String page = getIntent().getStringExtra("page");
+        if(page == null || page.equals(HomeFragment.class.getSimpleName())) {
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -118,6 +114,10 @@ public class ViewMoodActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        }
+        // for FriendMood and FriendMoodMap: disable edit button
+        else {
+            edit.setVisibility(View.GONE);
         }
 
         cancel_view.setOnClickListener(new View.OnClickListener() {

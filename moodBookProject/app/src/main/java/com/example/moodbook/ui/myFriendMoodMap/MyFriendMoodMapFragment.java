@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
+import com.example.moodbook.DBListListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
+import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.friendMood.FriendMood;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,7 +40,7 @@ import java.util.ArrayList;
 
  *  This activity is used to view a where a users friends' moods take place on a map
  */
-public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBFriend.FriendRecentMoodListListener {
+public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBListListener {
     //private MyFriendMoodMapViewModel MyFriendMoodMapViewModel;
 
     ///// Member Variables /////
@@ -181,7 +183,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      *
      */
     @Override
-    public void beforeGettingFriendMoodList() {
+    public void beforeGettingList() {
         moodDataList.clear();
         moodMap.clear();
     }
@@ -191,10 +193,20 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      * @param item
      */
     @Override
-    public void onGettingFriendMood(FriendMood item) {
-        if (item.getMood().getLocation() != null){
-            moodDataList.add(item.getMood());
-            drawMood(item.getMood(), moodDataList.size()-1);
+    public void onGettingItem(Object item) {
+        if(item instanceof FriendMood){
+            FriendMood mood = (FriendMood) item;
+            if (mood.getMood().getLocation() != null){
+                moodDataList.add(mood.getMood());
+                drawMood(mood.getMood(), moodDataList.size()-1);
+            }
+
         }
+    }
+
+
+    @Override
+    public void afterGettingList() {
+
     }
 }

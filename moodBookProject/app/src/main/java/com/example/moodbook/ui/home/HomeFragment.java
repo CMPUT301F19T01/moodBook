@@ -31,12 +31,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.moodbook.DBListListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodLocation;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
-import com.example.moodbook.RecyclerItemTouchHelper;
 import com.example.moodbook.ViewMoodActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -52,10 +52,10 @@ import java.util.ArrayList;
  * @see DBMoodSetter
  * @see MoodListAdapter
  * @see com.example.moodbook.PageFragment
- * @see com.example.moodbook.RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
+ * @see RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
  */
 public class HomeFragment extends PageFragment
-        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBMoodSetter.MoodListListener{
+        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBListListener {
 
     // Mood History
     private RecyclerView moodListView;
@@ -68,7 +68,6 @@ public class HomeFragment extends PageFragment
     private static final String TAG = HomeFragment.class.getSimpleName();
 
     private Mood SelectedMood = null;
-
 
 
     /**
@@ -93,10 +92,8 @@ public class HomeFragment extends PageFragment
             // Edit the selected mood: when a mood item is clicked, start edit activity
             @Override
             public void onItemClick(final Mood item) {
-//                Toast.makeText(getContext(), "Clicked " + item.getEmotionText(), Toast.LENGTH_LONG).show();
-//                Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
                 // put attributes of selected mood into editIntent
-                AlertDialog.Builder alert = new AlertDialog.Builder(
+                /*AlertDialog.Builder alert = new AlertDialog.Builder(
                         getActivity());
                 alert.setMessage("Would you like to view or edit this mood");
                 alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
@@ -135,7 +132,14 @@ public class HomeFragment extends PageFragment
                 });
 
                 alert.show();
-                SelectedMood =item;
+                 */
+                Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
+                // put attributes of selected mood into Intent
+                getIntentDataFromMood(viewIntent, item);
+                // add current class name to allow edit button
+                viewIntent.putExtra("page",HomeFragment.class.getSimpleName());
+                startActivity(viewIntent);
+                SelectedMood = item;
             }
         });
 
@@ -271,18 +275,21 @@ public class HomeFragment extends PageFragment
     }
 
     @Override
-    public void beforeGettingMoodList() {
+    public void beforeGettingList() {
         moodListAdapter.clear();
     }
 
     @Override
-    public void onGettingMood(Mood item) {
-        moodListAdapter.addItem(item);
+    public void onGettingItem(Object item) {
+        if(item instanceof Mood) {
+            moodListAdapter.addItem((Mood)item);
+        }
     }
 
+    @Deprecated
     @Override
-    public void afterGettingMoodList() {
-        // do nothing
+    public void afterGettingList() {
+        // Do nothing
     }
 
     /**
@@ -316,5 +323,4 @@ public class HomeFragment extends PageFragment
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
         intent.putExtra("location_address", location.getAddress());
     }
-
 }
