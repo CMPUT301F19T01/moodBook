@@ -31,11 +31,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.moodbook.DBListListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.Mood;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
-import com.example.moodbook.RecyclerItemTouchHelper;
 import com.example.moodbook.ViewMoodActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -51,10 +51,10 @@ import java.util.ArrayList;
  * @see DBMoodSetter
  * @see MoodListAdapter
  * @see com.example.moodbook.PageFragment
- * @see com.example.moodbook.RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
+ * @see RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
  */
 public class HomeFragment extends PageFragment
-        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBMoodSetter.MoodListListener{
+        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBListListener {
 
     // Mood History
     private RecyclerView moodListView;
@@ -270,18 +270,21 @@ public class HomeFragment extends PageFragment
     }
 
     @Override
-    public void beforeGettingMoodList() {
+    public void beforeGettingList() {
         moodListAdapter.clear();
     }
 
     @Override
-    public void onGettingMood(Mood item) {
-        moodListAdapter.addItem(item);
+    public void onGettingItem(Object item) {
+        if(item instanceof Mood) {
+            moodListAdapter.addItem((Mood)item);
+        }
     }
 
+    @Deprecated
     @Override
-    public void afterGettingMoodList() {
-        // do nothing
+    public void afterGettingList() {
+        // Do nothing
     }
 
     /**
@@ -314,5 +317,4 @@ public class HomeFragment extends PageFragment
         intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
         intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
     }
-
 }
