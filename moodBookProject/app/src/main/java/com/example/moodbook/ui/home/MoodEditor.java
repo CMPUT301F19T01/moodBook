@@ -35,6 +35,7 @@ import androidx.core.content.FileProvider;
 
 import com.example.moodbook.LocationPickerActivity;
 import com.example.moodbook.Mood;
+import com.example.moodbook.MoodLocation;
 import com.example.moodbook.R;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Ints;
@@ -65,7 +66,7 @@ public class MoodEditor {
     public interface MoodEditorInterface {
         void setMoodEmotion(String emotion);
         void setMoodSituation(String situation);
-        void setMoodLocation(Location location);
+        void setMoodLocation(MoodLocation location);
         void setMoodReasonPhoto(Bitmap bitImage);
     }
 
@@ -452,10 +453,12 @@ public class MoodEditor {
             if(resultCode == LocationPickerActivity.EDIT_LOCATION_OK){
                 double lat = data.getDoubleExtra("location_lat", 0);
                 double lon = data.getDoubleExtra("location_lon", 0);
+                String address = data.getStringExtra("location_address");
 
-                Location location = new Location("");
+                MoodLocation location = new MoodLocation("");
                 location.setLatitude(lat);
                 location.setLongitude(lon);
+                location.setAddress(address);
                 ((MoodEditorInterface)myActivity).setMoodLocation(location);
             }
         }

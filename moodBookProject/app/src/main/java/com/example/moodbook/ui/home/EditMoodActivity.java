@@ -70,6 +70,7 @@ public class EditMoodActivity extends MoodEditorActivity {
                 if(mood_location != null) {
                     moodMap.put("location_lat",mood_location.getLatitude());
                     moodMap.put("location_lon",mood_location.getLongitude());
+                    moodMap.put("location_address", mood_location.getAddress());
                 }
                 moodDB.editMood(moodID,moodMap);
                 Log.i("TEST", "Updated Successful");
@@ -92,6 +93,7 @@ public class EditMoodActivity extends MoodEditorActivity {
         });
         // situation
         super.situation_spinner = findViewById(R.id.edit_situation_spinner);
+
         // location
         super.location_button = findViewById(R.id.edit_location_button);
 
@@ -136,6 +138,7 @@ public class EditMoodActivity extends MoodEditorActivity {
                     if(mood_location != null) {
                         moodMap.put("location_lat",mood_location.getLatitude());
                         moodMap.put("location_lon",mood_location.getLongitude());
+                        moodMap.put("location_address", mood_location.getAddress());
                     }
                     moodDB.editMood(moodID,moodMap);
                     Log.i(TAG, "Mood successfully updated");

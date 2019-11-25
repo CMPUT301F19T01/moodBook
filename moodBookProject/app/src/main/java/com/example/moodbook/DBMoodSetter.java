@@ -411,7 +411,7 @@ public class DBMoodSetter {
      *    Returns a hashmap with mood fields on the database and their corresponding values
      */
     public static Map<String, Object> getDataFromMood (Mood mood){
-        Location location = mood.getLocation();
+        MoodLocation location = mood.getLocation();
         Map<String, Object> data = new HashMap<>();
         data.put("date", mood.getDateText());
         data.put("time", mood.getTimeText());
@@ -420,6 +420,7 @@ public class DBMoodSetter {
         data.put("situation", mood.getSituation());
         data.put("location_lat", location == null ? null : location.getLatitude());
         data.put("location_lon", location == null ? null : location.getLongitude());
+        data.put("location_address", location.getAddress());
         return data;
     }
 
@@ -432,13 +433,15 @@ public class DBMoodSetter {
      */
     public static Mood getMoodFromData (Map<String,Object> data){
 
-        Location location = null;
+        MoodLocation location = null;
         Object location_lat = data.get("location_lat");
         Object location_lon = data.get("location_lon");
+        Object location_address = data.get("location_address");
         if (location_lat != null && location_lon != null) {
-            location = new Location(LocationManager.GPS_PROVIDER);
+            location = new MoodLocation(LocationManager.GPS_PROVIDER);
             location.setLatitude((double) location_lat);
             location.setLongitude((double) location_lon);
+            location.setAddress((String)location_address);
         }
         Mood newMood = null;
         try {
