@@ -39,7 +39,6 @@ import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.example.moodbook.ui.profile.ProfileActivity;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
