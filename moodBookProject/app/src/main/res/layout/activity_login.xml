@@ -20,6 +20,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="64dp"
+        android:backgroundTint="@color/colorAccent"
         android:enabled="true"
         android:text="register"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,6 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start"
         android:layout_marginStart="48dp"
+        android:backgroundTint="@color/colorAccent"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="64dp"
@@ -111,4 +113,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/moodbook_logo" />
+
+    <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="217dp"
+        android:layout_height="23dp"
+        android:text="Forgot Password? Click here."
+        android:textColor="@color/colorAccent"
+        android:textSize="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        app:layout_constraintVertical_bias="0.083" />
 </androidx.constraintlayout.widget.ConstraintLayout>

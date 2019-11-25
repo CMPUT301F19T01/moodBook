@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,27 +21,37 @@ import com.bumptech.glide.Glide;
 
 import com.example.moodbook.MainActivity;
 import com.example.moodbook.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class ProfileActivity extends AppCompatActivity implements ProfileEditor.ProfilePicInterface{
     ImageView dp;
     TextView name;
     TextView email;
+    EditText phone;
+    EditText bio;
     FloatingActionButton edit_image;
     private static final int CHOOSE_IMAGE =101;
     String intent_name;
     String intent_email;
-    ProgressBar image_progress;
     Button save_profile;
     private Bitmap bitImage;
 
@@ -56,24 +67,30 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        name = (TextView) findViewById(R.id.name);
+
+        name = (TextView) findViewById(R.id.username);
         email = (TextView) findViewById(R.id.email);
+        phone = findViewById(R.id.phone);
+        bio = findViewById(R.id.bio);
         intent_name = getIntent().getStringExtra("name");
+        showImg(intent_name);
         intent_email = getIntent().getStringExtra("email");
         dp = (ImageView) findViewById(R.id.profile_pic);
         edit_image = (FloatingActionButton) findViewById(R.id.edit_profile_pic_button);
-        name.setText("Username: " + intent_name);
-        email.setText("Email: " + intent_email);
-        image_progress = (ProgressBar) findViewById(R.id.image_progress);
+
+        name.setText(intent_name);
+        email.setText(intent_email);
         save_profile =(Button) findViewById(R.id.save_profile);
-        showImg(intent_name);
         changeProfilePic();
+        getData();
+        final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         save_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                saveUserInformation();
                   addImg(intent_name);
-                  finishActivity(1);
+                  updateProfile(userID,name.getText().toString(), email.getText().toString(), phone.getText().toString(),bio.getText().toString());
+                  finishActivity(0);
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
@@ -81,6 +98,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
 
 
     }
+
     /**
      * This allows a user to edit a mood image.
      */
@@ -150,5 +168,63 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
             }
         });
     }
+    public void getData(){
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = db.collection("USERS");
+        DocumentReference docRef = collectionReference.document(userID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("DocumentSnapshot data: ", "DocumentSnapshot data: " + document.get("phone"));
+                        phone.setText((CharSequence) document.get("phone"));
+                        bio.setText((CharSequence) document.get("bio"));
+                        showImg((String) document.get("username"));
+
+                    } else {
+                        Log.d("No such document", "No such document");
+                    }
+                } else {
+                    Log.d("get failed with ", "get failed with ", task.getException());
+                }
+            }
+        });
+
+    }
+
+    public void updateProfile(String UserID, String email, String username, String phone, String bio){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = db.collection("USERS");
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("email", email);
+        data.put("username", username);
+        data.put("phone",phone);
+        data.put("bio", bio);
+
+        collectionReference
+                .document(UserID)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "uid stored in db");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "failed:" + e.toString());
+                    }
+                });
+
+
+    }
+
+
+
+
 
 }

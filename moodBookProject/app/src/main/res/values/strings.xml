@@ -53,4 +53,6 @@
     <string name="view_this_mood">View this Mood</string>
     <string name="edit_this_mood">Edit this Mood</string>
     <string name="delete_this_mood">Delete this Mood</string>
+    <string name="please_type_your_email_and_we_would_send_a_reset_passord_link_to_you">Please type your email and we would send a reset Passord link to you.</string>
+    <string name="button">Button</string>
 </resources>
