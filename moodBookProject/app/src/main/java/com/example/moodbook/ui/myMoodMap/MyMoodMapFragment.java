@@ -2,6 +2,7 @@ package com.example.moodbook.ui.myMoodMap;
 
 import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
@@ -19,6 +20,8 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -191,6 +194,14 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
             Location moodLocation = mood.getLocation();
             moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
 
+            // testing for circle drawing
+            Circle mCircle = moodMap.addCircle(new CircleOptions()
+                    .center(new LatLng(moodLatLng.latitude, moodLatLng.longitude))
+                    .radius(50)
+                    .strokeWidth(0)
+                    .strokeColor(mood.getEmotionColorResource())
+                    .fillColor(mood.getEmotionColorResource()));
+
             // use png image resource as marker icon
             BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
             Bitmap b = bitmapDrawable.getBitmap();
@@ -198,7 +209,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
 
             // draw on map
-            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor)).setTag(i);
+            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor).anchor(0.5f,0.5f)).setTag(i);
 
             // zoom in and focus on the most recent mood, ie. the last mood in list
             if(i+1 == moodDataList.size()){
