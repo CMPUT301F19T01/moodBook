@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.Request;
+package com.example.moodbook.ui.request;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

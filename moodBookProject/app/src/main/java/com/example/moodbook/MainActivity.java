@@ -28,7 +28,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
-import com.example.moodbook.ui.Request.RequestFragment;
+import com.example.moodbook.ui.request.RequestFragment;
 import com.example.moodbook.ui.followers.followersFragment;
 import com.example.moodbook.ui.chat.ChatFragment;
 import com.example.moodbook.ui.friendMood.FriendMoodFragment;
@@ -39,7 +39,6 @@ import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.example.moodbook.ui.profile.ProfileActivity;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
