@@ -7,7 +7,7 @@ import android.location.Location;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -32,14 +32,12 @@ public class MoodMapFragment extends PageFragment{
 
         // check if we are drawing a friend mood or own users mood
         if(username != null){
-            TextView name = dialog.findViewById(R.id.friend_name);
+            TextView name = dialog.findViewById(R.id.view_friend_name);
             name.setText(username);
             name.setVisibility(View.VISIBLE);
-
         }
 
-
-
+        // hide edit button
         Button editButton = dialog.findViewById(R.id.edit);
         editButton.setVisibility(View.GONE);
 
@@ -61,16 +59,24 @@ public class MoodMapFragment extends PageFragment{
 
         // set mood location
         TextView moodLocation = dialog.findViewById(R.id.view_location);
-        Location loc = mood.getLocation();
-        moodLocation.setText(mood.getLocation().getAddress());
+        String address = mood.getLocation().getAddress();
+        moodLocation.setText(address);
 
         // set mood situation
         TextView moodSituation = dialog.findViewById(R.id.view_situation);
-        moodSituation.setText(mood.getSituation());
+        String situation = mood.getSituation();
+        if (situation == null){
+            situation = "N/A";
+        }
+        moodSituation.setText("Situation: " + situation);
 
         // set mood reason
         TextView moodReason = dialog.findViewById(R.id.view_reason);
-        moodReason.setText(mood.getReasonText());
+        String reason = mood.getReasonText();
+        if(reason == null){
+            reason = "N/A";
+        }
+        moodReason.setText("Reason: " + reason);
 
         // close on click listener
         Button button = dialog.findViewById(R.id.cancel_view);
@@ -88,19 +94,19 @@ public class MoodMapFragment extends PageFragment{
         scrollView.setBackgroundColor(Color.TRANSPARENT);
 
         // set the background color based on the mood
-        ConstraintLayout constraintLayout = dialog.findViewById(R.id.constraint_layout);
+        LinearLayout linearLayout= dialog.findViewById(R.id.view_layout);
 
         if (mood.getEmotionText().equals("happy")){
-            constraintLayout.setBackgroundResource(R.drawable.view_happy_bg);
+            linearLayout.setBackgroundResource(R.drawable.view_happy_bg);
         }
         else if (mood.getEmotionText().equals("angry")){
-            constraintLayout.setBackgroundResource(R.drawable.view_angry_bg);
+            linearLayout.setBackgroundResource(R.drawable.view_angry_bg);
         }
         else if (mood.getEmotionText().equals("sad")){
-            constraintLayout.setBackgroundResource(R.drawable.view_sad_bg);
+            linearLayout.setBackgroundResource(R.drawable.view_sad_bg);
         }
         else if (mood.getEmotionText().equals("afraid")){
-            constraintLayout.setBackgroundResource(R.drawable.view_afraid_bg);
+            linearLayout.setBackgroundResource(R.drawable.view_afraid_bg);
         }
 
         return dialog;

@@ -154,7 +154,8 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
     public void setMoodLocation(MoodLocation location) {
         this.mood_location = location;
         String add_location_button_text = location.getAddress();
-        location_button.setText(add_location_button_text);
+        location_button.setText(
+                (add_location_button_text==null)?"PICK MOOD LOCATION":add_location_button_text);
     }
 
     /**
