@@ -29,11 +29,15 @@ public class MessageActivity extends AppCompatActivity {
     private ArrayList<MoodbookUser> friends;
     TextView sendText;
     ImageButton sendBtn;
+    TextView friend_username;
+
+    MessageAdapter messageAdapter;
+    ArrayList<Chat> chat;
 
     // connect to DB
     private DBFriend friendDB;
     private FirebaseAuth mAuth;
-    FirebaseUser firebaseUser;
+//    FirebaseUser firebaseUser;
 
 
     @Override
@@ -45,25 +49,26 @@ public class MessageActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         friendDB = new DBFriend(mAuth, getBaseContext(), TAG);
         friendDB.setFriendListListener(friendListAdapter);
-
-        sendText= findViewById(R.id.sendText);
-        sendBtn= findViewById(R.id.sendBtn);
+        sendText = findViewById(R.id.sendText);
+        sendBtn = findViewById(R.id.sendBtn);
+        friend_username = findViewById(R.id.friend_username);
         intent = getIntent();
+
 
         final RequestHandler requestHandler = new RequestHandler(mAuth,getBaseContext());
         final FirebaseUser username = mAuth.getCurrentUser();
-//        MoodbookUser friendUser = friends.get(username);
-//        final String friendId = intent.getStringExtra(MoodbookUser.friendUser.getUid());
+        final String friendId = intent.getStringExtra("uid");
+        friend_username.setText(friendId);
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                String message = sendText.getText().toString();
                 if (!message.equals("")){
-//                    requestHandler.sendMessage(username.getUid(), friendId, message);
+                    requestHandler.sendMessage(username.getUid(), friendId, message);
                 }
                 else {
                     Toast.makeText(MessageActivity.this,
-                            "Can not send empty message",
+                            "Cannot send an empty message",
                             Toast.LENGTH_LONG).show();
                 }
                 sendText.setText("");

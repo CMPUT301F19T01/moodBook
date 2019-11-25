@@ -47,7 +47,10 @@ public class MyFriendsFragment extends PageFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Toast.makeText(getContext(), "Clicked " , Toast.LENGTH_LONG).show();
+                MoodbookUser friendId = (MoodbookUser)friendListAdapter.getItem(i);
+
                 Intent intent = new Intent(getContext(),MessageActivity.class);
+                intent.putExtra("uid", String.valueOf(friendId));
                 getContext().startActivity(intent);
             }
         });

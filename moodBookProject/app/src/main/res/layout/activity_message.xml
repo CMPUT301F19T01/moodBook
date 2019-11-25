@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
-    android:background="@color/colorWhite">
+    android:background= "#F4E6F5">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/message_recyclerView"
         android:layout_width="match_parent"
@@ -30,7 +30,7 @@
         android:layout_marginRight="3dp"
         android:layout_alignParentBottom="true"/>
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/friend_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
