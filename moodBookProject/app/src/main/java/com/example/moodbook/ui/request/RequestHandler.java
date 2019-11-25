@@ -112,6 +112,11 @@ public class RequestHandler {
         };
     }
 
+    /**
+     * This method adds a friend to the user's friends list in the db
+     * @param acceptFriend
+     * @param myUsername
+     */
     public void addFriend(final MoodbookUser acceptFriend, final String myUsername){
 
         final String username = myUsername;
@@ -136,6 +141,11 @@ public class RequestHandler {
                 });
     }
 
+    /**
+     * This method adds a follower to the user's followers list in the db
+     * @param acceptFriend
+     * @param myUsername
+     */
     public void addToFollowerList(final MoodbookUser acceptFriend, final String myUsername){
         final CollectionReference followersRef = this.userReference.document(uid).collection("FOLLOWERS");
         HashMap<String, Object> data = new HashMap<>();
@@ -155,6 +165,10 @@ public class RequestHandler {
                 });
     }
 
+    /**
+     * This method removes a request
+     * @param username
+     */
     public void removeRequest( final String username){
         final CollectionReference collectionReference = this.userReference.document(this.uid).collection("REQUESTS");
         collectionReference.document(username).delete()
