@@ -20,6 +20,7 @@ import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.friendMood.FriendMood;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -227,6 +228,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
     @Override
     public void afterGettingList() {
-
+        Mood mood = moodDataList.get(moodDataList.size()-1).getMood();
+        LatLng moodLatLng = new LatLng(mood.getLocation().getLatitude(), mood.getLocation().getLatitude());
+        moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
     }
 }
