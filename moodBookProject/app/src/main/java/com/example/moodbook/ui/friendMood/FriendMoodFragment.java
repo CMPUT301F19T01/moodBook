@@ -62,6 +62,7 @@ public class FriendMoodFragment extends PageFragment implements DBListListener {
                 getIntentDataFromMood(viewIntent, selectedFriendMood.getMood());
                 // add current class name to disable edit button
                 viewIntent.putExtra("page",FriendMoodFragment.class.getSimpleName());
+                viewIntent.putExtra("friend_username", selectedFriendMood.getUsername());
                 startActivity(viewIntent);
             }
         });
