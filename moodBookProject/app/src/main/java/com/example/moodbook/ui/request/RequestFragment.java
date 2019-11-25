@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.Request;
+package com.example.moodbook.ui.request;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,12 +10,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.data.UsernameList;
+import com.example.moodbook.ui.myRequests.RequestsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
 
 /**
  * This fragment is shown to allow the user to send requests to other users
@@ -31,6 +35,7 @@ public class RequestFragment extends PageFragment {
     private Button requestButton;
 
     private RequestHandler requestHandler;
+    private RequestsAdapter requestsAdapter;
     private UsernameList usernameList;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -47,7 +52,9 @@ public class RequestFragment extends PageFragment {
         requestText = root.findViewById(R.id.usernameEditText);
         requestButton = root.findViewById(R.id.requestButton);
 
-        requestHandler = new RequestHandler(mAuth, db);
+        requestHandler = new RequestHandler(mAuth, getContext());
+        requestsAdapter = new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
+        requestHandler.setRequestListListener(requestsAdapter);
 
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
