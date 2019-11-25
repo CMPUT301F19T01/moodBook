@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -21,15 +24,17 @@ public class MyFriendsFragment extends PageFragment implements DBListListener {
     private FriendListAdapter friendListAdapter;
     private ListView friendListView;
     private static final String TAG = MyFriendsFragment.class.getSimpleName();
-
+    ArrayList<MoodbookUser> friendsList;
     // connect to DB
     private DBFriend friendDB;
     private FirebaseAuth mAuth;
+    private String selectedItem ="";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_myfriends);
 
+        friendsList = new ArrayList<>();
         friendListView = root.findViewById(R.id.friend_listView);
         friendListAdapter=  new FriendListAdapter(getContext());
         friendListView.setAdapter(friendListAdapter);

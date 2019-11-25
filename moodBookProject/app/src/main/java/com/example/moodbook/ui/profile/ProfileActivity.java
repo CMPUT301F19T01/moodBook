@@ -88,7 +88,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
             @Override
             public void onClick(View view) {
                   addImg(intent_name);
-                  updateProfile(userID,name.getText().toString(), email.getText().toString(), phone.getText().toString(),bio.getText().toString());
+                  ProfileEditor.updateProfile(userID,name.getText().toString(), email.getText().toString(), phone.getText().toString(),bio.getText().toString());
                   finishActivity(0);
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -139,14 +139,14 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
         Bitmap bitImage = ProfileEditor.getBitmap();
         Uri file = uriProfileImage;
         if (file != null){
-            UploadTask uploadTask = fireRef.putFile(file);
+            fireRef.putFile(file);
             Log.e("Fire Path", fireRef.toString());
 
         }else if (bitImage != null) {
             bitImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
             byte[] data = baos.toByteArray();
 
-            UploadTask uploadTask = fireRef.putBytes(data);
+           fireRef.putBytes(data);
         }
     }
     public void showImg(String username){
@@ -160,13 +160,15 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
                         .centerCrop()
                         .into(dp);
             }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                dp.setImageResource(R.drawable.purpleprofile);
-            }
-        });
+        }) ;
+//                .addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception exception) {
+//                // Handle any errors
+//                dp.setImageResource(R.drawable.purpleprofile);
+//            }
+//        }
+
     }
     public void getData(){
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -194,37 +196,4 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
         });
 
     }
-
-    public void updateProfile(String UserID, String email, String username, String phone, String bio){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection("USERS");
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("email", email);
-        data.put("username", username);
-        data.put("phone",phone);
-        data.put("bio", bio);
-
-        collectionReference
-                .document(UserID)
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "uid stored in db");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "failed:" + e.toString());
-                    }
-                });
-
-
-    }
-
-
-
-
-
 }

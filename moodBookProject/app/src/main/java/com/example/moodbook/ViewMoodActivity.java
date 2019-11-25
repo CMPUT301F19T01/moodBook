@@ -125,6 +125,7 @@ public class ViewMoodActivity extends AppCompatActivity {
             public void onClick(View view) {
                 setResult(AppCompatActivity.RESULT_CANCELED);
                 finish();
+                startActivity(new Intent(ViewMoodActivity.this,MainActivity.class));
             }
         });
 
