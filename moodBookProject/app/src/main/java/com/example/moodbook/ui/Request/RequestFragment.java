@@ -97,7 +97,6 @@ public class RequestFragment extends PageFragment implements DBListListener{
     @Override
     public void onGettingItem(Object item){
         if(item instanceof MoodbookUser) {
-            //friends.add((MoodbookUser)item);
             friends.add((((MoodbookUser) item).getUsername()));
         }
     }
