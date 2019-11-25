@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.myRequests;
+package com.example.moodbook.ui.Request;
 
 
 import android.annotation.SuppressLint;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.moodbook.MoodbookUser;
-import com.example.moodbook.ui.Request.RequestHandler;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,7 +46,7 @@ public class RequestsAdapter extends BaseAdapter {
         // inflate the layout for each item of listView
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
-        view = inflater.inflate(R.layout.custom_lv, parent, false);
+        view = inflater.inflate(R.layout.request_item, parent, false);
 
 
         // get the reference of textView and button

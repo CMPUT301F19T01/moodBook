@@ -132,18 +132,30 @@ public class DBFriend {
     }
 
     /**
-     * This method is for removing a follower that was previously accepted by a user
-     * @param username
+     * This method is used by followersFragment to remove a follower who was previously accepted by the user
+     * @param user
+     * @param follower
      */
-    public void removeFollower(final MoodbookUser removedUserUid, final String un, final String username ){
+    public void removeFollower(final MoodbookUser user, final MoodbookUser follower) {
+        removeFollower(user, follower, true);
+    }
 
-        final CollectionReference collectionReference = this.userReference.document(this.uid).collection("FOLLOWERS");
-        collectionReference.document(username).delete()
+    private void removeFollower(final MoodbookUser user, final MoodbookUser follower,
+                               final boolean toRemoveFriend) {
+        if (follower == null) return;
+        // go to user's follower list
+        final CollectionReference collectionReference = this.userReference.document(user.getUid())
+                .collection("FOLLOWERS");
+        // remove the follower's user name from follower list (followers who are following user)
+        collectionReference.document(follower.getUsername()).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Remove Follower.");
-                        removeFriend(removedUserUid, un);
+                        Log.d(TAG, "Remove Follower " + follower.getUsername()
+                                + " for " + user.getUsername());
+                        if(toRemoveFriend) {
+                            removeFriend(follower, user, false);
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -155,34 +167,39 @@ public class DBFriend {
     }
 
     /**
-     * This method is for removing a user from friends list from DB
-     * @param removedUserUid - user that was removed by current user
+     * This method is MyFriendsFragment to remove a friend that the user follows
+     * @param user
+     * @param friend
      */
-    public void removeFriend(final MoodbookUser removedUserUid, final String un){
-        final String username = un;
-    // go to the user collection that was removed by current user
-        // then go to their friends list
-        // remove the current user name
-        //friends in DB basically mean the users that they are following
-        final CollectionReference collectionReference = FirebaseFirestore.getInstance().collection("USERS").document(removedUserUid.getUid()).collection("FRIENDS");
-        if (username != null) {
-            collectionReference.document(username).delete()
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d(TAG, removedUserUid.getUid());
-                            Log.d(TAG, username);
-                            Log.d(TAG, "Remove friend.");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "Did nothing.");
-                        }
-                    });
-        }
+    public void removeFriend(final MoodbookUser user, final MoodbookUser friend) {
+        removeFriend(user, friend, true);
+    }
 
+    private void removeFriend(final MoodbookUser user, final MoodbookUser friend,
+                             final boolean toRemoveFollower){
+        if (friend == null) return;
+
+        // go to user's friend list
+        final CollectionReference collectionReference = this.userReference.document(user.getUid())
+                .collection("FRIENDS");
+        // remove the friend's user name from friend list (friends who user is following)
+        collectionReference.document(friend.getUsername()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Remove Friend " + friend.getUsername()
+                                + " for " + user.getUsername());
+                        if(toRemoveFollower) {
+                            removeFollower(friend, user, false);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Did nothing.");
+                    }
+                });
     }
 
     /**

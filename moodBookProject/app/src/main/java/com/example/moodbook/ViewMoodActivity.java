@@ -1,7 +1,6 @@
 package com.example.moodbook;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,35 +8,24 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.ui.home.HomeFragment;
-import com.example.moodbook.ui.home.MoodEditor;
-import com.example.moodbook.ui.home.MoodListAdapter;
-import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * This activity is used to  enable a user to be to view detials for a specific mood
  */
 public class ViewMoodActivity extends AppCompatActivity {
-    private TextView view_friend_name;
-    private TextView view_date_time;
-    private TextView view_reason;
-    private TextView view_situation;
-    private TextView view_location;
-    private TextView view_emotion;
-    private ImageView view_emoji;
-    private ImageView view_uploaded_pic;
-    private Button edit;
-    private Button cancel_view;
+    private TextView view_friend_name, view_date_time, view_emotion,
+            view_reason, view_situation, view_location;
+    private ImageView view_emoji, view_uploaded_pic;
+    private Button view_edit_button, view_cancel_button;
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
-    private ScrollView linear_emotion;
+    private ScrollView view_scrollView;
     private static final String TAG = ViewMoodActivity.class.getSimpleName();
 
     @Override
@@ -54,9 +42,10 @@ public class ViewMoodActivity extends AppCompatActivity {
         view_location = findViewById(R.id.view_location);
         view_emotion = findViewById(R.id.view_emotion);
         view_emoji = findViewById(R.id.view_emoji);
-        edit = findViewById(R.id.edit);
-        cancel_view = findViewById(R.id.cancel_view);
+        view_edit_button = findViewById(R.id.view_edit_button);
+        view_cancel_button = findViewById(R.id.view_cancel_button);
         view_uploaded_pic = findViewById(R.id.view_uploaded_pic);
+        view_scrollView = findViewById(R.id.viewPage);
 
 
         // Getting data from Intents
@@ -79,20 +68,19 @@ public class ViewMoodActivity extends AppCompatActivity {
 
         final String intent_emotion =getIntent().getStringExtra("emotion");
         view_emotion.setText(intent_emotion);
-        linear_emotion = findViewById(R.id.viewPage);
         //Set emoji
         if(Mood.Emotion.hasName(intent_emotion)) {
             view_emoji.setImageResource(Mood.Emotion.getImageResourceId(intent_emotion));
-            linear_emotion.setBackgroundColor(getResources().getColor(
+            view_scrollView.setBackgroundColor(getResources().getColor(
                     Mood.Emotion.getColorResourceId(intent_emotion)
             ));
         }
         moodDB.getImageFromDB(intent_moodID, view_uploaded_pic);
 
-        // for Mood History: enable edit button, hide friend_name field
+        // for Mood History: enable view_edit_button button, hide friend_name field
         String page = getIntent().getStringExtra("page");
         if(page == null || page.equals(HomeFragment.class.getSimpleName())) {
-            edit.setOnClickListener(new View.OnClickListener() {
+            view_edit_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(getApplicationContext(), EditMoodActivity.class);
@@ -110,9 +98,9 @@ public class ViewMoodActivity extends AppCompatActivity {
             });
             view_friend_name.setVisibility(View.GONE);
         }
-        // for FriendMood and FriendMoodMap: disable edit button, show friend_name field
+        // for FriendMood: disable view_edit_button button, show friend_name field
         else {
-            edit.setVisibility(View.GONE);
+            view_edit_button.setVisibility(View.GONE);
             String friend_username = getIntent().getStringExtra("friend_username");
             if(friend_username != null) {
                 view_friend_name.setVisibility(View.VISIBLE);
@@ -120,7 +108,7 @@ public class ViewMoodActivity extends AppCompatActivity {
             }
         }
 
-        cancel_view.setOnClickListener(new View.OnClickListener() {
+        view_cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setResult(AppCompatActivity.RESULT_CANCELED);
@@ -130,7 +118,4 @@ public class ViewMoodActivity extends AppCompatActivity {
         });
 
     }
-
-
-
 }
