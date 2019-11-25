@@ -66,7 +66,8 @@ public class ViewMoodActivity extends AppCompatActivity {
         view_reason.setText("Reason: "+intent_reason);
         final String intent_lat = getIntent().getStringExtra("location_lat");
         final String intent_lon = getIntent().getStringExtra("location_lon");
-        view_location.setText("Location: "+ intent_lat + " , " + intent_lon);
+        final String intent_address = getIntent().getStringExtra("location_address");
+        view_location.setText(intent_address);
         final String intent_situation =getIntent().getStringExtra("situation");
         view_situation.setText("Situation:  " + intent_situation);
         final String intent_emotion =getIntent().getStringExtra("emotion");
@@ -113,6 +114,7 @@ public class ViewMoodActivity extends AppCompatActivity {
                     intent.putExtra("situation",intent_situation);
                     intent.putExtra("location_lat",intent_lat);
                     intent.putExtra("location_lon", intent_lon);
+                    intent.putExtra("location_address", intent_address);
                     startActivity(intent);
                 }
             });
