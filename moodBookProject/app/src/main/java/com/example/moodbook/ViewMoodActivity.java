@@ -13,13 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.ui.home.MoodListAdapter;
+import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * This activity is used to  enable a user to be to view detials for a specific mood
- * @deprecated  Activity not implement yet : Waiting for user's feedback
+ * This activity is used to enable a user to be to view details for a specific mood
  */
 public class ViewMoodActivity extends AppCompatActivity {
     private TextView view_date_time;
@@ -43,8 +44,7 @@ public class ViewMoodActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_mood);
         mAuth = FirebaseAuth.getInstance();
-        moodDB = new DBMoodSetter(mAuth, getApplicationContext(),
-                DBMoodSetter.getMoodHistoryListener(moodAdapter), TAG);
+        moodDB = new DBMoodSetter(mAuth, getApplicationContext(), TAG);
         final FragmentManager fm = getSupportFragmentManager();
         view_date_time = findViewById(R.id.view_date_time);
         view_reason = findViewById(R.id.view_reason);
@@ -110,6 +110,7 @@ public class ViewMoodActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
         cancel_view.setOnClickListener(new View.OnClickListener() {
             @Override

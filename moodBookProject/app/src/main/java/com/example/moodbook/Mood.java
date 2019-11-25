@@ -282,7 +282,7 @@ public class Mood implements Comparable<Mood> {
     }
 
 
-    public static String locationToText(Location location) {
+    public static String locationToText(MoodLocation location) {
         String location_text = null;
         if(location != null) {
             location_text = location.getLatitude() + " , " + location.getLongitude();

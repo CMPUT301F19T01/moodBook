@@ -51,6 +51,13 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     private DBMoodSetter dbMoodSetter;
     private DBFriend friendMoodDB;
 
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate( R.layout.fragment_friendmoodmap, container, false);
@@ -77,6 +84,10 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         return root;
     }
 
+    /**
+     *
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // initialize map
@@ -104,31 +115,47 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
     }
 
+    /**
+     *
+     */
     @Override
     public void onResume() {
         mapView.onResume();
         super.onResume();
     }
 
+    /**
+     *
+     */
     @Override
     public void onPause() {
         super.onPause();
         mapView.onPause();
     }
 
+    /**
+     *
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
     }
 
+    /**
+     *
+     */
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
     }
 
-
+    /**
+     *
+     * @param mood
+     * @param i
+     */
     private void drawMood(Mood mood, int i ){
         if (mood.getLocation() != null){
             // get image resource for the mood marker
@@ -150,12 +177,19 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
     }
 
+    /**
+     *
+     */
     @Override
     public void beforeGettingFriendMoodList() {
         moodDataList.clear();
         moodMap.clear();
     }
 
+    /**
+     *
+     * @param item
+     */
     @Override
     public void onGettingFriendMood(FriendMood item) {
         if (item.getMood().getLocation() != null){

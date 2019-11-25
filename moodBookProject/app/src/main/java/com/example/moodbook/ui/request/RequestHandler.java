@@ -44,6 +44,7 @@ public class RequestHandler {
         this.context = context;
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
+        this.TAG = TAG;
     }
 
     public RequestHandler(FirebaseAuth mAuth, Context context){

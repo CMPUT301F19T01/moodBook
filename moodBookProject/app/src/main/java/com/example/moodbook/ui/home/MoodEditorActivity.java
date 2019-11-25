@@ -153,7 +153,6 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
     @Override
     public void setMoodLocation(MoodLocation location) {
         this.mood_location = location;
-        Log.i("fdjkls", location.getAddress());
         String add_location_button_text = location.getAddress();
         location_button.setText(add_location_button_text);
     }
