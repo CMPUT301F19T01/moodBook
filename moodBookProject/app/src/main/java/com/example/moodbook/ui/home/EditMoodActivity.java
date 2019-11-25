@@ -98,7 +98,7 @@ public class EditMoodActivity extends MoodEditorActivity {
         super.location_button = findViewById(R.id.edit_location_button);
 
         // action buttons
-        super.do_button = findViewById(R.id.edit_save_button);
+        super.save_button = findViewById(R.id.edit_save_button);
 
     }
 
@@ -118,8 +118,8 @@ public class EditMoodActivity extends MoodEditorActivity {
     }
 
     @Override
-    protected void setupDoButton() {
-        super.do_button.setOnClickListener(new View.OnClickListener() {
+    protected void setupSaveButton() {
+        super.save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(validMoodInputs()){
@@ -143,6 +143,7 @@ public class EditMoodActivity extends MoodEditorActivity {
                     moodDB.editMood(moodID,moodMap);
                     Log.i(TAG, "Mood successfully updated");
                     finish();
+                    startActivity(new Intent(EditMoodActivity.this, MainActivity.class));
                 }
             }
         });

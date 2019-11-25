@@ -1,12 +1,9 @@
 package com.example.moodbook.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moodbook.DBMoodSetter;
+import com.example.moodbook.MainActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodInvalidInputException;
 import com.example.moodbook.R;
@@ -84,7 +82,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
         super.location_button = findViewById(R.id.create_location_button);
 
         // action buttons
-        super.do_button = findViewById(R.id.create_add_button);
+        super.save_button = findViewById(R.id.create_add_button);
         super.cancel_button = findViewById(R.id.create_cancel_button);
     }
 
@@ -115,9 +113,9 @@ public class CreateMoodActivity extends MoodEditorActivity {
     }
 
     @Override
-    protected void setupDoButton() {
+    protected void setupSaveButton() {
         // When this button is clicked, return a result
-        super.do_button.setOnClickListener(new View.OnClickListener() {
+        super.save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(validMoodInputs()){
@@ -127,11 +125,13 @@ public class CreateMoodActivity extends MoodEditorActivity {
                         moodDB.addMood(newMood);
                         Log.i(TAG, "Mood successfully added");
                         finish();
+                        startActivity(new Intent(CreateMoodActivity.this, MainActivity.class));
                     } catch (MoodInvalidInputException e) {
                         // shouldn't happen since inputs are already checked
                         Toast.makeText(getApplicationContext(),
                                 "Adding failed: " + e.getMessage(),
                                 Toast.LENGTH_LONG).show();
+
                     }
                 }
             }

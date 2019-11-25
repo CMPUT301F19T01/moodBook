@@ -2,9 +2,7 @@ package com.example.moodbook.ui.home;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
@@ -61,7 +59,7 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
     protected MoodLocation mood_location;
 
     // action buttons
-    protected Button do_button;
+    protected Button save_button;
     protected Button cancel_button;
 
 
@@ -99,7 +97,7 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
         setupReasonPhoto();
         setupSituation();
         setupLocation();
-        setupDoButton();
+        setupSaveButton();
         setupCancelButton();
     }
 
@@ -148,13 +146,14 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
      * This override MoodEditor.MoodInterface setMoodLocation(),
      * and is setter for mood_location, as well as updating location button text with current location
      * @param location
-     *  This is current location of mood event
+     *  This is current location of mood event5
      */
     @Override
     public void setMoodLocation(MoodLocation location) {
         this.mood_location = location;
         String add_location_button_text = location.getAddress();
-        location_button.setText(add_location_button_text);
+        location_button.setText(
+                (add_location_button_text==null)?"PICK MOOD LOCATION":add_location_button_text);
     }
 
     /**
@@ -241,7 +240,7 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
         });
     }
 
-    protected abstract void setupDoButton();
+    protected abstract void setupSaveButton();
 
     protected void setupCancelButton() {
         // When cancel button is pressed, return to main activity; do nothing

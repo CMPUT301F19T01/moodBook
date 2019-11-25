@@ -88,7 +88,9 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
             @Override
             public void onClick(View view) {
                   addImg(intent_name);
+
                   ProfileEditor.updateProfile(userID,name.getText().toString(), email.getText().toString(), phone.getText().toString(),bio.getText().toString());
+
                   finishActivity(0);
 
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
