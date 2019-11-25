@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity  {
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
     private FirebaseFirestore db;
+    private FirebaseStorage st;
     private static String name;
     private String email;
     private  ImageView profile;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity  {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         db = FirebaseFirestore.getInstance();
+        st = FirebaseStorage.getInstance();
         profile = findViewById(R.id.profile);
 
         name = null;
@@ -128,7 +130,7 @@ public class MainActivity extends AppCompatActivity  {
         profileEmail.setText(email);
         if (name!=null) {
             // Reference to an image file in Cloud Storage
-             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+             StorageReference storageReference = st.getReference();
              storageReference.child("profilepics/" + name + ".jpeg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {

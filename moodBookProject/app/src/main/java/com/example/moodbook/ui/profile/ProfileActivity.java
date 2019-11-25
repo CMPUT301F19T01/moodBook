@@ -151,8 +151,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     }
     public void showImg(String username){
         // Reference to an image file in Cloud Storage
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        storageReference.child("profilepics/" + username + ".jpeg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        mStorageRef.child("profilepics/" + username + ".jpeg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext()/* context */)
