@@ -16,7 +16,6 @@ import com.example.moodbook.DBListListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
-import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.friendMood.FriendMood;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,7 +45,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     ///// Member Variables /////
     private MapView mapView;
     private GoogleMap moodMap;
-    private ArrayList<Mood> moodDataList;
+    private ArrayList<FriendMood> moodDataList;
     private FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private String userID;
@@ -102,13 +101,13 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
             public boolean onMarkerClick(Marker marker) {
                 // get mood from data list with by using tag
                 int pos = (int)marker.getTag();
-                Mood mood = moodDataList.get(pos);
+                FriendMood mood = moodDataList.get(pos);
 
                 // create dialog popup
                 Dialog dialog = new Dialog(getContext());
 
                 // bind mood data to dialog layout
-                bindViews(mood, dialog, dbMoodSetter).show();
+                bindViews(mood.getMood(), dialog, dbMoodSetter, mood.getUsername()).show();
 
                 return false;
             }
@@ -197,7 +196,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         if(item instanceof FriendMood){
             FriendMood mood = (FriendMood) item;
             if (mood.getMood().getLocation() != null){
-                moodDataList.add(mood.getMood());
+                moodDataList.add(mood);
                 drawMood(mood.getMood(), moodDataList.size()-1);
             }
 
