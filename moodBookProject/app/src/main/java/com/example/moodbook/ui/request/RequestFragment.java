@@ -1,6 +1,7 @@
 package com.example.moodbook.ui.Request;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,8 @@ public class RequestFragment extends PageFragment {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
+        Log.i("ads;lfkj", user.getDisplayName());
+
         usernameList = new UsernameList(FirebaseFirestore.getInstance());
         usernameList.updateUsernameList();
 
@@ -62,9 +65,14 @@ public class RequestFragment extends PageFragment {
                 String addUser = requestText.getText().toString();
 
                 if (usernameList.isUser(addUser)){ // check if username exists in db
-                    requestHandler.sendRequest(addUser, user.getUid(), user.getDisplayName());
-                    Toast.makeText(root.getContext(), "Sent request",
-                            Toast.LENGTH_LONG).show();
+                    if(!(addUser.equals(user.getDisplayName()))){ // check if user is try to send request to themselves
+                        requestHandler.sendRequest(addUser, user.getUid(), user.getDisplayName());
+                        Toast.makeText(root.getContext(), "Sent request",
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(root.getContext(), "cannot send request to yourself",
+                                Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     requestText.setError("User does not exist");
                 }

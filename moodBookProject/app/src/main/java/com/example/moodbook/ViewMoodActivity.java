@@ -66,8 +66,7 @@ public class ViewMoodActivity extends AppCompatActivity {
         view_reason.setText("Reason: "+intent_reason);
         final String intent_lat = getIntent().getStringExtra("location_lat");
         final String intent_lon = getIntent().getStringExtra("location_lon");
-        final String intent_address = getIntent().getStringExtra("location_address");
-        view_location.setText("Location: " + intent_address);
+        view_location.setText("Location: "+ intent_lat + " , " + intent_lon);
         final String intent_situation =getIntent().getStringExtra("situation");
         view_situation.setText("Situation:  " + intent_situation);
         final String intent_emotion =getIntent().getStringExtra("emotion");
@@ -94,23 +93,30 @@ public class ViewMoodActivity extends AppCompatActivity {
         }
         moodDB.getImageFromDB(intent_moodID, view_uploaded_pic);
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), EditMoodActivity.class);
-                intent.putExtra("moodID", intent_moodID);
-                intent.putExtra("date",intent_date);
-                intent.putExtra("time",intent_time);
-                intent.putExtra("emotion",intent_emotion);
-                intent.putExtra("reason_text",intent_reason);
-                intent.putExtra("situation",intent_situation);
-                intent.putExtra("location_lat",intent_lat);
-                intent.putExtra("location_lon", intent_lon);
-                intent.putExtra("location_address", intent_address);
-                startActivity(intent);
-            }
-        });
-
+        // for FriendMood and FriendMoodMap: disable edit button
+        String page = getIntent().getStringExtra("page");
+        if( page != null & (page.equals(FriendMoodFragment.class.getSimpleName())
+                || page.equals(MyFriendMoodMapFragment.class.getSimpleName())) ){
+            edit.setVisibility(View.GONE);
+        }
+        // for Mood History: enable edit button
+        else{
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getApplicationContext(), EditMoodActivity.class);
+                    intent.putExtra("moodID", intent_moodID);
+                    intent.putExtra("date",intent_date);
+                    intent.putExtra("time",intent_time);
+                    intent.putExtra("emotion",intent_emotion);
+                    intent.putExtra("reason_text",intent_reason);
+                    intent.putExtra("situation",intent_situation);
+                    intent.putExtra("location_lat",intent_lat);
+                    intent.putExtra("location_lon", intent_lon);
+                    startActivity(intent);
+                }
+            });
+        }
 
         cancel_view.setOnClickListener(new View.OnClickListener() {
             @Override
