@@ -67,4 +67,12 @@ public class FriendListAdapter extends ArrayAdapter {
         // notify list is cleared
         notifyDataSetChanged();
     }
+
+    /**
+     * Returns arraylist of the user's friends
+     * @return friends
+     */
+    public ArrayList<MoodbookUser> getFriendList(){
+        return this.friends;
+    }
 }

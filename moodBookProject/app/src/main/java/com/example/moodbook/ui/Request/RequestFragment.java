@@ -10,10 +10,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.moodbook.DBListListener;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.data.UsernameList;
+import com.example.moodbook.ui.myFriends.FriendListAdapter;
 import com.example.moodbook.ui.myRequests.RequestsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 /**
  * This fragment is shown to allow the user to send requests to other users
  */
-public class RequestFragment extends PageFragment {
+public class RequestFragment extends PageFragment implements DBListListener{
     //private RequestViewModel requestViewModel;
 
     private FirebaseAuth mAuth;
@@ -37,11 +39,16 @@ public class RequestFragment extends PageFragment {
     private com.example.moodbook.ui.Request.RequestHandler requestHandler;
     private RequestsAdapter requestsAdapter;
     private UsernameList usernameList;
+    private FriendListAdapter friendListAdapter;
+    private ArrayList<MoodbookUser> friends;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_request);
         db = FirebaseFirestore.getInstance();
+
+        friendListAdapter =  new FriendListAdapter(getContext());
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -56,14 +63,20 @@ public class RequestFragment extends PageFragment {
         requestsAdapter = new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
         requestHandler.setRequestListListener(requestsAdapter);
 
+
+
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                friends = friendListAdapter.getFriendList(); // get friendslist
+
                 String addUser = requestText.getText().toString();
 
                 if(addUser.equals(user.getDisplayName())){ // check if adding self
                     requestText.setError("Cannot add yourself");
-                } else if (usernameList.isUser(addUser)){ // check if username exists in db
+                } else if (friends.contains(addUser)) { // check if user already added
+                    requestText.setError("User already added");
+                }else if (usernameList.isUser(addUser)){ // check if username exists in db
                     requestHandler.sendRequest(addUser, user.getUid(), user.getDisplayName());
                     Toast.makeText(root.getContext(), "Sent request",
                             Toast.LENGTH_LONG).show();
@@ -74,5 +87,23 @@ public class RequestFragment extends PageFragment {
         });
 
         return root;
+    }
+
+    @Override
+    public void beforeGettingList(){
+        friendListAdapter.clear();
+    }
+
+    @Override
+    public void onGettingItem(Object item){
+        if(item instanceof MoodbookUser) {
+            friendListAdapter.add((MoodbookUser)item);
+        }
+    }
+
+    @Deprecated
+    @Override
+    public void afterGettingList(){
+
     }
 }
