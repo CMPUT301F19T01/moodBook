@@ -14,15 +14,24 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.util.HashMap;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class ProfileEditor {
 
@@ -133,6 +142,34 @@ public class ProfileEditor {
         );
 
        return image;
+    }
+
+    public static void updateProfile(String UserID, String email, String username, String phone, String bio){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = db.collection("USERS");
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("email", email);
+        data.put("username", username);
+        data.put("phone",phone);
+        data.put("bio", bio);
+
+        collectionReference
+                .document(UserID)
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "uid stored in db");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "failed:" + e.toString());
+                    }
+                });
+
+
     }
 
 
