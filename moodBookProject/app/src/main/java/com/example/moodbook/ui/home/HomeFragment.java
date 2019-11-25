@@ -72,11 +72,11 @@ public class HomeFragment extends PageFragment
 
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
+     *
      * @param inflater
      * @param container
      * @param savedInstanceState
-     * @return
-     *  Return root view inherited from PageFragment
+     * @return Return root view inherited from PageFragment
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -137,7 +137,7 @@ public class HomeFragment extends PageFragment
                 // put attributes of selected mood into Intent
                 getIntentDataFromMood(viewIntent, item);
                 // add current class name to allow edit button
-                viewIntent.putExtra("page",HomeFragment.class.getSimpleName());
+                viewIntent.putExtra("page", HomeFragment.class.getSimpleName());
                 startActivity(viewIntent);
                 SelectedMood = item;
             }
@@ -165,7 +165,7 @@ public class HomeFragment extends PageFragment
         // if you want both Right -> Left and Left -> Right
         // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(
-                0, ItemTouchHelper.LEFT,this);
+                0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(moodListView);
 
         return root;
@@ -213,10 +213,10 @@ public class HomeFragment extends PageFragment
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if (direction == ItemTouchHelper.LEFT){
-                    Log.e(TAG,"left Swipe");
-                }else {
-                    Log.e(TAG,"Right Swipe");
+                if (direction == ItemTouchHelper.LEFT) {
+                    Log.e(TAG, "left Swipe");
+                } else {
+                    Log.e(TAG, "Right Swipe");
                 }
                 moodListAdapter.notifyItemChanged(position);
 
@@ -267,7 +267,7 @@ public class HomeFragment extends PageFragment
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
-                searchView.setQuery("",false);
+                searchView.setQuery("", false);
                 moodListAdapter.getFilter().filter("");
                 return true;
             }
@@ -281,8 +281,8 @@ public class HomeFragment extends PageFragment
 
     @Override
     public void onGettingItem(Object item) {
-        if(item instanceof Mood) {
-            moodListAdapter.addItem((Mood)item);
+        if (item instanceof Mood) {
+            moodListAdapter.addItem((Mood) item);
         }
     }
 
@@ -294,6 +294,7 @@ public class HomeFragment extends PageFragment
 
     /**
      * This method is for setting up the mood list adapter
+     *
      * @param itemClickListener
      */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
@@ -307,20 +308,21 @@ public class HomeFragment extends PageFragment
 
     /**
      * This method takes in the Mood object from the clicked row
+     *
      * @param intent
      * @param mood
      */
     public void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
         MoodLocation location = mood.getLocation();
         intent.putExtra("moodID", mood.getDocId());
-        intent.putExtra("date",mood.getDateText());
-        intent.putExtra("time",mood.getTimeText());
-        intent.putExtra("emotion",mood.getEmotionText());
-        intent.putExtra("reason_text",mood.getReasonText());
+        intent.putExtra("date", mood.getDateText());
+        intent.putExtra("time", mood.getTimeText());
+        intent.putExtra("emotion", mood.getEmotionText());
+        intent.putExtra("reason_text", mood.getReasonText());
         //intent.putExtra("reason_photo", mood.getReasonPhoto());
-        intent.putExtra("situation",mood.getSituation());
-        intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
-        intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
-        intent.putExtra("location_address", location.getAddress());
+        intent.putExtra("situation", mood.getSituation());
+        intent.putExtra("location_lat", location == null ? null : ((Double) location.getLatitude()).toString());
+        intent.putExtra("location_lon", location == null ? null : ((Double) location.getLongitude()).toString());
+        intent.putExtra("location_address", location == null ? null : location.getAddress());
     }
 }
