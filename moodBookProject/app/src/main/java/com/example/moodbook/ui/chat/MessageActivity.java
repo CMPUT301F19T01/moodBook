@@ -19,6 +19,8 @@ import com.example.moodbook.ui.myFriends.FriendListAdapter;
 import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -29,6 +31,10 @@ public class MessageActivity extends AppCompatActivity {
     private ArrayList<MoodbookUser> friends;
     TextView sendText, usernameTextView;
     ImageButton sendBtn;
+    private String uid;
+    private FirebaseFirestore db;
+    private CollectionReference userReference = db.collection("USERS");
+
 //    TextView friend_username;
 
     MessageAdapter messageAdapter;
@@ -86,8 +92,14 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+        public void readMessages(final String myUid, final String friendUid){
+//            String myUid = mAuth.getCurrentUser().getUid();
+            chat = new ArrayList<>();
+            final CollectionReference friendsReference = this.userReference
+                    .document(friendUid).collection("CHAT");
+            friendsReference.
 
-
+        }
 
 
     }

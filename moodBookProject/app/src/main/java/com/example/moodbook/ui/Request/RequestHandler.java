@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.moodbook.MoodbookUser;
+import com.example.moodbook.ui.chat.Chat;
 import com.example.moodbook.ui.myRequests.RequestsAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +39,7 @@ public class RequestHandler {
     private FirebaseFirestore db;
     private String TAG;
     private Context context;
+    private ArrayList<Chat> chat;
 
 
     public RequestHandler(FirebaseAuth mAuth, Context context){
@@ -46,6 +48,7 @@ public class RequestHandler {
         this.context = context;
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
+        this.chat = chat;
     }
 
     public RequestHandler(FirebaseAuth mAuth, FirebaseFirestore db){
@@ -204,6 +207,8 @@ public class RequestHandler {
         friendsReference.document(myUid).set(data);
 
     }
+
+
 
 
 }
