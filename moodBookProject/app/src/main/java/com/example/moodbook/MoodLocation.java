@@ -32,4 +32,12 @@ public class MoodLocation extends Location {
     public String getAddress() {
         return address;
     }
+
+    public String getLatitudeText() {
+        return ((Double)super.getLatitude()).toString();
+    }
+
+    public String getLongitudeText() {
+        return ((Double)super.getLongitude()).toString();
+    }
 }
