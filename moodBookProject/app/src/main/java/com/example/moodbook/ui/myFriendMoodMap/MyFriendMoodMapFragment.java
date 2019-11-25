@@ -1,10 +1,12 @@
 package com.example.moodbook.ui.myFriendMoodMap;
 
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +20,14 @@ import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.friendMood.FriendMood;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -93,6 +97,24 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     public void onMapReady(GoogleMap googleMap) {
         // initialize map
         moodMap = googleMap;
+
+        // setting custom style of map
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = moodMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            getContext(), R.raw.custom_map_json));
+
+            if (!success) {
+                Log.e("Custom Map Parsing", "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e("Resource error", "Can't find style. Error: ", e);
+        }
+
+        // update list of markers
+        //updateList(db);
 
         mapView.setContentDescription("MAP READY");
 
@@ -206,6 +228,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
     @Override
     public void afterGettingList() {
-
+        Mood mood = moodDataList.get(moodDataList.size()-1).getMood();
+        LatLng moodLatLng = new LatLng(mood.getLocation().getLatitude(), mood.getLocation().getLatitude());
+        moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
     }
 }

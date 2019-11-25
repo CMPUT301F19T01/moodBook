@@ -10,7 +10,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 /**
- *
+ * super class that is extended by MyMoodMapFragment and FriendMoodMapFragment
  */
 public class MoodMapFragment extends PageFragment{
 
@@ -88,6 +88,7 @@ public class MoodMapFragment extends PageFragment{
 
         // background to transparent so we only see our custom layout
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
 
         return dialog;
 
