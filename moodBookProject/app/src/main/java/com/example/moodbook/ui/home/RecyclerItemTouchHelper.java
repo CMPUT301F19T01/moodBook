@@ -2,7 +2,7 @@
  * Reference:
  * RecyclerView - https://www.androidhive.info/2017/09/android-recyclerview-swipe-delete-undo-using-itemtouchhelper/
  */
-package com.example.moodbook;
+package com.example.moodbook.ui.home;
 
 import android.graphics.Canvas;
 import android.view.View;

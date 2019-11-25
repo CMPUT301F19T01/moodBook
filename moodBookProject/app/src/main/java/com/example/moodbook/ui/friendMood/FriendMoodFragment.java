@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
+import com.example.moodbook.DBListListener;
 import com.example.moodbook.ViewMoodActivity;
 import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
@@ -22,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
-public class FriendMoodFragment extends PageFragment implements DBFriend.FriendRecentMoodListListener{
+public class FriendMoodFragment extends PageFragment implements DBListListener {
 
     // Friend Mood
     private ListView friendMoodListView;
@@ -102,12 +103,20 @@ public class FriendMoodFragment extends PageFragment implements DBFriend.FriendR
     }
 
     @Override
-    public void beforeGettingFriendMoodList() {
+    public void beforeGettingList() {
         friendMoodListAdapter.clear();
     }
 
     @Override
-    public void onGettingFriendMood(FriendMood item) {
-        friendMoodListAdapter.add(item);
+    public void onGettingItem(Object item) {
+        if(item instanceof FriendMood) {
+            friendMoodListAdapter.add((FriendMood)item);
+        }
+    }
+
+    @Deprecated
+    @Override
+    public void afterGettingList() {
+        // Do nothing
     }
 }

@@ -45,13 +45,6 @@ import java.util.Map;
  * This class gets the most current instance of a mood in the Database
  */
 public class DBMoodSetter {
-
-    public interface MoodListListener {
-        void beforeGettingMoodList();
-        void onGettingMood(Mood item);
-        void afterGettingMoodList();
-    }
-
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private static FirebaseStorage storage;
@@ -63,7 +56,7 @@ public class DBMoodSetter {
     private String uid;
     private String TAG;         // optional: for log message
     private Bitmap obtainedImg;
-    private MoodListListener listListener;
+    private DBListListener listListener;
 
     /**
      * This is a constructor used by Create and Edit Mood Activity to get the current instance of a mood in the database
@@ -118,7 +111,7 @@ public class DBMoodSetter {
         this.TAG = TAG;
     }
 
-    public void setMoodListListener(@NonNull MoodListListener listListener) {
+    public void setMoodListListener(@NonNull DBListListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("MOODS")
                 .addSnapshotListener(getMoodEventListener());
@@ -391,7 +384,7 @@ public class DBMoodSetter {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
                 /*// clear the old list
                 moodListAdapter.clear();*/
-                listListener.beforeGettingMoodList();
+                listListener.beforeGettingList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;
@@ -400,10 +393,10 @@ public class DBMoodSetter {
                     if (mood != null) {
                         mood.setDocId(doc.getId());
                         //moodListAdapter.addItem(mood);
-                        listListener.onGettingMood(mood);
+                        listListener.onGettingItem(mood);
                     }
                 }
-                listListener.afterGettingMoodList();
+                listListener.afterGettingList();
             }
         };
     }
