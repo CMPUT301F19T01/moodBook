@@ -320,8 +320,8 @@ public class HomeFragment extends PageFragment
         intent.putExtra("reason_text", mood.getReasonText());
         //intent.putExtra("reason_photo", mood.getReasonPhoto());
         intent.putExtra("situation", mood.getSituation());
-        intent.putExtra("location_lat", location == null ? null : ((Double) location.getLatitude()).toString());
-        intent.putExtra("location_lon", location == null ? null : ((Double) location.getLongitude()).toString());
+        intent.putExtra("location_lat", location==null ? null : location.getLatitudeText());
+        intent.putExtra("location_lon", location==null ? null : location.getLongitudeText());
         intent.putExtra("location_address", location == null ? null : location.getAddress());
     }
 }

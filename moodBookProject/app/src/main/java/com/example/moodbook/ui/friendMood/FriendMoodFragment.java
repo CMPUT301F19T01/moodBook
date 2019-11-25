@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
 import com.example.moodbook.DBListListener;
+import com.example.moodbook.MoodLocation;
 import com.example.moodbook.ViewMoodActivity;
 import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
@@ -75,34 +76,6 @@ public class FriendMoodFragment extends PageFragment implements DBListListener {
         return root;
     }
 
-    /**
-     * This method is for setting up the mood list adapter
-     * @param itemClickListener
-     */
-    private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {
-        friendMoodListAdapter = new FriendMoodListAdapter(getContext(), new ArrayList<FriendMood>());
-        friendMoodListView.setAdapter(friendMoodListAdapter);
-        friendMoodListView.setOnItemClickListener(itemClickListener);
-    }
-
-    /**
-     * This method takes in the Mood object from the clicked row
-     * @param intent
-     * @param mood
-     */
-    private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
-        Location location = mood.getLocation();
-        intent.putExtra("moodID", mood.getDocId());
-        intent.putExtra("date",mood.getDateText());
-        intent.putExtra("time",mood.getTimeText());
-        intent.putExtra("emotion",mood.getEmotionText());
-        intent.putExtra("reason_text",mood.getReasonText());
-        //intent.putExtra("reason_photo", mood.getReasonPhoto());
-        intent.putExtra("situation",mood.getSituation());
-        intent.putExtra("location_lat", location==null ? null : ((Double)location.getLatitude()).toString());
-        intent.putExtra("location_lon", location==null ? null : ((Double)location.getLongitude()).toString());
-    }
-
     @Override
     public void beforeGettingList() {
         friendMoodListAdapter.clear();
@@ -119,5 +92,34 @@ public class FriendMoodFragment extends PageFragment implements DBListListener {
     @Override
     public void afterGettingList() {
         // Do nothing
+    }
+
+    /**
+     * This method is for setting up the mood list adapter
+     * @param itemClickListener
+     */
+    private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {
+        friendMoodListAdapter = new FriendMoodListAdapter(getContext(), new ArrayList<FriendMood>());
+        friendMoodListView.setAdapter(friendMoodListAdapter);
+        friendMoodListView.setOnItemClickListener(itemClickListener);
+    }
+
+    /**
+     * This method takes in the Mood object from the clicked row
+     * @param intent
+     * @param mood
+     */
+    private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
+        MoodLocation location = mood.getLocation();
+        intent.putExtra("moodID", mood.getDocId());
+        intent.putExtra("date",mood.getDateText());
+        intent.putExtra("time",mood.getTimeText());
+        intent.putExtra("emotion",mood.getEmotionText());
+        intent.putExtra("reason_text",mood.getReasonText());
+        //intent.putExtra("reason_photo", mood.getReasonPhoto());
+        intent.putExtra("situation",mood.getSituation());
+        intent.putExtra("location_lat", location==null ? null : location.getLatitudeText());
+        intent.putExtra("location_lon", location==null ? null : location.getLongitudeText());
+        intent.putExtra("location_address", location == null ? null : location.getAddress());
     }
 }

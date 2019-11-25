@@ -282,15 +282,6 @@ public class Mood implements Comparable<Mood> {
     }
 
 
-    public static String locationToText(MoodLocation location) {
-        String location_text = null;
-        if(location != null) {
-            location_text = location.getLatitude() + " , " + location.getLongitude();
-        }
-        return location_text;
-    }
-
-
     /**
      * This helper method parses data_text into Date, and is used by CreateMoodActivity
      * @param date_text
