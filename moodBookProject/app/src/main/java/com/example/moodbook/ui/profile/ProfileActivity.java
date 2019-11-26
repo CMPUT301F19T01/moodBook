@@ -89,7 +89,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
             public void onClick(View view) {
                   addImg(intent_name);
 
-                  ProfileEditor.updateProfile(userID,name.getText().toString(), email.getText().toString(), phone.getText().toString(),bio.getText().toString());
+                  ProfileEditor.updateProfile(userID, email.getText().toString(), name.getText().toString(), phone.getText().toString(),bio.getText().toString());
 
                   finishActivity(0);
 
