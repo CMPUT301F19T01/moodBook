@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.moodbook.DBListListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
@@ -46,7 +47,7 @@ import java.util.ArrayList;
 
  *  This activity is used to view a where a users moods take place on a map
  */
-public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback {
+public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBListListener {
 
     ///// Member Variables /////
     private MapView mapView; // view object
@@ -103,6 +104,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
         userID = mAuth.getUid();
 
         dbMoodSetter = new DBMoodSetter(mAuth, getContext());
+        dbMoodSetter.setMoodListListener(this);
 
         return root;
     }
@@ -133,7 +135,8 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
         }
 
         // update list of markers
-        updateList(db);
+        //updateList(db);
+
 
         // for testing purposes
         mapView.setContentDescription("MAP READY");
@@ -236,14 +239,8 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
 
     }
 
-
-    /**
-     * Queries FireBase for the all the Current users moods
-     * @param db
-     *  reference to the FireBaseFireStore instance
-     * @see MoodMapFragment
-     */
-    public void updateList(FirebaseFirestore db) {
+    
+    /*public void updateList(FirebaseFirestore db) {
         try {
             db.collection("USERS")
                     .document(userID)
@@ -277,5 +274,26 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
         } catch (Exception e){
             e.printStackTrace();
         }
+    }*/
+
+    @Override
+    public void beforeGettingList() {
+        moodDataList.clear();
+        moodMap.clear();
+    }
+
+    @Override
+    public void onGettingItem(Object item) {
+        if(item instanceof Mood){
+            Mood mood = (Mood) item;
+            if (mood.getLocation() != null){
+                moodDataList.add(mood);
+            }
+        }
+    }
+
+    @Override
+    public void afterGettingList() {
+        drawMoodMarkers(moodDataList, moodMap);
     }
 }
