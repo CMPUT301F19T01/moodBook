@@ -24,6 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+import static java.security.AccessController.getContext;
+
 public class MessageActivity extends AppCompatActivity {
     private static final String TAG = MyFriendsFragment.class.getSimpleName();
     Intent intent;
@@ -42,7 +44,9 @@ public class MessageActivity extends AppCompatActivity {
     RecyclerView message_recyclerView;
 
     // connect to DB
+    private DBFriend messageDB;
     private DBFriend friendDB;
+
     private FirebaseAuth mAuth;
     FirebaseUser firebaseUser;
 
@@ -52,10 +56,10 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
-        // initialize DB connector
-        mAuth = FirebaseAuth.getInstance();
-        friendDB = new DBFriend(mAuth, getBaseContext(), TAG);
-        friendDB.setFriendListListener(friendListAdapter);
+//        // initialize DB connector
+//        mAuth = FirebaseAuth.getInstance();
+//        friendDB = new DBFriend(mAuth, getBaseContext(), TAG);
+//        friendDB.setFriendListListener(friendListAdapter);
 
         usernameTextView = findViewById(R.id.message_username);
         sendText= findViewById(R.id.message_text);
@@ -91,8 +95,9 @@ public class MessageActivity extends AppCompatActivity {
 
             }
         });
-        messageAdapter = new MessageAdapter(MessageActivity.this, chat);
-        message_recyclerView.setAdapter(messageAdapter);
+        messageAdapter = new MessageAdapter(MessageActivity.this, new ArrayList<Chat>());
+        messageDB = new DBFriend(mAuth, getBaseContext(),TAG );
+//        message_recyclerView.setMessageListener(messageAdapter);
 
 //
 //        public void readMessages(final String myUid, final String friendUid){

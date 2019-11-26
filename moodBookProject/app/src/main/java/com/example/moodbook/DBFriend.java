@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.moodbook.ui.chat.MessageAdapter;
 import com.example.moodbook.ui.followers.followersAdapter;
 import com.example.moodbook.ui.friendMood.FriendMood;
 import com.example.moodbook.ui.friendMood.FriendMoodFragment;
@@ -94,6 +95,10 @@ public class DBFriend {
         this.userReference.document(uid).collection("FOLLOWERS")
                 .addSnapshotListener(getFollowerEventListener(followersListAdapter));
     }
+    public void setMessageListener(MessageAdapter messageListenerAdapter){
+        this.userReference.document(uid).collection("CHAT")
+                .addSnapshotListener(getMessageListener(messageListenerAdapter));
+    }
 
     /**
      * This is used by FriendMood and FriendMoodMap
@@ -113,6 +118,26 @@ public class DBFriend {
         currentUserDoc.update("recent_moodID", recentMoodID);
     }
 
+    private EventListener<QuerySnapshot> getMessageListener(final MessageAdapter messageListenerAdapter){
+        return new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (messageListenerAdapter != null){
+                    messageListenerAdapter.clear();
+                    for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                        if (doc.getId().equals("null")) continue;
+
+                        if (doc.getData() != null && doc.getData().get("uid") != null){
+                            String message = (String) doc.getData().get("message");
+//                            String myUid = (String) doc.getData().get("sender");
+                            String friendUid = (String) doc.getData().get("receiver");
+                            MoodbookUser friendUser = new MoodbookUser(message, friendUid);
+                        }
+                    }
+                }
+            }
+        };
+    }
     /**
      * This EventListener is for MyFollowers to get all the user's followers (username, uid) in the database
      * from the user's followers collection
