@@ -1,6 +1,7 @@
 package com.example.moodbook.ui.myFriends;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.example.moodbook.DBListListener;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
+import com.example.moodbook.ui.profile.FriendProfileViewActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -55,17 +57,27 @@ public class MyFriendsFragment extends PageFragment implements DBListListener {
             @Override
             public void onItemClick(AdapterView<?> adapterView, final View view, final int pos, long id) {
                 final int row = pos;
+                final MoodbookUser selectedUser = (MoodbookUser) friendListAdapter.getItem(pos);
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Remove User")
-                        .setMessage("Do you want to remove this user from your friend list?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle(selectedUser.getUsername())
+                        .setMessage("Would you like to view this User's Profile or delete this User")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                MoodbookUser selectedUser = (MoodbookUser) friendListAdapter.getItem(pos);
+
                                 friendDB.removeFriend(currentUser, selectedUser);
                             }
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton("View", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent viewProfile = new Intent(getContext(), FriendProfileViewActivity.class);
+                                viewProfile.putExtra("username",selectedUser.getUsername());
+                                viewProfile.putExtra("userID",selectedUser.getUid());
+                                startActivity(viewProfile);
+                            }
+                        })
+                        .setNeutralButton("Cancel",null)
                         .show();
             }
         });

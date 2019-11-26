@@ -1,9 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.profile.FriendProfileViewActivity">
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.profile.FriendProfileViewActivityProfileActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/unfriend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="48dp"
+            android:layout_marginEnd="48dp"
+            android:backgroundTint="@color/colorAccent"
+            android:enabled="true"
+            android:text="UNFRIEND"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="UNFRIEND" />
+
+        <ImageView
+            android:id="@+id/friend_dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginBottom="22dp"
+            android:maxWidth="180dp"
+            android:maxHeight="180dp"
+            app:layout_constraintBottom_toTopOf="@+id/friend_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.559"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.166"
+            app:srcCompat="@drawable/purpleprofile" />
+
+        <TextView
+                android:id="@+id/friend_email"
+                android:layout_width="260dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="196dp"
+                android:layout_marginEnd="24dp"
+                android:text="Email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.766"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/friend_username"
+                android:layout_width="260dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="56dp"
+                android:layout_marginEnd="24dp"
+                android:text="Username"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.766"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/friend_email" />
+
+        <TextView
+            android:id="@+id/friend_bio"
+            android:layout_width="260dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:ems="10"
+            android:gravity="start|top"
+            app:layout_constraintBottom_toTopOf="@+id/unfriend"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.766"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+                android:id="@+id/friend_phone"
+                android:layout_width="260dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="24dp"
+                android:ems="10"
+                app:layout_constraintBottom_toTopOf="@+id/friend_bio"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.764"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/friend_username"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/friend_email_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:contentDescription="Email Icon"
+                app:layout_constraintBottom_toBottomOf="@+id/friend_email"
+                app:layout_constraintEnd_toStartOf="@+id/friend_email"
+                app:layout_constraintHorizontal_bias="0.528"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/friend_email"
+                app:layout_constraintVertical_bias="0.416"
+                app:srcCompat="@drawable/email" />
+
+            <ImageView
+                android:id="@+id/friend_username_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="@+id/friend_username"
+                app:layout_constraintEnd_toStartOf="@+id/friend_username"
+                app:layout_constraintHorizontal_bias="0.509"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/friend_username"
+                app:layout_constraintVertical_bias="0.7"
+                app:srcCompat="@drawable/username" />
+
+            <ImageView
+                android:id="@+id/friend_phone_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toTopOf="@+id/friend_bio"
+                app:layout_constraintEnd_toStartOf="@+id/friend_phone"
+                app:layout_constraintHorizontal_bias="0.509"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/friend_phone"
+                app:layout_constraintVertical_bias="0.514"
+                app:srcCompat="@drawable/phone" />
+
+            <ImageView
+                android:id="@+id/friend_bio_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:layout_constraintBottom_toBottomOf="@+id/friend_bio"
+                app:layout_constraintEnd_toStartOf="@+id/friend_bio"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/friend_bio"
+                app:srcCompat="@drawable/bio" />
+
+        <Button
+            android:id="@+id/message_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:backgroundTint="@color/colorAccent"
+            android:enabled="true"
+            android:text="MESSAGE"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/unfriend"
+            app:layout_constraintHorizontal_bias="0.411"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/unfriend"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="MESSAGE" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout></ScrollView>
