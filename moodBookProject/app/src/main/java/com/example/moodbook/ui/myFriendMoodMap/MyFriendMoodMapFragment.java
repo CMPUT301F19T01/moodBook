@@ -221,7 +221,6 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
                 moodDataList.add(mood);
                 drawMood(mood.getMood(), moodDataList.size()-1);
             }
-
         }
     }
 
