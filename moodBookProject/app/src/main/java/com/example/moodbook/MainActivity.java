@@ -137,14 +137,14 @@ public class MainActivity extends AppCompatActivity  {
                                 .centerCrop()
                                 .into(profilePicture);
                     }
+                })
+                     .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                        profilePicture.setImageResource(R.drawable.purpleprofile);
+                    }
                 });
-//                     .addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception exception) {
-//                        // Handle any errors
-//                        profilePicture.setImageResource(R.drawable.purpleprofile);
-//                    }
-//                });
         }
 
 

@@ -1,18 +1,24 @@
 package com.example.moodbook.ui.myFriends;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.friendMood.FriendMood;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +50,18 @@ public class FriendListAdapter extends ArrayAdapter {
         // get views for username
         TextView usernameText = view.findViewById(R.id.user_item_username);
 
+        final ImageView frienddp = view.findViewById(R.id.user_item_dp);
+
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        storageReference.child("profilepics/" + friendUser.getUsername() + ".jpeg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Glide.with(getContext()/* context */)
+                        .load(uri)
+                        .centerCrop()
+                        .into(frienddp);
+            }
+        }) ;
         // show username
         usernameText.setText(friendUser.getUsername());
 
