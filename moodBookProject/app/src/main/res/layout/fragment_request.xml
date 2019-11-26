@@ -20,6 +20,7 @@
             android:layout_marginRight="10dp"
             android:ems="10"
             android:inputType="textPersonName"
+            android:textSize="20dp"
             android:hint="Username" />
 
         <Button

@@ -10,11 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         android:layout_centerInParent="true"
         android:padding="10dp"
         android:text="Username"
-        android:textSize="30dp"
+        android:textSize="25dp"
         android:textColor="@android:color/black" />
 
 </FrameLayout>
