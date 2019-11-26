@@ -163,14 +163,6 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
                         .into(dp);
             }
         }) ;
-//                .addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle any errors
-//                dp.setImageResource(R.drawable.purpleprofile);
-//            }
-//        }
-
     }
     public void getData(){
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
