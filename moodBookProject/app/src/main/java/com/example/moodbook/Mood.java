@@ -32,8 +32,8 @@ public class Mood implements Comparable<Mood> {
 
     // date time formatter
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
-    public static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("HH:mm");
-    public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("HH:mm:ss");
+    public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
      * This constructor is used to represent a mood event
@@ -80,7 +80,7 @@ public class Mood implements Comparable<Mood> {
         }
         // Error: invalid date time format
         catch (ParseException e) {
-            throw new MoodInvalidInputException("date_time","must be yyyy-hh-dd hh:mm format");
+            throw new MoodInvalidInputException("date_time","must be yyyy-hh-dd hh:mm:ss format");
         }
     }
 
