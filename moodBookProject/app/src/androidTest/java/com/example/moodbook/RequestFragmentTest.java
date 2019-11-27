@@ -30,7 +30,10 @@ public class RequestFragmentTest {
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
             //solo.clickOnText("Logout");
-            solo.clickOnMenuItem("Logout", true);
+            for (int i = 0; i < 4; i++){
+                solo.sendKey(Solo.DOWN);
+            }
+            solo.clickOnText("Logout");
             solo.sleep(3000);
         }
         // login with test account
@@ -77,7 +80,7 @@ public class RequestFragmentTest {
 
         solo.enterText((EditText) solo.getView(R.id.usernameEditText), "2j2ieh2@@@dwed33");
         solo.clickOnButton("Send Request");
-        assertTrue(solo.waitForText("MoodbookUser does not exist"));
+        assertTrue(solo.waitForText("User does not exist"));
     }
 
     /**
@@ -91,7 +94,7 @@ public class RequestFragmentTest {
         solo.clickOnText("Add Friends");
 
         solo.clickOnButton("Send Request");
-        assertTrue(solo.waitForText("MoodbookUser does not exist"));
+        assertTrue(solo.waitForText("User does not exist"));
     }
 
     /**
@@ -102,12 +105,23 @@ public class RequestFragmentTest {
         //login();
         // navigate to request sending
         solo.clickOnImageButton(0);
-        for (int i = 0; i < 20; i++){
-            solo.sendKey(Solo.DOWN);
-        }
         solo.clickOnText("Add Friends");
         solo.enterText((EditText) solo.getView(R.id.usernameEditText), "test");
         solo.clickOnButton("Send Request");
         assertTrue(solo.waitForText("Cannot add yourself"));
+    }
+
+    /**
+     * Test for adding a friend thats already added
+     */
+    @Test
+    public void sendRequestAdded(){
+        //login();
+        // navigate to request sending
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Add Friends");
+        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "newtest");
+        solo.clickOnButton("Send Request");
+        assertTrue(solo.waitForText("User already added"));
     }
 }
