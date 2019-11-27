@@ -14,12 +14,15 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -31,18 +34,30 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 public class ProfileEditor {
 
     private static final int REQUEST_IMAGE = 101;
     private static final int GET_IMAGE = 102;
-    private static final String TAG = "MyActivity";
+    private static final String TAG = ProfileEditor.class.getSimpleName();
     private static Bitmap imageBitmap;
 
     public interface ProfilePicInterface {
         void setProfilePic(Bitmap bitImage);
     }
+
+    public interface ProfileListener {
+        /**
+         * This defines task to be done when getting the user document
+         */
+        void onGettingUserDoc(DocumentSnapshot document);
+
+        /**
+         * This defines task to be done when getting the mood document
+         */
+        void onGettingMoodDoc(DocumentSnapshot document);
+    }
+
+
 
 
     public static Bitmap getBitmap(){
@@ -168,8 +183,47 @@ public class ProfileEditor {
                         Log.w(TAG, "failed:" + e.toString());
                     }
                 });
+    }
 
+    public static void getProfileData(String uid, @NonNull final ProfileListener profileListener){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = db.collection("USERS");
+        DocumentReference docRef = collectionReference.document(uid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        profileListener.onGettingUserDoc(document);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
+    }
+
+    public static void getMoodData(String uid, String recent_moodID,
+                                   @NonNull final ProfileListener profileListener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = db.collection("USERS");
+        DocumentReference moodRef = collectionReference.document(uid)
+                .collection("MOODS").document(recent_moodID);
+        moodRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> t) {
+                DocumentSnapshot doc = t.getResult();
+                if(doc.exists()){
+                    profileListener.onGettingMoodDoc(doc);
+                }else {
+                    Log.d(TAG, "No such mood document");
+                }
+            }
+        });
     }
 
 

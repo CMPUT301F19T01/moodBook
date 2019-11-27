@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
-import com.example.moodbook.DBListListener;
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
@@ -43,7 +43,7 @@ import java.util.ArrayList;
 
  *  This activity is used to view a where a users friends' moods take place on a map
  */
-public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBListListener {
+public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
     //private MyFriendMoodMapViewModel MyFriendMoodMapViewModel;
 
     ///// Member Variables /////
@@ -204,7 +204,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      *
      */
     @Override
-    public void beforeGettingList() {
+    public void beforeGettingCollection() {
         moodDataList.clear();
         moodMap.clear();
     }
@@ -226,7 +226,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
 
     @Override
-    public void afterGettingList() {
+    public void afterGettingCollection() {
         Mood mood = moodDataList.get(moodDataList.size()-1).getMood();
         LatLng moodLatLng = new LatLng(mood.getLocation().getLatitude(), mood.getLocation().getLatitude());
         moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
