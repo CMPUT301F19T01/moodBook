@@ -39,30 +39,24 @@ import static org.junit.Assert.assertEquals;
 public class CreateMoodActivityTest {
 
         private Solo solo;
-        private Solo solo2;
-        private Solo solo3;
 
         // test location
         private LatLng pickedLocation;
 
         @Rule
         public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
-        @Rule
-        public ActivityTestRule<CreateMoodActivity> rule2 = new ActivityTestRule<>(CreateMoodActivity.class, true, true);
-        @Rule
-        public ActivityTestRule<MainActivity> mActivityRule =
-                new ActivityTestRule(MainActivity.class);
 
         @Before
         public void setUp () throws Exception {
             solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-            solo2 = new Solo(InstrumentationRegistry.getInstrumentation(), rule2.getActivity());
-            solo3 = new Solo(InstrumentationRegistry.getInstrumentation(), mActivityRule.getActivity());
 
 
             // logout if logged in
             if (solo.searchText("Mood History")) {
                 solo.clickOnImageButton(0);
+                for (int i = 0; i < 4; i++){
+                    solo.sendKey(Solo.DOWN);
+                }
                 solo.clickOnText("Logout");
                 solo.sleep(3000);
             }
@@ -74,8 +68,8 @@ public class CreateMoodActivityTest {
         }
 
         public void login () {
-            solo.enterText((EditText) solo.getView(R.id.email), "hello@hello.com");
-            solo.enterText((EditText) solo.getView(R.id.password), "password");
+            solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
+            solo.enterText((EditText) solo.getView(R.id.password), "testtest");
             solo.clickOnButton("login");
         }
 
@@ -121,7 +115,7 @@ public class CreateMoodActivityTest {
             // go to create mood activity
 
 
-            LocationManager locationManager = (LocationManager) solo3.getCurrentActivity().getSystemService(Context.LOCATION_SERVICE);
+            LocationManager locationManager = (LocationManager) solo.getCurrentActivity().getSystemService(Context.LOCATION_SERVICE);
             LocationListener locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
@@ -158,40 +152,39 @@ public class CreateMoodActivityTest {
 
         /**
          * Tests the adding of location
-         * NOTE: Set location to 0.0, -134.12 in the android emulator
+         * NOTE: Set location to 37.4220, -122.0840 in the android emulator
          */
         @Test
         public void addLocationTest () {
-            solo3 = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-            solo3.clickOnImageButton(0);
-            solo3.clickOnText("My MoodBook");
-            solo3.sleep(3000);
+            solo.clickOnImageButton(0);
+            solo.clickOnText("My MoodBook");
+            solo.sleep(3000);
 
             // create mood
-            solo3.clickOnView(solo3.getView(R.id.mood_history_add_button));
+            solo.clickOnView(solo.getView(R.id.mood_history_add_button));
 
             // add location by clicking on button
-            solo3.clickOnView(solo3.getView(R.id.create_location_button));
+            solo.clickOnView(solo.getView(R.id.create_location_button));
 
             // wait for activity to launch
-            solo3.sleep(3000);
+            solo.sleep(3000);
 
             // check if we are on LocationPickerActivity
-            solo3.assertCurrentActivity("Expected Maps Activity to launch", LocationPickerActivity.class);
+            solo.assertCurrentActivity("Expected Maps Activity to launch", LocationPickerActivity.class);
 
             // add location
-            solo3.clickOnView(solo3.getView(R.id.confirmButton));
-            solo3.sleep(70000);
+            solo.clickOnView(solo.getView(R.id.confirmButton));
+            solo.sleep(2000);
 
             // check if we got back to CreateMoodActivity
-            solo3.assertCurrentActivity("Expected create mood activity to launch", CreateMoodActivity.class);
+            solo.assertCurrentActivity("Expected create mood activity to launch", CreateMoodActivity.class);
 
             // check the coordinates passed back and set into the pick location button text
-            Button pickLocationButton = (Button) solo3.getView(R.id.create_location_button);
+            Button pickLocationButton = (Button) solo.getView(R.id.create_location_button);
             String actual = pickLocationButton.getText().toString();
 
 
-            String expected = "0.0 , -134.12";
+            String expected = "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA";
 
             assertEquals("Expected coords returned from LocationPickerActivity to match users location",
                     expected,
