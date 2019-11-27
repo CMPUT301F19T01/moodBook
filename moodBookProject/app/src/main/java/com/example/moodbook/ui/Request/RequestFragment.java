@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
+import com.example.moodbook.UserListAdapter;
 import com.example.moodbook.data.UsernameList;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,6 +43,7 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
     private UsernameList usernameList;
     private ArrayList<String> friends;
     private DBFriend friendDB;
+    private TextView hiddenMssg;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -64,6 +68,7 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
         requestHandler = new com.example.moodbook.ui.Request.RequestHandler(mAuth, getContext());
         requestsAdapter = new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
         requestHandler.setRequestListListener(requestsAdapter);
+        hiddenMssg = (TextView) root.findViewById(R.id.empty_request);
 
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +95,7 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
 
     @Override
     public void beforeGettingList(){
+        hiddenMssg.setVisibility(View.INVISIBLE);
         friends.clear();
     }
 
@@ -100,9 +106,10 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
         }
     }
 
-    @Deprecated
     @Override
     public void afterGettingList(){
-
+        if (friends.isEmpty()){
+            hiddenMssg.setVisibility(View.VISIBLE);
+        }
     }
 }

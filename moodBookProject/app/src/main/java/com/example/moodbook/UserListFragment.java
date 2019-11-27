@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -31,6 +32,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
 
     protected ListView userListView;
     protected UserListAdapter userListAdapter;
+    private TextView hiddenMssg;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -50,6 +52,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
         // initialize DB connector
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         friendDB = new DBFriend(mAuth, getContext(), TAG);
+        hiddenMssg = (TextView) root.findViewById(R.id.no_f_mssg);
 
         // get id of layout & listView
         int listViewId;
@@ -112,6 +115,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
 
     @Override
     public void beforeGettingList() {
+        hiddenMssg.setVisibility(View.INVISIBLE);
         userListAdapter.clear();
     }
 
@@ -122,10 +126,11 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
         }
     }
 
-    @Deprecated
     @Override
     public void afterGettingList() {
-        // Do nothing
+        if (userListAdapter.isEmpty()){
+            hiddenMssg.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {

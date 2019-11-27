@@ -8,6 +8,18 @@
     android:background="@color/colorWhite"
     android:clickable="true">
 
+    <TextView
+        android:id="@+id/no_f_mssg"
+        android:text="You have no followers yet."
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:visibility="invisible"
+        android:gravity="center_horizontal"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
