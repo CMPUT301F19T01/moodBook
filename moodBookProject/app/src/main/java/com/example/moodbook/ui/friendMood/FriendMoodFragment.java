@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,7 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
     // Friend Mood
     private ListView friendMoodListView;
     private FriendMoodListAdapter friendMoodListAdapter;
+    private TextView hiddenMssg;
 
     // connect to DB
     private DBFriend friendMoodDB;
@@ -47,6 +49,8 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
 
         // Set up listView and adapter
         friendMoodListView = root.findViewById(R.id.friend_mood_listView);
+        hiddenMssg = (TextView) root.findViewById(R.id.empty2);
+
         setupAdapter(new AdapterView.OnItemClickListener() {
             // View the selected friendMood: when a mood item is clicked, start view activity
             @Override
@@ -73,7 +77,8 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
     }
 
     @Override
-    public void beforeGettingCollection() {
+    public void beforeGettingList() {
+        hiddenMssg.setVisibility(View.INVISIBLE);
         friendMoodListAdapter.clear();
     }
 
@@ -84,10 +89,11 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
         }
     }
 
-    @Deprecated
     @Override
-    public void afterGettingCollection() {
-        // Do nothing
+    public void afterGettingList() {
+        if (friendMoodListAdapter.getCount() == 0) {
+            hiddenMssg.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
