@@ -99,7 +99,7 @@ public class FriendMoodFragment extends PageFragment implements DBListListener {
      * @param itemClickListener
      */
     private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {
-        friendMoodListAdapter = new FriendMoodListAdapter(getContext(), new ArrayList<FriendMood>());
+        friendMoodListAdapter = new FriendMoodListAdapter(getContext());
         friendMoodListView.setAdapter(friendMoodListAdapter);
         friendMoodListView.setOnItemClickListener(itemClickListener);
     }

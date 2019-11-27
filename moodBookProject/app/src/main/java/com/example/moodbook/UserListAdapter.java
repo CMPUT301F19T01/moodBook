@@ -24,9 +24,9 @@ public class UserListAdapter extends ArrayAdapter {
     private ArrayList<MoodbookUser> users;
     private Context context;
 
-    public UserListAdapter(Context context, ArrayList<MoodbookUser> friends) {
-        super(context, 0, friends);
-        this.users = friends;
+    public UserListAdapter(Context context, ArrayList<MoodbookUser> users) {
+        super(context, 0, users);
+        this.users = users;
         this.context = context;
     }
 
@@ -44,11 +44,14 @@ public class UserListAdapter extends ArrayAdapter {
 
         MoodbookUser user = users.get(position);
 
-        // get views for username
+        // get views for username, profile picture
         TextView usernameText = view.findViewById(R.id.user_item_username);
+        final ImageView userdp = view.findViewById(R.id.user_item_dp);
 
-        final ImageView frienddp = view.findViewById(R.id.user_item_dp);
+        // show username
+        usernameText.setText(user.getUsername());
 
+        // show profile picture
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
         storageReference.child("profilepics/" + user.getUsername() + ".jpeg" ).getDownloadUrl()
                 .addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -57,11 +60,9 @@ public class UserListAdapter extends ArrayAdapter {
                 Glide.with(getContext()/* context */)
                         .load(uri)
                         .centerCrop()
-                        .into(frienddp);
+                        .into(userdp);
             }
         }) ;
-        // show username
-        usernameText.setText(user.getUsername());
 
         return view;
     }

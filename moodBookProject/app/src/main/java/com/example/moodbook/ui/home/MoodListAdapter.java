@@ -119,6 +119,10 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         this.mood_filter = getFilter();
     }
 
+    public MoodListAdapter(Context context, OnItemClickListener listener){
+        this(context, new ArrayList<Mood>(), listener);
+    }
+
     /**
      * This override RecyclerView.Adapter onCreateViewHolder(),
      * and return MyViewHolder that holds fields and layouts for each mood item in RecyclerView

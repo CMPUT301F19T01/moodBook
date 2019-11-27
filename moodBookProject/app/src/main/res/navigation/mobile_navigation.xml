@@ -27,7 +27,7 @@
         tools:layout="@layout/fragment_friendmood" />
     <fragment
         android:id="@+id/nav_Followers"
-        android:name="com.example.moodbook.ui.followers.followersFragment"
+        android:name="com.example.moodbook.ui.followers.MyFollowersFragment"
         android:label="My Followers"
         tools:layout="@layout/fragment_followers" />
     <fragment
