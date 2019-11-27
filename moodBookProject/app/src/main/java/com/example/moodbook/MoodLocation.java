@@ -3,7 +3,7 @@ package com.example.moodbook;
 import android.location.Location;
 
 /**
- * subclass of Location to allow for storing the address on top of the location functionality
+ * subclass of Location to allow for storing the address along with the other location functionality
  */
 public class MoodLocation extends Location {
 
@@ -33,10 +33,18 @@ public class MoodLocation extends Location {
         return address;
     }
 
+    /**
+     * gets latitude text
+     * @return returns latitude string
+     */
     public String getLatitudeText() {
         return ((Double)super.getLatitude()).toString();
     }
 
+    /**
+     * gets longitude text
+     * @return returns longitude string
+     */
     public String getLongitudeText() {
         return ((Double)super.getLongitude()).toString();
     }
