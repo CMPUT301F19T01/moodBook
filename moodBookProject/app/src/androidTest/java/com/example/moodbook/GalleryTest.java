@@ -30,6 +30,9 @@ public class GalleryTest {
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
+            for (int i = 0; i < 4; i++){
+                solo.sendKey(Solo.DOWN);
+            }
             solo.clickOnText("Logout");
             solo.sleep(3000);
         }
@@ -43,10 +46,10 @@ public class GalleryTest {
      * used in tests to first login to the app
      */
     public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testing");
+        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
+        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
         solo.clickOnButton("login");
-        solo.sleep(5000);
+        solo.sleep(2000);
     }
 
     /**
@@ -55,7 +58,7 @@ public class GalleryTest {
     @Test 
     public void GalleryTest(){
         solo.clickOnView(solo.getView(R.id.mood_history_add_button));
-        solo.sleep(5000); // wait for activity to change
+        solo.sleep(2000); // wait for activity to change
         solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
         solo.clickOnView(solo.getView(R.id.create_time_button)); //time button
         solo.clickOnView(solo.getView(R.id.create_emotion_spinner));//emotion --Picks alone
