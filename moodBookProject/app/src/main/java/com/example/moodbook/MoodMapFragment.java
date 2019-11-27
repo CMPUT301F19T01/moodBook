@@ -51,7 +51,7 @@ public class MoodMapFragment extends PageFragment{
         // check if we are drawing a friend mood or own users mood
         if(username != null){
             view_friend_name.setVisibility(View.VISIBLE);
-            view_friend_name.setText(username);
+            view_friend_name.setText("User: " + username);
         }
 
         // show mood date time

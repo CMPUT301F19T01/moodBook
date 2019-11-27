@@ -1,34 +1,32 @@
 package com.example.moodbook.ui.friendMood;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
-import com.example.moodbook.DBListListener;
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.MoodLocation;
 import com.example.moodbook.ViewMoodActivity;
-import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
-
-public class FriendMoodFragment extends PageFragment implements DBListListener {
+public class FriendMoodFragment extends PageFragment implements DBCollectionListener {
 
     // Friend Mood
     private ListView friendMoodListView;
     private FriendMoodListAdapter friendMoodListAdapter;
+    private TextView hiddenMssg;
 
     // connect to DB
     private DBFriend friendMoodDB;
@@ -51,6 +49,8 @@ public class FriendMoodFragment extends PageFragment implements DBListListener {
 
         // Set up listView and adapter
         friendMoodListView = root.findViewById(R.id.friend_mood_listView);
+        hiddenMssg = (TextView) root.findViewById(R.id.empty2);
+
         setupAdapter(new AdapterView.OnItemClickListener() {
             // View the selected friendMood: when a mood item is clicked, start view activity
             @Override
@@ -76,8 +76,10 @@ public class FriendMoodFragment extends PageFragment implements DBListListener {
         return root;
     }
 
+
     @Override
     public void beforeGettingList() {
+        hiddenMssg.setVisibility(View.INVISIBLE);
         friendMoodListAdapter.clear();
     }
 
@@ -88,18 +90,20 @@ public class FriendMoodFragment extends PageFragment implements DBListListener {
         }
     }
 
-    @Deprecated
     @Override
     public void afterGettingList() {
-        // Do nothing
+        if (friendMoodListAdapter.getCount() == 0) {
+            hiddenMssg.setVisibility(View.VISIBLE);
+        }
     }
+
 
     /**
      * This method is for setting up the mood list adapter
      * @param itemClickListener
      */
     private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {
-        friendMoodListAdapter = new FriendMoodListAdapter(getContext(), new ArrayList<FriendMood>());
+        friendMoodListAdapter = new FriendMoodListAdapter(getContext());
         friendMoodListView.setAdapter(friendMoodListAdapter);
         friendMoodListView.setOnItemClickListener(itemClickListener);
     }

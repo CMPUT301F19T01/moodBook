@@ -3,7 +3,6 @@ package com.example.moodbook;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 import android.widget.ImageView;
@@ -12,11 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.moodbook.ui.friendMood.FriendMood;
-import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
 import com.example.moodbook.ui.home.MoodEditor;
-import com.example.moodbook.ui.home.MoodListAdapter;
-import com.example.moodbook.ui.myFriends.FriendListAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +32,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,7 +50,7 @@ public class DBMoodSetter {
     private String uid;
     private String TAG;         // optional: for log message
     private Bitmap obtainedImg;
-    private DBListListener listListener;
+    private DBCollectionListener listListener;
 
     /**
      * This is a constructor used by Create and Edit Mood Activity to get the current instance of a mood in the database
@@ -111,7 +105,7 @@ public class DBMoodSetter {
         this.TAG = TAG;
     }
 
-    public void setMoodListListener(@NonNull DBListListener listListener) {
+    public void setMoodListListener(@NonNull DBCollectionListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("MOODS")
                 .addSnapshotListener(getMoodEventListener());

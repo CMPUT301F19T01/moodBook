@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,7 +32,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.moodbook.DBListListener;
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodLocation;
@@ -41,8 +42,6 @@ import com.example.moodbook.ViewMoodActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 
 /**
  * This class shows the mood history of the user, showing the date, time, and emotion state
@@ -55,12 +54,13 @@ import java.util.ArrayList;
  * @see RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
  */
 public class HomeFragment extends PageFragment
-        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBListListener {
+        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBCollectionListener {
 
     // Mood History
     private RecyclerView moodListView;
     private MoodListAdapter moodListAdapter;
     private CoordinatorLayout moodHistoryLayout;
+    private TextView hiddenMssg;
 
     // connect to DB
     private DBMoodSetter moodDB;
@@ -68,7 +68,6 @@ public class HomeFragment extends PageFragment
     private static final String TAG = HomeFragment.class.getSimpleName();
 
     private Mood SelectedMood = null;
-
 
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
@@ -85,6 +84,7 @@ public class HomeFragment extends PageFragment
 
         // initialize layout
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
+        hiddenMssg = (TextView) root.findViewById(R.id.empty);
 
         // Set up recyclerView and adapter
         moodListView = root.findViewById(R.id.mood_history_listView);
@@ -175,7 +175,7 @@ public class HomeFragment extends PageFragment
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction, final int position) {
         AlertDialog.Builder alert = new AlertDialog.Builder(
                 getActivity());
-        alert.setMessage("Are you sure you want to delete this Mood ?");
+        alert.setMessage("Are you sure you want to delete this Mood?");
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
             @Override
@@ -188,7 +188,7 @@ public class HomeFragment extends PageFragment
 
                     // remove the item from recycler view
                     //moodListAdapter.removeItem(deletedIndex);
-                    moodDB.removeMood(deletedMood.getDocId());
+                    removeMoodFromDB(deletedMood, position);
 
                     // showing snack bar with Undo option
                     Snackbar snackbar = Snackbar
@@ -276,6 +276,7 @@ public class HomeFragment extends PageFragment
 
     @Override
     public void beforeGettingList() {
+        hiddenMssg.setVisibility(View.INVISIBLE);
         moodListAdapter.clear();
     }
 
@@ -286,18 +287,20 @@ public class HomeFragment extends PageFragment
         }
     }
 
-    @Deprecated
     @Override
     public void afterGettingList() {
-        // Do nothing
+        if (moodListAdapter.getItemCount() == 0){
+            hiddenMssg.setVisibility(View.VISIBLE);
+        }
     }
+
 
     /**
      * This method is for setting up the mood list adapter
      * @param itemClickListener - click listener that defines what happens when adapter item is clicked
      */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
-        moodListAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
+        moodListAdapter = new MoodListAdapter(getContext(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         moodListView.setLayoutManager(mLayoutManager);
         moodListView.setItemAnimator(new DefaultItemAnimator());
@@ -323,5 +326,15 @@ public class HomeFragment extends PageFragment
         intent.putExtra("location_lat", location==null ? null : location.getLatitudeText());
         intent.putExtra("location_lon", location==null ? null : location.getLongitudeText());
         intent.putExtra("location_address", location == null ? null : location.getAddress());
+    }
+
+    private void removeMoodFromDB(Mood deletedMood, int position) {
+        if(position == 0 && moodListAdapter.getItemCount() > 1) {
+            Mood newRecentMood = moodListAdapter.getItem(1);
+            moodDB.removeMood(deletedMood.getDocId(),newRecentMood.getDocId());
+        }
+        else {
+            moodDB.removeMood(deletedMood.getDocId());
+        }
     }
 }

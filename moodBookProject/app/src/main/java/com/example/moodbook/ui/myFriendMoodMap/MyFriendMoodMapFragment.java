@@ -14,12 +14,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
-import com.example.moodbook.DBListListener;
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.friendMood.FriendMood;
+import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -43,7 +44,7 @@ import java.util.ArrayList;
 
  *  This activity is used to view a where a users friends' moods take place on a map
  */
-public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBListListener {
+public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
     //private MyFriendMoodMapViewModel MyFriendMoodMapViewModel;
 
     ///// Member Variables /////
@@ -57,11 +58,17 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     private DBFriend friendMoodDB;
 
     /**
-     *
+     * Called to have the fragment instantiate its user interface view
      * @param inflater
+     *  Object that can be used to inflate any views in the fragment
      * @param container
+     *  If non-null, this is the parent view that the fragment's UI
+     *  should be attached to. The fragment should not add the view
+     *  itself, but this can be used to generate the LayoutParams
+     *  of the view. This value may be null.
      * @param savedInstanceState
-     * @return
+     * If non-null, this fragment is being re-constructed from a
+     * previous saved state as given here.
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,8 +97,9 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     *
+     * Called when the map is ready to be used.
      * @param googleMap
+     *  internal representation of the map itself
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -139,7 +147,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     *
+     * You must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onResume() {
@@ -148,7 +156,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     *
+     * You must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onPause() {
@@ -157,7 +165,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     *
+     * You must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onDestroy() {
@@ -166,7 +174,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     *
+     * You must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onLowMemory() {
@@ -175,9 +183,9 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     *
-     * @param mood
-     * @param i
+     * draws moods on map
+     * @param mood mood object
+     * @param i integer that represents the index of the FriendMood in the data list
      */
     private void drawMood(Mood mood, int i ){
         if (mood.getLocation() != null){
@@ -201,7 +209,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     *
+     * clears map and data list before update on friend moods
      */
     @Override
     public void beforeGettingList() {
@@ -210,8 +218,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     *
-     * @param item
+     * adds FriendMood item into data list
+     * @param item friend mood
      */
     @Override
     public void onGettingItem(Object item) {
@@ -225,6 +233,9 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
 
+    /**
+     * draws the markers on the map
+     */
     @Override
     public void afterGettingList() {
         Mood mood = moodDataList.get(moodDataList.size()-1).getMood();

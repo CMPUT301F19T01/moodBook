@@ -29,8 +29,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
 import com.example.moodbook.ui.Request.RequestFragment;
-import com.example.moodbook.ui.followers.followersFragment;
-import com.example.moodbook.ui.chat.ChatFragment;
+import com.example.moodbook.ui.followers.MyFollowersFragment;
 import com.example.moodbook.ui.friendMood.FriendMoodFragment;
 import com.example.moodbook.ui.home.HomeFragment;
 import com.example.moodbook.ui.login.LoginActivity;
@@ -104,7 +103,6 @@ public class MainActivity extends AppCompatActivity  {
                 R.id.currentEmail, R.id.currentEmail,R.id.nav_profile,
                 R.id.nav_myMood,R.id.nav_friendMood,
                 R.id.nav_myRequests, R.id.nav_Followers, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap,
-                R.id.nav_chat,
                 R.id.nav_request, R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();
@@ -126,27 +124,6 @@ public class MainActivity extends AppCompatActivity  {
         final ImageView profilePicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile);
         profileUserName.setText(name);
         profileEmail.setText(email);
-        if (name!=null) {
-            // Reference to an image file in Cloud Storage
-             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-             storageReference.child("profilepics/" + name + ".jpeg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Glide.with(getApplicationContext()/* context */)
-                                .load(uri)
-                                .centerCrop()
-                                .into(profilePicture);
-                    }
-                })
-                     .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                        profilePicture.setImageResource(R.drawable.purpleprofile);
-                    }
-                });
-        }
-
 
     }
 
@@ -184,7 +161,7 @@ public class MainActivity extends AppCompatActivity  {
                 toolbar.setTitle("Friend Moods");
                 break;
             case R.id.nav_Followers:
-                fragmentClass = followersFragment.class;
+                fragmentClass = MyFollowersFragment.class;
                 toolbar.setTitle("My Followers");
                 break;
             case R.id.nav_myMoodMap:
@@ -194,10 +171,6 @@ public class MainActivity extends AppCompatActivity  {
             case R.id.nav_myFriendMoodMap:
                 fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
-                break;
-            case R.id.nav_chat:
-                fragmentClass = ChatFragment.class;
-                toolbar.setTitle("Chat");
                 break;
             case R.id.nav_myFriends:
                 fragmentClass = MyFriendsFragment.class;
@@ -256,15 +229,3 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 }
-//    OnCompleteListener<AuthResult> completeListener = new OnCompleteListener<AuthResult>() {
-//        @Override
-//        public void onComplete(@NonNull Task<AuthResult> task) {
-//            if (task.isSuccessful()) {
-//                boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
-////                    Log.d("MyTAG", "onComplete: " + (isNew ? "new user" : "old user"));
-//                Toast.makeText(getApplicationContext(),
-//                        "new user",
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    };

@@ -3,7 +3,7 @@ package com.example.moodbook;
 /**
  * Implemented by PageFragment to get real-time updated list from db
  */
-public interface DBListListener {
+public interface DBCollectionListener {
     /**
      * This defines task to be done before getting all the items
      * e.g. clearing list in PageFragment

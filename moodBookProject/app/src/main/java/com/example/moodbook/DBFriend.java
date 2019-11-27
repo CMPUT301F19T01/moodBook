@@ -1,20 +1,12 @@
 package com.example.moodbook;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.moodbook.ui.followers.followersAdapter;
 import com.example.moodbook.ui.friendMood.FriendMood;
-import com.example.moodbook.ui.friendMood.FriendMoodFragment;
-import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
-import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
-import com.example.moodbook.ui.myFriends.FriendListAdapter;
-import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +33,7 @@ public class DBFriend {
     private FirebaseUser user;
     private String uid;
     private static String TAG;         // optional: for log message
-    private DBListListener listListener;
+    private DBCollectionListener listListener;
 
     /**
      *
@@ -50,7 +42,6 @@ public class DBFriend {
      * @param TAG
      */
     public DBFriend(FirebaseAuth mAuth, Context context, String TAG) {
-
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
         this.uid = mAuth.getCurrentUser().getUid();
@@ -74,26 +65,27 @@ public class DBFriend {
      * This is used by MyFriends
      * @param listListener
      */
-    public void setFriendListListener(@NonNull DBListListener listListener) {
+    public void setFriendListListener(@NonNull DBCollectionListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("FRIENDS")
-                .addSnapshotListener(getFriendEventListener());
+                .addSnapshotListener(getUserEventListener());
     }
 
     /**
-     * This is used by followers fragment
-     * @param followersListAdapter
+     * This is used by MyFollowers
+     * @param listListener
      */
-    public void setFollowersListListener(@NonNull followersAdapter followersListAdapter) {
+    public void setFollowersListListener(@NonNull DBCollectionListener listListener) {
+        this.listListener = listListener;
         this.userReference.document(uid).collection("FOLLOWERS")
-                .addSnapshotListener(getFollowerEventListener(followersListAdapter));
+                .addSnapshotListener(getUserEventListener());
     }
 
     /**
      * This is used by FriendMood and FriendMoodMap
      * @param listListener
      */
-    public void setFriendRecentMoodListener(@NonNull DBListListener listListener) {
+    public void setFriendRecentMoodListener(@NonNull DBCollectionListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("FRIENDS")
                 .addSnapshotListener(getFriendRecentMoodEventListener());
@@ -108,36 +100,49 @@ public class DBFriend {
     }
 
     /**
-     * This EventListener is for MyFollowers to get all the user's followers (username, uid) in the database
-     * from the user's followers collection
+     * This method is MyFriendsFragment to remove a friend that the user follows
+     * @param user
+     * @param friend
      */
-    private EventListener<QuerySnapshot> getFollowerEventListener (@NonNull final followersAdapter followersListAdapter){
-        return new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                // clear the old list
-                followersListAdapter.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // ignore null item
-                    if (doc.getId().equals("null")) continue;
-                    // Adding friend from FireStore
-                    if (doc.getData() != null && doc.getData().get("uid") != null) {
-                        MoodbookUser followerUser = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
-                        followersListAdapter.add(followerUser);
-                    }
-                }
-            }
-        };
-
+    public void removeFriend(final MoodbookUser user, final MoodbookUser friend) {
+        removeFriend(user, friend, true);
     }
 
     /**
-     * This method is used by followersFragment to remove a follower who was previously accepted by the user
+     * This method is used by MyFollowersFragment to remove a follower who was previously accepted by the user
      * @param user
      * @param follower
      */
     public void removeFollower(final MoodbookUser user, final MoodbookUser follower) {
         removeFollower(user, follower, true);
+    }
+
+
+    private void removeFriend(final MoodbookUser user, final MoodbookUser friend,
+                              final boolean toRemoveFollower){
+        if (friend == null) return;
+
+        // go to user's friend list
+        final CollectionReference collectionReference = this.userReference.document(user.getUid())
+                .collection("FRIENDS");
+        // remove the friend's user name from friend list (friends who user is following)
+        collectionReference.document(friend.getUsername()).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Remove Friend " + friend.getUsername()
+                                + " for " + user.getUsername());
+                        if(toRemoveFollower) {
+                            removeFollower(friend, user, false);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Did nothing.");
+                    }
+                });
     }
 
     private void removeFollower(final MoodbookUser user, final MoodbookUser follower,
@@ -167,60 +172,24 @@ public class DBFriend {
     }
 
     /**
-     * This method is MyFriendsFragment to remove a friend that the user follows
-     * @param user
-     * @param friend
+     * This EventListener is for MyFriends & MyFollowers to get all the user's friends/followers
+     * (username, uid) in the database from the user's friend/follower collection
      */
-    public void removeFriend(final MoodbookUser user, final MoodbookUser friend) {
-        removeFriend(user, friend, true);
-    }
-
-    private void removeFriend(final MoodbookUser user, final MoodbookUser friend,
-                             final boolean toRemoveFollower){
-        if (friend == null) return;
-
-        // go to user's friend list
-        final CollectionReference collectionReference = this.userReference.document(user.getUid())
-                .collection("FRIENDS");
-        // remove the friend's user name from friend list (friends who user is following)
-        collectionReference.document(friend.getUsername()).delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d(TAG, "Remove Friend " + friend.getUsername()
-                                + " for " + user.getUsername());
-                        if(toRemoveFollower) {
-                            removeFollower(friend, user, false);
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Did nothing.");
-                    }
-                });
-    }
-
-    /**
-     * This EventListener is for MyFriends to get all the user's friends (username, uid) in the database
-     * from the user's friend collection
-     */
-    private EventListener<QuerySnapshot> getFriendEventListener (){
+    private EventListener<QuerySnapshot> getUserEventListener (){
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                // clear the old list
-                //friendListAdapter.clear();
                 listListener.beforeGettingList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;
-                    // Adding friend from FireStore
+                    // Adding user from FireStore
                     if (doc.getData() != null && doc.getData().get("uid") != null) {
-                        MoodbookUser friendUser = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
-                        //friendListAdapter.add(friendUser);
-                        listListener.onGettingItem(friendUser);
+                        // get uid and username of the user
+                        MoodbookUser user = new MoodbookUser(
+                                doc.getId(),
+                                (String) doc.getData().get("uid"));
+                        listListener.onGettingItem(user);
                     }
                 }
                 listListener.afterGettingList();
@@ -246,9 +215,9 @@ public class DBFriend {
                     // Get most recent mood for the friend from FireStore
                     if (doc.getData() != null && doc.getData().get("uid") != null) {
                         // get uid and username of the friend
-                        String username = doc.getId();
-                        String uid = (String) doc.getData().get("uid");
-                        MoodbookUser friendUser = new MoodbookUser(username, uid);
+                        MoodbookUser friendUser = new MoodbookUser(
+                                doc.getId(),
+                                (String) doc.getData().get("uid"));
                         // start getting most recent moodID
                         getRecentMoodID(friendUser);
                     }

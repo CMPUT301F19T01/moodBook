@@ -10,8 +10,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.example.moodbook.DBListListener;
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
@@ -22,18 +23,12 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -48,7 +43,7 @@ import java.util.ArrayList;
 
  *  This activity is used to view a where a users moods take place on a map
  */
-public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBListListener {
+public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
 
     ///// Member Variables /////
     private MapView mapView; // view object
@@ -68,7 +63,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
 
 
     /**
-     * This method is inherited by Fragment
+     * Called to have the fragment instantiate its user interface view
      * @param inflater
      *  Object that can be used to inflate any views in the fragment
      * @param container
@@ -111,7 +106,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-     * This method is inherited by OnMapReadyCallback
+     * Called when the map is ready to be used.
      * @param googleMap
      *  internal representation of the map itself
      */
@@ -161,7 +156,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-    * This method is inherited by OnMapReadyCallback
+    * You must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onResume() {
@@ -170,7 +165,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-     * This method is inherited by OnMapReadyCallback
+     * You must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onPause() {
@@ -179,7 +174,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-     * This method is inherited by OnMapReadyCallback
+     * You must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onDestroy() {
@@ -188,7 +183,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-     * This method is inherited by OnMapReadyCallback
+     * You must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onLowMemory() {
@@ -215,13 +210,6 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
             Location moodLocation = mood.getLocation();
             moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
 
-            // testing for circle drawing
-            //Circle mCircle = moodMap.addCircle(new CircleOptions()
-                    //.center(new LatLng(moodLatLng.latitude, moodLatLng.longitude))
-                    //.radius(50)
-                    //.strokeWidth(0)
-                    //.fillColor(mood.getEmotionColorResource()));
-
             // use png image resource as marker icon
             BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
             Bitmap b = bitmapDrawable.getBitmap();
@@ -240,49 +228,20 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
 
     }
 
-    
-    /*public void updateList(FirebaseFirestore db) {
-        try {
-            db.collection("USERS")
-                    .document(userID)
-                    .collection("MOODS")
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
 
-                                // iterate over each document and get fields for drawing mood markers
-                                task.getResult();
-                                for (int i = 0; i <  task.getResult().size(); i++) {
-                                    DocumentSnapshot doc = task.getResult().getDocuments().get(i);
-                                    if (doc.exists() && doc.getDouble("location_lat") != null
-                                            && doc.getDouble("location_lon") != null) {
-                                        try {
-                                            Mood mood = DBMoodSetter.getMoodFromData(doc.getData());
-                                            mood.setDocId(doc.getId());
-                                            moodDataList.add(mood);
-
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }
-                                drawMoodMarkers(moodDataList, moodMap);
-                            }
-                        }
-                    });
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }*/
-
+    /**
+     * clear list and map before getting items
+     */
     @Override
     public void beforeGettingList() {
         moodDataList.clear();
         moodMap.clear();
     }
 
+    /**
+     * Defines what to do with the item on getting it
+     * @param item users mood object
+     */
     @Override
     public void onGettingItem(Object item) {
         if(item instanceof Mood){
@@ -294,6 +253,9 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     // https://stackoverflow.com/questions/28672883/java-lang-illegalstateexception-fragment-not-attached-to-activity Miroslav Michalec  used to check fragment visibility
+    /**
+     * draws markers after getting whole list
+     */
     @Override
     public void afterGettingList() {
         if (isAdded() && mapView.getVisibility() == View.VISIBLE) {
