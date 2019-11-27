@@ -33,7 +33,7 @@ public class DBFriend {
     private FirebaseUser user;
     private String uid;
     private static String TAG;         // optional: for log message
-    private DBListListener listListener;
+    private DBCollectionListener listListener;
 
     /**
      *
@@ -65,7 +65,7 @@ public class DBFriend {
      * This is used by MyFriends
      * @param listListener
      */
-    public void setFriendListListener(@NonNull DBListListener listListener) {
+    public void setFriendListListener(@NonNull DBCollectionListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("FRIENDS")
                 .addSnapshotListener(getUserEventListener());
@@ -75,7 +75,7 @@ public class DBFriend {
      * This is used by MyFollowers
      * @param listListener
      */
-    public void setFollowersListListener(@NonNull DBListListener listListener) {
+    public void setFollowersListListener(@NonNull DBCollectionListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("FOLLOWERS")
                 .addSnapshotListener(getUserEventListener());
@@ -85,7 +85,7 @@ public class DBFriend {
      * This is used by FriendMood and FriendMoodMap
      * @param listListener
      */
-    public void setFriendRecentMoodListener(@NonNull DBListListener listListener) {
+    public void setFriendRecentMoodListener(@NonNull DBCollectionListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("FRIENDS")
                 .addSnapshotListener(getFriendRecentMoodEventListener());
@@ -179,7 +179,7 @@ public class DBFriend {
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                listListener.beforeGettingList();
+                listListener.beforeGettingCollection();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;
@@ -192,7 +192,7 @@ public class DBFriend {
                         listListener.onGettingItem(user);
                     }
                 }
-                listListener.afterGettingList();
+                listListener.afterGettingCollection();
             }
         };
     }
@@ -208,7 +208,7 @@ public class DBFriend {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
                 /*// clear the old list
                 friendMoodListAdapter.clear();*/
-                listListener.beforeGettingList();
+                listListener.beforeGettingCollection();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;

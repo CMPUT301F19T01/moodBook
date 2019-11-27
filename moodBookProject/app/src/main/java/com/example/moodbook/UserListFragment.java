@@ -13,16 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.example.moodbook.ui.followers.MyFollowersFragment;
-import com.example.moodbook.ui.home.CreateMoodActivity;
-import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.profile.FriendProfileViewActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class UserListFragment extends PageFragment implements DBListListener {
+public abstract class UserListFragment extends PageFragment implements DBCollectionListener {
     private static final String[] SUBCLASSES_NAMES = {
             MyFriendsFragment.class.getSimpleName(),
             MyFollowersFragment.class.getSimpleName()
@@ -114,7 +111,7 @@ public abstract class UserListFragment extends PageFragment implements DBListLis
     }
 
     @Override
-    public void beforeGettingList() {
+    public void beforeGettingCollection() {
         userListAdapter.clear();
     }
 
@@ -127,7 +124,7 @@ public abstract class UserListFragment extends PageFragment implements DBListLis
 
     @Deprecated
     @Override
-    public void afterGettingList() {
+    public void afterGettingCollection() {
         // Do nothing
     }
 

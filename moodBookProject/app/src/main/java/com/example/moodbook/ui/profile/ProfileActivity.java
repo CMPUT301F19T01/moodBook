@@ -42,7 +42,8 @@ import java.util.HashMap;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
-public class ProfileActivity extends AppCompatActivity implements ProfileEditor.ProfilePicInterface{
+public class ProfileActivity extends AppCompatActivity
+        implements ProfileEditor.ProfilePicInterface, ProfileEditor.ProfileListener{
     ImageView dp;
     TextView name;
     TextView email;
@@ -82,8 +83,10 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
         email.setText(intent_email);
         save_profile =(Button) findViewById(R.id.save_profile);
         changeProfilePic();
-        getData();
+
         final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        ProfileEditor.getProfileData(userID,this);
+
         save_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,9 +113,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
         edit_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 ProfileEditor.setImage(ProfileActivity.this);
-
             }
         });
     }
@@ -133,6 +134,20 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
     @Override
     public void setProfilePic(Bitmap bitImage) {
         this.bitImage = bitImage;
+    }
+
+    @Override
+    public void onGettingUserDoc(DocumentSnapshot document) {
+        Log.d("DocumentSnapshot data: ", "DocumentSnapshot data: " + document.get("phone"));
+        phone.setText((CharSequence) document.get("phone"));
+        bio.setText((CharSequence) document.get("bio"));
+        showImg((String) document.get("username"));
+    }
+
+    @Deprecated
+    @Override
+    public void onGettingMoodDoc(DocumentSnapshot document) {
+        // Do nothing
     }
 
     public void addImg(String username) {
@@ -164,6 +179,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
             }
         }) ;
     }
+
     public void getData(){
         String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -175,10 +191,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileEditor.
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Log.d("DocumentSnapshot data: ", "DocumentSnapshot data: " + document.get("phone"));
-                        phone.setText((CharSequence) document.get("phone"));
-                        bio.setText((CharSequence) document.get("bio"));
-                        showImg((String) document.get("username"));
+
 
                     } else {
                         Log.d("No such document", "No such document");
