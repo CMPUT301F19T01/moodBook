@@ -64,6 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
                 android:layout_gravity="center_vertical"
+                android:paddingLeft="3dp"
                 android:textSize="20dp"
                 android:text="Email"/>
 
@@ -90,6 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
                 android:layout_gravity="center_vertical"
+                android:paddingLeft="3dp"
                 android:textSize="20dp"
                 android:text="Username"/>
 
@@ -110,13 +112,14 @@
                 android:contentDescription="Phone Icon"
                 app:srcCompat="@drawable/phone" />
 
-            <TextView
+            <EditText
                 android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
                 android:layout_gravity="center_vertical"
                 android:textSize="20dp"
+                android:inputType="phone"
                 android:hint="Phone (optional)"/>
 
         </LinearLayout>
@@ -136,7 +139,7 @@
                 android:contentDescription="Bio Icon"
                 app:srcCompat="@drawable/bio" />
 
-            <TextView
+            <EditText
                 android:id="@+id/bio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
