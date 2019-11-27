@@ -20,19 +20,17 @@ import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.profile.FriendProfileViewActivity;
+import com.example.moodbook.UserListAdapter;
+import com.example.moodbook.UserListFragment;
+import com.example.moodbook.ui.followers.MyFollowersFragment;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
-public class MyFriendsFragment extends PageFragment implements DBListListener {
-    private FriendListAdapter friendListAdapter;
-    private ListView friendListView;
+public class MyFriendsFragment extends UserListFragment {
+
     private static final String TAG = MyFriendsFragment.class.getSimpleName();
-    ArrayList<MoodbookUser> friendsList;
-    // connect to DB
-    private DBFriend friendDB;
-    private FirebaseAuth mAuth;
-    private String selectedItem ="";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -81,26 +79,9 @@ public class MyFriendsFragment extends PageFragment implements DBListListener {
                         .show();
             }
         });
+        //View root = super.onCreateView(inflater, container, savedInstanceState, TAG);
 
         return root;
-    }
-
-    @Override
-    public void beforeGettingList() {
-        friendListAdapter.clear();
-    }
-
-    @Override
-    public void onGettingItem(Object item) {
-        if(item instanceof MoodbookUser) {
-            friendListAdapter.add((MoodbookUser)item);
-        }
-    }
-
-    @Deprecated
-    @Override
-    public void afterGettingList() {
-        // Do nothing
     }
 }
 

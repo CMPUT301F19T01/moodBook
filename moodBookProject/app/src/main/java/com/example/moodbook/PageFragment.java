@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
  * This fragment is inherited by each page to ensure unwanted menu options are cleared.
  * @see androidx.fragment.app.Fragment
  */
-public class PageFragment extends Fragment {
+public abstract class PageFragment extends Fragment {
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
      * @param inflater

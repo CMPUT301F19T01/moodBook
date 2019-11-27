@@ -28,6 +28,10 @@ public class FriendMoodListAdapter extends ArrayAdapter {
         this.context = context;
     }
 
+    public FriendMoodListAdapter(Context context) {
+        this(context, new ArrayList<FriendMood>());
+    }
+
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
