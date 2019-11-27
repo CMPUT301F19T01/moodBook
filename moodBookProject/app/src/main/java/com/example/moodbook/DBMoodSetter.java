@@ -378,7 +378,7 @@ public class DBMoodSetter {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
                 /*// clear the old list
                 moodListAdapter.clear();*/
-                listListener.beforeGettingCollection();
+                listListener.beforeGettingList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;
@@ -390,7 +390,7 @@ public class DBMoodSetter {
                         listListener.onGettingItem(mood);
                     }
                 }
-                listListener.afterGettingCollection();
+                listListener.afterGettingList();
             }
         };
     }

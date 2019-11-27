@@ -204,7 +204,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      *
      */
     @Override
-    public void beforeGettingCollection() {
+    public void beforeGettingList() {
         moodDataList.clear();
         moodMap.clear();
     }
@@ -226,7 +226,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
 
     @Override
-    public void afterGettingCollection() {
+    public void afterGettingList() {
         Mood mood = moodDataList.get(moodDataList.size()-1).getMood();
         LatLng moodLatLng = new LatLng(mood.getLocation().getLatitude(), mood.getLocation().getLatitude());
         moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));

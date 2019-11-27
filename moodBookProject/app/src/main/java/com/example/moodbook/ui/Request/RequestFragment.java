@@ -89,7 +89,7 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
     }
 
     @Override
-    public void beforeGettingCollection(){
+    public void beforeGettingList(){
         friends.clear();
     }
 
@@ -102,7 +102,7 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
 
     @Deprecated
     @Override
-    public void afterGettingCollection(){
+    public void afterGettingList(){
 
     }
 }
