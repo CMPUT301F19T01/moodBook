@@ -8,17 +8,17 @@ android:padding="5dp">
 
     <TextView
         android:id="@+id/nameRequest"
-        android:layout_weight="1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Test"
         android:layout_centerInParent="true"
-        android:textSize="30dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:textColor="@android:color/black" />
+        android:layout_weight="1"
+        android:text="Test"
+        android:textSize="25dp"
+        android:textStyle="bold" />
 
 
     <LinearLayout

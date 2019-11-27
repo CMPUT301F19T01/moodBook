@@ -1,6 +1,7 @@
 package com.example.moodbook;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.example.moodbook.ui.followers.MyFollowersFragment;
 import com.example.moodbook.ui.home.CreateMoodActivity;
 import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.ui.myFriends.MyFriendsFragment;
+import com.example.moodbook.ui.profile.FriendProfileViewActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -77,14 +79,13 @@ public abstract class UserListFragment extends PageFragment implements DBListLis
         setupAdapter(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, final View view, final int pos, long id) {
-                final int row = pos;
+                final MoodbookUser selectedUser = (MoodbookUser) userListAdapter.getItem(pos);
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Remove User")
-                        .setMessage("Do you want to remove this user from your "+listType+" list?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setTitle(selectedUser.getUsername())
+                        .setMessage("Would you like to view this User's Profile or delete this User")
+                        .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                MoodbookUser selectedUser = (MoodbookUser) userListAdapter.getItem(pos);
                                 // for MyFriends: remove friend
                                 if(TAG.equals(SUBCLASSES_NAMES[0])) {
                                     friendDB.removeFriend(currentUser, selectedUser);
@@ -95,7 +96,16 @@ public abstract class UserListFragment extends PageFragment implements DBListLis
                                 }
                             }
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton("View", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent viewProfile = new Intent(getContext(), FriendProfileViewActivity.class);
+                                viewProfile.putExtra("username",selectedUser.getUsername());
+                                viewProfile.putExtra("userID",selectedUser.getUid());
+                                startActivity(viewProfile);
+                            }
+                        })
+                        .setNeutralButton("Cancel",null)
                         .show();
             }
         });
