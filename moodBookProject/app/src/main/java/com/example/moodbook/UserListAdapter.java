@@ -1,4 +1,4 @@
-package com.example.moodbook.ui.myFriends;
+package com.example.moodbook;
 
 import android.content.Context;
 import android.net.Uri;
@@ -13,9 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
-import com.example.moodbook.MoodbookUser;
-import com.example.moodbook.R;
-import com.example.moodbook.ui.friendMood.FriendMood;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -23,17 +20,17 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class FriendListAdapter extends ArrayAdapter {
-    private ArrayList<MoodbookUser> friends;
+public class UserListAdapter extends ArrayAdapter {
+    private ArrayList<MoodbookUser> users;
     private Context context;
 
-    public FriendListAdapter(Context context, ArrayList<MoodbookUser> friends) {
+    public UserListAdapter(Context context, ArrayList<MoodbookUser> friends) {
         super(context, 0, friends);
-        this.friends = friends;
+        this.users = friends;
         this.context = context;
     }
 
-    public FriendListAdapter(Context context) {
+    public UserListAdapter(Context context) {
         this(context, new ArrayList<MoodbookUser>());
     }
 
@@ -45,7 +42,7 @@ public class FriendListAdapter extends ArrayAdapter {
             view = LayoutInflater.from(context).inflate(R.layout.user_item, parent, false);
         }
 
-        MoodbookUser friendUser = friends.get(position);
+        MoodbookUser user = users.get(position);
 
         // get views for username
         TextView usernameText = view.findViewById(R.id.user_item_username);
@@ -53,7 +50,8 @@ public class FriendListAdapter extends ArrayAdapter {
         final ImageView frienddp = view.findViewById(R.id.user_item_dp);
 
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        storageReference.child("profilepics/" + friendUser.getUsername() + ".jpeg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        storageReference.child("profilepics/" + user.getUsername() + ".jpeg" ).getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getContext()/* context */)
@@ -63,7 +61,7 @@ public class FriendListAdapter extends ArrayAdapter {
             }
         }) ;
         // show username
-        usernameText.setText(friendUser.getUsername());
+        usernameText.setText(user.getUsername());
 
         return view;
     }
@@ -72,8 +70,8 @@ public class FriendListAdapter extends ArrayAdapter {
     public void add(@Nullable Object object) {
         if(object == null || object instanceof MoodbookUser) {
             MoodbookUser item = (MoodbookUser)object;
-            friends.add(item);
-            Collections.sort(friends);
+            users.add(item);
+            Collections.sort(users);
             // notify item added
             notifyDataSetChanged();
         }
@@ -81,7 +79,7 @@ public class FriendListAdapter extends ArrayAdapter {
 
     @Override
     public void clear() {
-        friends.clear();
+        users.clear();
         // notify list is cleared
         notifyDataSetChanged();
     }
@@ -89,6 +87,6 @@ public class FriendListAdapter extends ArrayAdapter {
     @Nullable
     @Override
     public Object getItem(int position) {
-        return friends.get(position);
+        return users.get(position);
     }
 }

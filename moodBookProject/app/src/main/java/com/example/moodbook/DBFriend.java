@@ -1,20 +1,13 @@
 package com.example.moodbook;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.moodbook.ui.followers.followersAdapter;
 import com.example.moodbook.ui.friendMood.FriendMood;
-import com.example.moodbook.ui.friendMood.FriendMoodFragment;
-import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
-import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
-import com.example.moodbook.ui.myFriends.FriendListAdapter;
-import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;

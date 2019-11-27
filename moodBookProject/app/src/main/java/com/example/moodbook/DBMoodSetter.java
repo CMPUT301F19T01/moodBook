@@ -3,7 +3,6 @@ package com.example.moodbook;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 import android.widget.ImageView;
@@ -12,11 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.moodbook.ui.friendMood.FriendMood;
-import com.example.moodbook.ui.friendMood.FriendMoodListAdapter;
 import com.example.moodbook.ui.home.MoodEditor;
-import com.example.moodbook.ui.home.MoodListAdapter;
-import com.example.moodbook.ui.myFriends.FriendListAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,7 +32,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 

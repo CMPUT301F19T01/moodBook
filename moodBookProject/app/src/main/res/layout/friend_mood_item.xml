@@ -20,7 +20,8 @@
                 android:id="@+id/friend_mood_item_emotion_image"
                 android:layout_width="@dimen/friend_emoticon_size"
                 android:layout_height="@dimen/friend_mood_item_height"
-                android:padding="5dp"
+                android:layout_marginLeft="4dp"
+                android:padding="8dp"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
             <LinearLayout
@@ -32,18 +33,19 @@
                     android:id="@+id/friend_mood_item_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="2dp"
-                    android:paddingLeft="2dp"
+                    android:layout_marginLeft="4dp"
+                    android:padding="2dp"
                     android:text="Username"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/friend_mood_item_emotion_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
                     android:padding="2dp"
                     android:text="Emotion"
-                    android:textSize="20sp" />
+                    android:textSize="25sp" />
 
 
                 <LinearLayout
@@ -56,16 +58,18 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="2dp"
+                        android:layout_marginLeft="4dp"
                         android:text="Date"
-                        android:textSize="15sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:id="@+id/friend_mood_item_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="2dp"
+                        android:layout_marginLeft="4dp"
                         android:text="Time"
-                        android:textSize="15sp" />
+                        android:textSize="20sp" />
                 </LinearLayout>
             </LinearLayout>
 
