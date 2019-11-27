@@ -275,7 +275,7 @@ public class HomeFragment extends PageFragment
     }
 
     @Override
-    public void beforeGettingList() {
+    public void beforeGettingCollection() {
         hiddenMssg.setVisibility(View.INVISIBLE);
         moodListAdapter.clear();
     }
@@ -288,11 +288,12 @@ public class HomeFragment extends PageFragment
     }
 
     @Override
-    public void afterGettingList() {
+    public void afterGettingCollection() {
         if (moodListAdapter.getItemCount() == 0){
             hiddenMssg.setVisibility(View.VISIBLE);
         }
     }
+
 
     /**
      * This method is for setting up the mood list adapter

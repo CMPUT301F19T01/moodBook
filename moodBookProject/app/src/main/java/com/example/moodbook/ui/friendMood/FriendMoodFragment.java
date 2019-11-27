@@ -76,8 +76,9 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
         return root;
     }
 
+
     @Override
-    public void beforeGettingList() {
+    public void beforeGettingCollection() {
         hiddenMssg.setVisibility(View.INVISIBLE);
         friendMoodListAdapter.clear();
     }
@@ -90,11 +91,12 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
     }
 
     @Override
-    public void afterGettingList() {
+    public void afterGettingCollection() {
         if (friendMoodListAdapter.getCount() == 0) {
             hiddenMssg.setVisibility(View.VISIBLE);
         }
     }
+
 
     /**
      * This method is for setting up the mood list adapter

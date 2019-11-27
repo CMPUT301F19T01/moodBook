@@ -3,15 +3,7 @@
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#f5f5f5"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
+        "color": "#ebe3cd"
       }
     ]
   },
@@ -19,7 +11,7 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#616161"
+        "color": "#523735"
       }
     ]
   },
@@ -27,7 +19,34 @@
     "elementType": "labels.text.stroke",
     "stylers": [
       {
-        "color": "#f5f5f5"
+        "color": "#f5f1e6"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#c9b2a6"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.country",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#d2e0a6"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#dcd2be"
       }
     ]
   },
@@ -36,16 +55,16 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#bdbdbd"
+        "color": "#ae9e90"
       }
     ]
   },
   {
-    "featureType": "landscape.man_made",
-    "elementType": "labels",
+    "featureType": "landscape.natural",
+    "elementType": "geometry",
     "stylers": [
       {
-        "visibility": "simplified"
+        "color": "#d5e1a4"
       }
     ]
   },
@@ -54,16 +73,16 @@
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#f1ddff"
+        "color": "#dfd2ae"
       }
     ]
   },
   {
     "featureType": "poi",
-    "elementType": "labels.icon",
+    "elementType": "geometry.fill",
     "stylers": [
       {
-        "saturation": 5
+        "color": "#c8d39b"
       }
     ]
   },
@@ -72,16 +91,16 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#757575"
+        "color": "#93817c"
       }
     ]
   },
   {
     "featureType": "poi.park",
-    "elementType": "geometry",
+    "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#e5e5e5"
+        "color": "#9fab74"
       }
     ]
   },
@@ -90,7 +109,7 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#9e9e9e"
+        "color": "#447530"
       }
     ]
   },
@@ -99,102 +118,61 @@
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#e3b0ff"
+        "color": "#f5f1e6"
       }
     ]
   },
   {
-    "featureType": "road",
+    "featureType": "road.arterial",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#fdfcf8"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#c1d09b"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f8c967"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
     "elementType": "geometry.stroke",
     "stylers": [
       {
-        "color": "#ffffff"
+        "color": "#e9bc62"
       }
     ]
   },
   {
-    "featureType": "road.arterial",
+    "featureType": "road.highway.controlled_access",
     "elementType": "geometry",
     "stylers": [
       {
-        "visibility": "on"
+        "color": "#e98d58"
       }
     ]
   },
   {
-    "featureType": "road.arterial",
-    "elementType": "labels",
+    "featureType": "road.highway.controlled_access",
+    "elementType": "geometry.stroke",
     "stylers": [
       {
-        "color": "#ffffff"
-      },
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dadada"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry.fill",
-    "stylers": [
-      {
-        "color": "#b333ff"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#e0e0e0"
-      },
-      {
-        "visibility": "simplified"
+        "color": "#db8555"
       }
     ]
   },
@@ -203,7 +181,7 @@
     "elementType": "geometry.fill",
     "stylers": [
       {
-        "visibility": "simplified"
+        "color": "#c2d29f"
       }
     ]
   },
@@ -212,7 +190,7 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#9e9e9e"
+        "color": "#806b63"
       }
     ]
   },
@@ -221,7 +199,25 @@
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#e5e5e5"
+        "color": "#dfd2ae"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#8f7d77"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#ebe3cd"
       }
     ]
   },
@@ -230,16 +226,16 @@
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#eeeeee"
+        "color": "#dfd2ae"
       }
     ]
   },
   {
     "featureType": "water",
-    "elementType": "geometry",
+    "elementType": "geometry.fill",
     "stylers": [
       {
-        "color": "#c9c9c9"
+        "color": "#a9dbd4"
       }
     ]
   },
@@ -248,7 +244,7 @@
     "elementType": "labels.text.fill",
     "stylers": [
       {
-        "color": "#9e9e9e"
+        "color": "#92998d"
       }
     ]
   }

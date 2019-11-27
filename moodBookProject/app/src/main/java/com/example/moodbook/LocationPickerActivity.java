@@ -158,6 +158,11 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
                 mMap.addMarker(new MarkerOptions().position(latLng));
                 pickedLocation = latLng;
                 locationAddress = convertToAddress(latLng.latitude, latLng.longitude);
+
+                // use lat and lon as address string if nothing useful is returned
+                if(locationAddress == null){
+                    locationAddress = String.format("%.5f", latLng.latitude) + " " + String.format("%.5f", latLng.longitude);
+                }
                 Toast.makeText(getApplicationContext(), locationAddress, Toast.LENGTH_SHORT).show();
 
 
@@ -165,12 +170,21 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
         });
     }
 
+    /**
+     * helper method to get address from coordinates
+     * @param lat double latitude coordinate value
+     * @param lon double latitude coordinate value
+     * @return string representing address information
+     */
     private String convertToAddress(double lat, double lon){
+        // create geocoder object
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
         try {
+            // get 1 result address string from the coordinates
             List<Address> listAddresses = geocoder.getFromLocation(lat, lon, 1);
 
+            // check if list exists and has anything in it
             if (listAddresses != null && listAddresses.size() >0 ){
 
                 return listAddresses.get(0).getAddressLine(0);
