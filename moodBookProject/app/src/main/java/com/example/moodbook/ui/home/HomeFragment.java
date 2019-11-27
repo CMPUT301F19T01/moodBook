@@ -20,7 +20,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -61,6 +63,7 @@ public class HomeFragment extends PageFragment
     private RecyclerView moodListView;
     private MoodListAdapter moodListAdapter;
     private CoordinatorLayout moodHistoryLayout;
+    private TextView hiddenMssg;
 
     // connect to DB
     private DBMoodSetter moodDB;
@@ -68,7 +71,6 @@ public class HomeFragment extends PageFragment
     private static final String TAG = HomeFragment.class.getSimpleName();
 
     private Mood SelectedMood = null;
-
 
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
@@ -85,6 +87,7 @@ public class HomeFragment extends PageFragment
 
         // initialize layout
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
+        hiddenMssg = (TextView) root.findViewById(R.id.empty);
 
         // Set up recyclerView and adapter
         moodListView = root.findViewById(R.id.mood_history_listView);
@@ -276,6 +279,7 @@ public class HomeFragment extends PageFragment
 
     @Override
     public void beforeGettingList() {
+        hiddenMssg.setVisibility(View.INVISIBLE);
         moodListAdapter.clear();
     }
 
@@ -286,10 +290,11 @@ public class HomeFragment extends PageFragment
         }
     }
 
-    @Deprecated
     @Override
     public void afterGettingList() {
-        // Do nothing
+        if (moodListAdapter.getItemCount() == 0){
+            hiddenMssg.setVisibility(View.VISIBLE);
+        }
     }
 
     /**
