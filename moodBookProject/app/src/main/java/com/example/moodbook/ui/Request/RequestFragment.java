@@ -11,7 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
-import com.example.moodbook.DBListListener;
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * This fragment is shown to allow the user to send requests to other users
  */
-public class RequestFragment extends PageFragment implements DBListListener{
+public class RequestFragment extends PageFragment implements DBCollectionListener {
     //private RequestViewModel requestViewModel;
 
     private FirebaseAuth mAuth;
@@ -89,7 +89,7 @@ public class RequestFragment extends PageFragment implements DBListListener{
     }
 
     @Override
-    public void beforeGettingList(){
+    public void beforeGettingCollection(){
         friends.clear();
     }
 
@@ -102,7 +102,7 @@ public class RequestFragment extends PageFragment implements DBListListener{
 
     @Deprecated
     @Override
-    public void afterGettingList(){
+    public void afterGettingCollection(){
 
     }
 }

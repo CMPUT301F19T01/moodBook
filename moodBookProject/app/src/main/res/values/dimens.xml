@@ -9,4 +9,5 @@
     <dimen name="friend_emoticon_size">80dp</dimen>
     <dimen name="friend_mood_item_height">100dp</dimen>
     <dimen name="spinner_item_height">80dp</dimen>
+    <dimen name="button_text_size">16dp</dimen>
 </resources>

@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.moodbook.DBListListener;
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
@@ -23,18 +23,12 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
 
@@ -48,7 +42,7 @@ import java.util.ArrayList;
 
  *  This activity is used to view a where a users moods take place on a map
  */
-public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBListListener {
+public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
 
     ///// Member Variables /////
     private MapView mapView; // view object
@@ -238,7 +232,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
      * clear list and map before getting items
      */
     @Override
-    public void beforeGettingList() {
+    public void beforeGettingCollection() {
         moodDataList.clear();
         moodMap.clear();
     }
@@ -261,10 +255,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
      * draws markers after getting whole list
      */
     @Override
-    public void afterGettingList() {
-        if (MyMoodMapFragment.this.isVisible()){
-            drawMoodMarkers(moodDataList, moodMap);
-
-        }
+    public void afterGettingCollection() {
+        drawMoodMarkers(moodDataList, moodMap);
     }
 }

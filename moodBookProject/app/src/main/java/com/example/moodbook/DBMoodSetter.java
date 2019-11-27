@@ -50,7 +50,7 @@ public class DBMoodSetter {
     private String uid;
     private String TAG;         // optional: for log message
     private Bitmap obtainedImg;
-    private DBListListener listListener;
+    private DBCollectionListener listListener;
 
     /**
      * This is a constructor used by Create and Edit Mood Activity to get the current instance of a mood in the database
@@ -105,7 +105,7 @@ public class DBMoodSetter {
         this.TAG = TAG;
     }
 
-    public void setMoodListListener(@NonNull DBListListener listListener) {
+    public void setMoodListListener(@NonNull DBCollectionListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("MOODS")
                 .addSnapshotListener(getMoodEventListener());
@@ -378,7 +378,7 @@ public class DBMoodSetter {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
                 /*// clear the old list
                 moodListAdapter.clear();*/
-                listListener.beforeGettingList();
+                listListener.beforeGettingCollection();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;
@@ -390,7 +390,7 @@ public class DBMoodSetter {
                         listListener.onGettingItem(mood);
                     }
                 }
-                listListener.afterGettingList();
+                listListener.afterGettingCollection();
             }
         };
     }

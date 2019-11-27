@@ -10,7 +10,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +32,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.moodbook.DBListListener;
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.DBMoodSetter;
 import com.example.moodbook.Mood;
 import com.example.moodbook.MoodLocation;
@@ -43,8 +42,6 @@ import com.example.moodbook.ViewMoodActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 
 /**
  * This class shows the mood history of the user, showing the date, time, and emotion state
@@ -57,7 +54,7 @@ import java.util.ArrayList;
  * @see RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
  */
 public class HomeFragment extends PageFragment
-        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBListListener {
+        implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBCollectionListener {
 
     // Mood History
     private RecyclerView moodListView;
@@ -278,7 +275,7 @@ public class HomeFragment extends PageFragment
     }
 
     @Override
-    public void beforeGettingList() {
+    public void beforeGettingCollection() {
         hiddenMssg.setVisibility(View.INVISIBLE);
         moodListAdapter.clear();
     }
@@ -291,11 +288,12 @@ public class HomeFragment extends PageFragment
     }
 
     @Override
-    public void afterGettingList() {
+    public void afterGettingCollection() {
         if (moodListAdapter.getItemCount() == 0){
             hiddenMssg.setVisibility(View.VISIBLE);
         }
     }
+
 
     /**
      * This method is for setting up the mood list adapter

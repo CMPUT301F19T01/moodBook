@@ -1,7 +1,6 @@
 package com.example.moodbook.ui.friendMood;
 
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +13,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.DBFriend;
-import com.example.moodbook.DBListListener;
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.MoodLocation;
 import com.example.moodbook.ViewMoodActivity;
-import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
-
-public class FriendMoodFragment extends PageFragment implements DBListListener {
+public class FriendMoodFragment extends PageFragment implements DBCollectionListener {
 
     // Friend Mood
     private ListView friendMoodListView;
@@ -80,8 +76,9 @@ public class FriendMoodFragment extends PageFragment implements DBListListener {
         return root;
     }
 
+
     @Override
-    public void beforeGettingList() {
+    public void beforeGettingCollection() {
         hiddenMssg.setVisibility(View.INVISIBLE);
         friendMoodListAdapter.clear();
     }
@@ -94,11 +91,12 @@ public class FriendMoodFragment extends PageFragment implements DBListListener {
     }
 
     @Override
-    public void afterGettingList() {
+    public void afterGettingCollection() {
         if (friendMoodListAdapter.getCount() == 0) {
             hiddenMssg.setVisibility(View.VISIBLE);
         }
     }
+
 
     /**
      * This method is for setting up the mood list adapter

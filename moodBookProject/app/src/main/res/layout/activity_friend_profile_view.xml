@@ -5,156 +5,174 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.profile.FriendProfileViewActivityProfileActivity">
+        android:orientation="vertical">
 
 
-        <Button
-            android:id="@+id/close"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="48dp"
-            android:layout_marginEnd="48dp"
-            android:backgroundTint="@color/colorAccent"
-            android:enabled="true"
-            android:text="Close"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:text="Close" />
+            android:layout_marginTop="40dp">
 
-        <ImageView
-            android:id="@+id/friend_dp"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginBottom="22dp"
-            android:maxWidth="180dp"
-            android:maxHeight="180dp"
-            app:layout_constraintBottom_toTopOf="@+id/friend_email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.593"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.166"
-            app:srcCompat="@drawable/purpleprofile" />
-
-        <TextView
-                android:id="@+id/friend_email"
-                android:layout_width="260dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="196dp"
-                android:layout_marginEnd="24dp"
-                android:text="Email"
+            <ImageView
+                android:id="@+id/friend_dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:maxWidth="180dp"
+                android:maxHeight="180dp"
+                app:layout_constraintBottom_toTopOf="@+id/edit_profile_pic_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.766"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/purpleprofile" />
 
-            <TextView
-                android:id="@+id/friend_username"
-                android:layout_width="260dp"
-                android:layout_height="20dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="56dp"
-                android:layout_marginEnd="24dp"
-                android:text="Username"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.766"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/friend_email" />
+            <ImageView
+                android:id="@+id/most_recent_mood"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/friend_dp"
+                app:layout_constraintRight_toRightOf="@+id/friend_dp" />
 
-        <TextView
-            android:id="@+id/friend_bio"
-            android:layout_width="260dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
-            android:ems="10"
-            android:gravity="start|top"
-            app:layout_constraintBottom_toTopOf="@+id/close"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.766"
-            app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-                android:id="@+id/friend_phone"
-                android:layout_width="260dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginEnd="24dp"
-                android:ems="10"
-                app:layout_constraintBottom_toTopOf="@+id/friend_bio"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.764"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/friend_username"
-                app:layout_constraintVertical_bias="0.0" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp" >
 
             <ImageView
                 android:id="@+id/friend_email_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
                 android:contentDescription="Email Icon"
-                app:layout_constraintBottom_toBottomOf="@+id/friend_email"
-                app:layout_constraintEnd_toStartOf="@+id/friend_email"
-                app:layout_constraintHorizontal_bias="0.528"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/friend_email"
-                app:layout_constraintVertical_bias="0.416"
                 app:srcCompat="@drawable/email" />
+
+            <TextView
+                android:id="@+id/friend_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="3dp"
+                android:textSize="20dp"
+                android:text="Email"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp" >
 
             <ImageView
                 android:id="@+id/friend_username_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:layout_constraintBottom_toBottomOf="@+id/friend_username"
-                app:layout_constraintEnd_toStartOf="@+id/friend_username"
-                app:layout_constraintHorizontal_bias="0.509"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/friend_username"
-                app:layout_constraintVertical_bias="0.7"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:contentDescription="Username Icon"
                 app:srcCompat="@drawable/username" />
+
+            <TextView
+                android:id="@+id/friend_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="3dp"
+                android:textSize="20dp"
+                android:text="Username"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp" >
 
             <ImageView
                 android:id="@+id/friend_phone_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:layout_constraintBottom_toTopOf="@+id/friend_bio"
-                app:layout_constraintEnd_toStartOf="@+id/friend_phone"
-                app:layout_constraintHorizontal_bias="0.509"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/friend_phone"
-                app:layout_constraintVertical_bias="0.514"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:contentDescription="Phone Icon"
                 app:srcCompat="@drawable/phone" />
+
+            <TextView
+                android:id="@+id/friend_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="3dp"
+                android:textSize="20dp"
+                android:inputType="phone"
+                android:text=""/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp" >
 
             <ImageView
                 android:id="@+id/friend_bio_icon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                app:layout_constraintBottom_toBottomOf="@+id/friend_bio"
-                app:layout_constraintEnd_toStartOf="@+id/friend_bio"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/friend_bio"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:contentDescription="Bio Icon"
                 app:srcCompat="@drawable/bio" />
 
-        <ImageView
-            android:id="@+id/most_recent_mood"
-            android:layout_width="53dp"
-            android:layout_height="61dp"
-            android:layout_marginStart="112dp"
-            android:layout_marginLeft="112dp"
-            android:layout_marginTop="120dp"
-            app:layout_constraintBottom_toBottomOf="@+id/friend_dp"
-            app:layout_constraintStart_toStartOf="@+id/friend_dp"
-            app:layout_constraintTop_toTopOf="@+id/friend_dp"
-            app:layout_constraintVertical_bias="0.387" />
+            <TextView
+                android:id="@+id/friend_bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="3dp"
+                android:ems="10"
+                android:gravity="start|top"
+                android:textSize="20dp"
+                android:text=""/>
 
+        </LinearLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout></ScrollView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp">
+
+            <Button
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:enabled="true"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/button_text_size"
+                android:text="Close"
+                tools:text="Close" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout></ScrollView>
