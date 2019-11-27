@@ -195,10 +195,10 @@ public class MainActivity extends AppCompatActivity  {
                 fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
                 break;
-            case R.id.nav_chat:
+            /*case R.id.nav_chat:
                 fragmentClass = ChatFragment.class;
                 toolbar.setTitle("Chat");
-                break;
+                break;*/
             case R.id.nav_myFriends:
                 fragmentClass = MyFriendsFragment.class;
                 toolbar.setTitle("My Friends");
@@ -256,15 +256,3 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 }
-//    OnCompleteListener<AuthResult> completeListener = new OnCompleteListener<AuthResult>() {
-//        @Override
-//        public void onComplete(@NonNull Task<AuthResult> task) {
-//            if (task.isSuccessful()) {
-//                boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
-////                    Log.d("MyTAG", "onComplete: " + (isNew ? "new user" : "old user"));
-//                Toast.makeText(getApplicationContext(),
-//                        "new user",
-//                        Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    };
