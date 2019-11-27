@@ -36,8 +36,6 @@ public class MyMoodMapFragmentTest {
     @Rule
     public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class,
             true, true);
-    @Rule
-    public ActivityTestRule<MainActivity> rule2 = new ActivityTestRule<>(MainActivity.class, true, true);
 
     @Before
     public void setUp() throws Exception {
@@ -45,6 +43,9 @@ public class MyMoodMapFragmentTest {
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
+            for (int i = 0; i < 4; i++){
+                solo.sendKey(Solo.DOWN);
+            }
             solo.clickOnText("Logout");
             solo.sleep(3000);
         }
@@ -55,8 +56,8 @@ public class MyMoodMapFragmentTest {
     }
 
     public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "hello@hello.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "password");
+        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
+        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
         solo.clickOnButton("login");
     }
 
