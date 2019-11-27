@@ -232,7 +232,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
      * clear list and map before getting items
      */
     @Override
-    public void beforeGettingCollection() {
+    public void beforeGettingList() {
         moodDataList.clear();
         moodMap.clear();
     }
@@ -255,7 +255,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
      * draws markers after getting whole list
      */
     @Override
-    public void afterGettingCollection() {
+    public void afterGettingList() {
         drawMoodMarkers(moodDataList, moodMap);
     }
 }

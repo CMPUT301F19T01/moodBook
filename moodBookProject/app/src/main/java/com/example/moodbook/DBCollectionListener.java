@@ -8,7 +8,7 @@ public interface DBCollectionListener {
      * This defines task to be done before getting all the items
      * e.g. clearing list in PageFragment
      */
-    void beforeGettingCollection();
+    void beforeGettingList();
 
     /**
      * This defines task to be done when getting an item
@@ -21,5 +21,5 @@ public interface DBCollectionListener {
      * This defines task to be done after getting all the items
      * i.e. notify PageFragment all the items are saved into the list
      */
-    void afterGettingCollection();
+    void afterGettingList();
 }

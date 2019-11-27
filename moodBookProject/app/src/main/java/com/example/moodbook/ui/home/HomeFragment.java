@@ -175,7 +175,7 @@ public class HomeFragment extends PageFragment
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction, final int position) {
         AlertDialog.Builder alert = new AlertDialog.Builder(
                 getActivity());
-        alert.setMessage("Are you sure you want to delete this Mood ?");
+        alert.setMessage("Are you sure you want to delete this Mood?");
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
             @Override
@@ -188,7 +188,7 @@ public class HomeFragment extends PageFragment
 
                     // remove the item from recycler view
                     //moodListAdapter.removeItem(deletedIndex);
-                    moodDB.removeMood(deletedMood.getDocId());
+                    removeMoodFromDB(deletedMood, position);
 
                     // showing snack bar with Undo option
                     Snackbar snackbar = Snackbar
@@ -326,5 +326,15 @@ public class HomeFragment extends PageFragment
         intent.putExtra("location_lat", location==null ? null : location.getLatitudeText());
         intent.putExtra("location_lon", location==null ? null : location.getLongitudeText());
         intent.putExtra("location_address", location == null ? null : location.getAddress());
+    }
+
+    private void removeMoodFromDB(Mood deletedMood, int position) {
+        if(position == 0 && moodListAdapter.getItemCount() > 1) {
+            Mood newRecentMood = moodListAdapter.getItem(1);
+            moodDB.removeMood(deletedMood.getDocId(),newRecentMood.getDocId());
+        }
+        else {
+            moodDB.removeMood(deletedMood.getDocId());
+        }
     }
 }

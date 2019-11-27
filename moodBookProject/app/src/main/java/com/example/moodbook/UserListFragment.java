@@ -111,7 +111,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
     }
 
     @Override
-    public void beforeGettingCollection() {
+    public void beforeGettingList() {
         userListAdapter.clear();
     }
 
@@ -124,7 +124,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
 
     @Deprecated
     @Override
-    public void afterGettingCollection() {
+    public void afterGettingList() {
         // Do nothing
     }
 

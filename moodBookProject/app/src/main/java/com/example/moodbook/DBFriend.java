@@ -179,7 +179,7 @@ public class DBFriend {
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                listListener.beforeGettingCollection();
+                listListener.beforeGettingList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;
@@ -192,7 +192,7 @@ public class DBFriend {
                         listListener.onGettingItem(user);
                     }
                 }
-                listListener.afterGettingCollection();
+                listListener.afterGettingList();
             }
         };
     }
@@ -208,7 +208,7 @@ public class DBFriend {
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
                 /*// clear the old list
                 friendMoodListAdapter.clear();*/
-                listListener.beforeGettingCollection();
+                listListener.beforeGettingList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (doc.getId().equals("null")) continue;
