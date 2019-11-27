@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.moodbook.DBListListener;
 import com.example.moodbook.DBMoodSetter;
@@ -294,6 +295,10 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
 
     @Override
     public void afterGettingList() {
-        drawMoodMarkers(moodDataList, moodMap);
+        if (MyMoodMapFragment.this.isVisible()){
+            drawMoodMarkers(moodDataList, moodMap);
+            Toast.makeText(getContext(), moodDataList.size(), Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

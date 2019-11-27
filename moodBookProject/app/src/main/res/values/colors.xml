@@ -5,10 +5,10 @@
     <color name="colorAccent">#871C9C</color>
     <color name="lightpurple">#BBABEF</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="sadBlue">#ACE1F3</color>
-    <color name="happyYellow">#EBDD06</color>
-    <color name="angryRed">#F68A90</color>
-    <color name="afraidBrown">#E1C494</color>
-    <drawable name="highlighter">#08F90E</drawable>
+    <color name="sadBlue">#E2F1FF</color>
+    <color name="happyYellow">#FFF9D9</color>
+    <color name="angryRed">#FFE4E0</color>
+    <color name="afraidBrown">#E4FFD7</color>
+    <drawable name="highlighter">#AFFFB2</drawable>
     <color name="transparent">#00FFFFFF</color>
 </resources>

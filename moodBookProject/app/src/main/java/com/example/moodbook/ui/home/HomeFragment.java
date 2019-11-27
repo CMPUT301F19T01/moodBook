@@ -297,7 +297,7 @@ public class HomeFragment extends PageFragment
      * @param itemClickListener - click listener that defines what happens when adapter item is clicked
      */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
-        moodListAdapter = new MoodListAdapter(getContext(), new ArrayList<Mood>(), itemClickListener);
+        moodListAdapter = new MoodListAdapter(getContext(), itemClickListener);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         moodListView.setLayoutManager(mLayoutManager);
         moodListView.setItemAnimator(new DefaultItemAnimator());
