@@ -36,6 +36,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
@@ -292,8 +293,12 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
         }
     }
 
+    // https://stackoverflow.com/questions/28672883/java-lang-illegalstateexception-fragment-not-attached-to-activity Miroslav Michalec  used to check fragment visibility
     @Override
     public void afterGettingList() {
-        drawMoodMarkers(moodDataList, moodMap);
+        if (isAdded() && mapView.getVisibility() == View.VISIBLE) {
+            drawMoodMarkers(moodDataList, moodMap);
+        }
     }
+
 }
