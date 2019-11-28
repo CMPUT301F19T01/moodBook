@@ -24,12 +24,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-/**
- * todo: write tests for
- *  * markers with expected location data
- *  * markers with no location data
- *  * delete location
- */
+
 public class MyMoodMapFragmentTest {
     private Solo solo;
 

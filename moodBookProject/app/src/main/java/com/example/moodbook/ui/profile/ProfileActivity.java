@@ -194,8 +194,7 @@ public class ProfileActivity extends AppCompatActivity
         }else if (bitImage != null) {
             bitImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
             byte[] data = byteArrayOutputStream.toByteArray();
-
-           fireRef.putBytes(data);
+            fireRef.putBytes(data);
         }
     }
 
