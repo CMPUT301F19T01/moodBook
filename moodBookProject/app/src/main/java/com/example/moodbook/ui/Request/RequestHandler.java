@@ -2,8 +2,6 @@ package com.example.moodbook.ui.Request;
 
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -141,6 +139,31 @@ public class RequestHandler {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         showStatusMessage("Adding failed for " + username + ": " + e.toString());
+                    }
+                });
+    }
+
+    /**
+     * This method follow back user's friend
+     * @param acceptFriend
+     * @param myUsername
+     */
+    public void followBack(final String myUsername, final MoodbookUser acceptFriend ) {
+        final String username = myUsername;
+        final CollectionReference friendsReference = this.userReference.document(uid).collection("FRIENDS");
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("uid", uid);
+        friendsReference.document(acceptFriend.getUsername()).set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showStatusMessage("Added successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showStatusMessage("Adding failed");
                     }
                 });
     }

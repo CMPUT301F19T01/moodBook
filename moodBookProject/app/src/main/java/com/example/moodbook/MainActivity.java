@@ -6,17 +6,14 @@ package com.example.moodbook;
 
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -27,7 +24,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.bumptech.glide.Glide;
 import com.example.moodbook.ui.Request.RequestFragment;
 import com.example.moodbook.ui.followers.MyFollowersFragment;
 import com.example.moodbook.ui.friendMood.FriendMoodFragment;
@@ -38,14 +34,10 @@ import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
 import com.example.moodbook.ui.profile.ProfileActivity;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 
 //https://guides.codepath.com/android/fragment-navigation-drawer  - used for linking navigation
@@ -59,9 +51,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private FirebaseAuth mAuth;
-    private NavigationView navigationView;
-    private DrawerLayout drawer;
-    private ActionBarDrawerToggle actionBarDrawerToggle;
     private Toolbar toolbar;
     private FirebaseFirestore db;
     private static String name;
@@ -91,9 +80,6 @@ public class MainActivity extends AppCompatActivity  {
                 name = user.getDisplayName();
             }
             email = user.getEmail();
-            boolean emailVerified = user.isEmailVerified();
-
-            String uid = user.getUid();
         }
 
 
@@ -174,30 +160,37 @@ public class MainActivity extends AppCompatActivity  {
                 fragmentClass = FriendMoodFragment.class;
                 toolbar.setTitle("Friend Moods");
                 break;
+
             case R.id.nav_Followers:
                 fragmentClass = MyFollowersFragment.class;
                 toolbar.setTitle("My Followers");
                 break;
+
             case R.id.nav_myMoodMap:
                 fragmentClass = MyMoodMapFragment.class;
                 toolbar.setTitle("Mood History Map");
                 break;
+
             case R.id.nav_myFriendMoodMap:
                 fragmentClass = MyFriendMoodMapFragment.class;
                 toolbar.setTitle("Friend History Map");
                 break;
+
             case R.id.nav_myFriends:
                 fragmentClass = MyFriendsFragment.class;
                 toolbar.setTitle("My Friends");
                 break;
+
             case R.id.nav_request:
                 fragmentClass = RequestFragment.class;
                 toolbar.setTitle("Add Friends");
                 break;
+
             case R.id.nav_myRequests:
                 fragmentClass = myRequestsFragment.class;
                 toolbar.setTitle("Friend Requests");
                 break;
+
             case R.id.nav_profile:
                 fragmentClass =null;
                 Intent intent = new Intent(this, ProfileActivity.class);
@@ -205,14 +198,13 @@ public class MainActivity extends AppCompatActivity  {
                 intent.putExtra("email",email);
                 startActivity(intent);
                 Log.d("Activity:" , "My profile");
-                /*Toast.makeText(getApplicationContext(),
-                        "Clicked Profile Page " ,
-                        Toast.LENGTH_LONG).show();*/
                 break;
+
             case R.id.nav_logout:
                 fragmentClass = null;
                 logout();
                 break;
+
             default:
                 fragmentClass = HomeFragment.class;
                 toolbar.setTitle("Mood History");
@@ -239,15 +231,6 @@ public class MainActivity extends AppCompatActivity  {
         mAuth.getInstance().signOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
-    }
-
-    /**
-     * This method returns the current users username
-     * @return
-     *  Returns a String, name
-     */
-    public static String getUsername(){
-        return name;
     }
 
 }
