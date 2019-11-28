@@ -2,6 +2,7 @@ package com.example.moodbook.ui.friendMood;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
 
         // Set up listView and adapter
         friendMoodListView = root.findViewById(R.id.friend_mood_listView);
-        hiddenMssg = (TextView) root.findViewById(R.id.empty2);
+        hiddenMssg = (TextView) root.findViewById(R.id.empty_friend_mood);
 
         setupAdapter(new AdapterView.OnItemClickListener() {
             // View the selected friendMood: when a mood item is clicked, start view activity
@@ -72,6 +73,13 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
         mAuth = FirebaseAuth.getInstance();
         friendMoodDB = new DBFriend(mAuth, getContext(), TAG);
         friendMoodDB.setFriendRecentMoodListener(this);
+      //  friendMoodListAdapter.get
+        if (friendMoodListView.getCount() == 0) {
+            hiddenMssg.setVisibility(View.VISIBLE);
+        }
+        else{
+            hiddenMssg.setVisibility(View.INVISIBLE);
+        }
 
         return root;
     }
@@ -79,7 +87,6 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
 
     @Override
     public void beforeGettingList() {
-        hiddenMssg.setVisibility(View.INVISIBLE);
         friendMoodListAdapter.clear();
     }
 
@@ -90,11 +97,10 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
         }
     }
 
+    @Deprecated
     @Override
     public void afterGettingList() {
-        if (friendMoodListAdapter.getCount() == 0) {
-            hiddenMssg.setVisibility(View.VISIBLE);
-        }
+    //
     }
 
 

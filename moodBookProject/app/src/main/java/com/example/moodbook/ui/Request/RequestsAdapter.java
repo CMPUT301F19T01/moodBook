@@ -3,6 +3,7 @@ package com.example.moodbook.ui.Request;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,15 +29,6 @@ public class RequestsAdapter extends BaseAdapter {
         super();
         this.context = context;
         this.requestList = requestList;
-    }
-
-    public int getCount() {
-        int size = 0;
-        if (requestList!=null){
-            // return the number of records
-            size = requestList.size();
-        }
-        return size;
     }
 
     // getView method is called for each item of ListView
@@ -93,6 +85,7 @@ public class RequestsAdapter extends BaseAdapter {
         return view;
     }
 
+
     public MoodbookUser getItem(int position) {
         return requestList.get(position);
     }
@@ -100,6 +93,16 @@ public class RequestsAdapter extends BaseAdapter {
     //not used
     public long getItemId(int position) {
         return position;
+    }
+
+    @Override
+    public int getCount() {
+        int size = 0;
+        if (requestList!=null){
+            // return the number of records
+            size = requestList.size();
+        }
+        return size;
     }
 
     // Remove all name items
