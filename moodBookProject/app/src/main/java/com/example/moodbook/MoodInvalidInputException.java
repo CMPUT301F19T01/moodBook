@@ -19,8 +19,4 @@ public class MoodInvalidInputException extends Exception {
         this.input_type = input_type;
     }
 
-    @Deprecated
-    public String getInputType() {
-        return this.input_type;
-    }
 }

@@ -58,7 +58,7 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // get the selected friendMood
                 FriendMood selectedFriendMood = (FriendMood)adapterView.getItemAtPosition(i);
-                Toast.makeText(getContext(), "Clicked " + selectedFriendMood.toString(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "Clicked " + selectedFriendMood.toString(), Toast.LENGTH_LONG).show();
                 Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
                 // put attributes of selected mood into editIntent
                 getIntentDataFromMood(viewIntent, selectedFriendMood.getMood());
@@ -73,7 +73,7 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
         mAuth = FirebaseAuth.getInstance();
         friendMoodDB = new DBFriend(mAuth, getContext(), TAG);
         friendMoodDB.setFriendRecentMoodListener(this);
-      //  friendMoodListAdapter.get
+
         if (friendMoodListView.getCount() == 0) {
             hiddenMssg.setVisibility(View.VISIBLE);
         }

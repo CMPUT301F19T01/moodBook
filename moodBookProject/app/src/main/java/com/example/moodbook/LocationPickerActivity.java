@@ -35,7 +35,6 @@ import java.util.Locale;
  * Activity to allow user to set their mood location manually used by the CreateMoodActivity
  */
 public class LocationPickerActivity extends FragmentActivity implements OnMapReadyCallback {
-    // for intent passing
     public static final int REQUEST_EDIT_LOCATION = 1;
     public static final int EDIT_LOCATION_OK = 1;
 
@@ -50,6 +49,7 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
      * This method was inherited from FragmentActivity.
      * Used to set map fragment and button click listeners
      * @param savedInstanceState
+     *  This a Bundle that passes the saved instance state of the application
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,8 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
-     * @param googleMap non-null instance of google map object
+     * @param googleMap
+     *  This is a non-null instance of google map object
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -163,7 +164,7 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
                 if(locationAddress == null){
                     locationAddress = String.format("%.5f", latLng.latitude) + " " + String.format("%.5f", latLng.longitude);
                 }
-                Toast.makeText(getApplicationContext(), locationAddress, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), locationAddress, Toast.LENGTH_SHORT).show();
 
 
             }
@@ -171,10 +172,13 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
     }
 
     /**
-     * helper method to get address from coordinates
-     * @param lat double latitude coordinate value
-     * @param lon double latitude coordinate value
-     * @return string representing address information
+     * This is a helper method to get address from coordinates
+     * @param lat
+     *  This is a double latitude coordinate value
+     * @param lon
+     *   This is a double latitude coordinate value
+     * @return
+     *  Returns string representing address information
      */
     private String convertToAddress(double lat, double lon){
         // create geocoder object

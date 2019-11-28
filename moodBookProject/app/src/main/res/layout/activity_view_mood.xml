@@ -19,14 +19,22 @@
             android:id="@+id/view_friend_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:text="Friend_name"
             android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:textSize="25dp"
             android:gravity="center"
             android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/view_date_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:text="Date_time"
+            android:textSize="20dp" />
 
 
 
@@ -197,11 +205,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxHeight="100dp"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="20dp"
             android:adjustViewBounds="true"
             android:layout_centerInParent="true"
             tools:srcCompat="@tools:sample/avatars" />
-
 
 
         <RelativeLayout

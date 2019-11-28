@@ -20,8 +20,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MyFollowersFragment extends UserListFragment {
 
-    private UserListFragment followersListAdapter;
-    private ListView followersListView;
     private static final String TAG = MyFollowersFragment.class.getSimpleName();
 
     public View onCreateView(@NonNull LayoutInflater inflater,

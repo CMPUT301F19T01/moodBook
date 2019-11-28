@@ -292,15 +292,12 @@ public class Mood implements Comparable<Mood> {
      */
     public static Date parseMoodDate(String date_text) throws MoodInvalidInputException {
         Date date;
-        // Error: empty
         if (date_text == null) {
             throw new MoodInvalidInputException("date","cannot be empty");
         }
-        // Valid argument
         try {
             date = DATE_FORMATTER.parse(date_text);
         }
-        // Error: invalid date format
         catch (ParseException e) {
             throw new MoodInvalidInputException("date","must be yyyy-hh-dd format");
         }
@@ -317,15 +314,12 @@ public class Mood implements Comparable<Mood> {
      */
     public static Date parseMoodTime(String time_text) throws MoodInvalidInputException {
         Date time = null;
-        // Error: empty
         if (time_text == null) {
             throw new MoodInvalidInputException("time","cannot be empty");
         }
-        // Valid argument
         try {
             time = TIME_FORMATTER.parse(time_text);
         }
-        // Error: invalid time format
         catch (ParseException e) {
             throw new MoodInvalidInputException("time","must be hh:mm format");
         }
@@ -339,12 +333,10 @@ public class Mood implements Comparable<Mood> {
      * @throws MoodInvalidInputException
      */
     public static void parseMoodEmotion(String emotion_text) throws MoodInvalidInputException {
-        // Error: empty
         if (emotion_text == null) {
             throw new MoodInvalidInputException("emotion","must be selected");
         }
         emotion_text = emotion_text.toLowerCase();
-        // Error: no option is selected
         if (!Emotion.hasName(emotion_text)) {
             throw new MoodInvalidInputException("emotion","must be selected");
         }
@@ -357,14 +349,11 @@ public class Mood implements Comparable<Mood> {
      * @throws MoodInvalidInputException
      */
     public static void parseMoodReasonText(String reason_text) throws MoodInvalidInputException {
-        // Check if text is longer than 20 characters or 3 words
         if (reason_text != null) {
-            // Error: > 20 characters
             if (reason_text.length() > 20) {
                 throw new MoodInvalidInputException("reason_text","cannot be longer than 20 characters");
             } else {
                 String[] reason_text_words = reason_text.trim().split(" ");
-                // Error: > 3 words
                 if (reason_text_words.length > 3) {
                     throw new MoodInvalidInputException("reason_text","cannot have more than 3 words");
                 }
@@ -395,7 +384,6 @@ public class Mood implements Comparable<Mood> {
                     R.drawable.happy, R.drawable.sad, R.drawable.angry, R.drawable.afraid};
             color_resource_id = new int[]{
                     R.color.happyYellow, R.color.sadBlue, R.color.angryRed, R.color.afraidBrown};
-            // map emotion name to index
             name_index = new HashMap<>();
             for (int i = 0; i < names.length; i++) {
                 name_index.put(names[i], i);

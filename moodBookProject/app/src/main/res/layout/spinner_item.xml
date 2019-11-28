@@ -20,7 +20,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp"
             android:contentDescription="@string/todo"
-            android:src="@drawable/ic_menu_gallery" />
+            app:srcCompat="@drawable/ic_menu_gallery" />
 
         <TextView
             android:id="@+id/mood_text"
