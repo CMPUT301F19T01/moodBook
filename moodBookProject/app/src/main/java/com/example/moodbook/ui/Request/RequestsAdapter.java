@@ -24,7 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 /**
- * This class handles the display of requests that the user has recieved
+ * This class handles the display of requests that the user has received
  */
 public class RequestsAdapter extends BaseAdapter {
     private FirebaseFirestore db;
@@ -37,11 +37,16 @@ public class RequestsAdapter extends BaseAdapter {
         this.requestList = requestList;
     }
 
-    public RequestsAdapter(Context context) {
-        this(context, new ArrayList<MoodbookUser>());
-    }
-
-    // getView method is called for each item of ListView
+    /**
+     * This method is called for each item of ListView
+     * @param position
+     * This is the position in the list
+     * @param view
+     * This is the view
+     * @param parent
+     * This is the parent of ViewGroup
+     * @return view
+     */
     @SuppressLint("ViewHolder")
     public View getView(final int position, View view, ViewGroup parent) {
 
@@ -109,18 +114,26 @@ public class RequestsAdapter extends BaseAdapter {
     /**
      * This method returns a MoodbookUser based on their position in the adapter
      * @param position
-     * @return
+     * This is the position of the user in the list
+     * @return MoodbookUser
      */
     public MoodbookUser getItem(int position) {
         return requestList.get(position);
     }
 
-    //not used
+    @Deprecated
+    /**
+     * Inherited from the BaseAdapter class.
+     * Not used for this app.
+     */
     public long getItemId(int position) {
         return position;
     }
 
     @Override
+    /**
+     * This is method is used to count all the items in the listView.
+     */
     public int getCount() {
         int size = 0;
         if (requestList!=null){
@@ -131,7 +144,7 @@ public class RequestsAdapter extends BaseAdapter {
     }
 
     /**
-     * This method clears the adapter
+     * This method is used to clear the adapter.
      */
     public void clear() {
         if (requestList!= null){
@@ -143,7 +156,7 @@ public class RequestsAdapter extends BaseAdapter {
     }
 
     /**
-     * Thus nethod adds a user into the adapter
+     * Thus method is used to add a user into the adapter.
      * @param item
      */
     public void addItem(MoodbookUser item) {
