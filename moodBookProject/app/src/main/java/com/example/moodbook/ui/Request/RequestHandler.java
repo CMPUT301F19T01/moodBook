@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.MoodbookUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -35,6 +36,7 @@ public class RequestHandler {
     private FirebaseFirestore db;
     private String TAG;
     private Context context;
+    private DBCollectionListener listListener;
 
 
     public RequestHandler(FirebaseAuth mAuth, Context context, String TAG){
@@ -53,6 +55,12 @@ public class RequestHandler {
     public void setRequestListListener(@NonNull RequestsAdapter requestsAdapter) {
         this.userReference.document(uid).collection("REQUESTS")
                 .addSnapshotListener(getRequestListener(requestsAdapter));
+    }
+
+    public void setRequestListListener(@NonNull DBCollectionListener listListener) {
+        this.listListener = listListener;
+        this.userReference.document(uid).collection("REQUESTS")
+                .addSnapshotListener(getRequestListener());
     }
 
     /**
@@ -107,6 +115,25 @@ public class RequestHandler {
                         }
                     }
                 }
+            }
+        };
+    }
+    private EventListener<QuerySnapshot> getRequestListener() {
+        return new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
+                listListener.beforeGettingList();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    // ignore null item
+                    if (!doc.getId().equals("null")) {
+                        // Adding requestuser from FireStore
+                        if(doc.getData() != null && doc.getData().get("uid") != null) {
+                            MoodbookUser user = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
+                            listListener.onGettingItem(user);
+                        }
+                    }
+                }
+                listListener.afterGettingList();
             }
         };
     }

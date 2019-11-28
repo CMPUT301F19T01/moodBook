@@ -222,6 +222,7 @@ public class DBFriend {
                         getRecentMoodID(friendUser);
                     }
                 }
+                listListener.afterGettingList();
             }
         };
     }

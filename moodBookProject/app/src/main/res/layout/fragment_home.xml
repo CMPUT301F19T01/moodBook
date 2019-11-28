@@ -7,7 +7,7 @@
     android:background="@color/colorWhite"
     android:clickable="true">
     <TextView
-        android:id="@+id/empty"
+        android:id="@+id/mood_history_empty_msg"
         android:text="Feeling anything? Add a mood!"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
