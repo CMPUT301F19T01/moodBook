@@ -17,7 +17,7 @@ import com.example.moodbook.ui.home.HomeFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * This activity is used to  enable a user to be to view detials for a specific mood
+ * This Activity is used to  enable a user to be to view details for a specific mood
  */
 public class ViewMoodActivity extends AppCompatActivity {
     private TextView view_friend_name, view_date_time, view_emotion,
@@ -69,6 +69,7 @@ public class ViewMoodActivity extends AppCompatActivity {
 
         final String intent_emotion =getIntent().getStringExtra("emotion");
         view_emotion.setText(intent_emotion);
+
         //Set emoji
         if(Mood.Emotion.hasName(intent_emotion)) {
             view_emoji.setImageResource(Mood.Emotion.getImageResourceId(intent_emotion));
@@ -99,6 +100,7 @@ public class ViewMoodActivity extends AppCompatActivity {
             });
             view_friend_name.setVisibility(View.GONE);
         }
+
         // for FriendMood: disable view_edit_button button, show friend_name field
         else {
             view_edit_button.setVisibility(View.GONE);
