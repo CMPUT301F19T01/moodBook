@@ -52,6 +52,7 @@ import com.google.firebase.storage.StorageReference;
 
 /**
  * The Main Activity is set to HomeFragment as default, which in turn lists the Mood History list
+ * @see <a href = "https://guides.codepath.com/android/fragment-navigation-drawer" ></a>
  */
 
 public class MainActivity extends AppCompatActivity  {
@@ -68,8 +69,9 @@ public class MainActivity extends AppCompatActivity  {
     private  ImageView profile;
 
     /**
-     *
+     * onCreate method inherited from AppCompat Activity
      * @param savedInstanceState
+     *  This a Bundle that passes the saved instance state of the application
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,21 +133,21 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     /**
-     *
+     * This method adds items to the action bar if it is present.
      * @param menu
      * @return
+     *  Returns a boolean true
      */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     /**
-     *
+     * This overridden method is called whenever the user chooses to navigate up within the applications activity
      * @return
      */
     @Override
@@ -156,14 +158,13 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
-    /**
-     * This method is for switching between different intent activities
-
 
     /**
      * This method creates a new fragment based on the menu option selected
      * @param menuItem
+     *  The menuItems
      * @param drawer
+     *  A drawerlayout
      */
     public void selectDrawerItem(MenuItem menuItem, DrawerLayout drawer){
         Fragment fragment;
@@ -232,7 +233,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     /**
-     *
+     * This method logs the current user out
      */
     private void logout(){
         mAuth.getInstance().signOut();
@@ -241,8 +242,9 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     /**
-     *
+     * This method returns the current users username
      * @return
+     *  Returns a String, name
      */
     public static String getUsername(){
         return name;
