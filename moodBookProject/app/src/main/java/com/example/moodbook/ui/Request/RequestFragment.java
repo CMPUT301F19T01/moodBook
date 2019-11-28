@@ -106,6 +106,5 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
 
     @Override
     public void afterGettingList(){
-       //
     }
 }

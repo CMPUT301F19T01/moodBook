@@ -1,7 +1,11 @@
 package com.example.moodbook;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +17,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.annotation.GlideModule;
+import com.bumptech.glide.module.AppGlideModule;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -52,18 +66,25 @@ public class UserListAdapter extends ArrayAdapter {
         usernameText.setText(user.getUsername());
 
         // show profile picture
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        storageReference.child("profilepics/" + user.getUsername() + ".jpeg" ).getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(getContext()/* context */)
-                        .load(uri)
-                        .centerCrop()
-                        .into(userdp);
-            }
-        }) ;
 
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("profilepics/" + user.getUsername() + ".jpeg" );
+        try{
+            final File localFile = File.createTempFile("Images", "jpeg");
+            storageReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap obtainedImg = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    userdp.setImageBitmap(obtainedImg);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return view;
     }
 
