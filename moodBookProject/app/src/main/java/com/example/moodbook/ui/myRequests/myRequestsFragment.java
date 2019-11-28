@@ -49,16 +49,10 @@ public class myRequestsFragment extends PageFragment {
         mAuth = FirebaseAuth.getInstance();
         requestsAdapter=  new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
         requestDB = new RequestHandler(mAuth, getContext(), TAG);
-        requestDB.setRequestListListener(requestsAdapter);
+        requestDB.setRequestListListener(requestsAdapter, hiddenMssg);
         requestListView.setAdapter(requestsAdapter);
         int count = requestsAdapter.getCount();
         Log.i("testing", Integer.toString(count));
-
-        if (requestsAdapter.getCount() ==0) {
-            hiddenMssg.setVisibility(View.VISIBLE);
-        }else{
-            hiddenMssg.setVisibility(View.INVISIBLE);
-        }
 
         return root;
     }
