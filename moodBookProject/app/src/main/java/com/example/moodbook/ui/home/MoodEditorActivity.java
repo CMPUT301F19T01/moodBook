@@ -271,7 +271,7 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
     protected abstract void setupSaveButton();
 
     /**
-     * This method is for canceling going back to previous activity, without saving any changes. 
+     * This method is for canceling going back to previous activity, without saving any changes.
      */
     protected void setupCancelButton() {
         // When cancel button is pressed, return to main activity; do nothing
