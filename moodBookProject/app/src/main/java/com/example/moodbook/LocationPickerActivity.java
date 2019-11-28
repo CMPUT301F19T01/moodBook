@@ -35,7 +35,6 @@ import java.util.Locale;
  * Activity to allow user to set their mood location manually used by the CreateMoodActivity
  */
 public class LocationPickerActivity extends FragmentActivity implements OnMapReadyCallback {
-    // for intent passing
     public static final int REQUEST_EDIT_LOCATION = 1;
     public static final int EDIT_LOCATION_OK = 1;
 
