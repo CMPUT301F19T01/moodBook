@@ -73,7 +73,8 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(FriendProfileViewActivity.this, MainActivity.class));
+                finish();
+                //startActivity(new Intent(FriendProfileViewActivity.this, MainActivity.class));
 
             }
         });
