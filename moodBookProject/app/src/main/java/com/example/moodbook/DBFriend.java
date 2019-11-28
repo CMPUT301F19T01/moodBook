@@ -22,7 +22,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 /**
- * Used by Friend related pages: MyFriends, FriendMood, FriendMoodMap
+ * Used by Friend related pages: MyFriends, MyFollowers, FriendMood, FriendMoodMap, SendRequest
  */
 public class DBFriend {
     private FirebaseAuth mAuth;
@@ -121,19 +121,20 @@ public class DBFriend {
     }
 
     /**
-     * This method is used by MyFriendsFragment to remove a friend that the user follows
+     * This method is used by MyFriendsFragment to remove a friend that the user follows as well as
+     * to remove the user from the friend's follower list
      * @param user
      *  The user who wants to remove a friend
      * @param friend
      *  The friend to be removed
-     *
      */
     public void removeFriend(final MoodbookUser user, final MoodbookUser friend) {
         removeFriend(user, friend, true);
     }
 
     /**
-     * This method is used by MyFollowersFragment to remove a follower who was previously accepted by the user
+     * This method is used by MyFollowersFragment to remove a follower as well as
+     * to remove the user from the follower's friend list
      * @param user
      *  The user who wants to remove a friend
      * @param follower
@@ -144,16 +145,18 @@ public class DBFriend {
     }
 
     /**
-     *This method goes to user's friend list of a user and removes the friend's username if the boolean toRemoveFollower is true
+     * This method goes to the friend list of a user and removes the friend's username,
+     * and the user can also be removed from the friend's follower list when removeFriend is
+     * called for the first time (to prevent recursion)
      * @param user
      *  The user who wants to remove a friend
      * @param friend
      *  The friend who might be removed
-     * @param toRemoveFriend
-     *  The boolean that determines if a friend is removed or not
+     * @param toRemoveUserFromFollowerList
+     *  The boolean that determines if the user is removed as the follower of friend
      */
     private void removeFriend(final MoodbookUser user, final MoodbookUser friend,
-                              final boolean toRemoveFriend){
+                              final boolean toRemoveUserFromFollowerList){
         if (friend == null) return;
 
         // go to user's friend list
@@ -166,7 +169,7 @@ public class DBFriend {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Remove Friend " + friend.getUsername()
                                 + " for " + user.getUsername());
-                        if(toRemoveFriend) {
+                        if(toRemoveUserFromFollowerList) {
                             removeFollower(friend, user, false);
                         }
                     }
@@ -180,16 +183,18 @@ public class DBFriend {
     }
 
     /**
-     *This method goes to user's follower list of a user and removes the follower's username if the boolean toRemoveFollower is true
+     * This method goes to user's follower list of a user and removes the follower's username,
+     * and the user can also be removed from the follower's friend list when removeFollower is
+     * called for the first time (to prevent recursion)
      * @param user
      *  The user who wants to remove a follower
      * @param follower
      *  The follower who might be removed
-     * @param toRemoveFollower
-     *  The boolean that determines if a follower is removed or not
+     * @param toRemoveUserFromFriendList
+     *  The boolean that determines if the user is removed as the friend of follower
      */
     private void removeFollower(final MoodbookUser user, final MoodbookUser follower,
-                               final boolean toRemoveFollower) {
+                               final boolean toRemoveUserFromFriendList) {
         if (follower == null) return;
         final CollectionReference collectionReference = this.userReference.document(user.getUid())
                 .collection("FOLLOWERS");
@@ -199,7 +204,7 @@ public class DBFriend {
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "Remove Follower " + follower.getUsername()
                                 + " for " + user.getUsername());
-                        if(toRemoveFollower) {
+                        if(toRemoveUserFromFriendList) {
                             removeFriend(follower, user, false);
                         }
                     }
@@ -216,7 +221,6 @@ public class DBFriend {
      * This EventListener is for MyFriends & MyFollowers to get all the user's friends/followers
      * (username, uid) in the database from the user's friend/follower collection
      * @return a snapshot of the most updated username and uid in the user's friend/followers collection on firestore
-     *
      */
     private EventListener<QuerySnapshot> getUserEventListener (){
         return new EventListener<QuerySnapshot>() {
