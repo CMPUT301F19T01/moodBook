@@ -168,19 +168,16 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
+            android:layout_height="match_parent">
             <Button
                 android:id="@+id/create_add_button"
                 android:background = "@drawable/roundedbutton"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_centerInParent="true"
                 android:text="ADD"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorWhite"
@@ -193,9 +190,7 @@
                 android:background="#0000"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_toRightOf="@id/create_add_button"
                 android:text="CANCEL"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
@@ -204,10 +199,8 @@
                 android:paddingBottom="20dp"
                 android:textSize="15dp" />
 
-        </LinearLayout>
-
+        </RelativeLayout>
 
     </LinearLayout>
-
 
 </ScrollView>
