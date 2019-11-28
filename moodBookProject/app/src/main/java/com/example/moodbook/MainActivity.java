@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity  {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.currentEmail, R.id.currentEmail,R.id.nav_profile,
                 R.id.nav_myMood,R.id.nav_friendMood,
-                R.id.nav_myRequests, R.id.nav_Followers, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap,
+                R.id.nav_myRequests, R.id.nav_Followers, R.id.nav_myFriends, R.id.nav_myMoodMap, R.id.nav_myFriendMoodMap,
                 R.id.nav_request, R.id.nav_logout)
                 .setDrawerLayout(drawer)
                 .build();

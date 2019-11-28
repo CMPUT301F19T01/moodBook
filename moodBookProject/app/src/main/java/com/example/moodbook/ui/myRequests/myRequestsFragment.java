@@ -1,6 +1,7 @@
 package com.example.moodbook.ui.myRequests;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +12,13 @@ import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.example.moodbook.DBCollectionListener;
+import com.example.moodbook.Mood;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.ui.Request.RequestHandler;
 import com.example.moodbook.ui.Request.RequestsAdapter;
+import com.example.moodbook.ui.friendMood.FriendMood;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 

@@ -2,6 +2,7 @@ package com.example.moodbook.ui.friendMood;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,13 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
         mAuth = FirebaseAuth.getInstance();
         friendMoodDB = new DBFriend(mAuth, getContext(), TAG);
         friendMoodDB.setFriendRecentMoodListener(this);
+      //  friendMoodListAdapter.get
+        if (friendMoodListView.getCount() == 0) {
+            hiddenMssg.setVisibility(View.VISIBLE);
+        }
+        else{
+            hiddenMssg.setVisibility(View.INVISIBLE);
+        }
 
         return root;
     }

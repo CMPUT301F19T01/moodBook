@@ -2,6 +2,8 @@ package com.example.moodbook.ui.Request;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -58,6 +60,11 @@ public class RequestHandler {
                 .addSnapshotListener(getRequestListener());
     }
 
+    public void setRequestListListener(@NonNull RequestsAdapter requestsAdapter, final TextView hiddenMssg) {
+        this.userReference.document(uid).collection("REQUESTS")
+                .addSnapshotListener(getRequestListener(requestsAdapter, hiddenMssg));
+    }
+
     /**
      * This method adds a request to the given user's db document
      * @param addUser -- the username to add
@@ -107,6 +114,7 @@ public class RequestHandler {
                             listListener.onGettingItem(user);
                         }
                     }
+
                 }
                 listListener.afterGettingList();
             }

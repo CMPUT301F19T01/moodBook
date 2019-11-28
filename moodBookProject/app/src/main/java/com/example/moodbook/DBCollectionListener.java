@@ -22,4 +22,5 @@ public interface DBCollectionListener {
      * i.e. notify PageFragment all the items are saved into the list
      */
     void afterGettingList();
+
 }
