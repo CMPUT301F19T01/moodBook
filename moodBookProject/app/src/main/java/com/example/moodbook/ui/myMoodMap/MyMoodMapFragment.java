@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.DBMoodSetter;
@@ -29,25 +28,20 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
 /**
- *  This fragment is used to view a where a users moods take place on a map
+ * This fragment is used to view a where a users moods take place on a map
+ * @see MoodMapFragment
  */
 public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
 
-    ///// Member Variables /////
-    private MapView mapView; // view object
+    private MapView mapView;
     private GoogleMap moodMap; // map object
     private ArrayList<Mood> moodDataList; // list of moods
-    private FirebaseFirestore db; // database
-    private FirebaseAuth mAuth; // auth
-    private String userID; // users id
     private DBMoodSetter dbMoodSetter;
 
     /**
@@ -56,7 +50,6 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     public MyMoodMapFragment() {
         // Required empty public constructor
     }
-
 
     /**
      * Called to have the fragment instantiate its user interface view
@@ -70,31 +63,26 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
      * @param savedInstanceState
      *  If non-null, this fragment is being re-constructed from a
      *  previous saved state as given here.
+     * @return
+     *  Return the View for the fragment's UI, or null.
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_mymoodmap, container, false);
-        //MyMoodMapViewModel = ViewModelProviders.of(this).get(com.example.moodbook.ui.myMoodMap.MyMoodMapViewModel.class);
 
+        // prepare map
         mapView = root.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
-
         mapView.getMapAsync(this);
-
-        mapView.onResume();
-
-        // connect to db
-        db = FirebaseFirestore.getInstance();
 
         // create moodDataList
         moodDataList = new ArrayList<>();
 
+        // get instance of Firebase
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-        // get current user
-        mAuth = FirebaseAuth.getInstance();
-        userID = mAuth.getUid();
-
+        // initialize DBMoodSetter
         dbMoodSetter = new DBMoodSetter(mAuth, getContext());
         dbMoodSetter.setMoodListListener(this);
 
@@ -113,6 +101,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
 
         // setting custom style of map
         try {
+
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
             boolean success = moodMap.setMapStyle(
@@ -126,13 +115,10 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
             Log.e("Resource error", "Can't find style. Error: ", e);
         }
 
-        // update list of markers
-        //updateList(db);
-
-
         // for testing purposes
         mapView.setContentDescription("MAP READY");
 
+        // set functionality for viewing moods
         moodMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -159,7 +145,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-    * You must call this method from the parent Activity/Fragment's corresponding method.
+    * must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onResume() {
@@ -168,7 +154,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-     * You must call this method from the parent Activity/Fragment's corresponding method.
+     * must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onPause() {
@@ -177,7 +163,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-     * You must call this method from the parent Activity/Fragment's corresponding method.
+     * must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onDestroy() {
@@ -186,7 +172,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     }
 
     /**
-     * You must call this method from the parent Activity/Fragment's corresponding method.
+     * must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onLowMemory() {
@@ -199,7 +185,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
      * @param moodDataList
      *  ArrayList of the users Mood objects
      */
-    protected void drawMoodMarkers(ArrayList<Mood> moodDataList, GoogleMap moodMap){
+    private void drawMoodMarkers(ArrayList<Mood> moodDataList, GoogleMap moodMap){
         int emotionResource;
         LatLng moodLatLng;
 

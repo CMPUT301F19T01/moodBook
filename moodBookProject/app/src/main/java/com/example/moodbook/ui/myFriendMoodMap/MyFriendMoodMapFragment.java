@@ -17,12 +17,10 @@ import androidx.annotation.NonNull;
 import com.example.moodbook.DBFriend;
 import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.DBMoodSetter;
-import com.example.moodbook.MoodLocation;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.friendMood.FriendMood;
-import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -34,25 +32,19 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 /**
- *  This fragment is used to view a where a users friends' moods take place on a map
+ * This fragment is used to view a where a users friends' moods take place on a map
+ * @see MoodMapFragment
  */
 public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
-    //private MyFriendMoodMapViewModel MyFriendMoodMapViewModel;
 
-    ///// Member Variables /////
     private MapView mapView;
-    private GoogleMap moodMap;
-    private ArrayList<FriendMood> moodDataList;
-    private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
-    private String userID;
+    private GoogleMap moodMap; // googleMap object
+    private ArrayList<FriendMood> moodDataList; // data list of friend moods
     private DBMoodSetter dbMoodSetter;
-    private DBFriend friendMoodDB;
 
     /**
      * Called to have the fragment instantiate its user interface view
@@ -66,28 +58,33 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      * @param savedInstanceState
      *  If non-null, this fragment is being re-constructed from a
      *  previous saved state as given here.
+     * @return
+     *  Return the View for the fragment's UI, or null.
      */
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate( R.layout.fragment_friendmoodmap, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
 
+        View root = inflater.inflate( R.layout.fragment_friendmoodmap,
+                container, false);
+
+        // prepare map
         mapView = root.findViewById(R.id.friendMapView);
         mapView.onCreate(savedInstanceState);
-
         mapView.getMapAsync(this);
-
-        // connect to db
-        db = FirebaseFirestore.getInstance();
 
         // create moodDataList
         moodDataList = new ArrayList<>();
 
-        // get current user
-        mAuth = FirebaseAuth.getInstance();
-        userID = mAuth.getUid();
-        friendMoodDB = new DBFriend(mAuth, getContext(), MyFriendMoodMapFragment.class.getSimpleName());
+        // gets instance of Firebase
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+        // setup DBFriend
+        DBFriend friendMoodDB = new DBFriend(mAuth, getContext(),
+                MyFriendMoodMapFragment.class.getSimpleName());
         friendMoodDB.setFriendRecentMoodListener(this);
 
+        // initialize dbMoodSetter for use
         dbMoodSetter = new DBMoodSetter(mAuth, getContext());
 
         return root;
@@ -100,13 +97,16 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // initialize map
+        // set map variable
         moodMap = googleMap;
 
         // setting custom style of map
         try {
-            // Customise the styling of the base map using a JSON object defined
-            // in a raw resource file.
+
+            /*
+             * Customise the styling of the base map using a
+             * JSON object defined in a raw resource file.
+             */
             boolean success = moodMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                             getContext(), R.raw.custom_map_json));
@@ -114,25 +114,26 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
             if (!success) {
                 Log.e("Custom Map Parsing", "Style parsing failed.");
             }
+
         } catch (Resources.NotFoundException e) {
             Log.e("Resource error", "Can't find style. Error: ", e);
         }
 
-        // update list of markers
-        //updateList(db);
-
+        // for testing purposes
         mapView.setContentDescription("MAP READY");
 
+        // set functionality of viewing moods from clicking on markers
         moodMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 // get mood from data list with by using tag
                 int pos = (int)marker.getTag();
-                FriendMood mood = moodDataList.get(pos);
+                FriendMood friendMood = moodDataList.get(pos);
 
                 // create dialog popup
                 Dialog dialog = new Dialog(getContext());
 
+                // set window attributes
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
                 lp.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -141,7 +142,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
                 dialog.getWindow().setAttributes(lp);
 
                 // bind mood data to dialog layout
-                bindViews(mood.getMood(), dialog, dbMoodSetter, mood.getUsername()).show();
+                bindViews(friendMood.getMood(), dialog, dbMoodSetter, friendMood.getUsername()).show();
 
                 return false;
             }
@@ -150,7 +151,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     * You must call this method from the parent Activity/Fragment's corresponding method.
+     * must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onResume() {
@@ -159,7 +160,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     }
 
     /**
-     * You must call this method from the parent Activity/Fragment's corresponding method.
+     * must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onPause() {
@@ -167,9 +168,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         mapView.onPause();
     }
 
-
     /**
-     * You must call this method from the parent Activity/Fragment's corresponding method.
+     * must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onDestroy() {
@@ -177,9 +177,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         mapView.onDestroy();
     }
 
-
     /**
-     * You must call this method from the parent Activity/Fragment's corresponding method.
+     * must call this method from the parent Activity/Fragment's corresponding method.
      */
     @Override
     public void onLowMemory() {
@@ -187,9 +186,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         mapView.onLowMemory();
     }
 
-
     /**
-     * draws moods on map
+     * draws a mood on map
      * @param mood
      *  mood object
      * @param i
@@ -197,6 +195,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      */
     private void drawMood(Mood mood, int i ){
         if (mood.getLocation() != null){
+
             // get image resource for the mood marker
             int emotionResource = mood.getEmotionImageResource();
 
@@ -205,20 +204,23 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
             LatLng moodLatLng = new LatLng(moodLocation.getLatitude(), moodLocation.getLongitude());
 
             // use png image resource as marker icon
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) getResources().getDrawable(emotionResource);
+            BitmapDrawable bitmapDrawable
+                    = (BitmapDrawable) getResources().getDrawable(emotionResource);
             Bitmap b = bitmapDrawable.getBitmap();
             Bitmap smallMarker = Bitmap.createScaledBitmap(b, 100, 100, false);
-            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
+            BitmapDescriptor bitmapDescriptor
+                    = BitmapDescriptorFactory.fromBitmap(smallMarker);
 
             // draw on map
-            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor)).setTag(i);
+            moodMap.addMarker(new MarkerOptions().position(moodLatLng)
+                    .icon(bitmapDescriptor)).setTag(i);
 
-            //
-            //moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
+            // zoom in on mood
+            moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
+
         }
 
     }
-
 
     /**
      * clears map and data list before update on friend moods
@@ -229,36 +231,28 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         moodMap.clear();
     }
 
-
     /**
-     * adds FriendMood item into data list
+     * adds FriendMood item into data list and draws marker on map
      * @param item
      *  friend mood
      */
     @Override
     public void onGettingItem(Object item) {
         if(item instanceof FriendMood){
-            FriendMood mood = (FriendMood) item;
-            if (mood.getMood().getLocation() != null){
-                moodDataList.add(mood);
-                drawMood(mood.getMood(), moodDataList.size()-1);
+            FriendMood friendMood = (FriendMood) item;
+            if (friendMood.getMood().getLocation() != null){
+                moodDataList.add(friendMood);
+                drawMood(friendMood.getMood(), moodDataList.size()-1);
             }
         }
     }
 
-
     /**
-     * draws the markers on the map
+     * inherited from DBCollectionListener
      */
     @Override
-    public void afterGettingList() {
-        if (moodDataList.size() > 0){
-            MoodLocation moodLoc = moodDataList.get(moodDataList.size()-1).getMood().getLocation();
-            LatLng moodLatLng = new LatLng(moodLoc.getLatitude(), moodLoc.getLongitude());
-            moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
+    public void afterGettingList() {}
 
-        }
 
-    }
 
 }
