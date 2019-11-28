@@ -1,14 +1,14 @@
 package com.example.moodbook.ui.Request;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +18,6 @@ import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
-import com.example.moodbook.UserListAdapter;
 import com.example.moodbook.data.UsernameList;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,29 +28,32 @@ import java.util.ArrayList;
 /**
  * This fragment is shown to allow the user to send requests to other users
  */
-public class RequestFragment extends PageFragment implements DBCollectionListener {
-    //private RequestViewModel requestViewModel;
+public class RequestFragment extends PageFragment
+        implements DBCollectionListener, UsernameList.UsernameListListener {
 
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore db;
-    private FirebaseUser user;
-
-    private EditText requestText;
+    private AutoCompleteTextView usernameText;
+    private ImageView usernameArrow;
     private Button requestButton;
 
+    private FirebaseUser user;
     private RequestHandler requestHandler;
-    private RequestsAdapter requestsAdapter;
     private UsernameList usernameList;
-    private ArrayList<String> friends;
+    private ArrayAdapter<String> usersAdapter;
+
     private DBFriend friendDB;
+    private ArrayList<String> friends;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         final View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_request);
-        db = FirebaseFirestore.getInstance();
 
-        mAuth = FirebaseAuth.getInstance();
+        usernameText = root.findViewById(R.id.send_request_username_text);
+        usernameArrow = root.findViewById(R.id.send_request_username_arrow);
+        requestButton = root.findViewById(R.id.send_request_button);
+
+        //FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
         friendDB = new DBFriend(mAuth, getContext());
@@ -59,32 +61,25 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
 
         friends = new ArrayList<>();
 
-        usernameList = new UsernameList(FirebaseFirestore.getInstance());
-        usernameList.updateUsernameList();
+        setupUsername();
 
-        requestText = root.findViewById(R.id.usernameEditText);
-        requestButton = root.findViewById(R.id.requestButton);
-
-        requestHandler = new com.example.moodbook.ui.Request.RequestHandler(mAuth, getContext());
-        requestsAdapter = new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
-        requestHandler.setRequestListListener(this);
+        requestHandler = new RequestHandler(mAuth, getContext());
 
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                String addUser = requestText.getText().toString();
+                String addUser = usernameText.getText().toString();
 
                 if(addUser.equals(user.getDisplayName())){ // check if adding self
-                    requestText.setError("Cannot add yourself");
+                    usernameText.setError("Cannot add yourself");
                 } else if (friends.contains(addUser)) { // check if user already added
-                    requestText.setError("User already added");
+                    usernameText.setError("User already added");
                 } else if (usernameList.isUser(addUser)){ // check if username exists in db
                     requestHandler.sendRequest(addUser, user.getUid(), user.getDisplayName());
                     Toast.makeText(root.getContext(), "Sent request",
                             Toast.LENGTH_LONG).show();
                 } else {
-                    requestText.setError("User does not exist");
+                    usernameText.setError("User does not exist");
                 }
             }
         });
@@ -92,19 +87,64 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
         return root;
     }
 
+    /**
+     * This is used by DBFriend to perform task before getting all the friend users
+     */
     @Override
     public void beforeGettingList(){
         friends.clear();
     }
 
+    /**
+     * This is used by DBFriend to perform task when getting a friend user
+     * @param item
+     */
     @Override
     public void onGettingItem(Object item){
         if(item instanceof MoodbookUser) {
-            friends.add((((MoodbookUser) item).getUsername()));
+            friends.add(((MoodbookUser) item).getUsername());
         }
     }
 
+    /**
+     * This is used by DBFriend to perform task after getting all the friend users
+     */
     @Override
     public void afterGettingList(){
+        if(usersAdapter.getCount() > 0) {
+            for(String friendUsername : friends) {
+                usersAdapter.remove(friendUsername);
+            }
+        }
+    }
+
+    /**
+     * This is used by UsernameList to perform task after getting all the usernames
+     */
+    @Override
+    public void afterGettingUsernameList() {
+        usersAdapter.clear();
+        usersAdapter.addAll(usernameList.getUsernameList());
+        usersAdapter.remove(user.getDisplayName());
+        if(friends.size() > 0) {
+            afterGettingList();
+        }
+    }
+
+
+    private void setupUsername() {
+        usernameList = new UsernameList(FirebaseFirestore.getInstance());
+        usernameList.setUsernameListListener(this);
+
+        usersAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_dropdown_item_1line);
+        usernameText.setAdapter(usersAdapter);
+
+        usernameArrow.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                usernameText.showDropDown();
+            }
+        });
     }
 }

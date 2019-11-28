@@ -15,8 +15,13 @@ import java.util.ArrayList;
 
 public class UsernameList {
 
+    public interface UsernameListListener {
+        void afterGettingUsernameList();
+    }
+
     private ArrayList<String> list;
     private FirebaseFirestore db;
+    private UsernameListListener listListener;
 
     public UsernameList(FirebaseFirestore db){
         this.list = new ArrayList<>();
@@ -40,21 +45,7 @@ public class UsernameList {
      * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
      */
     public void updateUsernameList(){
-        list.clear();
-        db.collection("usernamelist")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                list.add(document.getId());
-                            }
-                        } else {
-                            Log.w("Email", "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
+        setUsernameListListener(null);
     }
 
     /**
@@ -68,5 +59,38 @@ public class UsernameList {
         Boolean result = list.contains(username);
         this.updateUsernameList();
         return result;
+    }
+
+    /**
+     * This method gets all the currently used usernames
+     * and allows listListener to define task to be done after getting all the usernames
+     * @return
+     *      an ArrayList of usernames
+     * https://firebase.google.com/docs/auth/android/manage-users#update_a_users_profile Used to update username
+     */
+    public void setUsernameListListener(final UsernameListListener listListener) {
+        this.listListener = listListener;
+        list.clear();
+        db.collection("usernamelist")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                list.add(document.getId());
+                            }
+                            if(listListener != null) {
+                                listListener.afterGettingUsernameList();
+                            }
+                        } else {
+                            Log.w("Email", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public String[] getUsernameList() {
+        return list.toArray(new String[list.size()]);
     }
 }
