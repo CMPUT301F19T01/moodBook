@@ -93,11 +93,11 @@ public class ProfileActivity extends AppCompatActivity
                   addImg(intent_name);
 
                   ProfileEditor.updateProfile(userID, email.getText().toString(), name.getText().toString(), phone.getText().toString(),bio.getText().toString());
-
-                  finishActivity(0);
-
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
+//                  finishActivity(0);
+                finish();
+//
+//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//                startActivity(intent);
             }
         });
 
