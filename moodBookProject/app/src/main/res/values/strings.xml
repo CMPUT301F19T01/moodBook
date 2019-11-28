@@ -23,7 +23,7 @@
     <string name="pick_mood_situation">Pick Mood Situation</string>
     <string name="pick_mood_reason">Pick Mood Reason</string>
     <string name="pick_mood_location">Pick Mood Location</string>
-    <string name="pick_mood_photo">Pick Mood Photo</string>
+    <string name="pick_mood_photo">Add Mood Photo (optional)</string>
     <string name="pick_mood_date">Pick Mood Date</string>
     <string name="mood_time_would_showup_here">Mood Time would showup here</string>
     <string name="mood_date_would_showup_here">Mood Date would showup here</string>

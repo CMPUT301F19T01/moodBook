@@ -45,6 +45,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * The Main Activity is set to HomeFragment as default, which in turn lists the Mood History list
+ * @see <a href = "https://guides.codepath.com/android/fragment-navigation-drawer" ></a>
  */
 
 public class MainActivity extends AppCompatActivity  {
@@ -57,7 +58,11 @@ public class MainActivity extends AppCompatActivity  {
     private String email;
     private  ImageView profile;
 
-
+    /**
+     * onCreate method inherited from AppCompat Activity
+     * @param savedInstanceState
+     *  This a Bundle that passes the saved instance state of the application
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         name = null;
@@ -114,14 +119,24 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    /**
+     * This method adds items to the action bar if it is present.
+     * @param menu
+     * @return
+     *  Returns a boolean true
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * This overridden method is called whenever the user chooses to navigate up within the applications activity
+     * @return
+     */
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -130,10 +145,13 @@ public class MainActivity extends AppCompatActivity  {
     }
 
 
+
     /**
      * This method creates a new fragment based on the menu option selected
      * @param menuItem
+     *  The menuItems
      * @param drawer
+     *  A drawerlayout
      */
     public void selectDrawerItem(MenuItem menuItem, DrawerLayout drawer){
         Fragment fragment;
@@ -174,9 +192,9 @@ public class MainActivity extends AppCompatActivity  {
                 intent.putExtra("email",email);
                 startActivity(intent);
                 Log.d("Activity:" , "My profile");
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         "Clicked Profile Page " ,
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
                 break;
             case R.id.nav_logout:
                 fragmentClass = null;
@@ -202,7 +220,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     /**
-     * This method logs the user out of the application
+     * This method logs the current user out
      */
     private void logout(){
         mAuth.getInstance().signOut();

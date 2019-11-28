@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -56,15 +57,15 @@ public class ViewMoodActivity extends AppCompatActivity {
         view_date_time.setText("Created: " + intent_date +" at " + intent_time );
 
         final String intent_reason = getIntent().getStringExtra("reason_text");
-        view_reason.setText("Reason: "+((intent_reason==null)?"N/A":intent_reason));
+        view_reason.setText((intent_reason==null)?"N/A":intent_reason);
 
         final String intent_lat = getIntent().getStringExtra("location_lat");
         final String intent_lon = getIntent().getStringExtra("location_lon");
         final String intent_address = getIntent().getStringExtra("location_address");
-        view_location.setText("Location:  "+ ((intent_address==null)?"N/A":intent_address));
+        view_location.setText((intent_address==null)?"N/A":intent_address);
 
         final String intent_situation =getIntent().getStringExtra("situation");
-        view_situation.setText("Situation:  " + ((intent_situation==null)?"N/A":intent_situation));
+        view_situation.setText((intent_situation==null)?"N/A":intent_situation);
 
         final String intent_emotion =getIntent().getStringExtra("emotion");
         view_emotion.setText(intent_emotion);

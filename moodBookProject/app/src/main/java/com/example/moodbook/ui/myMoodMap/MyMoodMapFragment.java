@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.moodbook.DBCollectionListener;
@@ -146,6 +147,13 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
 
                 // create dialog popup
                 Dialog dialog = new Dialog(getContext());
+
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                dialog.show();
+                dialog.getWindow().setAttributes(lp);
 
                 // bind mood data to dialog layout
                 bindViews(mood, dialog, dbMoodSetter, null).show();

@@ -62,7 +62,7 @@ public class RequestFragmentTest {
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
 
-        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "tyler");
+        solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "tyler");
         solo.clickOnButton("Send Request");
         assertTrue(solo.waitForText("Sent request"));
     }
@@ -77,7 +77,7 @@ public class RequestFragmentTest {
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
 
-        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "2j2ieh2@@@dwed33");
+        solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "2j2ieh2@@@dwed33");
         solo.clickOnButton("Send Request");
         assertTrue(solo.waitForText("User does not exist"));
     }
@@ -105,7 +105,7 @@ public class RequestFragmentTest {
         // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
-        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "test");
+        solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "test");
         solo.clickOnButton("Send Request");
         assertTrue(solo.waitForText("Cannot add yourself"));
     }
@@ -119,7 +119,7 @@ public class RequestFragmentTest {
         // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
-        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "newtest");
+        solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "newtest");
         solo.clickOnButton("Send Request");
         assertTrue(solo.waitForText("User already added"));
     }

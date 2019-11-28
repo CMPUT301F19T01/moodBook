@@ -9,32 +9,42 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-
 import com.example.moodbook.ui.followers.MyFollowersFragment;
 import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.profile.FriendProfileViewActivity;
 import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.Arrays;
 
+/**
+ * This is a subclass of the PageFragment it show displays the list of Users in the MyFriendsFragment and the MyFollowersFragment
+ * @see PageFragment
+ * @see MyFriendsFragment
+ * @see MyFollowersFragment
+ */
 public abstract class UserListFragment extends PageFragment implements DBCollectionListener {
     private static final String[] SUBCLASSES_NAMES = {
             MyFriendsFragment.class.getSimpleName(),
             MyFollowersFragment.class.getSimpleName()
     };
     protected String TAG;
-
-    // connect to DB
     private DBFriend friendDB;
-
     protected ListView userListView;
     protected UserListAdapter userListAdapter;
     private TextView hiddenMsg;
 
-
+    /**
+     * This method instantiates the UserListFragment view
+     * @param inflater
+     *  The LayoutInflater object that is used to inflate the view
+     * @param container
+     *  This is the parent view that the fragments UI should be attached to
+     * @param savedInstanceState
+     *  This is the saved Instance state from the previous state
+     * @param fragmentName
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState,
                              String fragmentName) {
@@ -42,38 +52,26 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
             throw new IllegalArgumentException(fragmentName+" is not a permitted subclass!");
         }
         this.TAG = fragmentName;
-
-        // get id of layout
         int layoutId = fragmentName.equals(SUBCLASSES_NAMES[0]) ?
                 R.layout.fragment_myfriends : R.layout.fragment_followers;
-        // create root View
         View root = super.onCreateView(inflater, container, savedInstanceState, layoutId);
-
-        // initialize DB connector
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         friendDB = new DBFriend(mAuth, getContext(), TAG);
-
-        // get id of layout & listView
         int listViewId;
         final String listType;
-        // for MyFriends: set friendListListener
         if(TAG.equals(SUBCLASSES_NAMES[0])) {
             friendDB.setFriendListListener(this);
             listViewId = R.id.friends_listView;
             hiddenMsg = root.findViewById(R.id.friends_empty_msg);
             listType = "friend";
         }
-        // for MyFollowers: set followerListListener
         else {
             friendDB.setFollowersListListener(this);
             listViewId = R.id.followers_listView;
             hiddenMsg = root.findViewById(R.id.followers_empty_msg);
             listType = "follower";
         }
-
-        // Set up recyclerView and adapter
         userListView = root.findViewById(listViewId);
-        // get current user
         final MoodbookUser currentUser = new MoodbookUser(
                 mAuth.getCurrentUser().getDisplayName(),
                 mAuth.getCurrentUser().getUid());
@@ -87,11 +85,9 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
                         .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                // for MyFriends: remove friend
                                 if(TAG.equals(SUBCLASSES_NAMES[0])) {
                                     friendDB.removeFriend(currentUser, selectedUser);
                                 }
-                                // for MyFollowers: remove friend
                                 else {
                                     friendDB.removeFollower(currentUser, selectedUser);
                                 }
@@ -114,12 +110,20 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
         return root;
     }
 
+    /**
+     * This method hides the empty message for the adapter
+     */
     @Override
     public void beforeGettingList() {
         hiddenMsg.setVisibility(View.INVISIBLE);   // hide empty message
         userListAdapter.clear();
     }
 
+    /**
+     *  This overridden method add the MoodBookUser instance to the userListAdapter
+     * @param item
+     *  A MoodBookUser object
+     */
     @Override
     public void onGettingItem(Object item) {
         if(item instanceof MoodbookUser) {
@@ -127,17 +131,25 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
         }
     }
 
+    /**
+     * This method checks if user List adapter is empty and shows a message if it is
+     */
     @Override
     public void afterGettingList() {
         if (userListAdapter.isEmpty()){
-            hiddenMsg.setVisibility(View.VISIBLE); // show empty message
+            hiddenMsg.setVisibility(View.VISIBLE);
         }
     }
+
+    /**
+     * This opens dialog to ask user whether to remove the follower method When a friend/follower item is clicked
+     * @param itemClickListener
+     *  An onclick listener for detecting item clicks on the fragment
+     */
 
     private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {
         userListAdapter = new UserListAdapter(getContext());
         userListView.setAdapter(userListAdapter);
-        // When a friend/follower item is clicked, opens dialog to ask user whether to remove the follower
         userListView.setOnItemClickListener(itemClickListener);
     }
 }

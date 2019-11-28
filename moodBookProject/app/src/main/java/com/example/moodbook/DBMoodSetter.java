@@ -55,9 +55,12 @@ public class DBMoodSetter {
     /**
      * This is a constructor used by Create and Edit Mood Activity to get the current instance of a mood in the database
      *
-     * @param mAuth   This is the FirebaseAuth instance for each logged in user
-     * @param context This is a handle to get the data and resources that the app needs while it runs
-     * @param TAG     This is an optional string used for printing log messages
+     * @param mAuth
+     *  This is the FirebaseAuth instance for each logged in user
+     * @param context
+     *  This is a handle to get the data and resources that the app needs while it runs
+     * @param TAG
+     *  This is an optional string used for printing log messages
      */
     public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG) {
         this.mAuth = mAuth;
@@ -73,8 +76,10 @@ public class DBMoodSetter {
 
     /**
      * This another instance of the DBMoodSetter Constructor that used to get updated mood data from user's mood collection in the database
-     * @param mAuth   This is the FirebaseAuth instance for each logged in user
-     * @param context This is a handle to get the data and resources that the app needs while it runs
+     * @param mAuth
+     *  This is the FirebaseAuth instance for each logged in user
+     * @param context
+     *  This is a handle to get the data and resources that the app needs while it runs
      *
      */
     public DBMoodSetter(FirebaseAuth mAuth, Context context) {
@@ -84,9 +89,12 @@ public class DBMoodSetter {
     /**
      * This is a constructor used by Mood History to get updated mood data from user's mood collection in the database
      *
-     * @param mAuth               This is the FirebaseAuth instance for each logged in user
-     * @param context             This is a handle to get the data and resources that the app needs while it runs
-     * @param moodHistoryListener This is a listener from Mood History
+     * @param mAuth
+     *  This is the FirebaseAuth instance for each logged in user
+     * @param context
+     *  This is a handle to get the data and resources that the app needs while it runs
+     * @param moodHistoryListener
+     *  This is a listener from Mood History
      */
     public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener) {
         this(mAuth, context);
@@ -95,10 +103,14 @@ public class DBMoodSetter {
     }
 
     /**
-     * @param mAuth               This is the FirebaseAuth instance for each logged in user
-     * @param context             This is a handle to get the data and resources that the app needs while it runs
-     * @param moodHistoryListener This is a listener from Mood History
-     * @param TAG                 This is an optional string used for printing log messages
+     * @param mAuth
+     *  This is the FirebaseAuth instance for each logged in user
+     * @param context
+     *  This is a handle to get the data and resources that the app needs while it runs
+     * @param moodHistoryListener
+     *  This is a listener from Mood History
+     * @param TAG
+     *  This is an optional string used for printing log messages
      */
     public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener, String TAG) {
         this(mAuth, context, moodHistoryListener);
@@ -138,7 +150,7 @@ public class DBMoodSetter {
                         if (documentSnapshot != null) {
                             // get mood docId from moodCount
                             Double m = documentSnapshot.getDouble("mood_Count");
-                            String moodID = String.valueOf(m) + MainActivity.getUsername(); //increment int + username as a moodID
+                            String moodID = String.valueOf(m) + mAuth.getCurrentUser().getDisplayName(); //increment int + username as a moodID
                             addImg(moodID, mood);
                             // add new mood into db
                             addMoodAfterDocId(moodID, mood);
@@ -230,12 +242,22 @@ public class DBMoodSetter {
      * and updates the most recent moodID for user
      * @param moodID
      *   This is a String object of mood docID on the database
+     * @param newRecentMoodID
+     * This is a the user's new most recent mood
      */
     public void removeMood (String moodID, String newRecentMoodID){
         removeMood(moodID, true, newRecentMoodID);
     }
 
-
+    /**
+     * This removes a mood and updates the most recent mood when the boolean updateRecentMoodID is true
+     * @param moodID
+     *  This is the moodID of the mood to be deleted
+     * @param updateRecentMoodID
+     *  This a boolean that tells the method if the most recent moodID needs to be updated
+     * @param newRecentMoodID
+     *  This is the new most recent moodID
+     */
     private void removeMood(final String moodID, final boolean updateRecentMoodID,
                             final String newRecentMoodID) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");
@@ -261,8 +283,10 @@ public class DBMoodSetter {
     }
 
     /**
-     *
+     * Removes a mood from the Firebase database
      * @param moodID
+     *  This is the moodID of the mood to be removed
+     * @see Mood
      */
     private void removeImgFromDB(final String moodID) {
         StorageReference photoRef = photoReference.child(moodID);

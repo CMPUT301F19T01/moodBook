@@ -54,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity
     String intent_name;
     String intent_email;
     Button save_profile;
+    Button close_profile;
     private Bitmap bitImage;
 
     Uri uriProfileImage;
@@ -82,6 +83,7 @@ public class ProfileActivity extends AppCompatActivity
         name.setText(intent_name);
         email.setText(intent_email);
         save_profile =(Button) findViewById(R.id.save_profile);
+        close_profile =(Button) findViewById(R.id.close_profile);
         changeProfilePic();
 
         final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -100,7 +102,12 @@ public class ProfileActivity extends AppCompatActivity
 //                startActivity(intent);
             }
         });
-
+        close_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 
