@@ -235,7 +235,12 @@ public class DBMoodSetter {
         removeMood(moodID, true, newRecentMoodID);
     }
 
-
+    /**
+     *
+     * @param moodID
+     * @param updateRecentMoodID
+     * @param newRecentMoodID
+     */
     private void removeMood(final String moodID, final boolean updateRecentMoodID,
                             final String newRecentMoodID) {
         CollectionReference moodReference = userReference.document(uid).collection("MOODS");

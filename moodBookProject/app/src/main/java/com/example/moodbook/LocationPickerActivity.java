@@ -120,12 +120,27 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
                 Log.i("location", String.valueOf(location.getLatitude()));
             }
 
+            /**
+             *
+             * @param s
+             * @param i
+             * @param bundle
+             */
+
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {}
 
+            /**
+             *
+             * @param s
+             */
             @Override
             public void onProviderEnabled(String s) {}
 
+            /**
+             *
+             * @param s
+             */
             @Override
             public void onProviderDisabled(String s) {}
         };

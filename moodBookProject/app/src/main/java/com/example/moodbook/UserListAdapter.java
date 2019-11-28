@@ -34,19 +34,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ *
+ */
 public class UserListAdapter extends ArrayAdapter {
     private ArrayList<MoodbookUser> users;
     private Context context;
 
+    /**
+     *
+     * @param context
+     * @param users
+     */
     public UserListAdapter(Context context, ArrayList<MoodbookUser> users) {
         super(context, 0, users);
         this.users = users;
         this.context = context;
     }
 
+    /**
+     *
+     * @param context
+     */
+
     public UserListAdapter(Context context) {
         this(context, new ArrayList<MoodbookUser>());
     }
+
+    /**
+     *
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
 
     @NonNull
     @Override
@@ -88,6 +109,11 @@ public class UserListAdapter extends ArrayAdapter {
         return view;
     }
 
+    /**
+     *
+     * @param object
+     */
+
     @Override
     public void add(@Nullable Object object) {
         if(object == null || object instanceof MoodbookUser) {
@@ -99,6 +125,9 @@ public class UserListAdapter extends ArrayAdapter {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void clear() {
         users.clear();
@@ -106,6 +135,11 @@ public class UserListAdapter extends ArrayAdapter {
         notifyDataSetChanged();
     }
 
+    /**
+     *
+     * @param position
+     * @return
+     */
     @Nullable
     @Override
     public Object getItem(int position) {
