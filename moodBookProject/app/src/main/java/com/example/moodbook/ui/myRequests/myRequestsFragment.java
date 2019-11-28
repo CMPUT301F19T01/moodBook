@@ -12,19 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.example.moodbook.DBCollectionListener;
+import com.example.moodbook.Mood;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.ui.Request.RequestHandler;
 import com.example.moodbook.ui.Request.RequestsAdapter;
+import com.example.moodbook.ui.friendMood.FriendMood;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class myRequestsFragment extends PageFragment implements DBCollectionListener {
+public class myRequestsFragment extends PageFragment {
     private RequestsAdapter requestsAdapter;
-    private CoordinatorLayout requestListLayout;
+  //  private CoordinatorLayout requestListLayout;
     private ListView requestListView;
     private static final String TAG = myRequestsFragment.class.getSimpleName();
 
@@ -40,7 +42,7 @@ public class myRequestsFragment extends PageFragment implements DBCollectionList
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_myrequests);
         db = FirebaseFirestore.getInstance();
 
-        requestListLayout = root.findViewById(R.id.request_layout);
+       // requestListLayout = root.findViewById(R.id.request_layout);
         requestListView = root.findViewById(R.id.request_listView);
         hiddenMssg = (TextView) root.findViewById(R.id.empty_request);
         // initialize DB connector
@@ -49,30 +51,16 @@ public class myRequestsFragment extends PageFragment implements DBCollectionList
         requestDB = new RequestHandler(mAuth, getContext(), TAG);
         requestDB.setRequestListListener(requestsAdapter);
         requestListView.setAdapter(requestsAdapter);
+        int count = requestsAdapter.getCount();
+        Log.i("testing", Integer.toString(count));
+
+        if (requestsAdapter.getCount() ==0) {
+            hiddenMssg.setVisibility(View.VISIBLE);
+        }else{
+            hiddenMssg.setVisibility(View.INVISIBLE);
+        }
 
         return root;
     }
 
-
-    @Override
-    public void beforeGettingList() {
-        hiddenMssg.setVisibility(View.INVISIBLE);
-        requestsAdapter.clear();
-    }
-
-
-    @Deprecated
-    @Override
-    public void onGettingItem(Object item) {
-        // nothing
-    }
-
-    @Override
-    public void afterGettingList() {
-        Log.e("check", "testrequest");
-        if (requestsAdapter.isEmpty()){
-            Log.e("check", "testrequest");
-            hiddenMssg.setVisibility(View.VISIBLE);
-        }
-    }
 }
