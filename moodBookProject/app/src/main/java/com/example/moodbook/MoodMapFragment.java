@@ -45,12 +45,21 @@ public class MoodMapFragment extends PageFragment{
         editButton.setVisibility(View.GONE);
         if(username != null){
             view_friend_name.setVisibility(View.VISIBLE);
-            view_friend_name.setText("User: " + username);
+            view_friend_name.setText(username);
         }
-        view_date_time.setText("Created: " + mood.getDateText() +" at " + mood.getTimeText() );
-        view_reason.setText("Reason: "+((mood.getReasonText()==null)?"N/A":mood.getReasonText()));
-        view_location.setText("Location:  "+ ((mood.getLocation()==null)?"N/A":mood.getLocation().getAddress()));
-        view_situation.setText("Situation:  " + ((mood.getSituation()==null)?"N/A":mood.getSituation()));
+        // show mood date time
+        view_date_time.setText(mood.getDateText() +" at " + mood.getTimeText() );
+
+        // show mood reason
+        view_reason.setText((mood.getReasonText()==null)?"N/A":mood.getReasonText());
+
+        // show mood location
+        view_location.setText((mood.getLocation()==null)?"N/A":mood.getLocation().getAddress());
+
+        // show mood situation
+        view_situation.setText((mood.getSituation()==null)?"N/A":mood.getSituation());
+
+        // show mood emotion
         view_emotion.setText(mood.getEmotionText());
         if(Mood.Emotion.hasName(mood.getEmotionText())) {
             view_emoji.setImageResource(Mood.Emotion.getImageResourceId(mood.getEmotionText()));
@@ -65,8 +74,6 @@ public class MoodMapFragment extends PageFragment{
                 dialog.dismiss();
             }
         });
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
 
         return dialog;
 

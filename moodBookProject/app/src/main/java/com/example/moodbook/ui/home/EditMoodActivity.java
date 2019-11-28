@@ -72,11 +72,6 @@ public class EditMoodActivity extends MoodEditorActivity {
                     moodMap.put("location_lon",mood_location.getLongitude());
                     moodMap.put("location_address", mood_location.getAddress());
                 }
-                moodDB.editMood(moodID,moodMap);
-                Log.i("TEST", "Updated Successful");
-                finish();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
 
             }
         });

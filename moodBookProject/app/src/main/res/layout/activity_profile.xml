@@ -154,28 +154,37 @@
 
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="30dp">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp"
+            android:paddingBottom="20dp">
             <Button
                 android:id="@+id/save_profile"
-                android:layout_width="wrap_content"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:enabled="true"
+                android:layout_marginTop="8dp"
+                android:layout_centerInParent="true"
+                android:text="SAVE"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="@color/colorWhite"
-                android:textSize="@dimen/button_text_size"
-                android:text="SAVE"
-                tools:text="SAVE" />
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:textSize="15dp"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/close_profile"
+                android:background="#0000"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/save_profile"
+                android:text="CLOSE"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:textSize="15dp" />
+
+        </RelativeLayout>
 
     </LinearLayout></ScrollView>
