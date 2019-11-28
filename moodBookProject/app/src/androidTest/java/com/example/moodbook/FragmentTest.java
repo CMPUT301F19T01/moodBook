@@ -17,6 +17,9 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+/**
+ * Tests ability to access various fragments through the mrenu
+ */
 public class FragmentTest {
     private Solo solo;
 
@@ -31,8 +34,11 @@ public class FragmentTest {
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
+            for (int i = 0; i < 4; i++){
+                solo.sendKey(Solo.DOWN);
+            }
             solo.clickOnText("Logout");
-            solo.sleep(3000);
+            solo.sleep(2000);
         }
         // login with test account
         if (solo.searchText("login")){
@@ -53,16 +59,19 @@ public class FragmentTest {
     public void FragmentSwitchFriendMoodBook() {
         solo.clickOnImageButton(0);
         solo.clickOnText("Friend MoodBook");
-        solo.sleep(5000);
-        assertTrue(solo.waitForText("Friend Mood History"));
+        solo.sleep(2000);
+        assertTrue(solo.waitForText("Friend MoodBook"));
     }
     /*Testing Add Friend */
 
     @Test
     public void FragmentSwitchAddFriends() {
         solo.clickOnImageButton(0);
+        for (int i = 0; i < 4; i++){
+            solo.sendKey(Solo.DOWN);
+        }
         solo.clickOnText("Add Friends");
-        solo.sleep(5000);
+        solo.sleep(2000);
         assertTrue(solo.waitForText("Add Friends"));
     }
     /*Testing Friend My Requests*/
@@ -70,8 +79,11 @@ public class FragmentTest {
     @Test
     public void FragmentSwitchMyRequests() {
         solo.clickOnImageButton(0);
+        for (int i = 0; i < 4; i++){
+            solo.sendKey(Solo.DOWN);
+        }
         solo.clickOnText("My Requests");
-        solo.sleep(5000);
+        solo.sleep(2000);
         assertTrue(solo.waitForText("Friend Requests"));
     }
 //    @Test
@@ -87,9 +99,9 @@ public class FragmentTest {
     public void FragmentSwitchFriendMoodMap() {
         solo.clickOnImageButton(0);
         solo.clickOnText("Friend Mood Map");
-        solo.sleep(5000);
-        assertTrue(solo.waitForText("Friend History Map"));
-        solo.sleep(5000);
+        solo.sleep(2000);
+        assertTrue(solo.waitForText("Friend Mood Map"));
+        solo.sleep(2000);
 
     }
 
@@ -97,8 +109,11 @@ public class FragmentTest {
     @Test
     public void FragmentSwitchLogout(){
         solo.clickOnImageButton(0);
+        for (int i = 0; i < 4; i++){
+            solo.sendKey(Solo.DOWN);
+        }
         solo.clickOnText("Logout");
-        solo.sleep(5000);
+        solo.sleep(2000);
         assertTrue(solo.waitForText("Email"));
     }
 }

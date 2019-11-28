@@ -20,7 +20,9 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-
+/**
+ * This tests the login activity
+ */
 public class LoginActivityTest {
     private Solo solo;
 
@@ -35,6 +37,9 @@ public class LoginActivityTest {
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
+            for (int i = 0; i < 4; i++){
+                solo.sendKey(Solo.DOWN);
+            }
             solo.clickOnText("Logout");
         }
         solo.sleep(3000);

@@ -35,6 +35,9 @@ public class AddMoodObjectTest {
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
+            for (int i = 0; i < 4; i++){
+                solo.sendKey(Solo.DOWN);
+            }
             solo.clickOnText("Logout");
             solo.sleep(3000);
         }
@@ -48,8 +51,8 @@ public class AddMoodObjectTest {
      * used in tests to first login to the app
      */
     public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testing");
+        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
+        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
         solo.clickOnButton("login");
     }
 
@@ -65,6 +68,8 @@ public class AddMoodObjectTest {
         solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
         solo.clickOnView(solo.getView(R.id.create_time_button)); //time button
         solo.clickOnView(solo.getView(R.id.create_location_button)); //location button
+        solo.sleep(3000);
+        solo.clickOnText("Confirm");
         solo.clickOnView(solo.getView(R.id.create_emotion_spinner));//emotion --Picks alone
         solo.pressSpinnerItem(0,1);
         solo.enterText((EditText) solo.getView(R.id.create_reason_editText), "test");

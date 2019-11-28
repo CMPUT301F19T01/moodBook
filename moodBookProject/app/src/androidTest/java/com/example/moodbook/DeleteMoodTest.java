@@ -31,6 +31,9 @@ public class DeleteMoodTest {
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
+            for (int i = 0; i < 4; i++){
+                solo.sendKey(Solo.DOWN);
+            }
             solo.clickOnText("Logout");
             solo.sleep(3000);
         }
@@ -44,14 +47,34 @@ public class DeleteMoodTest {
      * used in tests to first login to the app
      */
     public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testing");
+        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
+        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
         solo.clickOnButton("login");
+    }
+
+    /**
+     * Adds a mood for testing
+     */
+    public void addMood(){
+        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
+        solo.sleep(5000); // wait for activity to change
+        solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
+        solo.clickOnView(solo.getView(R.id.create_time_button)); //time button
+        solo.clickOnView(solo.getView(R.id.create_location_button)); //location button
+        solo.sleep(3000);
+        solo.clickOnText("Confirm");
+        solo.clickOnView(solo.getView(R.id.create_emotion_spinner));//emotion --Picks alone
+        solo.pressSpinnerItem(0,1);
+        solo.enterText((EditText) solo.getView(R.id.create_reason_editText), "test");
+        solo.clickOnView(solo.getView(R.id.create_situation_spinner));
+        solo.pressSpinnerItem(1,1);
+        solo.clickOnView(solo.getView(R.id.create_add_button));
     }
 
 // Reference: https://stackoverflow.com/questions/24664730/writing-a-robotium-test-to-swipe-open-an-item-on-a-swipeable-listview
     @Test
     public void testDelete(){
+        addMood();
         int fromX, toX, fromY, toY;
         int[] location = new int[2];
 
@@ -66,6 +89,7 @@ public class DeleteMoodTest {
         toX = location[0];
         toY = fromY;
         solo.drag(fromX, toX, fromY, toY, 10);
+        solo.clickOnText("Yes");
         assertTrue(solo.waitForLogMessage("Deleted mood."));
     }
 }

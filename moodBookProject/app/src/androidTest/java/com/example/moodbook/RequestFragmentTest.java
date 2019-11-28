@@ -29,7 +29,6 @@ public class RequestFragmentTest {
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
-            //solo.clickOnText("Logout");
             for (int i = 0; i < 4; i++){
                 solo.sendKey(Solo.DOWN);
             }
