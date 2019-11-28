@@ -7,12 +7,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.moodbook.MainActivity;
 import com.example.moodbook.R;
 import com.example.moodbook.data.UsernameList;
 import com.google.android.gms.tasks.OnCompleteListener;

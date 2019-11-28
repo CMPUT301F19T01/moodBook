@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/**
+ * This class handles the display of requests that the user has recieved
+ */
 public class RequestsAdapter extends BaseAdapter {
     private FirebaseFirestore db;
     private Context context;
@@ -102,7 +106,11 @@ public class RequestsAdapter extends BaseAdapter {
         return view;
     }
 
-
+    /**
+     * This method returns a MoodbookUser based on their position in the adapter
+     * @param position
+     * @return
+     */
     public MoodbookUser getItem(int position) {
         return requestList.get(position);
     }
@@ -122,7 +130,9 @@ public class RequestsAdapter extends BaseAdapter {
         return size;
     }
 
-    // Remove all name items
+    /**
+     * This method clears the adapter
+     */
     public void clear() {
         if (requestList!= null){
 
@@ -131,7 +141,11 @@ public class RequestsAdapter extends BaseAdapter {
         // notify list is cleared
         notifyDataSetChanged();
     }
-    // Add a request name
+
+    /**
+     * Thus nethod adds a user into the adapter
+     * @param item
+     */
     public void addItem(MoodbookUser item) {
         if (item!=null){
             requestList.add(item);
