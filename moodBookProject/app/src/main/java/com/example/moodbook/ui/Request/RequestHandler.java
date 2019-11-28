@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.MoodbookUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -37,6 +38,7 @@ public class RequestHandler {
     private FirebaseFirestore db;
     private String TAG;
     private Context context;
+    private DBCollectionListener listListener;
 
 
     public RequestHandler(FirebaseAuth mAuth, Context context, String TAG){
@@ -52,14 +54,10 @@ public class RequestHandler {
         this(mAuth, context, RequestHandler.class.getSimpleName());
     }
 
-    public void setRequestListListener(@NonNull RequestsAdapter requestsAdapter) {
+    public void setRequestListListener(@NonNull DBCollectionListener listListener) {
+        this.listListener = listListener;
         this.userReference.document(uid).collection("REQUESTS")
-                .addSnapshotListener(getRequestListener(requestsAdapter));
-    }
-
-    public void setRequestListListener(@NonNull RequestsAdapter requestsAdapter, final TextView hiddenMssg) {
-        this.userReference.document(uid).collection("REQUESTS")
-                .addSnapshotListener(getRequestListener(requestsAdapter, hiddenMssg));
+                .addSnapshotListener(getRequestListener());
     }
 
     /**
@@ -95,52 +93,25 @@ public class RequestHandler {
 
     /**
      * This methods gets the requests from DB and shows it in the listview
-     * @param requestsAdapter
      * @return
      */
-    private EventListener<QuerySnapshot> getRequestListener(@NonNull final RequestsAdapter requestsAdapter, final TextView hiddenMssg) {
+    private EventListener<QuerySnapshot> getRequestListener() {
         return new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                // clear the old list
-                requestsAdapter.clear();
+                listListener.beforeGettingList();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     // ignore null item
                     if (!doc.getId().equals("null")) {
                         // Adding requestuser from FireStore
                         if(doc.getData() != null && doc.getData().get("uid") != null) {
                             MoodbookUser user = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
-                            requestsAdapter.addItem(user);
-                        }
-                    }
-                    if (requestsAdapter.getCount() ==0) {
-                        hiddenMssg.setVisibility(View.VISIBLE);
-                    }else {
-                        hiddenMssg.setVisibility(View.INVISIBLE);
-                    }
-
-                }
-            }
-        };
-    }
-
-    private EventListener<QuerySnapshot> getRequestListener(@NonNull final RequestsAdapter requestsAdapter) {
-        return new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                // clear the old list
-                requestsAdapter.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // ignore null item
-                    if (!doc.getId().equals("null")) {
-                        // Adding requestuser from FireStore
-                        if(doc.getData() != null && doc.getData().get("uid") != null) {
-                            MoodbookUser user = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
-                            requestsAdapter.addItem(user);
+                            listListener.onGettingItem(user);
                         }
                     }
 
                 }
+                listListener.afterGettingList();
             }
         };
     }

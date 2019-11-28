@@ -19,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,7 +83,7 @@ public class HomeFragment extends PageFragment
 
         // initialize layout
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
-        hiddenMssg = (TextView) root.findViewById(R.id.empty);
+        hiddenMssg = (TextView) root.findViewById(R.id.mood_history_empty_msg);
 
         // Set up recyclerView and adapter
         moodListView = root.findViewById(R.id.mood_history_listView);
@@ -105,8 +104,6 @@ public class HomeFragment extends PageFragment
                         Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
                         getIntentDataFromMood(editIntent, item);
                         startActivity(editIntent);
-
-
                     }
                 });
                 alert.setNegativeButton("View", new DialogInterface.OnClickListener() {
@@ -120,8 +117,6 @@ public class HomeFragment extends PageFragment
                         // add current class name to disable edit button
                         viewIntent.putExtra("page",HomeFragment.class.getSimpleName());
                         startActivity(viewIntent);
-
-
                     }
                 });
                 alert.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -276,7 +271,7 @@ public class HomeFragment extends PageFragment
 
     @Override
     public void beforeGettingList() {
-        hiddenMssg.setVisibility(View.INVISIBLE);
+        hiddenMssg.setVisibility(View.INVISIBLE);   // hide empty message
         moodListAdapter.clear();
     }
 
@@ -290,7 +285,7 @@ public class HomeFragment extends PageFragment
     @Override
     public void afterGettingList() {
         if (moodListAdapter.getItemCount() == 0){
-            hiddenMssg.setVisibility(View.VISIBLE);
+            hiddenMssg.setVisibility(View.VISIBLE); // show empty message
         }
     }
 

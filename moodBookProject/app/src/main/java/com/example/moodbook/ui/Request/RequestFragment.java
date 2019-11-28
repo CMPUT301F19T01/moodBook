@@ -67,7 +67,7 @@ public class RequestFragment extends PageFragment implements DBCollectionListene
 
         requestHandler = new com.example.moodbook.ui.Request.RequestHandler(mAuth, getContext());
         requestsAdapter = new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
-        requestHandler.setRequestListListener(requestsAdapter);
+        requestHandler.setRequestListListener(this);
 
         requestButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -7,7 +7,7 @@
     android:clickable="true">
 
     <TextView
-        android:id="@+id/empty_friend_mood"
+        android:id="@+id/friend_mood_empty_msg"
         android:text="Your Friend MoodBook is empty."
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"

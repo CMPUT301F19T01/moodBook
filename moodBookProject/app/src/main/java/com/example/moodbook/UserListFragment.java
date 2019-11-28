@@ -32,7 +32,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
 
     protected ListView userListView;
     protected UserListAdapter userListAdapter;
-    private TextView hiddenMssg;
+    private TextView hiddenMsg;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,7 +52,6 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
         // initialize DB connector
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         friendDB = new DBFriend(mAuth, getContext(), TAG);
-        hiddenMssg = (TextView) root.findViewById(R.id.no_f_mssg);
 
         // get id of layout & listView
         int listViewId;
@@ -60,13 +59,15 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
         // for MyFriends: set friendListListener
         if(TAG.equals(SUBCLASSES_NAMES[0])) {
             friendDB.setFriendListListener(this);
-            listViewId = R.id.friend_listView;
+            listViewId = R.id.friends_listView;
+            hiddenMsg = root.findViewById(R.id.friends_empty_msg);
             listType = "friend";
         }
         // for MyFollowers: set followerListListener
         else {
             friendDB.setFollowersListListener(this);
             listViewId = R.id.followers_listView;
+            hiddenMsg = root.findViewById(R.id.followers_empty_msg);
             listType = "follower";
         }
 
@@ -115,7 +116,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
 
     @Override
     public void beforeGettingList() {
-        hiddenMssg.setVisibility(View.INVISIBLE);
+        hiddenMsg.setVisibility(View.INVISIBLE);   // hide empty message
         userListAdapter.clear();
     }
 
@@ -129,7 +130,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
     @Override
     public void afterGettingList() {
         if (userListAdapter.isEmpty()){
-            hiddenMssg.setVisibility(View.VISIBLE);
+            hiddenMsg.setVisibility(View.VISIBLE); // show empty message
         }
     }
 

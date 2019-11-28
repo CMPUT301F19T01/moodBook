@@ -50,7 +50,7 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
 
         // Set up listView and adapter
         friendMoodListView = root.findViewById(R.id.friend_mood_listView);
-        hiddenMssg = (TextView) root.findViewById(R.id.empty_friend_mood);
+        hiddenMssg = (TextView) root.findViewById(R.id.friend_mood_empty_msg);
 
         setupAdapter(new AdapterView.OnItemClickListener() {
             // View the selected friendMood: when a mood item is clicked, start view activity
@@ -87,21 +87,26 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
 
     @Override
     public void beforeGettingList() {
+        hiddenMssg.setVisibility(View.VISIBLE);         // show empty message
         friendMoodListAdapter.clear();
     }
 
     @Override
     public void onGettingItem(Object item) {
+        if (hiddenMssg.getVisibility() == View.VISIBLE) {
+            hiddenMssg.setVisibility(View.INVISIBLE);   // hide empty message
+        }
         if(item instanceof FriendMood) {
             friendMoodListAdapter.add((FriendMood)item);
         }
     }
 
+    /**
+     * This method should not be used, because list contains friends only, not friend mood.
+     */
     @Deprecated
     @Override
-    public void afterGettingList() {
-    //
-    }
+    public void afterGettingList() { }
 
 
     /**

@@ -24,37 +24,56 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
-public class myRequestsFragment extends PageFragment {
-    private RequestsAdapter requestsAdapter;
-  //  private CoordinatorLayout requestListLayout;
-    private ListView requestListView;
+public class myRequestsFragment extends PageFragment implements DBCollectionListener {
     private static final String TAG = myRequestsFragment.class.getSimpleName();
+
+    private RequestsAdapter requestsAdapter;
+    //private CoordinatorLayout requestListLayout;
+    private ListView requestListView;
+    private TextView hiddenMsg;
 
     // connect to DB
     private RequestHandler requestDB;
-    private FirebaseFirestore db;
-    private FirebaseAuth mAuth;
-    private TextView hiddenMssg;
+    //private FirebaseFirestore db;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_myrequests);
-        db = FirebaseFirestore.getInstance();
+        //db = FirebaseFirestore.getInstance();
 
-       // requestListLayout = root.findViewById(R.id.request_layout);
+        hiddenMsg = root.findViewById(R.id.request_empty_msg);
+
+        //requestListLayout = root.findViewById(R.id.request_layout);
         requestListView = root.findViewById(R.id.request_listView);
-        hiddenMssg = (TextView) root.findViewById(R.id.empty_request);
-        // initialize DB connector
-        mAuth = FirebaseAuth.getInstance();
         requestsAdapter=  new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
-        requestDB = new RequestHandler(mAuth, getContext(), TAG);
-        requestDB.setRequestListListener(requestsAdapter, hiddenMssg);
         requestListView.setAdapter(requestsAdapter);
-        int count = requestsAdapter.getCount();
-        Log.i("testing", Integer.toString(count));
+
+        // initialize DB connector
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        requestDB = new RequestHandler(mAuth, getContext(), TAG);
+        requestDB.setRequestListListener(this);
 
         return root;
     }
 
+    @Override
+    public void beforeGettingList() {
+        hiddenMsg.setVisibility(View.INVISIBLE);   // hide empty message
+        requestsAdapter.clear();
+    }
+
+    @Override
+    public void onGettingItem(Object item) {
+        if(item instanceof MoodbookUser) {
+            requestsAdapter.addItem((MoodbookUser) item);
+        }
+    }
+
+    @Override
+    public void afterGettingList() {
+        if (requestsAdapter.getCount() == 0){
+            hiddenMsg.setVisibility(View.VISIBLE); // show empty message
+        }
+    }
 }
