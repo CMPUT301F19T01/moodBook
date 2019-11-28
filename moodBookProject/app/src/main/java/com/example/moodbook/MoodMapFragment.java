@@ -11,16 +11,21 @@ import android.widget.TextView;
 
 /**
  * super class that is extended by MyMoodMapFragment and FriendMoodMapFragment
+ * that contains shared functionality
  */
 public class MoodMapFragment extends PageFragment{
 
     /**
      * Binds the mood data to a dialog for viewing on map view
      *
-     * @param mood the mood who's data we are binding
-     * @param dialog the dialog that contains the views where we want to bind the mood data
-     * @param dbMoodSetter uses a "getImageFromDB" method from this object to get image
-     * @return the dialog with all the mood data binded to the views
+     * @param mood
+     *  the mood who's data we are binding
+     * @param dialog
+     *  the dialog that contains the views where we want to bind the mood data
+     * @param dbMoodSetter
+     *  uses a "getImageFromDB" method from this object to get image
+     * @return
+     *  the dialog with all the mood data binded to the views
      */
     protected Dialog bindViews(Mood mood, final Dialog dialog, DBMoodSetter dbMoodSetter, String username){
         dialog.setContentView(R.layout.activity_view_mood);

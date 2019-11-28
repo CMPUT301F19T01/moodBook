@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import com.example.moodbook.DBFriend;
 import com.example.moodbook.DBCollectionListener;
 import com.example.moodbook.DBMoodSetter;
+import com.example.moodbook.MoodLocation;
 import com.example.moodbook.MoodMapFragment;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
@@ -38,12 +39,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 /**
- * MyFriendMoodMapFragment.java
- *
- * @author Neilzon Viloria
- * @since 07-11-2019
-
- *  This activity is used to view a where a users friends' moods take place on a map
+ *  This fragment is used to view a where a users friends' moods take place on a map
  */
 public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
     //private MyFriendMoodMapViewModel MyFriendMoodMapViewModel;
@@ -68,8 +64,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      *  itself, but this can be used to generate the LayoutParams
      *  of the view. This value may be null.
      * @param savedInstanceState
-     * If non-null, this fragment is being re-constructed from a
-     * previous saved state as given here.
+     *  If non-null, this fragment is being re-constructed from a
+     *  previous saved state as given here.
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -171,6 +167,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         mapView.onPause();
     }
 
+
     /**
      * You must call this method from the parent Activity/Fragment's corresponding method.
      */
@@ -179,6 +176,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         super.onDestroy();
         mapView.onDestroy();
     }
+
 
     /**
      * You must call this method from the parent Activity/Fragment's corresponding method.
@@ -189,10 +187,13 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         mapView.onLowMemory();
     }
 
+
     /**
      * draws moods on map
-     * @param mood mood object
-     * @param i integer that represents the index of the FriendMood in the data list
+     * @param mood
+     *  mood object
+     * @param i
+     *  integer that represents the index of the FriendMood in the data list
      */
     private void drawMood(Mood mood, int i ){
         if (mood.getLocation() != null){
@@ -211,9 +212,13 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
             // draw on map
             moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor)).setTag(i);
+
+            //
+            //moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
         }
 
     }
+
 
     /**
      * clears map and data list before update on friend moods
@@ -224,9 +229,11 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         moodMap.clear();
     }
 
+
     /**
      * adds FriendMood item into data list
-     * @param item friend mood
+     * @param item
+     *  friend mood
      */
     @Override
     public void onGettingItem(Object item) {
@@ -245,10 +252,13 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      */
     @Override
     public void afterGettingList() {
-        if ((moodDataList.size()-1)>0){
-            Mood mood = moodDataList.get(moodDataList.size()-1).getMood();
-            LatLng moodLatLng = new LatLng(mood.getLocation().getLatitude(), mood.getLocation().getLatitude());
+        if (moodDataList.size() > 0){
+            MoodLocation moodLoc = moodDataList.get(moodDataList.size()-1).getMood().getLocation();
+            LatLng moodLatLng = new LatLng(moodLoc.getLatitude(), moodLoc.getLongitude());
             moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
+
         }
+
     }
+
 }

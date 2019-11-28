@@ -37,12 +37,7 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 
 /**
- * MyMoodMapFragment.java
- *
- * @author Neilzon Viloria
- * @since 07-11-2019
-
- *  This activity is used to view a where a users moods take place on a map
+ *  This fragment is used to view a where a users moods take place on a map
  */
 public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
 
@@ -73,8 +68,8 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
      *  itself, but this can be used to generate the LayoutParams
      *  of the view. This value may be null.
      * @param savedInstanceState
-     * If non-null, this fragment is being re-constructed from a
-     * previous saved state as given here.
+     *  If non-null, this fragment is being re-constructed from a
+     *  previous saved state as given here.
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -248,7 +243,8 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
 
     /**
      * Defines what to do with the item on getting it
-     * @param item users mood object
+     * @param item
+     *  users mood object
      */
     @Override
     public void onGettingItem(Object item) {
