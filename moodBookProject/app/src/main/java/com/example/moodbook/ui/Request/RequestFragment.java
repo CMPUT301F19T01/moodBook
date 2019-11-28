@@ -46,7 +46,8 @@ public class RequestFragment extends PageFragment
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        final View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_request);
+        final View root = super.onCreateView(inflater, container,
+                savedInstanceState, R.layout.fragment_request);
 
         usernameText = root.findViewById(R.id.send_request_username_text);
         usernameArrow = root.findViewById(R.id.send_request_username_arrow);
@@ -136,7 +137,8 @@ public class RequestFragment extends PageFragment
         usernameList = new UsernameList(FirebaseFirestore.getInstance());
         usernameList.setUsernameListListener(this);
 
-        usersAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_dropdown_item_1line) {
+        usersAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_dropdown_item_1line) {
             /**
              * This limits the total number of dropdown items to 100
              * @return  the number of dropdown items to be displayed
