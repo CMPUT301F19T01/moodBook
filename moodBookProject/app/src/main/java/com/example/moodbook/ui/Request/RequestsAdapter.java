@@ -2,7 +2,9 @@ package com.example.moodbook.ui.Request;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,14 +66,25 @@ public class RequestsAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                    // When Accepts a friend requests and username is added in requestee's friend mood list
-                    requestHandler.addFriend(frienduser, username);
-                    requestHandler.addToFollowerList(frienduser, username);
-                    //remove request once accepted
-                    requestHandler.removeRequest(frienduser.getUsername());
-                Toast.makeText(context,
-                        "Accepted Request",
-                        Toast.LENGTH_LONG).show();
+                // When Accepts a friend requests and username is added in requestee's friend mood list
+                requestHandler.addFriend(frienduser, username);
+                requestHandler.addToFollowerList(frienduser, username);
+
+                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Follow Back");
+                builder.setMessage("Would you like to follow back?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        requestHandler.followBack(username, frienduser);
+                    }
+                })
+                        .setNegativeButton("No", null)
+                        .show();
+
+                //remove request once accepted
+                requestHandler.removeRequest(frienduser.getUsername());
+                Toast.makeText(context, "Accepted Request", Toast.LENGTH_LONG).show();
             }
         });
 
