@@ -1,50 +1,40 @@
 package com.example.moodbook;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.annotation.GlideModule;
-import com.bumptech.glide.module.AppGlideModule;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- *
+ * This ArrayAdapter stores moodBookUsers to display on the  MyFollowersFragment and the MyFriendsFragments
+ * @see com.example.moodbook.ui.followers.MyFollowersFragment
+ * @see com.example.moodbook.ui.myFriends.MyFriendsFragment
  */
 public class UserListAdapter extends ArrayAdapter {
     private ArrayList<MoodbookUser> users;
     private Context context;
 
     /**
-     *
+     * This is creates a new instance of the UserListAdapter
      * @param context
+     *  The current context of the application
      * @param users
+     *  An array of users
      */
     public UserListAdapter(Context context, ArrayList<MoodbookUser> users) {
         super(context, 0, users);
@@ -53,8 +43,9 @@ public class UserListAdapter extends ArrayAdapter {
     }
 
     /**
-     *
+     * This creates a new instance of the UserListAdapter
      * @param context
+     *  The current context of the application
      */
 
     public UserListAdapter(Context context) {
@@ -62,11 +53,15 @@ public class UserListAdapter extends ArrayAdapter {
     }
 
     /**
-     *
+     * This overridden method gets the views to display in fragments
      * @param position
+     *  The position for a specific moodBook User in arrayList
      * @param convertView
+     *  A view object to display fragments
      * @param parent
+     *   A viewgroup Object
      * @return
+     *  Returns the updated view Object
      */
 
     @NonNull
@@ -78,16 +73,9 @@ public class UserListAdapter extends ArrayAdapter {
         }
 
         MoodbookUser user = users.get(position);
-
-        // get views for username, profile picture
         TextView usernameText = view.findViewById(R.id.user_item_username);
         final ImageView userdp = view.findViewById(R.id.user_item_dp);
-
-        // show username
         usernameText.setText(user.getUsername());
-
-        // show profile picture
-
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("profilepics/" + user.getUsername() + ".jpeg" );
         try{
             final File localFile = File.createTempFile("Images", "jpeg");
@@ -110,8 +98,9 @@ public class UserListAdapter extends ArrayAdapter {
     }
 
     /**
-     *
+     * This overridden method adds a moodBookUser item to the users list and sorts the list
      * @param object
+     *  A moodBookUser object
      */
 
     @Override
@@ -126,19 +115,20 @@ public class UserListAdapter extends ArrayAdapter {
     }
 
     /**
-     *
+     * This method clears the users list
      */
     @Override
     public void clear() {
         users.clear();
-        // notify list is cleared
         notifyDataSetChanged();
     }
 
     /**
-     *
+     * This overridden method gets the User at a specific position
      * @param position
+     *  The position to get the user from
      * @return
+     *  The user at the given position
      */
     @Nullable
     @Override
