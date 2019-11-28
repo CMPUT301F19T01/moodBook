@@ -150,7 +150,7 @@ public class HomeFragment extends PageFragment
             @Override
             public void onClick(View view) {
                 Intent addIntent = new Intent(getActivity(), CreateMoodActivity.class);
-                Toast.makeText(getContext(), "Add a mood", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "Add a mood", Toast.LENGTH_LONG).show();
                 startActivity(addIntent);
             }
         });
@@ -188,7 +188,7 @@ public class HomeFragment extends PageFragment
                     // showing snack bar with Undo option
                     Snackbar snackbar = Snackbar
                             .make(moodHistoryLayout,
-                                    deletedMood.toString() + " removed from Mood History!",
+                                    "Mood " + deletedMood.toString() + " removed from Mood History!",
                                     Snackbar.LENGTH_LONG);
                     snackbar.setAction("UNDO", new View.OnClickListener() {
                         @Override

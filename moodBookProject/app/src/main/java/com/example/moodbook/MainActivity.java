@@ -205,9 +205,9 @@ public class MainActivity extends AppCompatActivity  {
                 intent.putExtra("email",email);
                 startActivity(intent);
                 Log.d("Activity:" , "My profile");
-                Toast.makeText(getApplicationContext(),
+                /*Toast.makeText(getApplicationContext(),
                         "Clicked Profile Page " ,
-                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_LONG).show();*/
                 break;
             case R.id.nav_logout:
                 fragmentClass = null;
