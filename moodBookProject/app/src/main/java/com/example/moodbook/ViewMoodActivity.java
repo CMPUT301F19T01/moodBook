@@ -17,7 +17,7 @@ import com.example.moodbook.ui.home.HomeFragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * This activity is used to  enable a user to be to view detials for a specific mood
+ * This Activity is used to  enable a user to be to view details for a specific mood
  */
 public class ViewMoodActivity extends AppCompatActivity {
     private TextView view_friend_name, view_date_time, view_emotion,

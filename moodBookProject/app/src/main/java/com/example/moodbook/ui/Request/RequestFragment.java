@@ -26,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 /**
- * This fragment is shown to allow the user to send requests to other users
+ * This fragment is shown to allow a user to send requests to other users
  */
 public class RequestFragment extends PageFragment
         implements DBCollectionListener, UsernameList.UsernameListListener {
@@ -131,7 +131,10 @@ public class RequestFragment extends PageFragment
         }
     }
 
-
+    /**
+     * This is a method used to show a list of users in the dropdown menu when a user wants send a request to another user.
+     * Offers more convenience and could also act as a suggestions list.
+     */
     private void setupUsername() {
         usernameList = new UsernameList(FirebaseFirestore.getInstance());
         usernameList.setUsernameListListener(this);
