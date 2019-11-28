@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
@@ -136,13 +137,19 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
                 // create dialog popup
                 Dialog dialog = new Dialog(getContext());
 
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+                lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+                dialog.show();
+                dialog.getWindow().setAttributes(lp);
+
                 // bind mood data to dialog layout
                 bindViews(mood.getMood(), dialog, dbMoodSetter, mood.getUsername()).show();
 
                 return false;
             }
         });
-
 
     }
 
@@ -238,8 +245,10 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      */
     @Override
     public void afterGettingList() {
-        Mood mood = moodDataList.get(moodDataList.size()-1).getMood();
-        LatLng moodLatLng = new LatLng(mood.getLocation().getLatitude(), mood.getLocation().getLatitude());
-        moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
+        if ((moodDataList.size()-1)>0){
+            Mood mood = moodDataList.get(moodDataList.size()-1).getMood();
+            LatLng moodLatLng = new LatLng(mood.getLocation().getLatitude(), mood.getLocation().getLatitude());
+            moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));
+        }
     }
 }
