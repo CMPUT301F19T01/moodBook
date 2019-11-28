@@ -20,6 +20,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
 
+/**
+ *
+ */
 public abstract class UserListFragment extends PageFragment implements DBCollectionListener {
     private static final String[] SUBCLASSES_NAMES = {
             MyFriendsFragment.class.getSimpleName(),
@@ -34,7 +37,14 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
     protected UserListAdapter userListAdapter;
     private TextView hiddenMsg;
 
-
+    /**
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @param fragmentName
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState,
                              String fragmentName) {
@@ -114,12 +124,19 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
         return root;
     }
 
+    /**
+     *
+     */
     @Override
     public void beforeGettingList() {
         hiddenMsg.setVisibility(View.INVISIBLE);   // hide empty message
         userListAdapter.clear();
     }
 
+    /**
+     *
+     * @param item
+     */
     @Override
     public void onGettingItem(Object item) {
         if(item instanceof MoodbookUser) {
@@ -127,12 +144,20 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void afterGettingList() {
         if (userListAdapter.isEmpty()){
             hiddenMsg.setVisibility(View.VISIBLE); // show empty message
         }
     }
+
+    /**
+     *
+     * @param itemClickListener
+     */
 
     private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {
         userListAdapter = new UserListAdapter(getContext());

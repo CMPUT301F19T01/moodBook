@@ -67,7 +67,10 @@ public class MainActivity extends AppCompatActivity  {
     private String email;
     private  ImageView profile;
 
-
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         name = null;
@@ -127,6 +130,12 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    /**
+     *
+     * @param menu
+     * @return
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -135,6 +144,10 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -218,12 +231,19 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    /**
+     *
+     */
     private void logout(){
         mAuth.getInstance().signOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
+    /**
+     *
+     * @return
+     */
     public static String getUsername(){
         return name;
     }

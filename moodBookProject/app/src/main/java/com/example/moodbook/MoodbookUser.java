@@ -31,6 +31,11 @@ public class MoodbookUser implements Comparable<MoodbookUser> {
         return this.uid;
     }
 
+    /**
+     *
+     * @param other
+     * @return
+     */
     @Override
     public int compareTo(@NonNull MoodbookUser other) {
         return this.username.compareTo(other.getUsername());
