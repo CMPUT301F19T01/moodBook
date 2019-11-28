@@ -60,11 +60,6 @@ public class RequestHandler {
                 .addSnapshotListener(getRequestListener());
     }
 
-    public void setRequestListListener(@NonNull RequestsAdapter requestsAdapter, final TextView hiddenMssg) {
-        this.userReference.document(uid).collection("REQUESTS")
-                .addSnapshotListener(getRequestListener(requestsAdapter, hiddenMssg));
-    }
-
     /**
      * This method adds a request to the given user's db document
      * @param addUser -- the username to add
