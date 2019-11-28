@@ -3,12 +3,10 @@ package com.example.moodbook.ui.login;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,10 +15,6 @@ import androidx.fragment.app.Fragment;
 
 
 import com.example.moodbook.R;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @deprecated
@@ -38,7 +32,7 @@ public class UsernameFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_username, null);
-        usernameEditText = view.findViewById(R.id.usernameEditText);
+        usernameEditText = view.findViewById(R.id.send_request_username_text);
 
         usernameButton = view.findViewById(R.id.usernameButton);
 
