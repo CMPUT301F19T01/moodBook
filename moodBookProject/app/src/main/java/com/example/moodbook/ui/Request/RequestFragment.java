@@ -136,7 +136,16 @@ public class RequestFragment extends PageFragment
         usernameList = new UsernameList(FirebaseFirestore.getInstance());
         usernameList.setUsernameListListener(this);
 
-        usersAdapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_dropdown_item_1line);
+        usersAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_dropdown_item_1line) {
+            /**
+             * This limits the total number of dropdown items to 100
+             * @return  the number of dropdown items to be displayed
+             */
+            @Override
+            public int getCount() {
+                return Math.min(100, super.getCount());
+            }
+        };
         usernameText.setAdapter(usersAdapter);
 
         usernameArrow.setOnClickListener(new View.OnClickListener() {

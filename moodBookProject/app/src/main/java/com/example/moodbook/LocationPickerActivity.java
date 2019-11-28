@@ -163,7 +163,7 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
                 if(locationAddress == null){
                     locationAddress = String.format("%.5f", latLng.latitude) + " " + String.format("%.5f", latLng.longitude);
                 }
-                Toast.makeText(getApplicationContext(), locationAddress, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), locationAddress, Toast.LENGTH_SHORT).show();
 
 
             }
