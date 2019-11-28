@@ -52,11 +52,6 @@ public class RequestHandler {
         this(mAuth, context, RequestHandler.class.getSimpleName());
     }
 
-    public void setRequestListListener(@NonNull RequestsAdapter requestsAdapter) {
-        this.userReference.document(uid).collection("REQUESTS")
-                .addSnapshotListener(getRequestListener(requestsAdapter));
-    }
-
     public void setRequestListListener(@NonNull DBCollectionListener listListener) {
         this.listListener = listListener;
         this.userReference.document(uid).collection("REQUESTS")
@@ -96,28 +91,8 @@ public class RequestHandler {
 
     /**
      * This methods gets the requests from DB and shows it in the listview
-     * @param requestsAdapter
      * @return
      */
-    private EventListener<QuerySnapshot> getRequestListener(@NonNull final RequestsAdapter requestsAdapter) {
-        return new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @NonNull FirebaseFirestoreException e) {
-                // clear the old list
-                requestsAdapter.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    // ignore null item
-                    if (!doc.getId().equals("null")) {
-                        // Adding requestuser from FireStore
-                        if(doc.getData() != null && doc.getData().get("uid") != null) {
-                            MoodbookUser user = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
-                            requestsAdapter.addItem(user);
-                        }
-                    }
-                }
-            }
-        };
-    }
     private EventListener<QuerySnapshot> getRequestListener() {
         return new EventListener<QuerySnapshot>() {
             @Override
