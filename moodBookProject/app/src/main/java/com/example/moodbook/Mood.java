@@ -1,7 +1,7 @@
 package com.example.moodbook;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.location.Location;
 import androidx.annotation.NonNull;
 
 import com.example.moodbook.ui.home.CreateMoodActivity;
@@ -31,8 +31,11 @@ public class Mood implements Comparable<Mood> {
     private String doc_id;          // document id in db for editing/deleting the mood
 
     // date time formatter
+    @SuppressLint("SimpleDateFormat")
     public static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+    @SuppressLint("SimpleDateFormat")
     public static final SimpleDateFormat TIME_FORMATTER = new SimpleDateFormat("HH:mm:ss");
+    @SuppressLint("SimpleDateFormat")
     public static final SimpleDateFormat DATETIME_FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
