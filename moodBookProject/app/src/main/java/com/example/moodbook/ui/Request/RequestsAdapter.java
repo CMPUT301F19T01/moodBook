@@ -31,6 +31,10 @@ public class RequestsAdapter extends BaseAdapter {
         this.requestList = requestList;
     }
 
+    public RequestsAdapter(Context context) {
+        this(context, new ArrayList<MoodbookUser>());
+    }
+
     // getView method is called for each item of ListView
     @SuppressLint("ViewHolder")
     public View getView(final int position, View view, ViewGroup parent) {
