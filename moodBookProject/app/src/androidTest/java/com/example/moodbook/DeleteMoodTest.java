@@ -1,3 +1,5 @@
+// Reference: https://stackoverflow.com/questions/24664730/writing-a-robotium-test-to-swipe-open-an-item-on-a-swipeable-listview
+
 package com.example.moodbook;
 
 import android.graphics.PointF;
@@ -26,26 +28,16 @@ public class DeleteMoodTest {
 
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        // logout if logged in
-        if (solo.searchText("Mood History")){
-            solo.clickOnImageButton(0);
-            for (int i = 0; i < 4; i++){
-                solo.sendKey(Solo.DOWN);
-            }
-            solo.clickOnText("Logout");
-            solo.sleep(3000);
-        }
-        // login with test account
-        if (solo.searchText("login")){
-            login();
-        }
+        TestHelper.setup(solo);
     }
 
     /**
-     * used in tests to first login to the app
+     * Tests if Swipe-to-delete from Mood History works
      */
+<<<<<<< HEAD
+=======
     public void login(){
         solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
         solo.enterText((EditText) solo.getView(R.id.password), "testtest");
@@ -75,24 +67,14 @@ public class DeleteMoodTest {
      * Checks to see if mood got deleted after swiping
      * Reference: https://stackoverflow.com/questions/24664730/writing-a-robotium-test-to-swipe-open-an-item-on-a-swipeable-listview
      */
+>>>>>>> kathTest
     @Test
-    public void testDelete(){
-        addMood();
-        int fromX, toX, fromY, toY;
-        int[] location = new int[2];
+    public void testDeleteMood() {
+        // add a new mood
+        TestHelper.addMoodBasic(solo);
 
-        View row = solo.getText("happy");
-        row.getLocationInWindow(location);
-        // fail if the view with text cannot be located in the window
-        if (location.length == 0) {
-            fail("Could not find text: " + "happy");
-        }
-        fromX = location[0] + 100;
-        fromY = location[1];
-        toX = location[0];
-        toY = fromY;
-        solo.drag(fromX, toX, fromY, toY, 10);
-        solo.clickOnText("Yes");
+        // delete the new mood, and check if the mood is deleted from db successfully
+        TestHelper.deleteMood(solo);
         assertTrue(solo.waitForLogMessage("Deleted mood."));
     }
 }

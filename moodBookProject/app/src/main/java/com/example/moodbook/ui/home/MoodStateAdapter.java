@@ -65,8 +65,8 @@ public class MoodStateAdapter extends ArrayAdapter<String> {
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = inflater.inflate(R.layout.spinner_item, null);
-            TextView t1 = (TextView) row.findViewById(R.id.mood_text);
-            ImageView i1 = (ImageView)row.findViewById(R.id.mood_image);
+            TextView t1 = row.findViewById(R.id.mood_text);
+            ImageView i1 = row.findViewById(R.id.mood_image);
 
             t1.setText(states[position]);
             i1.setImageResource(images[position]);
@@ -90,8 +90,8 @@ public class MoodStateAdapter extends ArrayAdapter<String> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(R.layout.spinner_item, null);
-        TextView t1 = (TextView) row.findViewById(R.id.mood_text);
-        ImageView i1 = (ImageView)row.findViewById(R.id.mood_image);
+        TextView t1 = row.findViewById(R.id.mood_text);
+        ImageView i1 = row.findViewById(R.id.mood_image);
 
         t1.setText(states[position]);
         i1.setImageResource(images[position]);
@@ -106,7 +106,7 @@ public class MoodStateAdapter extends ArrayAdapter<String> {
      * This is the error message you want to be displayed.
      */
     public void setError(View v, CharSequence s) {
-        TextView name = (TextView) v.findViewById(R.id.mood_text);
+        TextView name = v.findViewById(R.id.mood_text);
         name.setError(s);
     }
 

@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home" />
     <activity
         android:id="@+id/nav_profile"
-        android:name="com.example.moodbook.ui.profile.ProfileActivity"
+        android:name="com.example.moodbook.ui.profile.EditProfileActivity"
         android:label="View your profile"
-        tools:layout="@layout/activity_profile" />
+        tools:layout="@layout/activity_edit_profile" />
     <fragment
         android:id="@+id/nav_friendMood"
         android:name="com.example.moodbook.ui.friendMood.FriendMoodFragment"

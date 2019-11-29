@@ -28,7 +28,7 @@ import java.util.Collections;
 
 /**
  * This Adapter is used by Mood History to view and manage moods in RecyclerView.
- * @see com.example.moodbook.ui.home.HomeFragment
+ * @see HomeFragment
  * @see androidx.recyclerview.widget.RecyclerView.Adapter
  * @see android.widget.Filterable
  */
@@ -103,7 +103,7 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
 
 
     /**
-     * This constructor is used by Mood History and Friend Moods to handle list of moods in RecyclerView
+     * This constructor is complete version with predefined moodList
      * @param context
      *   This is a handler to get the data and resources that the app needs while it runs
      * @param moodList
@@ -119,6 +119,11 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         this.mood_filter = getFilter();
     }
 
+    /**
+     * This constructor is used by Mood History to handle list of moods in RecyclerView
+     * @param context
+     * @param listener
+     */
     public MoodListAdapter(Context context, OnItemClickListener listener){
         this(context, new ArrayList<Mood>(), listener);
     }
