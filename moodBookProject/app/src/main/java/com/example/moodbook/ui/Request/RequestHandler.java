@@ -78,7 +78,11 @@ public class RequestHandler {
                     if (document.exists()){
                         HashMap<String, Object> data = new HashMap<>();
                         data.put("uid", uid);
-                        collectionReference.document(document.getString("uid")).collection("REQUESTS").document(username).set(data); // adding the request to the addUser's REQUEST collection
+                        collectionReference
+                                .document(document.getString("uid"))
+                                .collection("REQUESTS")
+                                .document(username)
+                                .set(data); // adding the request to the addUser's REQUEST collection
                     } else {
                         Log.d("TESTING", "no such doc");
                     }
@@ -103,7 +107,8 @@ public class RequestHandler {
                     if (!doc.getId().equals("null")) {
                         // Adding requestuser from FireStore
                         if(doc.getData() != null && doc.getData().get("uid") != null) {
-                            MoodbookUser user = new MoodbookUser(doc.getId(), (String) doc.getData().get("uid"));
+                            MoodbookUser user = new MoodbookUser(doc.getId(),
+                                    (String) doc.getData().get("uid"));
                             listListener.onGettingItem(user);
                         }
                     }
@@ -122,7 +127,9 @@ public class RequestHandler {
     public void addFriend(final MoodbookUser acceptFriend, final String myUsername){
 
         final String username = myUsername;
-        final CollectionReference friendsReference = this.userReference.document(acceptFriend.getUid()).collection("FRIENDS");
+        final CollectionReference friendsReference = this.userReference
+                .document(acceptFriend.getUid())
+                .collection("FRIENDS");
         HashMap<String, Object> data = new HashMap<>();
         data.put("uid", uid);
         friendsReference.document(username).set(data)
@@ -150,7 +157,8 @@ public class RequestHandler {
      */
     public void followBack(final String myUsername, final MoodbookUser acceptFriend ) {
         final String username = myUsername;
-        final CollectionReference friendsReference = this.userReference.document(uid).collection("FRIENDS");
+        final CollectionReference friendsReference
+                = this.userReference.document(uid).collection("FRIENDS");
         HashMap<String, Object> data = new HashMap<>();
         data.put("uid", uid);
         friendsReference.document(acceptFriend.getUsername()).set(data)
@@ -174,7 +182,8 @@ public class RequestHandler {
      * @param myUsername
      */
     public void addToFollowerList(final MoodbookUser acceptFriend, final String myUsername){
-        final CollectionReference followersRef = this.userReference.document(uid).collection("FOLLOWERS");
+        final CollectionReference followersRef
+                = this.userReference.document(uid).collection("FOLLOWERS");
         HashMap<String, Object> data = new HashMap<>();
         data.put("uid", acceptFriend.getUid());
         followersRef.document(acceptFriend.getUsername()).set(data)
@@ -197,7 +206,8 @@ public class RequestHandler {
      * @param username
      */
     public void removeRequest( final String username){
-        final CollectionReference collectionReference = this.userReference.document(this.uid).collection("REQUESTS");
+        final CollectionReference collectionReference
+                = this.userReference.document(this.uid).collection("REQUESTS");
         collectionReference.document(username).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

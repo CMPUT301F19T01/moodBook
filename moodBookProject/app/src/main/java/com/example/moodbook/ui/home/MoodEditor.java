@@ -78,11 +78,14 @@ public class MoodEditor {
 
     public static final String [] EMOTION_STATE_LIST = ObjectArrays.concat(
             new String[]{"Pick mood state ..."}, Mood.Emotion.getNames(), String.class);
+
     public static final int[] EMOTION_IMAGE_LIST = Ints.concat(
             new int[]{R.color.transparent}, Mood.Emotion.getImageResources());
+
     public static final int[] EMOTION_COLOR_LIST = Ints.concat(
             new int[]{R.color.transparent}, Mood.Emotion.getColorResources());
-    // Situation spinner options
+
+    /* Situation spinner options */
     public static final String[] SITUATION_LIST = new String[]{
             "Add situation ...",
             "Alone",
@@ -94,7 +97,8 @@ public class MoodEditor {
     /**
      * A method that acts as a Date editor
      * Used by users to set the current date
-     * @param view This is a view for a button
+     * @param view
+     *  This is a view for a button
      */
     public static void showDate(final Button view){
         Calendar c = Calendar.getInstance();
@@ -117,9 +121,12 @@ public class MoodEditor {
     /**
      * A method that acts as an emotion state editor
      * Used by users to select their current emotional state
-     * @param myActivity This is the class that calls on this method
-     * @param emotionSpinner This is the spinner for choosing an emotion state
-     * @param emotionAdapter This is the adapter for emotion states
+     * @param myActivity
+     *  This is the class that calls on this method
+     * @param emotionSpinner
+     *  This is the spinner for choosing an emotion state
+     * @param emotionAdapter
+     *  This is the adapter for emotion states
      */
     public static void setEmotionSpinner(final AppCompatActivity myActivity, final Spinner emotionSpinner,
                                          MoodStateAdapter emotionAdapter, String moodEmotion) {
@@ -155,8 +162,10 @@ public class MoodEditor {
     /**
      * This return ArrayAdapter for setting up a situation editor
      * Used by users to selects their current situation
-     * @param myActivity The class that calls in this method
-     * @param spinnerLayoutId The view that contains the situation options
+     * @param myActivity
+     *  The class that calls in this method
+     * @param spinnerLayoutId
+     *  The view that contains the situation options
      * @return situationAdapter
      */
     public static ArrayAdapter<String> getSituationAdapter(AppCompatActivity myActivity,
@@ -183,9 +192,12 @@ public class MoodEditor {
 
     /**
      * This is a method that allows users to choose a situation from the adapter
-     * @param myActivity The class that calls in this method
-     * @param situationSpinner The spinner view
-     * @param situationAdapter The situation adapter
+     * @param myActivity
+     *  The class that calls in this method
+     * @param situationSpinner
+     *  The spinner view
+     * @param situationAdapter
+     *  The situation adapter
      */
     public static void setSituationSpinner(final AppCompatActivity myActivity, Spinner situationSpinner,
                                            ArrayAdapter<String> situationAdapter, String moodSituation) {
@@ -218,7 +230,8 @@ public class MoodEditor {
 
     /**
      * A method that returns a bitmap that was set in the imageView
-     * @return imageBitmap
+     * @return
+     *  imageBitmap
      */
     public static Bitmap getBitmap(){
         return imageBitmap;
@@ -228,7 +241,8 @@ public class MoodEditor {
     /**
      * This is a method that allows the users to add an image to their mood
      * Involves two options, Camera and Gallery, and will take the users to a new activity to choose/take a picture
-     * @param myActivity The class that calls in this method
+     * @param myActivity
+     *  The class that calls in this method
      */
     public static void setImage(final AppCompatActivity myActivity){
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(myActivity);
@@ -248,7 +262,9 @@ public class MoodEditor {
                                 Intent imageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 File dir = myActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
                             //    File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
-                                Uri uri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", new File(dir, "MyPhoto.img"));
+                                Uri uri = FileProvider.getUriForFile(myActivity,
+                                        myActivity.getApplicationContext().getPackageName() + ".provider",
+                                        new File(dir, "MyPhoto.img"));
                                 imageIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
                                 imageIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                                 if (imageIntent.resolveActivity(myActivity.getPackageManager()) != null) {
@@ -273,7 +289,9 @@ public class MoodEditor {
      * Method that checks dimension, decodes bitmap, and decides on what rotation it should display on the imageView
      * Attemps flexibility on the code, especially when taking a picture with different phones that takes in different orientation
      * @param context
+     *
      * @param selectedImage
+     *  resource identifier to image
      * @return Bitmap image
      * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
      * @throws IOException
@@ -352,7 +370,8 @@ public class MoodEditor {
         else
             ei = new ExifInterface(selectedImage.getPath());
 
-        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL);
 
         switch (orientation) {
             case ExifInterface.ORIENTATION_ROTATE_90:
@@ -376,7 +395,8 @@ public class MoodEditor {
     private static Bitmap rotateImage(Bitmap img, int degree) {
         Matrix matrix = new Matrix();
         matrix.postRotate(degree);
-        Bitmap rotatedImage = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        Bitmap rotatedImage = Bitmap.createBitmap(img, 0, 0,
+                img.getWidth(), img.getHeight(), matrix, true);
         img.recycle();
         return rotatedImage;
     }
@@ -396,7 +416,9 @@ public class MoodEditor {
             //File object of camera image
             File dir = myActivity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             //    File file = new File(Environment.getExternalStorageDirectory(), "MyPhoto.jpg");
-            Uri photoUri = FileProvider.getUriForFile(myActivity, myActivity.getApplicationContext().getPackageName() + ".provider", new File(dir, "MyPhoto.img"));
+            Uri photoUri = FileProvider.getUriForFile(myActivity,
+                    myActivity.getApplicationContext().getPackageName() + ".provider",
+                    new File(dir, "MyPhoto.img"));
             if (photoUri != null) {
 
                 imageBitmap = getRotatedBitmap(myActivity, photoUri);
@@ -437,9 +459,14 @@ public class MoodEditor {
      * A method that acts as a location editor
      * Used by users to get their current location
      * @param requestCode
+     *  the integer request code originally supplied to startActivityForResult(), allowing you to identify who this result came from.
      * @param resultCode
+     *  The integer result code returned by the child activity through its setResult().
      * @param data
+     *  An Intent, which can return result data to the caller
      * @param myActivity
+     *
+     *
      */
     public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data,
             final AppCompatActivity myActivity) {
@@ -454,7 +481,6 @@ public class MoodEditor {
                 double lat = data.getDoubleExtra("location_lat", 0);
                 double lon = data.getDoubleExtra("location_lon", 0);
                 String address = data.getStringExtra("location_address");
-
                 MoodLocation location = new MoodLocation("");
                 location.setLatitude(lat);
                 location.setLongitude(lon);

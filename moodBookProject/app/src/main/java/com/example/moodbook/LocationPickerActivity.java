@@ -76,7 +76,6 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
             }
         });
 
-
     }
 
     /**
@@ -107,8 +106,10 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
             Log.e("Resource error", "Can't find style. Error: ", e);
         }
 
-        // Gets users location
-        // create location manager and listener
+        /*
+         * Gets users location
+         * create location manager and listener
+         */
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -147,9 +148,7 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
             } catch (Exception e){
                 e.printStackTrace();
             }
-
         }
-
 
         // functionality for placing marker with on clicks
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -164,9 +163,6 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
                 if(locationAddress == null){
                     locationAddress = String.format("%.5f", latLng.latitude) + " " + String.format("%.5f", latLng.longitude);
                 }
-                //Toast.makeText(getApplicationContext(), locationAddress, Toast.LENGTH_SHORT).show();
-
-
             }
         });
     }
@@ -181,7 +177,7 @@ public class LocationPickerActivity extends FragmentActivity implements OnMapRea
      *  Returns string representing address information
      */
     private String convertToAddress(double lat, double lon){
-        // create geocoder object
+        // create geocode object
         Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
         try {

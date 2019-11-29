@@ -51,7 +51,8 @@ public class RequestsAdapter extends BaseAdapter {
     public View getView(final int position, View view, ViewGroup parent) {
 
         // inflate the layout for each item of listView
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         assert inflater != null;
         view = inflater.inflate(R.layout.request_item, parent, false);
 

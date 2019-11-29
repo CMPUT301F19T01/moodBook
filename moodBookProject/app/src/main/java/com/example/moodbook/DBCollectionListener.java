@@ -14,6 +14,7 @@ public interface DBCollectionListener {
      * This defines task to be done when getting an item
      * e.g. add item into list in PageFragment
      * @param item
+     *  item that is instance of FriendMood or Mood
      */
     void onGettingItem(Object item);
 
