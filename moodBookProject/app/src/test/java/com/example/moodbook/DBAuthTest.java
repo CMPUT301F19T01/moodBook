@@ -65,5 +65,21 @@ public class DBAuthTest {
         assertEquals(false, result);
     }
 
+    /**
+     * nothing to test as it interacts with the db and has no state changes
+     */
+    @Test
+    public void testCreateUser(){
+
+    }
+
+    /**
+     * nothing to test as it interacts with Firebase and has no state changes
+     */
+    @Test
+    public void testUpdateUsername(){
+
+    }
+
 
 }
