@@ -38,6 +38,7 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
     ImageView emotion;
     Button close;
     String friend_uid;
+    String most_recent_mood;
 
     private FirebaseFirestore db;
 
@@ -74,13 +75,12 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
             @Override
             public void onClick(View view) {
                 finish();
-                //startActivity(new Intent(FriendProfileViewActivity.this, MainActivity.class));
 
             }
         });
 
-        ProfileEditor.getProfileData(friend_uid,this);
-        /*final DocumentReference docRef = collectionReference.document(intent_userID);
+//        ProfileEditor.getProfileData(friend_uid,this);
+        final DocumentReference docRef = collectionReference.document(friend_uid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -100,6 +100,8 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
                                     DocumentSnapshot doc = t.getResult();
                                     if(doc.exists()){
                                         most_recent_mood= (String) doc.get("emotion");
+                                        Log.d("Most_Recent_Mood",most_recent_mood);
+
                                         switch (most_recent_mood){
                                             case "sad":
                                                 emotion.setImageResource(R.drawable.sad);
@@ -128,7 +130,7 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
                     Log.d("get failed with ", "get failed with ", task.getException());
                 }
             }
-        });*/
+        });
 
     }
 
