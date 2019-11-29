@@ -104,7 +104,7 @@ public class RequestsAdapter extends BaseAdapter {
                 //Decline Request
                 requestHandler.removeRequest(frienduser.getUsername());
                 Toast.makeText(context,
-                        "Declined Reequest",
+                        "Declined Request",
                         Toast.LENGTH_LONG).show();
             }
         });
