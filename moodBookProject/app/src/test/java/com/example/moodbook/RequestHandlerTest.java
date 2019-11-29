@@ -11,7 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-/**
+/*
  * All methods found within RequestHandler interact with the db
  * After mocking the db, there would be no remaining functionality to test
  */
