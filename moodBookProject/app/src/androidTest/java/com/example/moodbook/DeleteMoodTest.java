@@ -71,7 +71,10 @@ public class DeleteMoodTest {
         solo.clickOnView(solo.getView(R.id.create_add_button));
     }
 
-// Reference: https://stackoverflow.com/questions/24664730/writing-a-robotium-test-to-swipe-open-an-item-on-a-swipeable-listview
+    /**
+     * Checks to see if mood got deleted after swiping
+     * Reference: https://stackoverflow.com/questions/24664730/writing-a-robotium-test-to-swipe-open-an-item-on-a-swipeable-listview
+     */
     @Test
     public void testDelete(){
         addMood();
