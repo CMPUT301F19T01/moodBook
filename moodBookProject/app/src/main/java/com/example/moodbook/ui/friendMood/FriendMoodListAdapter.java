@@ -79,4 +79,16 @@ public class FriendMoodListAdapter extends ArrayAdapter {
         // notify list is cleared
         notifyDataSetChanged();
     }
+
+    @Override
+    public int getCount() {
+        return friendMoods.size();
+    }
+
+    @Nullable
+    @Override
+    public Object getItem(int position) {
+        return (position >= 0 && position < friendMoods.size()) ?
+             friendMoods.get(position) : null;
+    }
 }
