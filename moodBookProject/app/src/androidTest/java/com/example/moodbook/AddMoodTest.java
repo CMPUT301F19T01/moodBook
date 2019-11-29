@@ -16,7 +16,6 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertTrue;
 
 public class AddMoodTest {
-
     private Solo solo;
 
     @Rule
@@ -24,7 +23,7 @@ public class AddMoodTest {
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         TestHelper.setup(solo);
     }
@@ -33,7 +32,7 @@ public class AddMoodTest {
      * Tests if CreateMood UI works
      */
     @Test
-    public void testeAddMood(){
+    public void testAddMood() {
         // wait for activity to change
         solo.sleep(5000);
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);

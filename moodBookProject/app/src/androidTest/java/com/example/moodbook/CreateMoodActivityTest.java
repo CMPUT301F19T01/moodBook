@@ -19,6 +19,7 @@ import android.widget.Button;
 import com.google.android.gms.maps.model.LatLng;
 import com.robotium.solo.Solo;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -47,69 +48,26 @@ public class CreateMoodActivityTest {
         public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
 
         @Before
-        public void setUp () throws Exception {
+        public void setUp() {
             solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-
-
-            // logout if logged in
-            if (solo.searchText("Mood History")) {
-                solo.clickOnImageButton(0);
-                for (int i = 0; i < 4; i++){
-                    solo.sendKey(Solo.DOWN);
-                }
-                solo.clickOnText("Logout");
-                solo.sleep(3000);
-            }
-            // login with test account
-            if (solo.searchText("login")) {
-                login();
-            }
-
+            TestHelper.setup(solo);
         }
 
-        public void login () {
-            solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
-            solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-            solo.clickOnButton("login");
-        }
-
-//    /**
-//     * used in tests to first login to the app
-//     */
-//    public void login(){
-//        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
-//        solo.enterText((EditText) solo.getView(R.id.password), "testing");
-//        solo.clickOnButton("login");
-//    }
-
-
-    /*
-    @Test
-    public void start() throws Exception {
-
-    }
-*/
         /**
          * Clicks on the Fab button for adding moods to go to createMood Activity
          */
         @Test
-        public void CreateActivityTest () {
+        public void CreateActivityTest() {
+            // wait for activity to change
+            solo.sleep(5000);
+            solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+            // ensure current fragment is for Mood History
+            Assert.assertTrue(solo.searchText("Mood History"));
+
             solo.clickOnView(solo.getView(R.id.mood_history_add_button));
             solo.sleep(5000); // wait for activity to change
             assertTrue(solo.waitForActivity(CreateMoodActivity.class));
         }
-
-        public void clickAdd () {
-            solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-            solo.clickOnImageButton(0);
-            solo.clickOnText("My MoodBook");
-            solo.sleep(3000);
-
-
-            solo.clickOnView(solo.getView(R.id.mood_history_add_button));
-            solo.sleep(5000); // wait for activity to change
-        }
-
 
         /**
          * Tests the adding of location
@@ -117,9 +75,11 @@ public class CreateMoodActivityTest {
          */
         @Test
         public void addLocationTest () {
-            solo.clickOnImageButton(0);
-            solo.clickOnText("My MoodBook");
-            solo.sleep(3000);
+            // wait for activity to change
+            solo.sleep(5000);
+            solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+            // ensure current fragment is for Mood History
+            Assert.assertTrue(solo.searchText("Mood History"));
 
             // create mood
             solo.clickOnView(solo.getView(R.id.mood_history_add_button));
@@ -151,22 +111,6 @@ public class CreateMoodActivityTest {
                     expected,
                     actual);
         }
-
-    /*
-  @Test
-    public void addMood(){
-        solo.clickOnView(solo.getView(R.id.create_date_button)); //date button
-        solo.clickOnView(solo.getView(R.id.create_time_button)); //time button
-        solo.clickOnView(solo.getView(R.id.create_location_button)); //time button
-
-        solo.clickOnView(solo.getView(R.id.create_emotion_spinner, 0));//emotion --Picks alone
-        solo.clickOnView(solo.getView(R.id.create_location_button));
-        solo.clickOnView(solo.getView(R.id.create_emotion_spinner, 0));
-
-        solo.clickOnView(solo.getView(R.id.create_add_button)); //Select CONFIRM Button
-
-    }
-    */
 
     }
 

@@ -29,41 +29,86 @@ public class FragmentSwitchTest {
 
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        // logout if logged in
-        if (solo.searchText("Mood History")){
-            solo.clickOnImageButton(0);
-            for (int i = 0; i < 4; i++){
-                solo.sendKey(Solo.DOWN);
-            }
-            solo.clickOnText("Logout");
-            solo.sleep(2000);
-        }
-        // login with test account
-        if (solo.searchText("login")){
-            login();
-        }
+        TestHelper.setup(solo);
     }
 
     /**
-     * used in tests to first login to the app
+     * Testing My MoodBook
      */
-    public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.clickOnButton("login");
+    @Test
+    public void FragmentSwitchMyMoodBook() {
+        solo.clickOnImageButton(0);
+        solo.clickOnText("My MoodBook");
+        solo.sleep(2000);
+        assertTrue(solo.waitForText("Mood History"));
     }
-    /*Testing Friend Mood Book*/
+
+    /**
+     * Testing Friend Mood Book
+     */
     @Test
     public void FragmentSwitchFriendMoodBook() {
         solo.clickOnImageButton(0);
         solo.clickOnText("Friend MoodBook");
         solo.sleep(2000);
-        assertTrue(solo.waitForText("Friend MoodBook"));
+        assertTrue(solo.waitForText("Friend Moods"));
     }
-    /*Testing Add Friend */
 
+    /**
+     * Testing My Mood Map
+     */
+    @Test
+    public void FragmentSwitchMyMoodMap() {
+        solo.clickOnImageButton(0);
+        solo.clickOnText("My Mood Map");
+        solo.sleep(2000);
+        assertTrue(solo.waitForText("Mood History Map"));
+    }
+
+    /**
+     * Testing Friend Mood Map
+     */
+    @Test
+    public void FragmentSwitchFriendMoodMap() {
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Friend Mood Map");
+        solo.sleep(2000);
+        assertTrue(solo.waitForText("Friend Mood Map"));
+    }
+
+    /**
+     * Testing My Followers
+     */
+    @Test
+    public void FragmentSwitchMyFollowers() {
+        solo.clickOnImageButton(0);
+        for (int i = 0; i < 4; i++){
+            solo.sendKey(Solo.DOWN);
+        }
+        solo.clickOnText("My Followers");
+        solo.sleep(2000);
+        assertTrue(solo.waitForText("My Followers"));
+    }
+
+    /**
+     * Testing My Friends
+     */
+    @Test
+    public void FragmentSwitchMyFriends() {
+        solo.clickOnImageButton(0);
+        for (int i = 0; i < 4; i++){
+            solo.sendKey(Solo.DOWN);
+        }
+        solo.clickOnText("My Friends");
+        solo.sleep(2000);
+        assertTrue(solo.waitForText("My Friends"));
+    }
+
+    /**
+     * Testing Add Friend
+     */
     @Test
     public void FragmentSwitchAddFriends() {
         solo.clickOnImageButton(0);
@@ -74,8 +119,10 @@ public class FragmentSwitchTest {
         solo.sleep(2000);
         assertTrue(solo.waitForText("Add Friends"));
     }
-    /*Testing Friend My Requests*/
 
+    /**
+     * Testing My Requests
+     */
     @Test
     public void FragmentSwitchMyRequests() {
         solo.clickOnImageButton(0);
@@ -86,26 +133,10 @@ public class FragmentSwitchTest {
         solo.sleep(2000);
         assertTrue(solo.waitForText("Friend Requests"));
     }
-//    @Test
-//    public void FragmentSwitchMyMoodMap() {
-//        solo.clickOnImageButton(0);
-//        solo.clickOnText("My Mood Map");
-//        solo.sleep(5000);
-//        assertTrue(solo.waitForText("Mood History Map"));
-//    }
-    /*Testing Friend Mood Map*/
 
-    @Test
-    public void FragmentSwitchFriendMoodMap() {
-        solo.clickOnImageButton(0);
-        solo.clickOnText("Friend Mood Map");
-        solo.sleep(2000);
-        assertTrue(solo.waitForText("Friend Mood Map"));
-        solo.sleep(2000);
-
-    }
-
-    /*Testing Logout*/
+    /**
+     * Testing Logout
+     */
     @Test
     public void FragmentSwitchLogout(){
         solo.clickOnImageButton(0);

@@ -8,13 +8,14 @@ import androidx.test.rule.ActivityTestRule;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
 
-public class UpdateMoodObjectTest {
+public class UpdateMoodTest {
     private Solo solo;
 
     @Rule
@@ -31,6 +32,12 @@ public class UpdateMoodObjectTest {
 
     @Test
     public void editMoodTest() {
+        // wait for activity to change
+        solo.sleep(5000);
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        // ensure current fragment is for Mood History
+        Assert.assertTrue(solo.searchText("Mood History"));
+
         solo.clickInRecyclerView(1);
         solo.sleep(2000); // wait for activity to change
         solo.clickOnText("Edit");

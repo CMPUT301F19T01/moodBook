@@ -37,19 +37,17 @@ public class HomeFragmentTest {
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
-
     @Before
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         TestHelper.setup(solo);
     }
 
-
     /**
      * Check if moods are sorted starting from most recent
      */
     @Test
-    public void testSorting(){
+    public void testSorting() {
         // wait for activity to change
         solo.sleep(5000);
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);

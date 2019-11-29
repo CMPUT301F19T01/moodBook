@@ -36,7 +36,7 @@ public class FriendMoodFragmentTest {
      * Check if friend moods are sorted starting from most recent
      */
     @Test
-    public void testSorting(){
+    public void testSorting() {
         // switch to Friend Moodbook
         solo.clickOnImageButton(0);
         solo.clickOnText("Friend MoodBook");

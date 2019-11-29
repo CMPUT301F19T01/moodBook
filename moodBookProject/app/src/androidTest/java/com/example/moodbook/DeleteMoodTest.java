@@ -28,7 +28,7 @@ public class DeleteMoodTest {
 
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         TestHelper.setup(solo);
     }
@@ -37,7 +37,7 @@ public class DeleteMoodTest {
      * Tests if Swipe-to-delete from Mood History works
      */
     @Test
-    public void testDeleteMood(){
+    public void testDeleteMood() {
         // add a new mood
         TestHelper.addMoodBasic(solo);
 
