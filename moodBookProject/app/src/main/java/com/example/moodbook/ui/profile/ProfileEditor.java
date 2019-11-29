@@ -35,7 +35,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- *
+ * This class is a helper class for the prodf
  */
 public class ProfileEditor {
 
