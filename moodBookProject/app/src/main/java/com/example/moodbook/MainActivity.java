@@ -33,6 +33,7 @@ import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
+import com.example.moodbook.ui.profile.FriendProfileViewActivity;
 import com.example.moodbook.ui.profile.ProfileActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity  {
     private FirebaseFirestore db;
     private static String name;
     private String email;
+    private  String userID;
     private  ImageView profile;
 
     /**
@@ -80,6 +82,7 @@ public class MainActivity extends AppCompatActivity  {
                 name = user.getDisplayName();
             }
             email = user.getEmail();
+            userID = user.getUid();
         }
 
 
@@ -193,11 +196,12 @@ public class MainActivity extends AppCompatActivity  {
 
             case R.id.nav_profile:
                 fragmentClass =null;
-                Intent intent = new Intent(this, ProfileActivity.class);
-                intent.putExtra("name",name);
+                Intent intent = new Intent(this, FriendProfileViewActivity.class);
+                intent.putExtra("username",name);
+                intent.putExtra("userID",userID);
                 intent.putExtra("email",email);
+                intent.putExtra("user","user");
                 startActivity(intent);
-                Log.d("Activity:" , "My profile");
                 break;
 
             case R.id.nav_logout:

@@ -3,6 +3,7 @@ package com.example.moodbook.ui.profile;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -20,6 +21,7 @@ import com.example.moodbook.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -36,12 +38,16 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
     TextView friend_bio;
     private FirebaseAuth mAuth;
     ImageView emotion;
+    FloatingActionButton edit_button;
     Button close;
     String friend_uid;
+    String user;
     String most_recent_mood;
+
 
     private FirebaseFirestore db;
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +61,31 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
         friend_bio = (TextView)findViewById(R.id.friend_bio);
         close = (Button) findViewById(R.id.close);
         emotion = findViewById(R.id.most_recent_mood);
+        edit_button = findViewById(R.id.edit_profile);
 
-        String intent_username = getIntent().getStringExtra("username");
+        final String intent_username = getIntent().getStringExtra("username");
+        final String intent_email =getIntent().getStringExtra("email");
         friend_uid = getIntent().getStringExtra("userID");
+        user = getIntent().getStringExtra("user");
+
+
+        if(user != null){
+            edit_button.setVisibility(View.VISIBLE);
+            friend_email.setText(intent_email);
+            edit_button.setOnClickListener(new View.OnClickListener() {
+                                               @Override
+                                               public void onClick(View view) {
+                                                   Intent intent = new Intent(FriendProfileViewActivity.this, ProfileActivity.class);
+                                                   intent.putExtra("username",intent_username);
+                                                   intent.putExtra("userID",friend_uid);
+                                                   intent.putExtra("email",intent_email);
+                                                   startActivity(intent);
+
+                                               }
+                                           }
+            );
+
+        }
 
         friend_username.setText(intent_username);
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
@@ -79,59 +107,7 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
             }
         });
 
-//        ProfileEditor.getProfileData(friend_uid,this);
-        final DocumentReference docRef = collectionReference.document(friend_uid);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("DocumentSnapshot data: ", "DocumentSnapshot data: " + document.get("phone"));
-                        friend_phone.setText((CharSequence) document.get("phone"));
-                        friend_bio.setText((CharSequence) document.get("bio"));
-                        friend_email.setText((CharSequence) document.get("email"));
-                        String recent_moodID = (String) document.get("recent_moodID");
-                        if (recent_moodID != null) {
-                            DocumentReference moodRef = docRef.collection("MOODS").document(recent_moodID);
-                            moodRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> t) {
-                                    DocumentSnapshot doc = t.getResult();
-                                    if(doc.exists()){
-                                        most_recent_mood= (String) doc.get("emotion");
-                                        Log.d("Most_Recent_Mood",most_recent_mood);
-
-                                        switch (most_recent_mood){
-                                            case "sad":
-                                                emotion.setImageResource(R.drawable.sad);
-                                                break;
-                                            case "happy":
-                                                emotion.setImageResource(R.drawable.happy);
-                                                break;
-                                            case  "afraid":
-                                                emotion.setImageResource(R.drawable.afraid);
-                                                break;
-                                            case "angry":
-                                                emotion.setImageResource(R.drawable.angry);
-                                                break;
-
-                                        }
-                                    }
-                                }
-                            });
-                        }
-
-
-                    } else {
-                        Log.d("No such document", "No such document");
-                    }
-                } else {
-                    Log.d("get failed with ", "get failed with ", task.getException());
-                }
-            }
-        });
-
+        ProfileEditor.getProfileData(friend_uid,this);
     }
 
     @Override

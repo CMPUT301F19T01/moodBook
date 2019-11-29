@@ -78,7 +78,7 @@ public class ProfileActivity extends AppCompatActivity
         email = (TextView) findViewById(R.id.email);
         phone = findViewById(R.id.phone);
         bio = findViewById(R.id.bio);
-        intent_name = getIntent().getStringExtra("name");
+        intent_name = getIntent().getStringExtra("username");
         showImg(intent_name);
         intent_email = getIntent().getStringExtra("email");
         dp = (ImageView) findViewById(R.id.profile_pic);
@@ -162,8 +162,6 @@ public class ProfileActivity extends AppCompatActivity
      */
     @Override
     public void onGettingUserDoc(DocumentSnapshot document) {
-        Log.d("DocumentSnapshot data: ",
-                "DocumentSnapshot data: " + document.get("phone"));
         phone.setText((CharSequence) document.get("phone"));
         bio.setText((CharSequence) document.get("bio"));
         showImg((String) document.get("username"));
