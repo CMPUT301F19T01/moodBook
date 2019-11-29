@@ -107,7 +107,7 @@ public class CreateMoodActivityTest {
 
             String expected = "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA";
 
-            assertEquals("Expected coords returned from LocationPickerActivity to match users location",
+            assertEquals("Expected coords returned from LocationPickerActivity to match users location. Make sure you set the location in the emulator to 37.4220, -122.0840",
                     expected,
                     actual);
         }

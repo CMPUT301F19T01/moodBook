@@ -32,19 +32,7 @@ public class AcceptDeclineTest {
     @Before
     public void setUp() throws Exception{
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        // logout if logged in
-        if (solo.searchText("Mood History")){
-            solo.clickOnImageButton(0);
-            for (int i = 0; i < 4; i++){
-                solo.sendKey(Solo.DOWN);
-            }
-            solo.clickOnText("Logout");
-            solo.sleep(3000);
-        }
-        // login with test account
-        if (solo.searchText("login")){
-            login();
-        }
+        TestHelper.setup(solo);
     }
 
     /**
@@ -62,8 +50,11 @@ public class AcceptDeclineTest {
     @Test
     public void AcceptRequest(){
         solo.clickOnImageButton(0);
+        for (int i = 0; i < 4; i++){
+            solo.sendKey(Solo.DOWN);
+        }
         solo.clickOnText("My Requests");
-        solo.sleep(5000);
+        solo.sleep(2000);
         solo.waitForText("Friend Requests");
 
         ListView requestListView = (ListView) solo.getView(R.id.request_listView);
@@ -88,8 +79,11 @@ public class AcceptDeclineTest {
     @Test
     public void DeclineRequest(){
         solo.clickOnImageButton(0);
+        for (int i = 0; i < 4; i++){
+            solo.sendKey(Solo.DOWN);
+        }
         solo.clickOnText("My Requests");
-        solo.sleep(5000);
+        solo.sleep(2000);
         solo.waitForText("Friend Requests");
 
         ListView requestListView = (ListView) solo.getView(R.id.request_listView);
