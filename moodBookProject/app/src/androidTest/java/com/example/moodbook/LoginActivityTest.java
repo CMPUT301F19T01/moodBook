@@ -39,9 +39,9 @@ public class LoginActivityTest {
             for (int i = 0; i < 4; i++){
                 solo.sendKey(Solo.DOWN);
             }
-            solo.clickOnText("Logout");
+            TestHelper.scrollToLogout(solo);
+            solo.sleep(3000);
         }
-        solo.sleep(3000);
     }
 
     /**
@@ -49,13 +49,11 @@ public class LoginActivityTest {
      */
     @Test
     public void loginSucceed(){
-        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.clickOnButton("login");
-        solo.sleep(5000); // wait for activity to change
+        TestHelper.login(solo);
 
+        // wait for activity to change
+        solo.sleep(5000);
         solo.assertCurrentActivity("Wrong activity", MainActivity.class);
-
     }
 
     /**
@@ -96,7 +94,6 @@ public class LoginActivityTest {
         solo.clickOnButton("login");
 
         assertTrue(solo.waitForText("Incorrect email format"));
-
     }
 
     /**
@@ -110,7 +107,6 @@ public class LoginActivityTest {
         solo.clickOnButton("login");
 
         assertTrue(solo.waitForText("Password must be"));
-
     }
 
     /**
@@ -120,7 +116,8 @@ public class LoginActivityTest {
     public void loginRegister(){
         solo.clickOnButton("register");
 
-        solo.sleep(5000); // wait for activity to change
+        // wait for activity to change
+        solo.sleep(5000);
         solo.assertCurrentActivity("Wrong activity", RegisterActivity.class);
     }
 }

@@ -67,9 +67,8 @@ public class MyFriendMoodMapFragment extends MoodMapFragment
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        View root = inflater.inflate( R.layout.fragment_friendmoodmap,
-                container, false);
+        // get root view from PageFragment
+        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_friendmoodmap);
 
         // prepare map
         mapView = root.findViewById(R.id.friendMapView);
