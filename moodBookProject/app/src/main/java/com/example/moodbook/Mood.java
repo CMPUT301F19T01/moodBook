@@ -27,7 +27,7 @@ public class Mood implements Comparable<Mood> {
     private String reason_text;     // optional
     private Bitmap reason_photo;    // optional
     private String situation;       // optional
-    private MoodLocation location;      // optional
+    private MoodLocation location;  // optional
     private String doc_id;          // document id in db for editing/deleting the mood
 
     // date time formatter

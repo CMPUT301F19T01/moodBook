@@ -1,5 +1,10 @@
 package com.example.moodbook;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
 import com.example.moodbook.ui.login.DBAuth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -59,4 +64,6 @@ public class DBAuthTest {
         result = dbAuth.verifyPass(password);
         assertEquals(false, result);
     }
+
+
 }
