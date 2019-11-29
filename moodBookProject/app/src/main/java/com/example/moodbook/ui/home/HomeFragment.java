@@ -43,7 +43,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * This class shows the mood history of the user, showing the date, time, and emotion state
-
  * This fragment for Mood History allows user to view, add, edit and remove moods.
  * @see Mood
  * @see DBMoodSetter
@@ -54,7 +53,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class HomeFragment extends PageFragment
         implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBCollectionListener {
 
-    // Mood History
     private RecyclerView moodListView;
     private MoodListAdapter moodListAdapter;
     private CoordinatorLayout moodHistoryLayout;
@@ -69,7 +67,6 @@ public class HomeFragment extends PageFragment
 
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
-     *
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -77,12 +74,11 @@ public class HomeFragment extends PageFragment
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        // get root view from PageFragment
+
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_home);
 
-        // initialize layout
-        moodHistoryLayout = root.findViewById(R.id.mood_history_layout);
-        hiddenMssg = (TextView) root.findViewById(R.id.mood_history_empty_msg);
+        moodHistoryLayout = root.findViewById(R.id.mood_history_layout);  // initialize layout
+        hiddenMssg = root.findViewById(R.id.mood_history_empty_msg); //message to show when there is no mood available
 
         // Set up recyclerView and adapter
         moodListView = root.findViewById(R.id.mood_history_listView);
@@ -90,48 +86,9 @@ public class HomeFragment extends PageFragment
             // View the selected mood: when a mood item is clicked, start View activity
             @Override
             public void onItemClick(final Mood item) {
-                /*// put attributes of selected mood into editIntent
-                AlertDialog.Builder alert = new AlertDialog.Builder(
-                        getActivity());
-                alert.setMessage("Would you like to view or edit this mood");
-                alert.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //do your work here
-                        dialog.dismiss();
-                        Intent editIntent = new Intent(getActivity(), EditMoodActivity.class);
-                        getIntentDataFromMood(editIntent, item);
-                        startActivity(editIntent);
-                    }
-                });
-                alert.setNegativeButton("View", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //do your work here
-                        dialog.dismiss();
-                        Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
-                        // put attributes of selected mood into editIntent
-                        getIntentDataFromMood(viewIntent, item);
-                        // add current class name to disable edit button
-                        viewIntent.putExtra("page",HomeFragment.class.getSimpleName());
-                        startActivity(viewIntent);
-                    }
-                });
-                alert.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-
-                alert.show();
-                 */
                 Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
-                // put attributes of selected mood into Intent
                 getIntentDataFromMood(viewIntent, item);
-                // add current class name to allow edit button
-                viewIntent.putExtra("page", HomeFragment.class.getSimpleName());
+                viewIntent.putExtra("page", HomeFragment.class.getSimpleName()); // add current class name to allow edit button
                 startActivity(viewIntent);
                 SelectedMood = item;
             }
@@ -140,7 +97,6 @@ public class HomeFragment extends PageFragment
         // initialize DB connector
         mAuth = FirebaseAuth.getInstance();
         moodDB = new DBMoodSetter(mAuth, getContext(), TAG);
-        //moodDB.setMoodListListener(moodListAdapter);
         moodDB.setMoodListListener(this);
 
         // Add a mood: when floating add button is clicked, start add activity
@@ -149,15 +105,10 @@ public class HomeFragment extends PageFragment
             @Override
             public void onClick(View view) {
                 Intent addIntent = new Intent(getActivity(), CreateMoodActivity.class);
-                //Toast.makeText(getContext(), "Add a mood", Toast.LENGTH_LONG).show();
                 startActivity(addIntent);
             }
         });
 
-        // adding item touch helper
-        // only ItemTouchHelper.LEFT added to detect Right to Left swipe
-        // if you want both Right -> Left and Left -> Right
-        // add pass ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT as param
         ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new RecyclerItemTouchHelper(
                 0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(moodListView);
@@ -165,36 +116,38 @@ public class HomeFragment extends PageFragment
         return root;
     }
 
-
+    /**
+     * This method allows a user to swipe a row to be able to delete a mood.
+     * @param viewHolder
+     * This is the view from RecyclerView
+     * @param direction
+     * This is the direction of the swipe
+     * @param position
+     * This is the position of the mood in the list
+     */
     public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction, final int position) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(
-                getActivity());
+        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
         alert.setMessage("Are you sure you want to delete this Mood?");
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //do your work here
+
                 if (viewHolder instanceof MoodListAdapter.MyViewHolder) {
-                    // backup of removed item for undo purpose
-                    final int deletedIndex = viewHolder.getAdapterPosition();
+                    final int deletedIndex = viewHolder.getAdapterPosition(); // backup of removed item for undo purpose
                     final Mood deletedMood = moodListAdapter.getItem(deletedIndex);
+                    removeMoodFromDB(deletedMood, position); //removes from DB
 
-                    // remove the item from recycler view
-                    //moodListAdapter.removeItem(deletedIndex);
-                    removeMoodFromDB(deletedMood, position);
-
-                    // showing snack bar with Undo option
+                    // showing snack bar with the Undo option
                     Snackbar snackbar = Snackbar
                             .make(moodHistoryLayout,
                                     "Mood " + deletedMood.toString() + " removed from Mood History!",
                                     Snackbar.LENGTH_LONG);
+
                     snackbar.setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // undo is selected, restore the deleted item
-                            //moodListAdapter.restoreItem(deletedItem, deletedIndex);
-                            moodDB.addMood(deletedMood);
+                            moodDB.addMood(deletedMood); // restores the previously deleted item
                         }
                     });
                     Log.i("testDel", "Deleted mood.");
@@ -208,39 +161,34 @@ public class HomeFragment extends PageFragment
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    Log.e(TAG, "left Swipe");
+                    Log.i(TAG, "left Swipe");
                 } else {
-                    Log.e(TAG, "Right Swipe");
+                    Log.i(TAG, "Right Swipe");
                 }
                 moodListAdapter.notifyItemChanged(position);
-
                 dialogInterface.dismiss();
             }
         });
-
         alert.show();
     }
 
     /**
-     * This override PageFragment onCreateOptionsMenu() which creates menu options when fragment is created,
-     * and set up search action to filter emotional state
+     * This override PageFragment onCreateOptionsMenu() creates menu options when fragment is created
+     * This sets up search action to filter emotional state
      */
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // clean up unwanted menu options
         super.onCreateOptionsMenu(menu, inflater);
-        // inflate new search action menu
         if (inflater == null) {
             inflater = getActivity().getMenuInflater();
         }
         inflater.inflate(R.menu.mood_history_emotion_filter, menu);
 
-        // set up search action
         final MenuItem searchItem = menu.findItem(R.id.mood_history_action_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
         searchView.setQueryHint("Search Emotions");
-        searchView.setIconifiedByDefault(false);    // expand searchView by default
+        searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
@@ -268,12 +216,18 @@ public class HomeFragment extends PageFragment
         });
     }
 
+    /**
+     * This is used by DBMoodSetter to perform task before getting the list of moods
+     */
     @Override
     public void beforeGettingList() {
-        hiddenMssg.setVisibility(View.INVISIBLE);   // hide empty message
+        hiddenMssg.setVisibility(View.INVISIBLE);
         moodListAdapter.clear();
     }
 
+    /**
+     * This is used by DBMoodSetter to perform task when getting the list of moods
+     */
     @Override
     public void onGettingItem(Object item) {
         if (item instanceof Mood) {
@@ -281,17 +235,21 @@ public class HomeFragment extends PageFragment
         }
     }
 
+    /**
+     * This is used by DBMoodSetter to perform task after getting the list of moods
+     */
     @Override
     public void afterGettingList() {
         if (moodListAdapter.getItemCount() == 0){
-            hiddenMssg.setVisibility(View.VISIBLE); // show empty message
+            hiddenMssg.setVisibility(View.VISIBLE);
         }
     }
 
 
     /**
      * This method is for setting up the mood list adapter
-     * @param itemClickListener - click listener that defines what happens when adapter item is clicked
+     * @param itemClickListener
+     * This is a click listener that defines what happens when adapter item is clicked
      */
     private void setupAdapter(MoodListAdapter.OnItemClickListener itemClickListener) {
         moodListAdapter = new MoodListAdapter(getContext(), itemClickListener);
@@ -303,10 +261,11 @@ public class HomeFragment extends PageFragment
     }
 
     /**
-     * This method takes in the Mood object from the clicked row
-     *
+     * This method takes in the Mood object from the clicked row.
      * @param intent
+     * This is an object that provides runtime binding between HomeFragment and another activity.
      * @param mood
+     * This is the Mood object obtained.
      */
     public void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
         MoodLocation location = mood.getLocation();
@@ -322,6 +281,13 @@ public class HomeFragment extends PageFragment
         intent.putExtra("location_address", location == null ? null : location.getAddress());
     }
 
+    /**
+     * This method deletes a mood from the database.
+     * @param deletedMood
+     * This is the Mood obtained that a user would want to delete.
+     * @param position
+     * This is the position of the mood in the adapter.
+     */
     private void removeMoodFromDB(Mood deletedMood, int position) {
         if(position == 0 && moodListAdapter.getItemCount() > 1) {
             Mood newRecentMood = moodListAdapter.getItem(1);
