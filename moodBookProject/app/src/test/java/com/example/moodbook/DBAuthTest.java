@@ -18,6 +18,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
+ * Unit testing methods inside DBAuth
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class DBAuthTest {
 
@@ -63,6 +66,22 @@ public class DBAuthTest {
         password = "12345";
         result = dbAuth.verifyPass(password);
         assertEquals(false, result);
+    }
+
+    /**
+     * nothing to test as it interacts with the db and has no state changes
+     */
+    @Test
+    public void testCreateUser(){
+
+    }
+
+    /**
+     * nothing to test as it interacts with Firebase and has no state changes
+     */
+    @Test
+    public void testUpdateUsername(){
+
     }
 
 

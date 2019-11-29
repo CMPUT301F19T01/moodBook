@@ -131,6 +131,7 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
      * This takes in the Mood object from the clicked row
      * @param intent
      * @param mood
+     * This is a mood Object
      */
     private void getIntentDataFromMood(@NonNull Intent intent, @NonNull Mood mood) {
         MoodLocation location = mood.getLocation();

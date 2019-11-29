@@ -289,7 +289,6 @@ public class MoodEditor {
      * Method that checks dimension, decodes bitmap, and decides on what rotation it should display on the imageView
      * Attemps flexibility on the code, especially when taking a picture with different phones that takes in different orientation
      * @param context
-     *
      * @param selectedImage
      *  resource identifier to image
      * @return Bitmap image
@@ -321,7 +320,9 @@ public class MoodEditor {
      * Calculates inSampleSize
      * @param options
      * @param reqWidth
+     * Required width
      * @param reqHeight
+     * Required height
      * @return int inSampleSize
      * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
      */
@@ -356,7 +357,9 @@ public class MoodEditor {
      * Avoid having to show a vertical oriented image as a horizontal one
      * @param context
      * @param img
+     * Bitmap of the image to be roted
      * @param selectedImage
+     * Path of the image
      * @return Bitmap image
      * @throws IOException
      * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
@@ -388,7 +391,9 @@ public class MoodEditor {
     /**
      * Method that actually rotates the image
      * @param img
+     * Image to be rotated
      * @param degree
+     * Degree in which the image should be rotated
      * @return Bitmap rotatedImage
      * Reference: https://stackoverflow.com/questions/14066038/why-does-an-image-captured-using-camera-intent-gets-rotated-on-some-devices-on-a
      */
@@ -465,8 +470,7 @@ public class MoodEditor {
      * @param data
      *  An Intent, which can return result data to the caller
      * @param myActivity
-     *
-     *
+     * Activity that is calling it from
      */
     public static void getLocationResult(int requestCode, int resultCode, @Nullable Intent data,
             final AppCompatActivity myActivity) {

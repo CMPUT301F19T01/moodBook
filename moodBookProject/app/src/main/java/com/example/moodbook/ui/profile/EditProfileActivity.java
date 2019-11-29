@@ -53,10 +53,6 @@ public class EditProfileActivity extends AppCompatActivity
     StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
 
 
-    /**
-     *
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,13 +113,6 @@ public class EditProfileActivity extends AppCompatActivity
         });
     }
 
-
-    /**
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -136,7 +125,7 @@ public class EditProfileActivity extends AppCompatActivity
     }
 
     /**
-     *
+     * This method sets a profile image
      * @param bitImage
      */
     @Override
@@ -145,7 +134,7 @@ public class EditProfileActivity extends AppCompatActivity
     }
 
     /**
-     *
+     * This method displays profile data that was obtained from database
      * @param document
      */
     @Override
@@ -165,7 +154,7 @@ public class EditProfileActivity extends AppCompatActivity
     }
 
     /**
-     *
+     * This method adds image to FireBase Storage
      * @param username
      */
     public void addImg(String username) {
@@ -185,7 +174,7 @@ public class EditProfileActivity extends AppCompatActivity
     }
 
     /**
-     *
+     * This method displays the profile picture
      * @param username
      *  string username of a user
      */
