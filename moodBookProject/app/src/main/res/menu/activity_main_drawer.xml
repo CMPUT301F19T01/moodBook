@@ -2,48 +2,62 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
+    <item android:title="Mood">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_myMood"
+                    android:icon="@drawable/ic_person_black_24dp"
+                    android:title="My MoodBook" />
+                <item
+                    android:id="@+id/nav_friendMood"
+                    android:icon="@drawable/ic_group_black_24dp"
+                    android:title="Friend MoodBook" />
+                <item
+                    android:id="@+id/nav_myMoodMap"
+                    android:icon="@drawable/ic_location_on_black_24dp"
+                    android:title="My Mood Map" />
+                <item
+                    android:id="@+id/nav_myFriendMoodMap"
+                    android:icon="@drawable/ic_person_pin_circle_black_24dp"
+                    android:title="Friend Mood Map" />
 
-    <group android:checkableBehavior="single">
-        <!--<item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />-->
-        <item
-            android:id="@+id/nav_myMood"
-            android:icon="@drawable/ic_format_list_bulleted_black_24dp"
-            android:title="My MoodBook" />
-        <item
-            android:id="@+id/nav_FriendMood"
-            android:icon="@drawable/ic_group_black_24dp"
-            android:title="Friend MoodBook" />
-        <item
-            android:id="@+id/nav_addFriends"
-            android:icon="@drawable/ic_person_add_black_24dp"
-            android:title="Add Friends" />
-        <item
-            android:id="@+id/nav_myRequests"
-            android:icon="@drawable/ic_group_add_black_24dp"
-            android:title="My Requests" />
-        <item
-            android:id="@+id/nav_myMoodMap"
-            android:icon="@drawable/ic_location_on_black_24dp"
-            android:title="My Mood Map" />
-        <item
-            android:id="@+id/nav_myFriendMoodMap"
-            android:icon="@drawable/ic_person_pin_circle_black_24dp"
-            android:title="Friend Mood Map" />
-
-    </group>
+            </group>
+        </menu>
+    </item>
 
     <item android:title="User">
         <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_profile"
+                    android:icon="@drawable/ic_profile"
+                    android:title="My Profile" />
+                <item
+                    android:id="@+id/nav_Followers"
+                    android:icon="@drawable/ic_big_group_black_24dp"
+                    android:title="My Followers" />
+                <item
+                    android:id="@+id/nav_myFriends"
+                    android:icon="@drawable/ic_big_group_black_24dp"
+                    android:title="My Friends" />
+                <item
+                    android:id="@+id/nav_request"
+                    android:icon="@drawable/ic_person_add_black_24dp"
+                    android:title="Add Friends" />
+                <item
+                    android:id="@+id/nav_myRequests"
+                    android:icon="@drawable/ic_group_add_black_24dp"
+                    android:title="My Requests" />
+            </group>
+        </menu>
+    </item>
+
+    <group android:checkableBehavior="single">
             <item
                 android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_lock_open_black_24dp"
                 android:title="Logout" />
-
-
-        </menu>
-    </item>
+    </group>
 
 </menu>

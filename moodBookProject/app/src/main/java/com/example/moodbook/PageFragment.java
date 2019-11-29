@@ -14,12 +14,15 @@ import androidx.fragment.app.Fragment;
  * This fragment is inherited by each page to ensure unwanted menu options are cleared.
  * @see androidx.fragment.app.Fragment
  */
-public class PageFragment extends Fragment {
+public abstract class PageFragment extends Fragment {
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
      * @param inflater
+     *  This is a Layout inflater object
      * @param container
+     *  This is a ViewGroup object
      * @param savedInstanceState
+     *  This is a Bundle with the saved instance of the application
      * @param layoutId
      *  This is resource id of layout for PageFragment
      * @return
@@ -36,18 +39,16 @@ public class PageFragment extends Fragment {
     }
 
     /**
-     * This override Fragment onCreateOptionsMenu() which creates menu options when fragment is created
+     * This override Fragment onCreateOptionsMenu() which remove all the useless menu options and creates menu options when fragment is created
      * @param menu
+     *   The menu object
      * @param inflater
+     *  The menu inflater object
      */
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        // remove all the useless menu options
         menu.clear();
-        /*// remove old search action menu
-        if(menu.findItem(R.id.mood_history_action_search) != null) {
-            menu.removeItem(R.id.mood_history_action_search);
-        }*/
+
     }
 }

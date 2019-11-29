@@ -1,5 +1,10 @@
 package com.example.moodbook;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+
 import com.example.moodbook.ui.login.DBAuth;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -11,11 +16,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+/*
+ * Unit testing methods inside DBAuth
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class DBAuthTest {
 
@@ -62,4 +67,22 @@ public class DBAuthTest {
         result = dbAuth.verifyPass(password);
         assertEquals(false, result);
     }
+
+    /**
+     * nothing to test as it interacts with the db and has no state changes
+     */
+    @Test
+    public void testCreateUser(){
+
+    }
+
+    /**
+     * nothing to test as it interacts with Firebase and has no state changes
+     */
+    @Test
+    public void testUpdateUsername(){
+
+    }
+
+
 }

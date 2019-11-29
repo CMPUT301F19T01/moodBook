@@ -1,3 +1,5 @@
+// Reference: https://stackoverflow.com/questions/16596418/how-to-handle-exceptions-in-junit  - Eric Jablow    used to ignore failed login method
+
 package com.example.moodbook;
 
 import android.widget.EditText;
@@ -22,44 +24,22 @@ public class RequestFragmentTest {
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
-
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        // logout if logged in
-        if (solo.searchText("Mood History")){
-            solo.clickOnImageButton(0);
-            solo.clickOnText("Logout");
-            solo.sleep(3000);
-        }
-        // login with test account
-        if (solo.searchText("login")){
-            login();
-        }
-    }
-
-    /**
-     * used in tests to first login to the app
-     */
-    public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.clickOnButton("login");
+        TestHelper.setup(solo);
     }
 
     /**
      * Test for successful add request
+     * To setup this test, ensure the account user: tyler@gmail.com pw: 123456  does not have a request from test
      */
-    // https://stackoverflow.com/questions/16596418/how-to-handle-exceptions-in-junit  - Eric Jablow    used to ignore failed login method
-    //@Test(expected = junit.framework.AssertionFailedError.class) // ignore failed login attempt (if already logged in)
     @Test
     public void sendRequest(){
-        //login();
-        // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
 
-        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "tyler");
+        solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "tyler");
         solo.clickOnButton("Send Request");
         assertTrue(solo.waitForText("Sent request"));
     }
@@ -69,12 +49,10 @@ public class RequestFragmentTest {
      */
     @Test
     public void sendRequestInvalid(){
-        //login();
-        // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
 
-        solo.enterText((EditText) solo.getView(R.id.usernameEditText), "2j2ieh2@@@dwed33");
+        solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "2j2ieh2@@@dwed33");
         solo.clickOnButton("Send Request");
         assertTrue(solo.waitForText("User does not exist"));
     }
@@ -84,12 +62,34 @@ public class RequestFragmentTest {
      */
     @Test
     public void sendRequestEmpty(){
-        //login();
-        // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
 
         solo.clickOnButton("Send Request");
         assertTrue(solo.waitForText("User does not exist"));
+    }
+
+    /**
+     * Test for adding self
+     */
+    @Test
+    public void sendRequestSelf(){
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Add Friends");
+        solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "test");
+        solo.clickOnButton("Send Request");
+        assertTrue(solo.waitForText("Cannot add yourself"));
+    }
+
+    /**
+     * Test for adding a friend thats already added
+     */
+    @Test
+    public void sendRequestAdded(){
+        solo.clickOnImageButton(0);
+        solo.clickOnText("Add Friends");
+        solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "newtest");
+        solo.clickOnButton("Send Request");
+        assertTrue(solo.waitForText("User already added"));
     }
 }

@@ -11,6 +11,10 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/*
+ * All methods found within RequestHandler interact with the db
+ * After mocking the db, there would be no remaining functionality to test
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class RequestHandlerTest {
 
@@ -21,7 +25,7 @@ public class RequestHandlerTest {
     @Mock
     FirebaseFirestore mockdb;
 
-    private final RequestHandler requestHandler = new RequestHandler(mockmAuth, mockdb);
+    private RequestHandler requestHandler;
 
 
     /**
@@ -29,6 +33,30 @@ public class RequestHandlerTest {
      */
     @Test
     public void testSendRequest(){
+
+    }
+
+    /**
+     * nothing to test as it is a void and a simple setter and also interacts with the db
+     */
+    @Test
+    public void testSetRequestListListener(){
+
+    }
+
+    /**
+     * nothing to test as it is a simple getter that interacts with the db
+     */
+    @Test
+    public void testGetRequestListener(){
+
+    }
+
+    /**
+     * nothing to test as it is is void and interacts with the db
+     */
+    @Test
+    public void testAddFriend(){
 
     }
 

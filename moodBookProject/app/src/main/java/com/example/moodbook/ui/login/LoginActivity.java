@@ -7,12 +7,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.moodbook.MainActivity;
@@ -25,11 +24,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import static androidx.constraintlayout.widget.Constraints.TAG;
-
 
 /**
  * This activity handles login and registration
+ * Note: Login is not not modularized because FireBase calls are asynchronous.
+ *  Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows
+ *  that the task is finished
  */
 
 public class LoginActivity extends AppCompatActivity {
@@ -43,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button registerButton;
     protected EditText email;
     protected EditText password;
+    private ImageView profile;
+    private TextView forgotPasswordLink;
 
     private static final String TAG = "EmailPassword";
 
@@ -50,8 +52,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //Stuck logging in? use the following line once to log out the cached session:
-//        mAuth.getInstance().signOut();
 
         mAuth = FirebaseAuth.getInstance();
         dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
@@ -61,10 +61,10 @@ public class LoginActivity extends AppCompatActivity {
 
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
+        profile = findViewById(R.id.profile);
 
+        forgotPasswordLink = findViewById(R.id.forgot_password);
 
-        // Login is not not modularized because FireBase calls are asynchronous. Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows that the task is finished
-        // LOGIN button
         loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // REGISTER button
+        /* REGISTER button */
         registerButton = findViewById(R.id.register);
         registerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Auth listener checks if user is logged in
+        /* Auth listener checks if user is logged in */
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -115,6 +115,13 @@ public class LoginActivity extends AppCompatActivity {
                 updateUI(user);
             }
         };
+
+        forgotPasswordLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+            }
+    });
 
     }
 
@@ -136,19 +143,23 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This method starts the mainactivity when the user is logged in
      * @param currentUser
+     * This is the current user
      */
     protected void updateUI(FirebaseUser currentUser){
         if (currentUser != null){
-            Log.d(TAG, "User logged in:starting mainactivity");
+            Log.d(TAG, "MoodbookUser logged in:starting mainactivity");
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
             // update text views, show error messages
-            Log.d(TAG, "User not logged in");
+            Log.d(TAG, "MoodbookUser not logged in");
         }
     }
 
-    // https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant    used for activity results
+    /*
+     https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant
+    used for activity results
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

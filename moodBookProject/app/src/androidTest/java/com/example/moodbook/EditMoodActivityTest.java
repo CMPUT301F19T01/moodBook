@@ -1,14 +1,15 @@
 package com.example.moodbook;
-import android.app.Activity;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.moodbook.ui.home.CreateMoodActivity;
+import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
-import com.example.moodbook.MainActivity;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,35 +26,27 @@ public class EditMoodActivityTest {
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
-
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        // logout if logged in
-        if (solo.searchText("Mood History")){
-            solo.clickOnImageButton(0);
-            solo.clickOnText("Logout");
-            solo.sleep(3000);
-        }
-        // login with test account
-        if (solo.searchText("login")){
-            login();
-        }
-    }
-
-    /**
-     * used in tests to first login to the app
-     */
-    public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testing");
-        solo.clickOnButton("login");
+        TestHelper.setup(solo);
     }
 
     @Test
     public void clickEdit(){
+        // wait for activity to change
+        solo.sleep(5000);
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        // ensure current fragment is for Mood History
+        Assert.assertTrue(solo.searchText("Mood History"));
+
+        // back to Mood History
+        solo.waitForActivity(MainActivity.class, 5000); // wait for activity to change
+
         solo.clickInRecyclerView(0);
-        solo.sleep(5000); // wait for activity to change
+        solo.waitForActivity(ViewMoodActivity.class, 2000); // wait for activity to change
+        solo.clickOnText("Edit");
+        solo.sleep(2000); // wait for activity to change
         assertTrue(solo.waitForActivity(EditMoodActivity.class));
     }
 

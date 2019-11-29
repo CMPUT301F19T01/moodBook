@@ -5,28 +5,26 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/nav_myMood">
 
-
-
     <fragment
         android:id="@+id/nav_myMood"
         android:name="com.example.moodbook.ui.home.HomeFragment"
         android:label="Mood History"
         tools:layout="@layout/fragment_home" />
+    <activity
+        android:id="@+id/nav_profile"
+        android:name="com.example.moodbook.ui.profile.EditProfileActivity"
+        android:label="View your profile"
+        tools:layout="@layout/activity_edit_profile" />
     <fragment
-        android:id="@+id/nav_FriendMood"
-        android:name="com.example.moodbook.ui.friendMood.friendMoodFragment"
+        android:id="@+id/nav_friendMood"
+        android:name="com.example.moodbook.ui.friendMood.FriendMoodFragment"
         android:label="Friend Mood"
         tools:layout="@layout/fragment_friendmood" />
     <fragment
-        android:id="@+id/nav_addFriends"
-        android:name="com.example.moodbook.ui.Request.RequestFragment"
-        android:label="Add Friends"
-        tools:layout="@layout/fragment_myrequests" />
-    <fragment
-        android:id="@+id/nav_myRequests"
-        android:name="com.example.moodbook.ui.myRequests.myRequestsFragment"
-        android:label="My Requests"
-        tools:layout="@layout/fragment_request" />
+        android:id="@+id/nav_Followers"
+        android:name="com.example.moodbook.ui.followers.MyFollowersFragment"
+        android:label="My Followers"
+        tools:layout="@layout/fragment_followers" />
     <fragment
         android:id="@+id/nav_myMoodMap"
         android:name="com.example.moodbook.ui.myMoodMap.MyMoodMapFragment"
@@ -38,15 +36,24 @@
         android:label="Friend Mood Map"
         tools:layout="@layout/fragment_friendmoodmap" />
     <fragment
-        android:id="@+id/nav_logout"
-        android:name="com.example.moodbook.ui.login.LoginActivity"
-        android:label="Log Out"
-        tools:layout="@layout/fragment_logout" />
-
+        android:id="@+id/nav_myFriends"
+        android:name="com.example.moodbook.ui.myFriends.MyFriendsFragment"
+        android:label="My Friends"
+        tools:layout="@layout/fragment_myfriends" />
 
     <fragment
         android:id="@+id/nav_request"
         android:name="com.example.moodbook.ui.Request.RequestFragment"
         android:label="Follow a user"
         tools:layout="@layout/fragment_request" />
+    <fragment
+        android:id="@+id/nav_myRequests"
+        android:name="com.example.moodbook.ui.myRequests.myRequestsFragment"
+        android:label="My Requests"
+        tools:layout="@layout/fragment_myrequests" />
+    <fragment
+        android:id="@+id/nav_logout"
+        android:name="com.example.moodbook.ui.login.LoginActivity"
+        android:label="Log Out"
+        tools:layout="@layout/fragment_logout" />
 </navigation>

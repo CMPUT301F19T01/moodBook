@@ -24,40 +24,18 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-/**
- * todo: write tests for
- *  * markers with expected location data
- *  * markers with no location data
- *  * delete location
- */
+
 public class MyMoodMapFragmentTest {
     private Solo solo;
 
     @Rule
     public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class,
             true, true);
-    @Rule
-    public ActivityTestRule<MainActivity> rule2 = new ActivityTestRule<>(MainActivity.class, true, true);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        // logout if logged in
-        if (solo.searchText("Mood History")){
-            solo.clickOnImageButton(0);
-            solo.clickOnText("Logout");
-            solo.sleep(3000);
-        }
-        // login with test account
-        if (solo.searchText("login")){
-            login();
-        }
-    }
-
-    public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "hello@hello.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "password");
-        solo.clickOnButton("login");
+        TestHelper.setup(solo);
     }
 
     /**
@@ -66,7 +44,6 @@ public class MyMoodMapFragmentTest {
     @Test
     public void test(){
         // switch to mood map fragment
-        solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo.clickOnImageButton(0);
         solo.clickOnText("My Mood Map");
         solo.sleep(3000);
@@ -78,5 +55,4 @@ public class MyMoodMapFragmentTest {
         // test if map view is shown
         assertEquals("Expected mapView.shown() is true",true, mapView.isShown());
     }
-
 }

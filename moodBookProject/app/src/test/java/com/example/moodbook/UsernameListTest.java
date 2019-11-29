@@ -10,6 +10,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/*
+ * Unit testing methods in UsernameList
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class UsernameListTest {
 

@@ -1,126 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/viewPage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ViewMoodActivity"
-    android:orientation="vertical"
-    android:background="@drawable/view_background">
+    android:background="@color/lightpurple"
+    android:paddingBottom="20dp">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/view_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        android:id="@+id/view_date_time"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:layout_width="374dp"
-        android:layout_height="49dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="114dp"
-        tools:ignore="MissingConstraints" />
+        <TextView
+            android:id="@+id/view_friend_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="Friend_name"
+            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+            android:textSize="25dp"
+            android:gravity="center"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/view_reason"
-        android:layout_width="374dp"
-        android:layout_height="49dp"
-        android:text="TextView"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.567"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="402dp" />
 
-    <TextView
-        android:id="@+id/view_situation"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:layout_width="374dp"
-        android:layout_height="49dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.594"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/view_location"
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:layout_width="374dp"
-        android:layout_height="49dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.594"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="269dp"
-        tools:ignore="MissingConstraints" />
+            <ImageView
+                android:id="@+id/view_emoji"
+                android:layout_width="@dimen/spinner_item_height"
+                android:layout_height="@dimen/spinner_item_height"
+                android:layout_margin="10dp"
+                android:contentDescription="@string/todo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_menu_gallery"
+                android:layout_gravity="center"/>
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="84dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
-        android:contentDescription="@string/todo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_menu_gallery"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="25dp" />
+            <TextView
+                android:id="@+id/view_date_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:gravity="center"
+                android:text="Date_time" />
 
-    <Button
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-    <TextView
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:id="@+id/view_emotion"
-        android:layout_width="199dp"
-        android:layout_height="52dp"
-        android:text="@string/textview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.818"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
-        tools:layout_editor_absoluteY="29dp"
-        tools:ignore="MissingConstraints" />
+                <TextView
+                    android:id="@+id/viewtag_emotion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Emotional State"
+                    android:textSize="15dp"
+                    android:gravity="center" />
 
-    <TextView
-        android:textColor="#000000"
-        android:textSize="20dp"
-        android:id="@+id/view_time"
-        android:layout_width="374dp"
-        android:layout_height="49dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.567"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="196dp"
-        tools:ignore="MissingConstraints" />
+                <TextView
+                    android:id="@+id/view_emotion"
+                    android:textAlignment="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_corner"
+                    android:paddingTop="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="10dp"
+                    android:text="Emotion"
+                    android:textColor="#000000"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="20dp"/>
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="510dp"
-        tools:srcCompat="@tools:sample/avatars"
-        tools:ignore="MissingConstraints" />
+            </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/viewtag_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Location"
+                android:textSize="15dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/view_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner"
+                android:textAlignment="center"
+                android:paddingTop="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:text="Location"
+                android:textColor="#000000"
+                android:layout_gravity="center"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/viewtag_situation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Situation"
+                android:textSize="15dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/view_situation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:background="@drawable/rounded_corner"
+                android:paddingTop="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:text="Situation"
+                android:textColor="#000000"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/viewtag_reason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Reason"
+                android:textSize="15dp"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/view_reason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner"
+                android:textAlignment="center"
+                android:paddingTop="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="10dp"
+                android:text="Reason"
+                android:textColor="#000000"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_gravity="center"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/view_uploaded_pic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            android:adjustViewBounds="true"
+            android:layout_centerInParent="true"
+            tools:srcCompat="@tools:sample/avatars" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/view_edit_button"
+                android:background = "@drawable/roundedbutton"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_centerInParent="true"
+                android:text="EDIT"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:textSize="15dp"/>
+
+            <Button
+                android:id="@+id/view_cancel_button"
+                android:background="#0000"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/view_edit_button"
+                android:text="CANCEL"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:textSize="15dp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

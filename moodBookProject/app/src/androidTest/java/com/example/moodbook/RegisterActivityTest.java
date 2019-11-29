@@ -1,13 +1,12 @@
+// Reference: https://stackoverflow.com/questions/20536566/creating-a-random-string-with-a-z-and-0-9-in-java   - Suresh Atta     used to generate unique username and email address
+
 package com.example.moodbook;
 
-import android.content.Intent;
-import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.example.moodbook.ui.login.LoginActivity;
-import com.example.moodbook.ui.login.RegisterActivity;
 import com.robotium.solo.Solo;
 
 import org.junit.Before;
@@ -26,7 +25,6 @@ public class RegisterActivityTest {
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
-    // https://stackoverflow.com/questions/20536566/creating-a-random-string-with-a-z-and-0-9-in-java   - Suresh Atta     used to generate unique username and email address
     private String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
@@ -46,6 +44,9 @@ public class RegisterActivityTest {
         // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
+            for (int i = 0; i < 4; i++){
+                solo.sendKey(Solo.DOWN);
+            }
             solo.clickOnText("Logout");
             solo.sleep(3000);
         }
@@ -54,15 +55,15 @@ public class RegisterActivityTest {
     }
 
     /**
-     * Tests register
+     * Tests a successful register
      */
     @Test
     public void registerSucceed(){
         String unique = getSaltString();
         String email = unique + "@test.com";
-        solo.enterText((EditText) solo.getView(R.id.email), email);
-        solo.enterText((EditText) solo.getView(R.id.username), unique);
-        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
+        solo.enterText(1, email);
+        solo.enterText(2, unique);
+        solo.enterText(0, "testtest");
         solo.clickOnButton("register");
         solo.sleep(5000); // wait for activity to change
         assertTrue(solo.waitForText("Mood History"));
@@ -75,9 +76,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailEmail(){
         // invalid email
-        solo.enterText((EditText) solo.getView(R.id.email), "fail");
-        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.enterText((EditText) solo.getView(R.id.username), "unusedtestuser");
+        solo.enterText(1, "fail");
+        solo.enterText(2, "testtest");
+        solo.enterText(0, "unusedtestuser");
         solo.clickOnButton("register");
         assertTrue(solo.waitForText("Incorrect email format"));
 
@@ -89,9 +90,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailPassword(){
         // invalid email
-        solo.enterText((EditText) solo.getView(R.id.email), "test@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "fail");
-        solo.enterText((EditText) solo.getView(R.id.username), "unusedtestuser");
+        solo.enterText(1, "test@gmail.com");
+        solo.enterText(0, "fail");
+        solo.enterText(2, "unusedtestuser");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Password must be"));
@@ -103,9 +104,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailUsername(){
         // invalid email
-        solo.enterText((EditText) solo.getView(R.id.email), "test@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.enterText((EditText) solo.getView(R.id.username), "test");
+        solo.enterText(1, "test@gmail.com");
+        solo.enterText(0, "testtest");
+        solo.enterText(2, "test");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Username in use"));
@@ -117,9 +118,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailEmptyEmail(){
         // invalid email
-        solo.enterText((EditText) solo.getView(R.id.email), "");
-        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.enterText((EditText) solo.getView(R.id.username), "unusedtestuser");
+        solo.enterText(1, "");
+        solo.enterText(2, "testtest");
+        solo.enterText(0, "unusedtestuser");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Incorrect email format"));
@@ -131,9 +132,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailEmptyUsername(){
         // invalid email
-        solo.enterText((EditText) solo.getView(R.id.email), "test@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.enterText((EditText) solo.getView(R.id.username), "");
+        solo.enterText(1, "test@gmail.com");
+        solo.enterText(2, "");
+        solo.enterText(0, "unusedtestuser");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Username in use"));
@@ -145,9 +146,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailEmptyPassword(){
         // invalid email
-        solo.enterText((EditText) solo.getView(R.id.email), "test@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "");
-        solo.enterText((EditText) solo.getView(R.id.username), "unusedtestuser");
+        solo.enterText(1, "test@gmail.com");
+        solo.enterText(2, "testtest");
+        solo.enterText(0, "");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Password must be"));

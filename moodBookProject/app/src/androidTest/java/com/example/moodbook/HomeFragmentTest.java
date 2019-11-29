@@ -1,12 +1,18 @@
 package com.example.moodbook;
 
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
 
+import androidx.appcompat.view.menu.ActionMenuItemView;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.moodbook.ui.home.CreateMoodActivity;
+import com.example.moodbook.ui.home.MoodListAdapter;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
 
@@ -14,6 +20,10 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.HashMap;
+
+import static com.google.firebase.firestore.util.Assert.fail;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -27,44 +37,26 @@ public class HomeFragmentTest {
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
-
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        // logout if logged in
-        if (solo.searchText("Mood History")){
-            solo.clickOnImageButton(0);
-            solo.clickOnText("Logout");
-            solo.sleep(3000);
-        }
-        // login with test account
-        if (solo.searchText("login")){
-            login();
-        }
-    }
-
-    /**
-     * used in tests to first login to the app
-     */
-    public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "kathleen@gmail.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testing");
-        solo.clickOnButton("login");
+        TestHelper.setup(solo);
     }
 
     /**
      * Check if moods are sorted starting from most recent
      */
-    /*@Test
-    public void checkSorting(){
-        solo.sleep(5000); // wait for activity to change
+    @Test
+    public void testSorting() {
+        // wait for activity to change
+        solo.sleep(5000);
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         // ensure current fragment is for Mood History
         assertTrue(solo.searchText("Mood History"));
 
         final RecyclerView moodListView = (RecyclerView) solo.getView(R.id.mood_history_listView);
         MoodListAdapter moodAdapter = (MoodListAdapter)moodListView.getAdapter();
-        // check if moods in existing RecyclerView are sorted
+        // test if moods in RecyclerView are sorted
         for (int i = 1; i < moodAdapter.getItemCount(); i++) {
             Mood a = moodAdapter.getItem(i-1);
             Mood b = moodAdapter.getItem(i);
@@ -72,43 +64,54 @@ public class HomeFragmentTest {
         }
 
         // add a new mood, and check if the new mood is the top item in RecyclerView
-        solo.clickOnView(solo.getView(R.id.mood_history_add_button));
-        solo.sleep(5000); // wait for activity to change
-        assertTrue(solo.waitForActivity(CreateMoodActivity.class));
-        solo.clickOnView(solo.getView(R.id.create_date_button));
-        solo.clickOnView(solo.getView(R.id.create_time_button));
-        solo.pressSpinnerItem(0, 1);
-        String new_mood_date = ((Button)solo.getView(R.id.create_date_button)).getText().toString();
-        String new_mood_time = ((Button)solo.getView(R.id.create_time_button)).getText().toString();
-        solo.clickOnButton("ADD");
+        HashMap<String,String> moodData = TestHelper.addMoodBasic(solo);
 
         // back to Mood History
-        solo.sleep(5000); // wait for activity to change
-        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        solo.waitForActivity(MainActivity.class, 5000); // wait for activity to change
         // ensure current fragment is for Mood History
         assertTrue(solo.searchText("Mood History"));
+        // test if the first mood is the one just added
         Mood new_mood = moodAdapter.getItem(0);
-        assertEquals(new_mood.getDateText(), new_mood_date);
-        assertEquals(new_mood.getTimeText(), new_mood_time);
-    }*/
+        assertEquals(moodData.get("date"), new_mood.getDateText());
+        assertEquals(moodData.get("time"), new_mood.getTimeText());
+        assertEquals(moodData.get("emotion"), new_mood.getEmotionText());
+
+        // delete the new mood
+        TestHelper.deleteMood(solo);
+    }
 
     /**
-     * Check if filter filters out non-matching mood
-     * TODO: need to find menu
+     * Check if filter filters out mood with non-matching emotion
      */
     @Test
-    public void checkFiltering() {
-        solo.sleep(5000); // wait for activity to change
+    public void testFiltering() {
+        // wait for activity to change
+        solo.sleep(5000);
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-        MainActivity activity = (MainActivity) solo.getCurrentActivity() ;
         // ensure current fragment is for Mood History
         assertTrue(solo.searchText("Mood History"));
 
-        solo.clickOnView(solo.getView(R.id.mood_history_action_search));
+        final RecyclerView moodListView = (RecyclerView) solo.getView(R.id.mood_history_listView);
+        MoodListAdapter moodAdapter = (MoodListAdapter)moodListView.getAdapter();
 
-        MenuItem searchItem = (MenuItem)solo.getView(R.id.mood_history_action_search);
-        //MenuItem searchItem = (MenuItem)solo.getView(R.id.mood_history_action_search);
-        SearchView searchView = (SearchView) searchItem.getActionView();
-        searchView.setQuery("happy",false);
+        // click search menu option
+        View menu_search = solo.getView(R.id.mood_history_action_search);
+        solo.clickOnView(menu_search);
+
+        // type "happy" into searchView
+        MenuItem menu_searchItem = ((ActionMenuItemView)menu_search).getItemData();
+        SearchView searchView = (SearchView) menu_searchItem.getActionView();
+        searchView.performClick();
+        solo.enterText(0,"happy");
+        solo.sleep(3000);
+
+        // filter first to get updated moodAdapter
+        moodAdapter.getFilter().filter("happy");
+        solo.sleep(3000);
+        // check if moods in RecyclerView are "happy" only
+        for (int i = 0; i < moodAdapter.getItemCount(); i++) {
+            Mood a = moodAdapter.getItem(i);
+            assertEquals("happy", a.getEmotionText());
+        }
     }
 }
