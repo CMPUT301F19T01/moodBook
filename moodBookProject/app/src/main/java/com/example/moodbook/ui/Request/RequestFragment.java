@@ -52,7 +52,6 @@ public class RequestFragment extends PageFragment
         usernameArrow = root.findViewById(R.id.send_request_username_arrow);
         requestButton = root.findViewById(R.id.send_request_button);
 
-        //FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
