@@ -33,7 +33,6 @@ public class LoginActivityTest {
     @Before
     public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
-        // logout if logged in
         if (solo.searchText("Mood History")){
             solo.clickOnImageButton(0);
             for (int i = 0; i < 4; i++){

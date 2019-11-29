@@ -61,9 +61,9 @@ public class RegisterActivityTest {
     public void registerSucceed(){
         String unique = getSaltString();
         String email = unique + "@test.com";
-        solo.enterText(1, email);
-        solo.enterText(2, unique);
-        solo.enterText(0, "testtest");
+        solo.enterText(0, email);
+        solo.enterText(1, unique);
+        solo.enterText(2, "testtest");
         solo.clickOnButton("register");
         solo.sleep(5000); // wait for activity to change
         assertTrue(solo.waitForText("Mood History"));
@@ -76,9 +76,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailEmail(){
         // invalid email
-        solo.enterText(1, "fail");
+        solo.enterText(0, "fail");
+        solo.enterText(1, "unusedtestuser");
         solo.enterText(2, "testtest");
-        solo.enterText(0, "unusedtestuser");
         solo.clickOnButton("register");
         assertTrue(solo.waitForText("Incorrect email format"));
 
@@ -90,9 +90,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailPassword(){
         // invalid email
-        solo.enterText(1, "test@gmail.com");
-        solo.enterText(0, "fail");
-        solo.enterText(2, "unusedtestuser");
+        solo.enterText(0, "test@gmail.com");
+        solo.enterText(1, "unusedtestuser");
+        solo.enterText(2, "fail");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Password must be"));
@@ -104,9 +104,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailUsername(){
         // invalid email
-        solo.enterText(1, "test@gmail.com");
-        solo.enterText(0, "testtest");
-        solo.enterText(2, "test");
+        solo.enterText(0, "test@gmail.com");
+        solo.enterText(1, "test");
+        solo.enterText(2, "testtest");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Username in use"));
@@ -118,9 +118,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailEmptyEmail(){
         // invalid email
-        solo.enterText(1, "");
-        solo.enterText(2, "testtest");
-        solo.enterText(0, "unusedtestuser");
+        solo.enterText(0, "");
+        solo.enterText(1, "testtest");
+        solo.enterText(2, "unusedtestuser");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Incorrect email format"));
@@ -132,9 +132,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailEmptyUsername(){
         // invalid email
-        solo.enterText(1, "test@gmail.com");
-        solo.enterText(2, "");
-        solo.enterText(0, "unusedtestuser");
+        solo.enterText(0, "test@gmail.com");
+        solo.enterText(1, "");
+        solo.enterText(2, "testtest");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Username in use"));
@@ -146,9 +146,9 @@ public class RegisterActivityTest {
     @Test
     public void registerFailEmptyPassword(){
         // invalid email
-        solo.enterText(1, "test@gmail.com");
-        solo.enterText(2, "testtest");
-        solo.enterText(0, "");
+        solo.enterText(0, "test@gmail.com");
+        solo.enterText(1, "unusedtestuser");
+        solo.enterText(2, "");
         solo.clickOnButton("register");
 
         assertTrue(solo.waitForText("Password must be"));
