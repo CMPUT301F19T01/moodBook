@@ -53,11 +53,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Stuck logging in? use the following line once to log out the cached session:
-        // mAuth.getInstance().signOut();
-
         mAuth = FirebaseAuth.getInstance();
         dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
+
 
         loginButton = findViewById(R.id.login);
 
@@ -67,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
 
         forgotPasswordLink = findViewById(R.id.forgot_password);
 
-        // LOGIN button
         loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -98,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // REGISTER button
+        /* REGISTER button */
         registerButton = findViewById(R.id.register);
         registerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -110,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Auth listener checks if user is logged in
+        /* Auth listener checks if user is logged in */
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -159,7 +156,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant    used for activity results
+    /*
+     https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant
+    used for activity results
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
