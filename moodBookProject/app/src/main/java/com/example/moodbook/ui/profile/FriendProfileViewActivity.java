@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,6 +20,7 @@ import com.example.moodbook.MainActivity;
 import com.example.moodbook.Mood;
 import com.example.moodbook.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,8 +29,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.io.File;
+import java.io.IOException;
 
 public class FriendProfileViewActivity extends AppCompatActivity implements ProfileEditor.ProfileListener{
     ImageView friend_dp;
@@ -86,18 +92,25 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
             );
 
         }
-
         friend_username.setText(intent_username);
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        storageReference.child("profilepics/" + intent_username + ".jpeg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Glide.with(getApplicationContext()/* context */)
-                        .load(uri)
-                        .centerCrop()
-                        .into(friend_dp);
-            }
-        }) ;
+        StorageReference sRef = FirebaseStorage.getInstance().getReference().child("profilepics/" + intent_username + ".jpeg" );
+        try{
+            final File localFile = File.createTempFile("Images", "jpeg");
+            sRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    Bitmap obtainedImg = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                    friend_dp.setImageBitmap(obtainedImg);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
