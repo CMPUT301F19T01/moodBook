@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.moodbook.ui.home.MoodListAdapter;
-
 /**
  * This class is used by Mood History to attach swipe-to-delete functionality to RecyclerView
  */

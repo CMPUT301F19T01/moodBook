@@ -27,6 +27,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
  * This activity handles login and registration
+ * Note: Login is not not modularized because FireBase calls are asynchronous.
+ *  Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows
+ *  that the task is finished
  */
 
 public class LoginActivity extends AppCompatActivity {
@@ -49,8 +52,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //Stuck logging in? use the following line once to log out the cached session:
-//        mAuth.getInstance().signOut();
 
         mAuth = FirebaseAuth.getInstance();
         dbAuth = new DBAuth(mAuth, FirebaseFirestore.getInstance());
@@ -64,9 +65,6 @@ public class LoginActivity extends AppCompatActivity {
 
         forgotPasswordLink = findViewById(R.id.forgot_password);
 
-
-        // Login is not not modularized because FireBase calls are asynchronous. Since they are asynchronous, we can't depend on results returned from methods until the onCompleteListener knows that the task is finished
-        // LOGIN button
         loginButton = findViewById(R.id.login);
         loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -97,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // REGISTER button
+        /* REGISTER button */
         registerButton = findViewById(R.id.register);
         registerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -109,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Auth listener checks if user is logged in
+        /* Auth listener checks if user is logged in */
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -145,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * This method starts the mainactivity when the user is logged in
      * @param currentUser
+     * This is the current user
      */
     protected void updateUI(FirebaseUser currentUser){
         if (currentUser != null){
@@ -157,7 +156,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant    used for activity results
+    /*
+     https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android  - Nishant
+    used for activity results
+    */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
