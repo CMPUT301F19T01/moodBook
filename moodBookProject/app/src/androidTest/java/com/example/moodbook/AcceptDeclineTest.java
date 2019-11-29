@@ -65,7 +65,7 @@ public class AcceptDeclineTest {
             for(int i = 1; i<requestsAdapter.getCount();i++){
                 TextView textView = (TextView) requestListView.getChildAt(i);
                 solo.clickOnButton("ACCEPT");
-                assertTrue(solo.waitForText("Accepted Request"));
+                assertTrue(solo.waitForLogMessage("Accepted Request"));
             }
         }
         else {
@@ -93,7 +93,7 @@ public class AcceptDeclineTest {
             for(int i = 1; i<requestsAdapter.getCount();i++){
                 TextView textView = (TextView) requestListView.getChildAt(i);
                 solo.clickOnButton("DECLINE");
-                assertTrue(solo.waitForText("Declined Request"));
+                assertTrue(solo.waitForLogMessage("Declined Request"));
             }
         }
         else {

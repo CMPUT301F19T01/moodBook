@@ -88,8 +88,7 @@ public class RequestsAdapter extends BaseAdapter implements RequestHandler.Verif
 
                 //remove request once accepted
                 requestHandler.removeRequest(frienduser.getUsername());
-                Toast.makeText(context, "Accepted Request", Toast.LENGTH_LONG).show();
-
+                Log.i("Accepted.", "Accepted Request"); //testing purposes
                 requestHandler.startFollowBack(frienduser, thisInstance);
             }
         });
@@ -99,9 +98,7 @@ public class RequestsAdapter extends BaseAdapter implements RequestHandler.Verif
             public void onClick(View view) {
                 //Decline Request
                 requestHandler.removeRequest(frienduser.getUsername());
-                Toast.makeText(context,
-                        "Declined Request",
-                        Toast.LENGTH_LONG).show();
+                Log.i("Declined", "Declined Request");
             }
         });
 

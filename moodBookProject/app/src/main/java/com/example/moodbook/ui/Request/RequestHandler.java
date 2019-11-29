@@ -224,13 +224,13 @@ public class RequestHandler {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        showStatusMessage("Declined request");
+                        Log.i("Removed", "Removed in DB");
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        showStatusMessage("Decline failed for  " + username + ": " + e.toString());
+                       Log.i("Remove Failed.", "Decline failed for  " + username + ": " + e.toString());
                     }
                 });
     }
