@@ -66,8 +66,7 @@ public class MapTest {
         // find marker on map view
         UiDevice device = UiDevice.getInstance(getInstrumentation());
         UiObject marker = device.findObject(new UiSelector()
-                .descriptionContains("MAP READY")
-                .childSelector(new UiSelector().instance(3)));
+                .focusable(true));
 
         // click marker to open up dialog
         marker.click();
