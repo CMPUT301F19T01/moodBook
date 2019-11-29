@@ -153,7 +153,7 @@ public class RequestsAdapter extends BaseAdapter implements RequestHandler.Verif
     }
 
     /**
-     * Thus method is used to add a user into the adapter.
+     * This method is used to add a user into the adapter.
      * @param item
      */
     public void addItem(MoodbookUser item) {
@@ -163,7 +163,9 @@ public class RequestsAdapter extends BaseAdapter implements RequestHandler.Verif
         // notify item added
         notifyDataSetChanged();
     }
-
+    /**
+     * It is used to verify if follower is already your friend.
+     */
 
     @Override
     public void onVerifyingFollowerAsFriend(boolean isFriend, final MoodbookUser acceptedFriend) {
