@@ -39,6 +39,7 @@ public class EditMoodActivityTest {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         // ensure current fragment is for Mood History
         Assert.assertTrue(solo.searchText("Mood History"));
+        TestHelper.addMoodBasic(solo);
 
         // back to Mood History
         solo.waitForActivity(MainActivity.class, 5000); // wait for activity to change
@@ -48,6 +49,11 @@ public class EditMoodActivityTest {
         solo.clickOnButton(0);
         solo.sleep(2000); // wait for activity to change
         assertTrue(solo.waitForActivity(EditMoodActivity.class));
+        solo.clickOnText("CANCEL");
+        solo.sleep(2000);
+        solo.clickOnButton(1);
+        solo.sleep(2000);
+        TestHelper.deleteMood(solo);
     }
 
 }

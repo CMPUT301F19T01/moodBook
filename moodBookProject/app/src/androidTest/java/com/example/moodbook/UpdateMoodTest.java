@@ -38,10 +38,11 @@ public class UpdateMoodTest {
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
         // ensure current fragment is for Mood History
         Assert.assertTrue(solo.searchText("Mood History"));
+        TestHelper.addMoodBasic(solo);
 
         solo.clickInRecyclerView(1);
         solo.waitForActivity(ViewMoodActivity.class, 2000); // wait for activity to change
-        solo.clickOnText("Edit");
+        solo.clickOnButton(0);
 
         solo.waitForActivity(EditMoodActivity.class, 2000); // wait for activity to change
         solo.clickOnView(solo.getView(R.id.edit_emotion_spinner));//emotion --Picks alone
@@ -51,5 +52,6 @@ public class UpdateMoodTest {
         solo.pressSpinnerItem(1,1);
         solo.clickOnView(solo.getView(R.id.edit_save_button)); //Select SAVE Button
         assertTrue(solo.waitForText("Updated"));
+        TestHelper.deleteMood(solo);
     }
 }
