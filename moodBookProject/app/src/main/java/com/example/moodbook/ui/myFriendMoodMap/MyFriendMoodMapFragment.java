@@ -230,6 +230,14 @@ public class MyFriendMoodMapFragment extends MoodMapFragment
     }
 
     /**
+     * gets friend mood list
+     * @return
+     *  returns array list of friend moods
+     */
+    public ArrayList<FriendMood> getMoodDataList(){ return moodDataList; }
+
+
+    /**
      * clears map and data list before update on friend moods
      */
     @Override

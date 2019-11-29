@@ -37,15 +37,6 @@ public class FriendMood implements Comparable<FriendMood> {
     }
 
     /**
-     * This getter for uid returns text
-     * @return
-     *  returns uid in text
-     */
-    public String getUid() {
-        return this.user.getUid();
-    }
-
-    /**
      * This getter for mood
      * @return
      *  returns user's mood object
@@ -59,6 +50,7 @@ public class FriendMood implements Comparable<FriendMood> {
      * @param other
      *  friendMood object to be compared with
      * @return
+     *
      */
     @Override
     public int compareTo(@NonNull FriendMood other) {

@@ -1,5 +1,6 @@
 package com.example.moodbook;
 
+import android.app.Activity;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -9,7 +10,9 @@ import androidx.test.uiautomator.UiObject;
 import androidx.test.uiautomator.UiObjectNotFoundException;
 import androidx.test.uiautomator.UiSelector;
 
+import com.example.moodbook.ui.friendMood.FriendMood;
 import com.example.moodbook.ui.login.LoginActivity;
+import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.google.android.gms.maps.MapView;
 import com.robotium.solo.Solo;
 
@@ -17,10 +20,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
+
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * tests MyFriendMoodMapFragment for map functionality and mood viewing
+ */
 public class FriendMoodMapFragmentTest {
     private Solo solo;
 

@@ -23,7 +23,9 @@ import java.util.HashMap;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertEquals;
 
-
+/**
+ * tests MyMoodMapFragment for map functionality and mood viewing
+ */
 public class MyMoodMapFragmentTest {
     private Solo solo;
 
