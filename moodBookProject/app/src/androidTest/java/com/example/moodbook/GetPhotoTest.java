@@ -29,25 +29,6 @@ import static junit.framework.TestCase.assertTrue;
             TestHelper.setup(solo);
         }
 
-        /**
-         * Tests Camera intent
-         */
-        @Test
-        public void CameraTest(){
-            // wait for activity to change
-            solo.sleep(5000);
-            solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
-            // ensure current fragment is for Mood History
-            Assert.assertTrue(solo.searchText("Mood History"));
-
-            solo.clickOnView(solo.getView(R.id.mood_history_add_button));
-            solo.waitForActivity(CreateMoodActivity.class, 5000);   // wait for activity to change
-            solo.clickOnView(solo.getView(R.id.create_emotion_spinner));//emotion --Picks alone
-            solo.pressSpinnerItem(0,1);
-            solo.clickOnView(solo.getView(R.id.create_reason_photo_button));
-            solo.clickOnText("Capture photo from camera");
-            assertTrue(solo.waitForLogMessage("Camera intent successful"));
-        }
 
         /**
          * Test for Gallery intent
