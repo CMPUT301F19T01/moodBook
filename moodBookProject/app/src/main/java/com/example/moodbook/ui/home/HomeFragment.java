@@ -47,8 +47,9 @@ import com.google.firebase.auth.FirebaseAuth;
  * @see Mood
  * @see DBMoodSetter
  * @see MoodListAdapter
- * @see com.example.moodbook.PageFragment
+ * @see PageFragment
  * @see RecyclerItemTouchHelper.RecyclerItemTouchHelperListener
+ * @see DBCollectionListener
  */
 public class HomeFragment extends PageFragment
         implements RecyclerItemTouchHelper.RecyclerItemTouchHelperListener, DBCollectionListener {
@@ -56,21 +57,22 @@ public class HomeFragment extends PageFragment
     private RecyclerView moodListView;
     private MoodListAdapter moodListAdapter;
     private CoordinatorLayout moodHistoryLayout;
-    private TextView hiddenMssg;
+    private TextView hiddenMsg;
 
     // connect to DB
     private DBMoodSetter moodDB;
     private FirebaseAuth mAuth;
     private static final String TAG = HomeFragment.class.getSimpleName();
 
-    private Mood SelectedMood = null;
+    //private Mood SelectedMood = null;
 
     /**
      * This is default Fragment onCreateView() which creates view when fragment is created
      * @param inflater
      * @param container
      * @param savedInstanceState
-     * @return Return root view inherited from PageFragment
+     * @return
+     *  Return root view inherited from PageFragment
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class HomeFragment extends PageFragment
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_home);
 
         moodHistoryLayout = root.findViewById(R.id.mood_history_layout);  // initialize layout
-        hiddenMssg = root.findViewById(R.id.mood_history_empty_msg); //message to show when there is no mood available
+        hiddenMsg = root.findViewById(R.id.mood_history_empty_msg); //message to show when there is no mood available
 
         // Set up recyclerView and adapter
         moodListView = root.findViewById(R.id.mood_history_listView);
@@ -90,7 +92,7 @@ public class HomeFragment extends PageFragment
                 getIntentDataFromMood(viewIntent, item);
                 viewIntent.putExtra("page", HomeFragment.class.getSimpleName()); // add current class name to allow edit button
                 startActivity(viewIntent);
-                SelectedMood = item;
+                //SelectedMood = item;
             }
         });
 
@@ -221,12 +223,14 @@ public class HomeFragment extends PageFragment
      */
     @Override
     public void beforeGettingList() {
-        hiddenMssg.setVisibility(View.INVISIBLE);
+        hiddenMsg.setVisibility(View.INVISIBLE);
         moodListAdapter.clear();
     }
 
     /**
-     * This is used by DBMoodSetter to perform task when getting the list of moods
+     * This is used by DBMoodSetter to perform task when getting a mood
+     * @param item
+     *  This is the new mood
      */
     @Override
     public void onGettingItem(Object item) {
@@ -241,7 +245,7 @@ public class HomeFragment extends PageFragment
     @Override
     public void afterGettingList() {
         if (moodListAdapter.getItemCount() == 0){
-            hiddenMssg.setVisibility(View.VISIBLE);
+            hiddenMsg.setVisibility(View.VISIBLE);
         }
     }
 
