@@ -45,7 +45,7 @@ public class EditMoodActivityTest {
 
         solo.clickInRecyclerView(0);
         solo.waitForActivity(ViewMoodActivity.class, 2000); // wait for activity to change
-        solo.clickOnText("Edit");
+        solo.clickOnButton(0);
         solo.sleep(2000); // wait for activity to change
         assertTrue(solo.waitForActivity(EditMoodActivity.class));
     }
