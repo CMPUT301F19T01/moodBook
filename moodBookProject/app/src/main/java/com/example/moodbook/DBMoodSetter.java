@@ -15,6 +15,7 @@ import com.example.moodbook.ui.home.MoodEditor;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -47,7 +48,7 @@ public class DBMoodSetter {
     private StorageReference photoReference;
     private DocumentReference intRef;
     private Context context;
-    private String uid;
+    private FirebaseUser user;
     private String TAG;         // optional: for log message
     private Bitmap obtainedImg;
     private DBCollectionListener listListener;
@@ -62,11 +63,16 @@ public class DBMoodSetter {
      * @param TAG
      *  This is an optional string used for printing log messages
      */
-    public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG) {
+    public DBMoodSetter(@NonNull FirebaseAuth mAuth, Context context, String TAG) {
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
+<<<<<<< HEAD
         storage = FirebaseStorage.getInstance();
         this.uid = mAuth.getCurrentUser().getUid();
+=======
+        this.storage = FirebaseStorage.getInstance();
+        this.user = mAuth.getCurrentUser();
+>>>>>>> kathTest
         this.userReference = db.collection("USERS");
         this.context = context;
         this.intReference = db.collection("int");
@@ -98,7 +104,7 @@ public class DBMoodSetter {
      */
     public DBMoodSetter(FirebaseAuth mAuth, Context context, @NonNull EventListener moodHistoryListener) {
         this(mAuth, context);
-        userReference.document(uid).collection("MOODS")
+        userReference.document(user.getUid()).collection("MOODS")
                 .addSnapshotListener(moodHistoryListener);
     }
 
@@ -119,7 +125,7 @@ public class DBMoodSetter {
 
     public void setMoodListListener(@NonNull DBCollectionListener listListener) {
         this.listListener = listListener;
-        this.userReference.document(uid).collection("MOODS")
+        this.userReference.document(user.getUid()).collection("MOODS")
                 .addSnapshotListener(getMoodEventListener());
     }
 
@@ -179,14 +185,14 @@ public class DBMoodSetter {
      */
     private void addMoodAfterDocId(final String moodDocID, final Mood mood) {
         Map<String, Object> data = getDataFromMood(mood);
-        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
+        CollectionReference moodReference = userReference.document(user.getUid()).collection("MOODS");
         moodReference.document(moodDocID).set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         showStatusMessage("Added successfully: " + moodDocID);
                         // update recent moodID if adding mood is successful
-                        DBFriend.setRecentMoodID(db,uid,moodDocID);
+                        DBFriend.setRecentMoodID(db,user.getUid(),moodDocID);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -260,7 +266,7 @@ public class DBMoodSetter {
      */
     private void removeMood(final String moodID, final boolean updateRecentMoodID,
                             final String newRecentMoodID) {
-        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
+        CollectionReference moodReference = userReference.document(user.getUid()).collection("MOODS");
         // remove selected city
         moodReference.document(moodID).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -270,7 +276,7 @@ public class DBMoodSetter {
                         removeImgFromDB(moodID);
                         // update recent moodID if deleted mood was the most recent mood
                         if(updateRecentMoodID){
-                            DBFriend.setRecentMoodID(db, uid, newRecentMoodID);
+                            DBFriend.setRecentMoodID(db, user.getUid(), newRecentMoodID);
                         }
                     }
                 })
@@ -314,7 +320,7 @@ public class DBMoodSetter {
      *   This is a HashMap containing all the fields that need to be updated in the database and their new values
      */
     public void editMood ( final String moodID, HashMap data){
-        CollectionReference moodReference = userReference.document(uid).collection("MOODS");
+        CollectionReference moodReference = userReference.document(user.getUid()).collection("MOODS");
         updateImg(moodID);
         moodReference.document(moodID).update(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
