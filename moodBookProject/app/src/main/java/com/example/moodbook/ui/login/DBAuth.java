@@ -162,7 +162,7 @@ public class DBAuth {
     /**
      * Stores the username in the user's FireBase auth profile
      * @param user
-     *  user in Firebase 
+     *  user in Firebase
      * @param username
      *  Username string
      */

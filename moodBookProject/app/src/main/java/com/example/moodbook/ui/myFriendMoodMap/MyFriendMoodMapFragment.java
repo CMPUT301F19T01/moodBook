@@ -39,7 +39,8 @@ import java.util.ArrayList;
  * This fragment is used to view a where a users friends' moods take place on a map
  * @see MoodMapFragment
  */
-public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
+public class MyFriendMoodMapFragment extends MoodMapFragment
+        implements OnMapReadyCallback, DBCollectionListener {
 
     private MapView mapView;
     private GoogleMap moodMap; // googleMap object
@@ -77,7 +78,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         // create moodDataList
         moodDataList = new ArrayList<>();
 
-        // gets instance of Firebase
+        // gets instance of FireBase
         mAuth = FirebaseAuth.getInstance();
 
         // setup DBFriend

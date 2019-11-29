@@ -79,7 +79,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
         // create moodDataList
         moodDataList = new ArrayList<>();
 
-        // get instance of Firebase
+        // get instance of FireBase
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         // initialize DBMoodSetter
@@ -138,6 +138,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
 
                 // bind mood data to dialog layout
                 bindViews(mood, dialog, dbMoodSetter, null).show();
+                marker.hideInfoWindow();
 
                 return false;
             }
@@ -206,7 +207,10 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
             BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(smallMarker);
 
             // draw on map
-            moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor).anchor(0.5f,0.5f)).setTag(i);
+            Marker marker = moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor).anchor(0.5f,0.5f));
+            marker.setTag(i);
+            marker.setTitle(String.valueOf(i));
+
 
             // zoom in and focus on the most recent mood, ie. the last mood in list
             if(i+1 == moodDataList.size()){
