@@ -28,10 +28,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-
     protected DBAuth dbAuth;
     private UsernameList usernameList;
-
 
     private Button registerButton;
     protected EditText email;

@@ -25,10 +25,10 @@
         <activity android:name=".ui.login.ResetPasswordActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"></activity>
-        <activity android:name=".ui.profile.FriendProfileViewActivity"
+        <activity android:name=".ui.profile.ProfileViewActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"/>
-        <activity android:name=".ui.profile.ProfileActivity"
+        <activity android:name=".ui.profile.EditProfileActivity"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden"/>
         <!--

@@ -58,9 +58,9 @@ public class RequestsAdapter extends BaseAdapter {
 
 
         // get the reference of textView and button
-        final TextView usernameTextView = (TextView) view.findViewById(R.id.nameRequest);
-        Button acceptButton = (Button) view.findViewById(R.id.accept_button);
-        Button declineButton = (Button) view.findViewById(R.id.decline_button);
+        final TextView usernameTextView = view.findViewById(R.id.nameRequest);
+        Button acceptButton = view.findViewById(R.id.accept_button);
+        Button declineButton = view.findViewById(R.id.decline_button);
 
         // Set the name on the list
         final MoodbookUser frienduser =  requestList.get(position);

@@ -209,7 +209,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
             // draw on map
             Marker marker = moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor).anchor(0.5f,0.5f));
             marker.setTag(i);
-            marker.setTitle(String.valueOf(i));
+            marker.setTitle(mood.getDateText() + " " + mood.getTimeText());
 
 
             // zoom in and focus on the most recent mood, ie. the last mood in list
@@ -220,7 +220,6 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
         }
 
     }
-
 
     /**
      * clear list and map before getting items

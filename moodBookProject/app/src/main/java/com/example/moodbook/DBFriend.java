@@ -52,7 +52,7 @@ public class DBFriend {
         this.userReference = db.collection("USERS");
         this.usernamelistRef = db.collection("usernamelist");
         this.context = context;
-        this.TAG = TAG;
+        DBFriend.TAG = TAG;
     }
 
     /**

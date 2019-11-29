@@ -2,14 +2,12 @@ package com.example.moodbook.ui.friendMood;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -23,14 +21,21 @@ import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- *
+ * This class shows the list of mood recent mood from the user's friends,
+ * showing the username, date, time, and emotion state
+ * This fragment for Friend Mood allows user to view moods.
+ * @see FriendMood
+ * @see DBFriend
+ * @see FriendMoodListAdapter
+ * @see PageFragment
+ * @see DBCollectionListener
  */
 public class FriendMoodFragment extends PageFragment implements DBCollectionListener {
 
     // Friend Mood
     private ListView friendMoodListView;
     private FriendMoodListAdapter friendMoodListAdapter;
-    private TextView hiddenMssg;
+    private TextView hiddenMsg;
 
     // connect to DB
     private DBFriend friendMoodDB;
@@ -53,7 +58,7 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
 
         // Set up listView and adapter
         friendMoodListView = root.findViewById(R.id.friend_mood_listView);
-        hiddenMssg = (TextView) root.findViewById(R.id.friend_mood_empty_msg);
+        hiddenMsg = root.findViewById(R.id.friend_mood_empty_msg);
 
         setupAdapter(new AdapterView.OnItemClickListener() {
             // View the selected friendMood: when a mood item is clicked, start view activity
@@ -61,7 +66,6 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // get the selected friendMood
                 FriendMood selectedFriendMood = (FriendMood)adapterView.getItemAtPosition(i);
-                //Toast.makeText(getContext(), "Clicked " + selectedFriendMood.toString(), Toast.LENGTH_LONG).show();
                 Intent viewIntent = new Intent(getActivity(), ViewMoodActivity.class);
                 // put attributes of selected mood into editIntent
                 getIntentDataFromMood(viewIntent, selectedFriendMood.getMood());
@@ -77,42 +81,36 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
         friendMoodDB = new DBFriend(mAuth, getContext(), TAG);
         friendMoodDB.setFriendRecentMoodListener(this);
 
-        if (friendMoodListView.getCount() == 0) {
-            hiddenMssg.setVisibility(View.VISIBLE);
-        }
-        else{
-            hiddenMssg.setVisibility(View.INVISIBLE);
-        }
-
         return root;
     }
 
 
     /**
-     *
+     * This is used by DBFriend to perform task before getting the list of moods
      */
     @Override
     public void beforeGettingList() {
-        hiddenMssg.setVisibility(View.VISIBLE);         // show empty message
+        hiddenMsg.setVisibility(View.VISIBLE);         // show empty message
         friendMoodListAdapter.clear();
     }
 
     /**
-     *
+     * This is used by DBFriend to perform task when getting a friendMood
      * @param item
+     *  This is the new friendMood
      */
     @Override
     public void onGettingItem(Object item) {
-        if (hiddenMssg.getVisibility() == View.VISIBLE) {
-            hiddenMssg.setVisibility(View.INVISIBLE);   // hide empty message
+        if (hiddenMsg.getVisibility() == View.VISIBLE) {
+            hiddenMsg.setVisibility(View.INVISIBLE);   // hide empty message
         }
         if(item instanceof FriendMood) {
-            friendMoodListAdapter.add((FriendMood)item);
+            friendMoodListAdapter.add(item);
         }
     }
 
     /**
-     * This method should not be used, because list contains friends only, not friend mood.
+     * This should not be used, because list contains friends only, not friend mood.
      */
     @Deprecated
     @Override
@@ -120,7 +118,7 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
 
 
     /**
-     * This method is for setting up the mood list adapter
+     * This is for setting up the mood list adapter
      * @param itemClickListener
      */
     private void setupAdapter(AdapterView.OnItemClickListener itemClickListener) {
@@ -130,7 +128,7 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
     }
 
     /**
-     * This method takes in the Mood object from the clicked row
+     * This takes in the Mood object from the clicked row
      * @param intent
      * @param mood
      */

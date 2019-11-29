@@ -30,9 +30,8 @@ public class LoginActivityTest {
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
-
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         // logout if logged in
         if (solo.searchText("Mood History")){
