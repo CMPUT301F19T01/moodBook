@@ -45,7 +45,7 @@ public class TestHelper {
     /**
      * This is needed to scroll up sidebar in order to find Logout button on smaller device
      */
-    private static void scrollToLogout(Solo solo) {
+    public static void scrollToLogout(Solo solo) {
         int fromX, toX, fromY, toY;
         int[] location = new int[2];
 
