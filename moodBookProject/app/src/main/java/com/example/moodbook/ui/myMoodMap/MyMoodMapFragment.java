@@ -69,7 +69,7 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_mymoodmap, container, false);
+        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_mymoodmap);
 
         // prepare map
         mapView = root.findViewById(R.id.mapView);

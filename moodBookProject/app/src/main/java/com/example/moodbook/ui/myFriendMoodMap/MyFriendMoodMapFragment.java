@@ -66,8 +66,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate( R.layout.fragment_friendmoodmap,
-                container, false);
+        View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_friendmoodmap);
 
         // prepare map
         mapView = root.findViewById(R.id.friendMapView);
