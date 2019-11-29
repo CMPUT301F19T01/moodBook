@@ -6,16 +6,21 @@ import com.example.moodbook.Mood;
 import com.example.moodbook.MoodbookUser;
 
 /**
- *
+ * This class handles everything about a friend's mood event.
+ * @see MoodbookUser
+ * @see Mood
+ * @see java.lang.Comparable
  */
 public class FriendMood implements Comparable<FriendMood> {
     private MoodbookUser user;
     private Mood mood;
 
     /**
-     *
+     * This constructor is used to represent a mood event for a friend
      * @param user
+     *  This is the friend user
      * @param mood
+     *  This is the mood event
      */
     public FriendMood(@NonNull MoodbookUser user, @NonNull Mood mood) {
         this.user = user;
@@ -23,25 +28,25 @@ public class FriendMood implements Comparable<FriendMood> {
     }
 
     /**
-     * get the users name
+     * This getter for username returns text
      * @return
-     *  return user name string
+     *  return username in text
      */
     public String getUsername() {
         return this.user.getUsername();
     }
 
     /**
-     * get the users id
+     * This getter for uid returns text
      * @return
-     *  returns users Id
+     *  returns uid in text
      */
     public String getUid() {
         return this.user.getUid();
     }
 
     /**
-     * get the users mood
+     * This getter for mood
      * @return
      *  returns user's mood object
      */
@@ -50,9 +55,9 @@ public class FriendMood implements Comparable<FriendMood> {
     }
 
     /**
-     *
+     * This compares friendMood based on mood
      * @param other
-     *  friend mood object
+     *  friendMood object to be compared with
      * @return
      */
     @Override
@@ -61,9 +66,9 @@ public class FriendMood implements Comparable<FriendMood> {
     }
 
     /**
-     *
+     * This returns the string representation of friendMood
      * @return
-     *  return string of username and mood
+     *  Returns username and mood in text to represent the friendMood
      */
     @NonNull
     @Override

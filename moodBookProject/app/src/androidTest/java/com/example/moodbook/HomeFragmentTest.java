@@ -37,19 +37,17 @@ public class HomeFragmentTest {
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
-
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         TestHelper.setup(solo);
     }
-
 
     /**
      * Check if moods are sorted starting from most recent
      */
     @Test
-    public void checkSorting(){
+    public void testSorting() {
         // wait for activity to change
         solo.sleep(5000);
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
@@ -85,8 +83,8 @@ public class HomeFragmentTest {
     /**
      * Check if filter filters out mood with non-matching emotion
      */
-    //@Test
-    public void checkFiltering() {
+    @Test
+    public void testFiltering() {
         // wait for activity to change
         solo.sleep(5000);
         solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
