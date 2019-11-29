@@ -158,7 +158,7 @@ public class ProfileEditor {
     }
 
     /**
-     *
+     * This method creates temporary file for obtained image.
      * @param inContext
      * @return
      * @throws IOException
@@ -176,12 +176,17 @@ public class ProfileEditor {
 
 
     /**
-     *
+     * This methods updates the user profile to the database.
      * @param UserID
+     * UserID of current user
      * @param email
+     * Email of current user
      * @param username
+     * Username of current user
      * @param phone
+     * Phone of current user
      * @param bio
+     * Bio of current user
      */
     public static void updateProfile(String UserID, String email, String username, String phone, String bio){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -210,8 +215,9 @@ public class ProfileEditor {
     }
 
     /**
-     *
+     * This method gets the profile data from the database.
      * @param uid
+     * Uid of currentUser
      * @param profileListener
      */
     public static void getProfileData(String uid, @NonNull final ProfileListener profileListener){
@@ -237,9 +243,11 @@ public class ProfileEditor {
     }
 
     /**
-     *
+     * This method gets the mood data from the database
      * @param uid
+     * Uid of user
      * @param recent_moodID
+     * Recent mood id of the user
      * @param profileListener
      */
     public static void getMoodData(String uid, String recent_moodID,
@@ -260,6 +268,5 @@ public class ProfileEditor {
             }
         });
     }
-
 
 }
