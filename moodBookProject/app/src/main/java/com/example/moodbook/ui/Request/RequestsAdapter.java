@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
@@ -26,15 +27,20 @@ import java.util.ArrayList;
 /**
  * This class handles the display of requests that the user has received
  */
-public class RequestsAdapter extends BaseAdapter {
+public class RequestsAdapter extends BaseAdapter implements RequestHandler.VerifyFollowerInterface{
     private FirebaseFirestore db;
     private Context context;
     private ArrayList<MoodbookUser> requestList;
 
-    public RequestsAdapter(Context context, ArrayList<MoodbookUser> requestList) {
+    private RequestHandler requestHandler;
+    private FirebaseUser user;
+
+    public RequestsAdapter(Context context, ArrayList<MoodbookUser> requestList,
+                           RequestHandler requestHandler) {
         super();
         this.context = context;
         this.requestList = requestList;
+        this.requestHandler = requestHandler;
     }
 
     /**
@@ -65,36 +71,25 @@ public class RequestsAdapter extends BaseAdapter {
         // Set the name on the list
         final MoodbookUser frienduser =  requestList.get(position);
         usernameTextView.setText(frienduser.getUsername());
-        final FirebaseAuth mAuth;
 
-        mAuth = FirebaseAuth.getInstance();
-        final RequestHandler requestHandler = new RequestHandler(mAuth,context);
-        final String username = mAuth.getCurrentUser().getDisplayName();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        final String username = user.getDisplayName();
+
+        final RequestsAdapter thisInstance = this;
 
         // Click listener of button
         acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 // When Accepts a friend requests and username is added in requestee's friend mood list
                 requestHandler.addFriend(frienduser, username);
                 requestHandler.addToFollowerList(frienduser, username);
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle("Follow Back");
-                builder.setMessage("Would you like to follow back?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        requestHandler.followBack(username, frienduser);
-                    }
-                })
-                        .setNegativeButton("No", null)
-                        .show();
-
                 //remove request once accepted
                 requestHandler.removeRequest(frienduser.getUsername());
-                Toast.makeText(context, "Accepted Request", Toast.LENGTH_LONG).show();
+                Log.i("Accepted.", "Accepted Request"); //testing purposes
+                requestHandler.startFollowBack(frienduser, thisInstance);
             }
         });
 
@@ -103,9 +98,7 @@ public class RequestsAdapter extends BaseAdapter {
             public void onClick(View view) {
                 //Decline Request
                 requestHandler.removeRequest(frienduser.getUsername());
-                Toast.makeText(context,
-                        "Declined Reequest",
-                        Toast.LENGTH_LONG).show();
+                Log.i("Declined", "Declined Request");
             }
         });
 
@@ -157,7 +150,7 @@ public class RequestsAdapter extends BaseAdapter {
     }
 
     /**
-     * Thus method is used to add a user into the adapter.
+     * This method is used to add a user into the adapter.
      * @param item
      */
     public void addItem(MoodbookUser item) {
@@ -166,5 +159,26 @@ public class RequestsAdapter extends BaseAdapter {
         }
         // notify item added
         notifyDataSetChanged();
+    }
+    /**
+     * It is used to verify if follower is already your friend.
+     */
+
+    @Override
+    public void onVerifyingFollowerAsFriend(boolean isFriend, final MoodbookUser acceptedFriend) {
+        if(isFriend) return;
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Follow Back");
+        builder.setMessage("Would you like to follow back?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                requestHandler.sendRequest(acceptedFriend.getUsername(),
+                       user.getUid(), user.getDisplayName() );
+            }
+        })
+                .setNegativeButton("No", null)
+                .show();
+
     }
 }

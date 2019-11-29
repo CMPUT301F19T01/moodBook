@@ -30,15 +30,6 @@ public class PngTest {
         TestHelper.setup(solo);
     }
 
-    /**
-     * used in tests to first login to the app
-     */
-    public void login(){
-        solo.enterText((EditText) solo.getView(R.id.email), "test@test.com");
-        solo.enterText((EditText) solo.getView(R.id.password), "testtest");
-        solo.clickOnButton("login");
-    }
-
 
    @Test
     public void PngTest() {

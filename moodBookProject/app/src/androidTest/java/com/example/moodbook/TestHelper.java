@@ -11,6 +11,9 @@ import java.util.HashMap;
 
 import static com.google.firebase.firestore.util.Assert.fail;
 
+/**
+ *
+ */
 public class TestHelper {
 
     /**

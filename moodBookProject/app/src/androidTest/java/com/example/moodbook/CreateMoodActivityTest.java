@@ -41,8 +41,6 @@ public class CreateMoodActivityTest {
 
         private Solo solo;
 
-        // test location
-        private LatLng pickedLocation;
 
         @Rule
         public ActivityTestRule<LoginActivity> rule = new ActivityTestRule<>(LoginActivity.class, true, true);
@@ -62,7 +60,7 @@ public class CreateMoodActivityTest {
             solo.sleep(5000);
             solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
             // ensure current fragment is for Mood History
-            Assert.assertTrue(solo.searchText("Mood History"));
+            assertTrue(solo.searchText("Mood History"));
 
             solo.clickOnView(solo.getView(R.id.mood_history_add_button));
             solo.sleep(5000); // wait for activity to change
@@ -107,7 +105,7 @@ public class CreateMoodActivityTest {
 
             String expected = "1600 Amphitheatre Pkwy, Mountain View, CA 94043, USA";
 
-            assertEquals("Expected coords returned from LocationPickerActivity to match users location",
+            assertEquals("Expected coords returned from LocationPickerActivity to match users location. Make sure you set the location in the emulator to 37.4220, -122.0840",
                     expected,
                     actual);
         }

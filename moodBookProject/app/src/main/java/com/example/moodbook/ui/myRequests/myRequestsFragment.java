@@ -8,12 +8,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import com.example.moodbook.DBCollectionListener;
+import com.example.moodbook.DBFriend;
 import com.example.moodbook.MoodbookUser;
 import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.example.moodbook.ui.Request.RequestHandler;
 import com.example.moodbook.ui.Request.RequestsAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.util.ArrayList;
 
 /**
@@ -28,19 +31,24 @@ public class myRequestsFragment extends PageFragment implements DBCollectionList
     private TextView hiddenMsg;
     private RequestHandler requestDB;
 
+    private DBFriend friendDB;
+    private ArrayList<String> friends;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_myrequests);
 
         hiddenMsg = root.findViewById(R.id.request_empty_msg);
         requestListView = root.findViewById(R.id.request_listView);
-        requestsAdapter=  new RequestsAdapter(getContext(), new ArrayList<MoodbookUser>());
-        requestListView.setAdapter(requestsAdapter);
 
         // initialize DB connector
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         requestDB = new RequestHandler(mAuth, getContext(), TAG);
         requestDB.setRequestListListener(this);
+
+        requestsAdapter=  new RequestsAdapter(getContext(),
+                new ArrayList<MoodbookUser>(), requestDB);
+        requestListView.setAdapter(requestsAdapter);
 
         return root;
     }
