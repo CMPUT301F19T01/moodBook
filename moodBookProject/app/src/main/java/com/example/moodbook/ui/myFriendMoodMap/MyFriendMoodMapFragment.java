@@ -38,6 +38,7 @@ import java.util.ArrayList;
 /**
  * This fragment is used to view a where a users friends' moods take place on a map
  * @see MoodMapFragment
+ * @see DBCollectionListener
  */
 public class MyFriendMoodMapFragment extends MoodMapFragment
         implements OnMapReadyCallback, DBCollectionListener {
@@ -218,8 +219,9 @@ public class MyFriendMoodMapFragment extends MoodMapFragment
                     = BitmapDescriptorFactory.fromBitmap(smallMarker);
 
             // draw on map
-            moodMap.addMarker(new MarkerOptions().position(moodLatLng)
-                    .icon(bitmapDescriptor)).setTag(i);
+            Marker marker = moodMap.addMarker(new MarkerOptions().position(moodLatLng).icon(bitmapDescriptor).anchor(0.5f,0.5f));
+            marker.setTag(i);
+            marker.setTitle(mood.getDateText() + " " + mood.getTimeText());
 
             // zoom in on mood
             moodMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moodLatLng, 11.0f));

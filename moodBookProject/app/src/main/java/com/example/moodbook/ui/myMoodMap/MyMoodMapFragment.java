@@ -36,6 +36,7 @@ import java.util.ArrayList;
 /**
  * This fragment is used to view a where a users moods take place on a map
  * @see MoodMapFragment
+ * @see DBCollectionListener
  */
 public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCallback, DBCollectionListener {
 

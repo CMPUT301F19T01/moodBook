@@ -57,6 +57,7 @@ public class MyMoodMapFragmentTest {
         HashMap<String,String> moodAttributes = addMood();
         String date = moodAttributes.get("date");
         String time = moodAttributes.get("time");
+
         // switch to mood map fragment
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         solo.clickOnImageButton(0);
