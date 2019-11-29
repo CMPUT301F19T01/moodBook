@@ -1,3 +1,5 @@
+// Reference: https://stackoverflow.com/questions/20536566/creating-a-random-string-with-a-z-and-0-9-in-java   - Suresh Atta     used to generate unique username and email address
+
 package com.example.moodbook;
 
 
@@ -23,7 +25,6 @@ public class RegisterActivityTest {
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
 
-    // https://stackoverflow.com/questions/20536566/creating-a-random-string-with-a-z-and-0-9-in-java   - Suresh Atta     used to generate unique username and email address
     private String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();

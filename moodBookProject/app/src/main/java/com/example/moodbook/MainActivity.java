@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity  {
 
             case R.id.nav_myFriendMoodMap:
                 fragmentClass = MyFriendMoodMapFragment.class;
-                toolbar.setTitle("Friend History Map");
+                toolbar.setTitle("Friend Mood Map");
                 break;
 
             case R.id.nav_myFriends:
