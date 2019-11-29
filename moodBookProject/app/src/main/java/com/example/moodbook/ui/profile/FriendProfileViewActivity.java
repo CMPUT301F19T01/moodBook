@@ -79,58 +79,58 @@ public class FriendProfileViewActivity extends AppCompatActivity implements Prof
             }
         });
 
-//        ProfileEditor.getProfileData(friend_uid,this);
-        final DocumentReference docRef = collectionReference.document(friend_uid);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("DocumentSnapshot data: ", "DocumentSnapshot data: " + document.get("phone"));
-                        friend_phone.setText((CharSequence) document.get("phone"));
-                        friend_bio.setText((CharSequence) document.get("bio"));
-                        friend_email.setText((CharSequence) document.get("email"));
-                        String recent_moodID = (String) document.get("recent_moodID");
-                        if (recent_moodID != null) {
-                            DocumentReference moodRef = docRef.collection("MOODS").document(recent_moodID);
-                            moodRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> t) {
-                                    DocumentSnapshot doc = t.getResult();
-                                    if(doc.exists()){
-                                        most_recent_mood= (String) doc.get("emotion");
-                                        Log.d("Most_Recent_Mood",most_recent_mood);
-
-                                        switch (most_recent_mood){
-                                            case "sad":
-                                                emotion.setImageResource(R.drawable.sad);
-                                                break;
-                                            case "happy":
-                                                emotion.setImageResource(R.drawable.happy);
-                                                break;
-                                            case  "afraid":
-                                                emotion.setImageResource(R.drawable.afraid);
-                                                break;
-                                            case "angry":
-                                                emotion.setImageResource(R.drawable.angry);
-                                                break;
-
-                                        }
-                                    }
-                                }
-                            });
-                        }
-
-
-                    } else {
-                        Log.d("No such document", "No such document");
-                    }
-                } else {
-                    Log.d("get failed with ", "get failed with ", task.getException());
-                }
-            }
-        });
+        ProfileEditor.getProfileData(friend_uid,this);
+//        final DocumentReference docRef = collectionReference.document(friend_uid);
+//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        Log.d("DocumentSnapshot data: ", "DocumentSnapshot data: " + document.get("phone"));
+//                        friend_phone.setText((CharSequence) document.get("phone"));
+//                        friend_bio.setText((CharSequence) document.get("bio"));
+//                        friend_email.setText((CharSequence) document.get("email"));
+//                        String recent_moodID = (String) document.get("recent_moodID");
+//                        if (recent_moodID != null) {
+//                            DocumentReference moodRef = docRef.collection("MOODS").document(recent_moodID);
+//                            moodRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<DocumentSnapshot> t) {
+//                                    DocumentSnapshot doc = t.getResult();
+//                                    if(doc.exists()){
+//                                        most_recent_mood= (String) doc.get("emotion");
+//                                        Log.d("Most_Recent_Mood",most_recent_mood);
+//
+//                                        switch (most_recent_mood){
+//                                            case "sad":
+//                                                emotion.setImageResource(R.drawable.sad);
+//                                                break;
+//                                            case "happy":
+//                                                emotion.setImageResource(R.drawable.happy);
+//                                                break;
+//                                            case  "afraid":
+//                                                emotion.setImageResource(R.drawable.afraid);
+//                                                break;
+//                                            case "angry":
+//                                                emotion.setImageResource(R.drawable.angry);
+//                                                break;
+//
+//                                        }
+//                                    }
+//                                }
+//                            });
+//                        }
+//
+//
+//                    } else {
+//                        Log.d("No such document", "No such document");
+//                    }
+//                } else {
+//                    Log.d("get failed with ", "get failed with ", task.getException());
+//                }
+//            }
+//        });
 
     }
 
