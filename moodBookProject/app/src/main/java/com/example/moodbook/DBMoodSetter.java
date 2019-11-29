@@ -65,7 +65,7 @@ public class DBMoodSetter {
     public DBMoodSetter(FirebaseAuth mAuth, Context context, String TAG) {
         this.mAuth = mAuth;
         this.db = FirebaseFirestore.getInstance();
-        this.storage = FirebaseStorage.getInstance();
+        storage = FirebaseStorage.getInstance();
         this.uid = mAuth.getCurrentUser().getUid();
         this.userReference = db.collection("USERS");
         this.context = context;
@@ -150,7 +150,7 @@ public class DBMoodSetter {
                         if (documentSnapshot != null) {
                             // get mood docId from moodCount
                             Double m = documentSnapshot.getDouble("mood_Count");
-                            String moodID = String.valueOf(m) + mAuth.getCurrentUser().getDisplayName(); //increment int + username as a moodID
+                            String moodID = m + mAuth.getCurrentUser().getDisplayName(); //increment int + username as a moodID
                             addImg(moodID, mood);
                             // add new mood into db
                             addMoodAfterDocId(moodID, mood);
@@ -463,7 +463,7 @@ public class DBMoodSetter {
         }
         Mood newMood = null;
         try {
-            newMood = new Mood((String) data.get("date") + " " + (String) data.get("time"),
+            newMood = new Mood(data.get("date") + " " + data.get("time"),
                     (String) data.get("emotion"), (String) data.get("reason_text"), null,
                     (String) data.get("situation"), location);
         } catch (MoodInvalidInputException e) {

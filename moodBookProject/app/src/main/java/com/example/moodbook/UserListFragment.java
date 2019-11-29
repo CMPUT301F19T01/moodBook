@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import com.example.moodbook.ui.followers.MyFollowersFragment;
 import com.example.moodbook.ui.myFriends.MyFriendsFragment;
-import com.example.moodbook.ui.profile.FriendProfileViewActivity;
+import com.example.moodbook.ui.profile.ProfileViewActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import java.util.Arrays;
 
@@ -96,7 +96,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
                         .setNegativeButton("View", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent viewProfile = new Intent(getContext(), FriendProfileViewActivity.class);
+                                Intent viewProfile = new Intent(getContext(), ProfileViewActivity.class);
                                 viewProfile.putExtra("username",selectedUser.getUsername());
                                 viewProfile.putExtra("userID",selectedUser.getUid());
                                 startActivity(viewProfile);
@@ -127,7 +127,7 @@ public abstract class UserListFragment extends PageFragment implements DBCollect
     @Override
     public void onGettingItem(Object item) {
         if(item instanceof MoodbookUser) {
-            userListAdapter.add((MoodbookUser)item);
+            userListAdapter.add(item);
         }
     }
 

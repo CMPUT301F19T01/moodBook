@@ -7,7 +7,6 @@ package com.example.moodbook;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -33,8 +32,7 @@ import com.example.moodbook.ui.myFriendMoodMap.MyFriendMoodMapFragment;
 import com.example.moodbook.ui.myFriends.MyFriendsFragment;
 import com.example.moodbook.ui.myMoodMap.MyMoodMapFragment;
 import com.example.moodbook.ui.myRequests.myRequestsFragment;
-import com.example.moodbook.ui.profile.FriendProfileViewActivity;
-import com.example.moodbook.ui.profile.ProfileActivity;
+import com.example.moodbook.ui.profile.ProfileViewActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -113,9 +111,9 @@ public class MainActivity extends AppCompatActivity  {
                     }
                 }
         );
-        TextView profileUserName = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentUsername);
-        TextView profileEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
-        final ImageView profilePicture = (ImageView) navigationView.getHeaderView(0).findViewById(R.id.profile);
+        TextView profileUserName = navigationView.getHeaderView(0).findViewById(R.id.currentUsername);
+        TextView profileEmail = navigationView.getHeaderView(0).findViewById(R.id.currentEmail);
+        final ImageView profilePicture = navigationView.getHeaderView(0).findViewById(R.id.profile);
         profileUserName.setText(name);
         profileEmail.setText(email);
 
@@ -153,7 +151,7 @@ public class MainActivity extends AppCompatActivity  {
      * @param menuItem
      *  The menuItems
      * @param drawer
-     *  A drawerlayout
+     *  A DrawerLayout
      */
     public void selectDrawerItem(MenuItem menuItem, DrawerLayout drawer){
         Fragment fragment;
@@ -196,7 +194,7 @@ public class MainActivity extends AppCompatActivity  {
 
             case R.id.nav_profile:
                 fragmentClass =null;
-                Intent intent = new Intent(this, FriendProfileViewActivity.class);
+                Intent intent = new Intent(this, ProfileViewActivity.class);
                 intent.putExtra("username",name);
                 intent.putExtra("userID",userID);
                 intent.putExtra("email",email);
@@ -232,7 +230,7 @@ public class MainActivity extends AppCompatActivity  {
      * This method logs the current user out
      */
     private void logout(){
-        mAuth.getInstance().signOut();
+        FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }

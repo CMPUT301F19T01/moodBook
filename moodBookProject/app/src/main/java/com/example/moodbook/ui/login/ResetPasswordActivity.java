@@ -34,8 +34,8 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
 
 
-        ResetPasswordButton = (Button) findViewById(R.id.ok_button);
-        ResetEmailInput = (EditText) findViewById(R.id.type_email);
+        ResetPasswordButton = findViewById(R.id.ok_button);
+        ResetEmailInput = findViewById(R.id.type_email);
 
         mAuth = FirebaseAuth.getInstance();
 

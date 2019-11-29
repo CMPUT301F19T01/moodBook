@@ -55,7 +55,7 @@
 
             <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
 
-                android:id="@+id/friend_dp"
+                android:id="@+id/user_dp"
                 android:layout_width="180dp"
                 android:layout_height="180dp"
                 android:layout_below="@+id/header_cover_image"
@@ -107,7 +107,7 @@
                 app:srcCompat="@drawable/email" />
 
             <TextView
-                android:id="@+id/friend_email"
+                android:id="@+id/user_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
@@ -134,7 +134,7 @@
                 app:srcCompat="@drawable/username" />
 
             <TextView
-                android:id="@+id/friend_username"
+                android:id="@+id/user_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
@@ -161,7 +161,7 @@
                 app:srcCompat="@drawable/phone" />
 
             <TextView
-                android:id="@+id/friend_phone"
+                android:id="@+id/user_phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
@@ -189,7 +189,7 @@
                 app:srcCompat="@drawable/bio" />
 
             <TextView
-                android:id="@+id/friend_bio"
+                android:id="@+id/user_bio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="30dp"
