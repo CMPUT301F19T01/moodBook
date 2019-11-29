@@ -247,7 +247,6 @@ public class MyMoodMapFragment extends MoodMapFragment implements OnMapReadyCall
         }
     }
 
-    // https://stackoverflow.com/questions/28672883/java-lang-illegalstateexception-fragment-not-attached-to-activity Miroslav Michalec  used to check fragment visibility
     /**
      * draws markers after getting whole list
      */

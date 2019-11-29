@@ -25,6 +25,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * tests MyMoodMapFragment for map functionality and mood viewing
+ * Note: before running the test, tester must change the location of the emulator
  */
 public class MyMoodMapFragmentTest {
     private Solo solo;

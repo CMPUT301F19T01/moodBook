@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * tests MyFriendMoodMapFragment for map functionality and mood viewing
+ * Note: before running the test, tester must change the location of the emulator
  */
 public class FriendMoodMapFragmentTest {
     private Solo solo;
