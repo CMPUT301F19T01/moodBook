@@ -30,6 +30,10 @@ import java.util.HashMap;
  */
 
 public class RequestHandler {
+    public interface VerifyFollowerInterface {
+        void onVerifyingFollowerAsFriend(boolean isFriend, MoodbookUser follower);
+    }
+
     private CollectionReference userReference;
     private String uid;
     private FirebaseAuth mAuth;
@@ -156,30 +160,28 @@ public class RequestHandler {
                 });
     }
 
-    /**
-     * This method allows a user to follow back another user after accepting a request
-     * @param acceptFriend
-     * This is a MoodbookUser object whose request got accepted by the user.
-     * @param myUsername
-     * This is the username of the user that accepted the request.
-     */
-    public void followBack(final String myUsername, final MoodbookUser acceptFriend ) {
-        final String username = myUsername;
+    public void startFollowBack(final MoodbookUser acceptFriend,
+                                final VerifyFollowerInterface listener){
         final CollectionReference friendsReference
                 = this.userReference.document(uid).collection("FRIENDS");
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("uid", uid);
-        friendsReference.document(acceptFriend.getUsername()).set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        friendsReference.document(acceptFriend.getUsername()).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        showStatusMessage("Added successfully.");
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if (documentSnapshot != null) {
+                            listener.onVerifyingFollowerAsFriend(
+                                    !(documentSnapshot.getId() == null || documentSnapshot.getData() == null)
+                                    ,acceptFriend);
+                        } else {
+                            Log.d(TAG, acceptFriend.getUsername()+" is not friend yet");
+                            listener.onVerifyingFollowerAsFriend(false,acceptFriend);
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        showStatusMessage("Adding failed.");
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
