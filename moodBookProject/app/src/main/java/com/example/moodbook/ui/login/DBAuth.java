@@ -56,54 +56,6 @@ public class DBAuth {
     public Boolean verifyPass(String password){ return password.length() >= 6;}
 
     /**
-     * This method attempts to log a user in
-     */
-    /*
-     https://stackoverflow.com/questions/50899160/oncompletelistener-get-results-in-another-class  - Levi Moreira
-     used to find out what argument to use in .addOnCompleteListener
-     */
-    @Deprecated
-    public FirebaseUser login(String email, String password){
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                        } else {
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        }
-                    }
-                });
-        FirebaseUser user = mAuth.getCurrentUser();
-        return user;
-    }
-
-    /**
-     * This method creates a new user in Firebase
-     */
-    @Deprecated
-    public FirebaseUser register(String email, String password, String userParam){
-        final String username = userParam;
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //createUser(user, username);
-                        } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        }
-                    }
-                });
-        FirebaseUser user = mAuth.getCurrentUser();
-        return user;
-    }
-
-    /**
      * This method creates containers for a new user in the database
      * @param user
      *  user in Firebase

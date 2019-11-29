@@ -32,12 +32,10 @@ public class RequestFragmentTest {
 
     /**
      * Test for successful add request
+     * To setup this test, ensure the account user: tyler@gmail.com pw: 123456  does not have a request from test
      */
-    //@Test(expected = junit.framework.AssertionFailedError.class) // ignore failed login attempt (if already logged in)
     @Test
     public void sendRequest(){
-        //login();
-        // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
 
@@ -51,8 +49,6 @@ public class RequestFragmentTest {
      */
     @Test
     public void sendRequestInvalid(){
-        //login();
-        // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
 
@@ -66,8 +62,6 @@ public class RequestFragmentTest {
      */
     @Test
     public void sendRequestEmpty(){
-        //login();
-        // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
 
@@ -80,8 +74,6 @@ public class RequestFragmentTest {
      */
     @Test
     public void sendRequestSelf(){
-        //login();
-        // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
         solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "test");
@@ -94,8 +86,6 @@ public class RequestFragmentTest {
      */
     @Test
     public void sendRequestAdded(){
-        //login();
-        // navigate to request sending
         solo.clickOnImageButton(0);
         solo.clickOnText("Add Friends");
         solo.enterText((EditText) solo.getView(R.id.send_request_username_text), "newtest");
