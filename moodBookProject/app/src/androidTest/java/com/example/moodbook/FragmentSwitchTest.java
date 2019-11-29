@@ -20,7 +20,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * Tests ability to access various fragments through the mrenu
  */
-public class FragmentTest {
+public class FragmentSwitchTest {
     private Solo solo;
 
     @Rule

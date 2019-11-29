@@ -27,7 +27,7 @@ public class FriendMoodFragmentTest {
 
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() {
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         TestHelper.setup(solo);
     }
@@ -36,7 +36,7 @@ public class FriendMoodFragmentTest {
      * Check if friend moods are sorted starting from most recent
      */
     @Test
-    public void checkSorting(){
+    public void testSorting(){
         // switch to Friend Moodbook
         solo.clickOnImageButton(0);
         solo.clickOnText("Friend MoodBook");

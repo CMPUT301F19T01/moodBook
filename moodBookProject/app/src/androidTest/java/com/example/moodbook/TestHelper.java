@@ -82,8 +82,6 @@ public class TestHelper {
         newMoodData.put("emotion", "happy");
 
         solo.clickOnButton("ADD");
-        // back to Mood History
-        solo.waitForActivity(MainActivity.class, 5000); // wait for activity to change
 
         return newMoodData;
     }
@@ -115,8 +113,6 @@ public class TestHelper {
         newMoodData.put("reason_text", ((EditText)solo.getView(R.id.create_reason_editText)).getText().toString() );
 
         solo.clickOnButton("ADD");
-        // back to Mood History
-        solo.waitForActivity(MainActivity.class, 5000); // wait for activity to change
 
         return newMoodData;
     }

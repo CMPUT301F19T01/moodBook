@@ -1,9 +1,5 @@
-// Reference: https://stackoverflow.com/questions/24664730/writing-a-robotium-test-to-swipe-open-an-item-on-a-swipeable-listview
-
 package com.example.moodbook;
 
-import android.graphics.PointF;
-import android.view.View;
 import android.widget.EditText;
 
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -12,20 +8,20 @@ import androidx.test.rule.ActivityTestRule;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static com.google.firebase.firestore.util.Assert.fail;
 import static junit.framework.TestCase.assertTrue;
 
-public class DeleteMoodTest {
+public class AddMoodTest {
+
     private Solo solo;
 
     @Rule
     public ActivityTestRule<LoginActivity> rule =
             new ActivityTestRule<>(LoginActivity.class, true, true);
-
 
     @Before
     public void setUp() throws Exception{
@@ -34,15 +30,26 @@ public class DeleteMoodTest {
     }
 
     /**
-     * Tests if Swipe-to-delete from Mood History works
+     * Tests if CreateMood UI works
      */
     @Test
-    public void testDeleteMood(){
-        // add a new mood
-        TestHelper.addMoodBasic(solo);
+    public void testeAddMood(){
+        // wait for activity to change
+        solo.sleep(5000);
+        solo.assertCurrentActivity("Wrong Activity", MainActivity.class);
+        // ensure current fragment is for Mood History
+        Assert.assertTrue(solo.searchText("Mood History"));
 
-        // delete the new mood, and check if the mood is deleted from db successfully
+        // add a new mood, and check if the new mood is added into db successfully
+        TestHelper.addMoodComplete(solo);
+        assertTrue(solo.waitForLogMessage("Mood successfully added"));
+
+        // delete the new mood
         TestHelper.deleteMood(solo);
-        assertTrue(solo.waitForLogMessage("Deleted mood."));
     }
 }
+
+
+
+
+
