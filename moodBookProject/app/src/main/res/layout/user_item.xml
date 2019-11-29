@@ -17,6 +17,7 @@
             android:maxHeight="70dp"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
+            android:padding="8dp"
             app:srcCompat="@drawable/purpleprofile" />
 
         <TextView
