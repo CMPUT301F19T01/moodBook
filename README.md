@@ -2,7 +2,8 @@
 
 Welcome to moodBook!
 
-https://github.com/CMPUT301F19T01/moodBook/wiki
+<img src="https://github.com/CMPUT301F19T01/moodBook/blob/prod/doc/photos/1.png?raw=true" width="250"/> <img src="https://github.com/CMPUT301F19T01/moodBook/blob/prod/doc/photos/2.png?raw=true" width="250"/> <img src="https://github.com/CMPUT301F19T01/moodBook/blob/prod/doc/photos/3.png?raw=true" width="250"/>
+
 
 # Links
 [Backlog](https://github.com/CMPUT301F19T01/moodBook/projects/1)
