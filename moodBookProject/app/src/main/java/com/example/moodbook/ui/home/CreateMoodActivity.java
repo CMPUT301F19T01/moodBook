@@ -26,15 +26,11 @@ import com.example.moodbook.R;
  */
 public class CreateMoodActivity extends MoodEditorActivity {
 
-    // date
     private Button add_date_button;
     private String mood_date;
-
-    // time
     private Button add_time_button;
     private String mood_time;
     private boolean isImageFitToScreen;
-
 
     /**
      * This is a method inherited from the AppCompatActivity
@@ -47,7 +43,9 @@ public class CreateMoodActivity extends MoodEditorActivity {
         super.createActivity(CreateMoodActivity.class.getSimpleName());
     }
 
-
+    /**
+     * This method sets up the fields on the layout used by the activity.
+     */
     @Override
     protected void initializeViews() {
         isImageFitToScreen = true;
@@ -60,7 +58,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
         super.reason_photo_button = findViewById(R.id.create_reason_photo_button);
         super.reason_photo_imageView = findViewById(R.id.create_reason_photo_imageView);
 
-        // when imageview is clicked, then it would enlarge the image
+        // when imageView is clicked, then it would enlarge the image
         reason_photo_imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,19 +74,17 @@ public class CreateMoodActivity extends MoodEditorActivity {
                 }
             }
         });
-        // situation
         super.situation_spinner = findViewById(R.id.create_situation_spinner);
-        // location
         super.location_button = findViewById(R.id.create_location_button);
-
-        // action buttons
         super.save_button = findViewById(R.id.create_add_button);
         super.cancel_button = findViewById(R.id.create_cancel_button);
     }
 
+    /**
+     * This method sets up the date and time
+     */
     @Override
     protected void setupDateTime() {
-        // date
         this.add_date_button = ((AppCompatActivity)this).findViewById(R.id.create_date_button);
         Log.d(TAG, ""+add_date_button.getId());
         MoodEditor.showDate(this.add_date_button);
@@ -100,7 +96,6 @@ public class CreateMoodActivity extends MoodEditorActivity {
             }
         });
 
-        // time
         this.add_time_button = ((AppCompatActivity)this).findViewById(R.id.create_time_button);
         MoodEditor.showTime(this.add_time_button);
 
@@ -112,9 +107,11 @@ public class CreateMoodActivity extends MoodEditorActivity {
         });
     }
 
+    /**
+     * This method is used to save the changes after adding details of a mood.
+     */
     @Override
     protected void setupSaveButton() {
-        // When this button is clicked, return a result
         super.save_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -127,11 +124,9 @@ public class CreateMoodActivity extends MoodEditorActivity {
                         finish();
                         startActivity(new Intent(CreateMoodActivity.this, MainActivity.class));
                     } catch (MoodInvalidInputException e) {
-                        // shouldn't happen since inputs are already checked
                         Toast.makeText(getApplicationContext(),
                                 "Adding failed: " + e.getMessage(),
                                 Toast.LENGTH_LONG).show();
-
                     }
                 }
             }
@@ -140,7 +135,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
 
     /**
      * Checks if mood inputs are valid, including date & time
-     * @return
+     * @return areInputsValid
      *  A boolean with representing all inputs are valid or all inputs are not valid.
      */
     @Override
@@ -148,7 +143,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
         boolean areInputsValid = super.validMoodInputs();
         // check date & time if emotion & reason_text are valid
         if(areInputsValid) {
-            // get and check mood_date
+
             this.mood_date = this.add_date_button.getText().toString();
             try {
                 Mood.parseMoodDate(this.mood_date);
@@ -157,7 +152,7 @@ public class CreateMoodActivity extends MoodEditorActivity {
                 this.add_date_button.setError(e.getMessage());
                 areInputsValid = false;
             }
-            // get and check mood_time
+
             this.mood_time = this.add_time_button.getText().toString();
             try {
                 Mood.parseMoodTime(this.mood_time);
@@ -169,5 +164,4 @@ public class CreateMoodActivity extends MoodEditorActivity {
         }
         return areInputsValid;
     }
-
 }

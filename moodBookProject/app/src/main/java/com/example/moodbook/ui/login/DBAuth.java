@@ -1,9 +1,6 @@
 package com.example.moodbook.ui.login;
 
-import android.content.Context;
-
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -25,7 +22,6 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 /**
  * This class handles interaction with the DB to login and register
  */
-
 public class DBAuth {
 
     private FirebaseAuth mAuth;
@@ -39,6 +35,7 @@ public class DBAuth {
     /**
      * This method verifys that the email and password are filled out. Email is of type email, password is > 6 chars
      * @param email
+     *  email string
      * @return
      *      True if email is an email address
      *      False if email is not an email address
@@ -51,13 +48,12 @@ public class DBAuth {
     /**
      * This method verifys that the password is filled out.
      * @param password
+     *  password string
      * @return
      *      True if password >= 6 chars
      *      False if password is not >= 6 chars
      */
-    public Boolean verifyPass(String password){
-        return password.length() >= 6;
-    }
+    public Boolean verifyPass(String password){ return password.length() >= 6;}
 
     /**
      * This method attempts to log a user in
@@ -109,6 +105,16 @@ public class DBAuth {
 
     /**
      * This method creates containers for a new user in the database
+     * @param user
+     *  user in Firebase
+     * @param email
+     *  Email String
+     * @param username
+     *  Username string
+     * @param phone
+     *  Phone number string
+     * @param bio
+     *  Biography string
      */
     public void createUser(FirebaseUser user, String email, String username , String phone, String bio){
 
@@ -159,7 +165,9 @@ public class DBAuth {
     /**
      * Stores the username in the user's FireBase auth profile
      * @param user
+     *  user in Firebase 
      * @param username
+     *  Username string
      */
     public void updateUsername(FirebaseUser user, String username){
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()

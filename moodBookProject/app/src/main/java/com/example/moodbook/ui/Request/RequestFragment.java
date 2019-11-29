@@ -26,7 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 /**
- * This fragment is shown to allow the user to send requests to other users
+ * This fragment is shown to allow a user to send requests to other users
  */
 public class RequestFragment extends PageFragment
         implements DBCollectionListener, UsernameList.UsernameListListener {
@@ -46,13 +46,13 @@ public class RequestFragment extends PageFragment
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        final View root = super.onCreateView(inflater, container, savedInstanceState, R.layout.fragment_request);
+        final View root = super.onCreateView(inflater, container,
+                savedInstanceState, R.layout.fragment_request);
 
         usernameText = root.findViewById(R.id.send_request_username_text);
         usernameArrow = root.findViewById(R.id.send_request_username_arrow);
         requestButton = root.findViewById(R.id.send_request_button);
 
-        //FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
@@ -131,12 +131,16 @@ public class RequestFragment extends PageFragment
         }
     }
 
-
+    /**
+     * This is a method used to show a list of users in the dropdown menu when a user wants send a request to another user.
+     * Offers more convenience and could also act as a suggestions list.
+     */
     private void setupUsername() {
         usernameList = new UsernameList(FirebaseFirestore.getInstance());
         usernameList.setUsernameListListener(this);
 
-        usersAdapter = new ArrayAdapter<String>(getContext(),android.R.layout.simple_dropdown_item_1line) {
+        usersAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_dropdown_item_1line) {
             /**
              * This limits the total number of dropdown items to 100
              * @return  the number of dropdown items to be displayed

@@ -141,7 +141,8 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
 
     /**
      * This override RecyclerView.Adapter onBindViewHolder(),
-     * and use the mood to set text & images for the fields in the corresponding Recycler item
+     * and use the mood to set text & images for the fields in the corresponding Recycler item.
+     * This method displays date, time, emotional state, and shows background colour.
      * @param holder
      *   This is MyViewHolder that holds fields and layouts for a mood item
      * @param position
@@ -151,23 +152,20 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         final Mood mood = moodList.get(position);
 
-        // show date, time, and emotional state
         holder.dateText.setText(mood.getDateText());
         holder.timeText.setText(mood.getTimeText());
         holder.emotionText.setText(mood.getEmotionText());
         holder.emotionImage.setImageResource(mood.getEmotionImageResource());
-        // show item background color
+
         holder.viewForeground.setBackgroundColor(
                 ContextCompat.getColor(context, mood.getEmotionColorResource()));
 
-        // bind item with onItemClick listener
         holder.bind(mood, listener);
     }
 
     /**
-     * This override RecyclerView.Adapter getItemCount(),
-     * and return the number of moods to be displayed
-     * @return
+     * This override RecyclerView.Adapter getItemCount(), and return the number of moods to be displayed
+     * @return int
      *    Returns the size of arrayList of all the moods that will be displayed
      */
     @Override
@@ -192,13 +190,10 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
      *   This is the new mood
      */
     public void addItem(Mood item) {
-        // add to filtered moodList
-        moodList.add(item);
+        moodList.add(item); /* add to filtered moodList */
         Collections.sort(moodList, Collections.reverseOrder());
-        // add to full moodList
-        moodListFull.add(item);
+        moodListFull.add(item); /* add to full moodList */
         Collections.sort(moodListFull, Collections.reverseOrder());
-        // notify item added
         notifyDataSetChanged();
     }
 
@@ -208,7 +203,6 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
     public void clear() {
         moodList.clear();
         moodListFull.clear();
-        // notify list is cleared
         notifyDataSetChanged();
     }
 
@@ -225,11 +219,9 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
                 @Override
                 protected FilterResults performFiltering(CharSequence constraint) {
                     ArrayList<Mood> filteredList = new ArrayList<>();
-                    // if there is no constraint, return all mood events
                     if (constraint == null || constraint.length() == 0) {
-                        filteredList.addAll(moodListFull);
+                        filteredList.addAll(moodListFull); /* if there is no constraint, return all mood events */
                     }
-                    // otherwise, find all mood events whose emotional states match constraint
                     else {
                         String filterPattern = constraint.toString().toLowerCase().trim();
                         for (Mood item : moodListFull) {
@@ -256,65 +248,4 @@ public class MoodListAdapter extends RecyclerView.Adapter<MoodListAdapter.MyView
         return this.mood_filter;
     }
 
-    /**
-     * This remove a mood at specified position
-     * Not used in this project
-     * @param position
-     *  This is the position of a mood to be removed
-     */
-    @Deprecated
-    public void removeItem(int position) {
-        // get index of removed item in full moodList
-        int posInListFull = moodListFull.indexOf(moodList.get(position));
-        // remove item from filtered moodList
-        moodList.remove(position);
-        // remove item from filtered moodList
-        moodListFull.remove(posInListFull);
-        // notify the item removed by position
-        // to perform recycler view delete animations
-        // NOTE: don't call notifyDataSetChanged()
-        notifyItemRemoved(position);
-    }
-
-    /**
-     * This restore a mood at specified position, and sort full arrayList of moods by dateTime
-     * Not used in this project
-     * @param item
-     *  This is the mood to be restored
-     * @param position
-     *  This is the position of the mood
-     */
-    // Restore a mood item at its original position
-    @Deprecated
-    public void restoreItem(Mood item, int position) {
-        // insert removed item back to filtered moodList
-        moodList.add(position, item);
-        // add removed item back to full moodList
-        moodListFull.add(item);
-        Collections.sort(moodListFull, Collections.reverseOrder());
-        // notify item added by position
-        notifyItemInserted(position);
-    }
-
-    /**
-     * This update a mood at specified position, and sort arrayList and full arrayList of moods by dateTime
-     * Not used in this project
-     * @param item
-     *  This is the new mood to replace the old one
-     * @param position
-     *  This is the position of the old mood
-     */
-    @Deprecated
-    public void editItem(Mood item, int position) {
-        // get index of edited item in full moodList
-        int posInListFull = moodListFull.indexOf(moodList.get(position));
-        // change item in filtered moodList
-        moodList.set(position, item);
-        Collections.sort(moodList, Collections.reverseOrder());
-        // change item in full moodList
-        moodListFull.set(posInListFull, item);
-        Collections.sort(moodList, Collections.reverseOrder());
-        // notify item edited
-        notifyItemChanged(position);
-    }
 }

@@ -34,6 +34,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ *
+ */
 public class ProfileEditor {
 
     private static final int REQUEST_IMAGE = 101;
@@ -103,11 +106,16 @@ public class ProfileEditor {
 
     /**
      * This is a method that gets the photo that was taken/chosen and let the image be shown on the screen
-     * @param requestCode This is a result code
-     * @param resultCode This is a result code
-     * @param data This is the data obtained from the Camera/Gallery intent
-     * @param image_view_photo This is an ImageView
-     * @param myActivity The class that calls in this method
+     * @param requestCode
+     *  This is a result code
+     * @param resultCode
+     *  This is a result code
+     * @param data
+     *  This is the data obtained from the Camera/Gallery intent
+     * @param image_view_photo
+     *  This is an ImageView
+     * @param myActivity
+     *  The class that calls in this method
      */
     public static void getImageResult(int requestCode, int resultCode, @Nullable Intent data,
                                       ImageView image_view_photo, final AppCompatActivity myActivity) throws IOException {
@@ -148,6 +156,13 @@ public class ProfileEditor {
             //does nothing if fails to deliver data
         }
     }
+
+    /**
+     *
+     * @param inContext
+     * @return
+     * @throws IOException
+     */
     private static File createImageFile(Context inContext) throws IOException {
         File storageDir = inContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
@@ -159,6 +174,15 @@ public class ProfileEditor {
        return image;
     }
 
+
+    /**
+     *
+     * @param UserID
+     * @param email
+     * @param username
+     * @param phone
+     * @param bio
+     */
     public static void updateProfile(String UserID, String email, String username, String phone, String bio){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("USERS");
@@ -185,6 +209,11 @@ public class ProfileEditor {
                 });
     }
 
+    /**
+     *
+     * @param uid
+     * @param profileListener
+     */
     public static void getProfileData(String uid, @NonNull final ProfileListener profileListener){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference collectionReference = db.collection("USERS");
@@ -207,6 +236,12 @@ public class ProfileEditor {
 
     }
 
+    /**
+     *
+     * @param uid
+     * @param recent_moodID
+     * @param profileListener
+     */
     public static void getMoodData(String uid, String recent_moodID,
                                    @NonNull final ProfileListener profileListener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

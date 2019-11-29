@@ -110,45 +110,6 @@ public class CreateMoodActivityTest {
             solo.sleep(5000); // wait for activity to change
         }
 
-        // get the current location to check against location picker
-        public void getLocation () {
-            // go to create mood activity
-
-
-            LocationManager locationManager = (LocationManager) solo.getCurrentActivity().getSystemService(Context.LOCATION_SERVICE);
-            LocationListener locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    // get current location and draw it on map as initial location
-                    pickedLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                }
-
-                @Override
-                public void onStatusChanged(String s, int i, Bundle bundle) {
-                }
-
-                @Override
-                public void onProviderEnabled(String s) {
-                }
-
-                @Override
-                public void onProviderDisabled(String s) {
-                }
-            };
-
-            // request for update
-            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, locationListener, null);
-
-            if (ActivityCompat.checkSelfPermission(solo.getCurrentActivity(),
-                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(solo.getCurrentActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(solo.getCurrentActivity(),
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                return;
-            }
-
-
-        }
 
         /**
          * Tests the adding of location

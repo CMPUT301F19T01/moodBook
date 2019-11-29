@@ -42,6 +42,9 @@ import java.util.HashMap;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
+/**
+ * Activity to view and edits users profile
+ */
 public class ProfileActivity extends AppCompatActivity
         implements ProfileEditor.ProfilePicInterface, ProfileEditor.ProfileListener{
     ImageView dp;
@@ -50,7 +53,6 @@ public class ProfileActivity extends AppCompatActivity
     EditText phone;
     EditText bio;
     FloatingActionButton edit_image;
-    private static final int CHOOSE_IMAGE =101;
     String intent_name;
     String intent_email;
     Button save_profile;
@@ -58,13 +60,15 @@ public class ProfileActivity extends AppCompatActivity
     private Bitmap bitImage;
 
     Uri uriProfileImage;
-    String profileImageUrl;
-    FirebaseAuth mAuth;
 
     StorageReference fireRef;
     StorageReference mStorageRef = FirebaseStorage.getInstance().getReference();
 
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,12 +98,12 @@ public class ProfileActivity extends AppCompatActivity
             public void onClick(View view) {
                   addImg(intent_name);
 
-                  ProfileEditor.updateProfile(userID, email.getText().toString(), name.getText().toString(), phone.getText().toString(),bio.getText().toString());
-//                  finishActivity(0);
+                  ProfileEditor.updateProfile(userID, email.getText().toString(),
+                          name.getText().toString(), phone.getText().toString(),
+                          bio.getText().toString());
+
                 finish();
-//
-//                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                startActivity(intent);
+
             }
         });
         close_profile.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +130,12 @@ public class ProfileActivity extends AppCompatActivity
     }
 
 
+    /**
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -137,28 +147,43 @@ public class ProfileActivity extends AppCompatActivity
         uriProfileImage = data.getData();
     }
 
-
+    /**
+     *
+     * @param bitImage
+     */
     @Override
     public void setProfilePic(Bitmap bitImage) {
         this.bitImage = bitImage;
     }
 
+    /**
+     *
+     * @param document
+     */
     @Override
     public void onGettingUserDoc(DocumentSnapshot document) {
-        Log.d("DocumentSnapshot data: ", "DocumentSnapshot data: " + document.get("phone"));
+        Log.d("DocumentSnapshot data: ",
+                "DocumentSnapshot data: " + document.get("phone"));
         phone.setText((CharSequence) document.get("phone"));
         bio.setText((CharSequence) document.get("bio"));
         showImg((String) document.get("username"));
     }
 
-    @Deprecated
+    /**
+     * inherited by ProfileEditor
+     * @param document
+     */
     @Override
     public void onGettingMoodDoc(DocumentSnapshot document) {
         // Do nothing
     }
 
+    /**
+     *
+     * @param username
+     */
     public void addImg(String username) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         fireRef = mStorageRef.child("profilepics/" + username + ".jpeg" );
         Bitmap bitImage = ProfileEditor.getBitmap();
         Uri file = uriProfileImage;
@@ -167,16 +192,22 @@ public class ProfileActivity extends AppCompatActivity
             Log.e("Fire Path", fireRef.toString());
 
         }else if (bitImage != null) {
-            bitImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
-
-           fireRef.putBytes(data);
+            bitImage.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+            byte[] data = byteArrayOutputStream.toByteArray();
+            fireRef.putBytes(data);
         }
     }
+
+    /**
+     *
+     * @param username
+     *  string username of a user
+     */
     public void showImg(String username){
         // Reference to an image file in Cloud Storage
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        storageReference.child("profilepics/" + username + ".jpeg" ).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+        storageReference.child("profilepics/" + username + ".jpeg" )
+                .getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getApplicationContext()/* context */)
@@ -187,27 +218,5 @@ public class ProfileActivity extends AppCompatActivity
         }) ;
     }
 
-    public void getData(){
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection("USERS");
-        DocumentReference docRef = collectionReference.document(userID);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
 
-
-                    } else {
-                        Log.d("No such document", "No such document");
-                    }
-                } else {
-                    Log.d("get failed with ", "get failed with ", task.getException());
-                }
-            }
-        });
-
-    }
 }
