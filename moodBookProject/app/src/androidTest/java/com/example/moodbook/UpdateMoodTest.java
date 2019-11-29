@@ -5,6 +5,7 @@ import android.widget.EditText;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.moodbook.ui.home.EditMoodActivity;
 import com.example.moodbook.ui.login.LoginActivity;
 import com.robotium.solo.Solo;
 
@@ -39,8 +40,10 @@ public class UpdateMoodTest {
         Assert.assertTrue(solo.searchText("Mood History"));
 
         solo.clickInRecyclerView(1);
-        solo.sleep(2000); // wait for activity to change
+        solo.waitForActivity(ViewMoodActivity.class, 2000); // wait for activity to change
         solo.clickOnText("Edit");
+
+        solo.waitForActivity(EditMoodActivity.class, 2000); // wait for activity to change
         solo.clickOnView(solo.getView(R.id.edit_emotion_spinner));//emotion --Picks alone
         solo.pressSpinnerItem(0,1);
         solo.clickOnView(solo.getView(R.id.edit_reason_editText));
