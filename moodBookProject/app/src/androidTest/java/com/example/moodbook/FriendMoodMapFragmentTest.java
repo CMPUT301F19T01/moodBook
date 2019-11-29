@@ -24,7 +24,7 @@ public class FriendMoodMapFragmentTest {
 
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp(){
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         // logout if logged in
         if (solo.searchText("Mood History")){

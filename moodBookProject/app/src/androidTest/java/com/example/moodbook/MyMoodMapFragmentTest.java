@@ -33,7 +33,7 @@ public class MyMoodMapFragmentTest {
             true, true);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(){
         solo = new Solo(InstrumentationRegistry.getInstrumentation(), rule.getActivity());
         // logout if logged in
         if (solo.searchText("Mood History")){
@@ -74,5 +74,4 @@ public class MyMoodMapFragmentTest {
         // test if map view is shown
         assertEquals("Expected mapView.shown() is true",true, mapView.isShown());
     }
-
 }

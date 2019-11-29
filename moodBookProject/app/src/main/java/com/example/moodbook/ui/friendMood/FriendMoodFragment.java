@@ -22,6 +22,9 @@ import com.example.moodbook.PageFragment;
 import com.example.moodbook.R;
 import com.google.firebase.auth.FirebaseAuth;
 
+/**
+ *
+ */
 public class FriendMoodFragment extends PageFragment implements DBCollectionListener {
 
     // Friend Mood
@@ -85,12 +88,19 @@ public class FriendMoodFragment extends PageFragment implements DBCollectionList
     }
 
 
+    /**
+     *
+     */
     @Override
     public void beforeGettingList() {
         hiddenMssg.setVisibility(View.VISIBLE);         // show empty message
         friendMoodListAdapter.clear();
     }
 
+    /**
+     *
+     * @param item
+     */
     @Override
     public void onGettingItem(Object item) {
         if (hiddenMssg.getVisibility() == View.VISIBLE) {

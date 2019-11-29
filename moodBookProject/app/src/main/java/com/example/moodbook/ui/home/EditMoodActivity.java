@@ -42,18 +42,19 @@ public class EditMoodActivity extends MoodEditorActivity {
         super.createActivity(EditMoodActivity.class.getSimpleName());
     }
 
-
+    /**
+     * This method sets up the fields on the layout used by the activity.
+     */
     @Override
     protected void initializeViews() {
         isImageFitToScreen = true;
-        // emotion
         super.emotion_spinner = findViewById(R.id.edit_emotion_spinner);
-        // reason text
         super.reason_editText = findViewById(R.id.edit_reason_editText);
-        // reason photo
         super.reason_photo_button = findViewById(R.id.edit_reason_photo_button);
         super.reason_photo_imageView = findViewById(R.id.edit_reason_photo_imageView);
+
         final HashMap<String, Object> moodMap = new HashMap<>();
+
         reason_photo_imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,8 +76,8 @@ public class EditMoodActivity extends MoodEditorActivity {
 
             }
         });
+
         super.cancel_button = findViewById(R.id.edit_cancel_button);
-        // When cancel button is pressed, return to main activity; do nothing
         cancel_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,17 +87,15 @@ public class EditMoodActivity extends MoodEditorActivity {
                 startActivity(intent);
             }
         });
-        // situation
+
         super.situation_spinner = findViewById(R.id.edit_situation_spinner);
-
-        // location
         super.location_button = findViewById(R.id.edit_location_button);
-
-        // action buttons
         super.save_button = findViewById(R.id.edit_save_button);
-
     }
 
+    /**
+     * This method sets up the date and time
+     */
     @Override
     protected void setupDateTime() {
         TextView show_date_time = findViewById(R.id.show_date_time);
@@ -106,12 +105,19 @@ public class EditMoodActivity extends MoodEditorActivity {
         show_date_time.setText("Created: " + intent_date +" at " + intent_time );
     }
 
+    /**
+     * This method is used to display if there is any image assigned to the mood.
+     * This method allows users to edit/add image to their mood.
+     */
     @Override
     protected void setupReasonPhoto() {
         super.setupReasonPhoto();
         super.moodDB.getImageFromDB(this.moodID, super.reason_photo_imageView);
     }
 
+    /**
+     * This method is used to save the changes after adding details of a mood.
+     */
     @Override
     protected void setupSaveButton() {
         super.save_button.setOnClickListener(new View.OnClickListener() {

@@ -45,6 +45,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
     private GoogleMap moodMap; // googleMap object
     private ArrayList<FriendMood> moodDataList; // data list of friend moods
     private DBMoodSetter dbMoodSetter;
+    private FirebaseAuth mAuth;
 
     /**
      * Called to have the fragment instantiate its user interface view
@@ -77,7 +78,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
         moodDataList = new ArrayList<>();
 
         // gets instance of Firebase
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         // setup DBFriend
         DBFriend friendMoodDB = new DBFriend(mAuth, getContext(),
@@ -152,6 +153,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
     /**
      * must call this method from the parent Activity/Fragment's corresponding method.
+     * Inherited by OnMapReadyCallback
      */
     @Override
     public void onResume() {
@@ -161,6 +163,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
     /**
      * must call this method from the parent Activity/Fragment's corresponding method.
+     * Inherited by OnMapReadyCallback
      */
     @Override
     public void onPause() {
@@ -170,6 +173,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
     /**
      * must call this method from the parent Activity/Fragment's corresponding method.
+     * Inherited by OnMapReadyCallback
      */
     @Override
     public void onDestroy() {
@@ -179,6 +183,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
 
     /**
      * must call this method from the parent Activity/Fragment's corresponding method.
+     * Inherited by OnMapReadyCallback
      */
     @Override
     public void onLowMemory() {
@@ -251,7 +256,7 @@ public class MyFriendMoodMapFragment extends MoodMapFragment implements OnMapRea
      * inherited from DBCollectionListener
      */
     @Override
-    public void afterGettingList() {}
+    public void afterGettingList() { /* do nothing */ }
 
 
 

@@ -25,6 +25,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.io.IOException;
 import java.util.Arrays;
 
+/**
+ * This abstract class is used by CreateMoodActivity and EditMoodActivity
+ * Provides the base methods for adding/editing mood details
+ * This class implements the MoodEditorInterface to provide functionality for the methods declared in that interface
+ * This class inherits the attributes and methods from the AppCompatActivity
+ */
 public abstract class MoodEditorActivity extends AppCompatActivity implements MoodEditor.MoodEditorInterface {
 
     private static final String[] SUBCLASSES_NAMES = {
@@ -73,24 +79,26 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * This method identifies what activity is calling it, then sets up the necessary layout that it should display.
+     * It calls the methods to setup editors of all the mood fields within the activity.
+     * @param activityName
+     * This is the name of the activity that is calling the method
+     */
     protected void createActivity(String activityName) {
         if(!Arrays.asList(SUBCLASSES_NAMES).contains(activityName)){
             throw new IllegalArgumentException(activityName+" is not a permitted subclass!");
         }
         this.TAG = activityName;
 
-        // set layout view
         int activityLayoutId = (this.TAG.equals(SUBCLASSES_NAMES[0])) ?
                 R.layout.activity_create_mood : R.layout.activity_edit_mood;
         setContentView(activityLayoutId);
 
-        // initialize DBMoodSetter
         initializeDBMoodSetter();
 
-        // initialize all the views (except date&time) within the activity
         initializeViews();
 
-        // setup editors all mood fields within the activity
         setupDateTime();
         setupEmotion();
         setupReasonText();
@@ -168,6 +176,9 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
     }
 
 
+    /**
+     * This method initialize the database.
+     */
     private void initializeDBMoodSetter() {
         // initialize DB connector
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -185,23 +196,30 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
      */
     protected abstract void setupDateTime();
 
+    /**
+     * This method initializes a MoodStateAdapter for emotional state spinner
+     * If state is in the EditMoodActivity, then it will display the emotion for the mood.
+     */
     protected void setupEmotion() {
-        // Initializing a MoodStateAdapter for emotional state spinner
         emotionAdapter = new MoodStateAdapter(this,
                 MoodEditor.EMOTION_STATE_LIST, MoodEditor.EMOTION_IMAGE_LIST);
-        // intent data is null for CreateMoodActivity
         String intent_emotion = getIntent().getStringExtra("emotion");
         MoodEditor.setEmotionSpinner(this, emotion_spinner, emotionAdapter, intent_emotion);
     }
 
+    /**
+     * This method will display the reason for the chosen mood if state is in the EditMoodActivity.
+     */
     protected void setupReasonText() {
-        // intent data is null for CreateMoodActivity
         String intent_reason = getIntent().getStringExtra("reason_text");
         if(intent_reason != null) {
             reason_editText.setText(intent_reason);
         }
     }
 
+    /**
+     * This method allows users to take or choose a photo when a button is clicked.
+     */
     protected void setupReasonPhoto() {
         reason_photo_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,6 +229,10 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
         });
     }
 
+    /**
+     * This method initializes an Array Adapter for situation spinner.
+     * If state is in the EditMoodActivity, then it will display the situation for the mood.
+     */
     protected void setupSituation() {
         // Initializing an ArrayAdapter for situation spinner
         ArrayAdapter<String> spinnerArrayAdapter = MoodEditor.getSituationAdapter(
@@ -220,6 +242,10 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
         MoodEditor.setSituationSpinner(this, situation_spinner, spinnerArrayAdapter, intent_situation);
     }
 
+    /**
+     * This method displays the location for the chosen mood.
+     * This method enables users to add or edit a location.
+     */
     protected void setupLocation() {
         // intent data is null for CreateMoodActivity
         String intent_lat = getIntent().getStringExtra("location_lat");
@@ -229,7 +255,6 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
             location_button.setText(intent_address);
         }
 
-        // set the button onClickListener to request location
         location_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -240,8 +265,14 @@ public abstract class MoodEditorActivity extends AppCompatActivity implements Mo
         });
     }
 
+    /**
+     * This method is for saving the changes after editing a mood.
+     */
     protected abstract void setupSaveButton();
 
+    /**
+     * This method is for canceling going back to previous activity, without saving any changes.
+     */
     protected void setupCancelButton() {
         // When cancel button is pressed, return to main activity; do nothing
         cancel_button.setOnClickListener(new View.OnClickListener() {
