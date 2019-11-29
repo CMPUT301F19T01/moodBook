@@ -51,6 +51,7 @@ import static junit.framework.TestCase.assertTrue;
 
         /**
          * Test for Gallery intent
+         * Ensure the emulator has a photo in its gallery before starting
          */
         @Test
         public void GalleryTest(){
